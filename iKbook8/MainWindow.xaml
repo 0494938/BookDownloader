@@ -34,7 +34,7 @@
                 <ColumnDefinition Width="2"/>
                 <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/18897986.html"/>
+            <TextBox Grid.Column="0" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/>
             <Button Grid.Column="2" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click"/>
         </Grid>
         <Grid 
@@ -61,21 +61,52 @@
             x:Name="webBrowser" >
             
         </WebBrowser>
-        <TextBox
+
+        <Grid
             Grid.Row="2" 
             Grid.Column="2"
-            x:Name="txtWebContents" 
-            BorderThickness="1" 
-            VerticalScrollBarVisibility="Auto"
-            HorizontalScrollBarVisibility="Auto"
-            FontSize="12" FontWeight="Thin">
-            <TextBox.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="CadetBlue"/>
-                    <GradientStop Color="LightBlue" Offset="0.7"/>
-                </LinearGradientBrush>
-            </TextBox.Background>
+            >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <TextBox
+                Grid.Row="0" 
+                x:Name="txtWebContents" 
+                BorderThickness="1" 
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Auto"
+                FontSize="12" FontWeight="Thin">
+                <TextBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="CadetBlue"/>
+                        <GradientStop Color="LightBlue" Offset="0.7"/>
+                    </LinearGradientBrush>
+                </TextBox.Background>
 
-        </TextBox>
+            </TextBox>
+            <TextBox
+                Grid.Row="1" 
+                x:Name="txtAnalysizedContents" 
+                BorderThickness="1" 
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Auto"
+                FontSize="12" FontWeight="Thin">
+                <TextBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="CadetBlue"/>
+                        <GradientStop Color="LightBlue" Offset="0.7"/>
+                    </LinearGradientBrush>
+                </TextBox.Background>
+
+            </TextBox>
+            <TextBox
+                Grid.Row="2" 
+                x:Name="txtNextUrl" 
+                BorderThickness="1" 
+                FontSize="12" FontWeight="Thin">
+            </TextBox>
+        </Grid>
     </Grid>
 </Window>
