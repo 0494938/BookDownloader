@@ -16,49 +16,54 @@
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="26"/>
-            <RowDefinition Height="26"/>
+            <RowDefinition Height="36"/>
+            <RowDefinition Height="36"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="25" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="2"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid 
+        <GroupBox VerticalAlignment="Center"
             Grid.Row="0" 
-            Grid.ColumnSpan="3"
+            Grid.ColumnSpan="3">
+            <Grid 
             VerticalAlignment="Center">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2"/>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="2"/>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="40"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/>
-            <Button Grid.Column="2" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click" Height="20" VerticalAlignment="Top"/>
-            <Button Grid.Column="4" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click" Height="20" VerticalAlignment="Top"/>
-            <TextBox Grid.Column="5" x:Name="txtPages" Text="10" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput" DataObject.Pasting="PagesPaste"/>
-        </Grid>
-        <Grid 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="2"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/>
+                <Button Grid.Column="2" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click"/>
+                <Button Grid.Column="4" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click" Height="20" VerticalAlignment="Top"/>
+                <TextBox Grid.Column="5" x:Name="txtPages" Text="100" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput" DataObject.Pasting="PagesPaste"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox VerticalAlignment="Center"
             Grid.Row="1" 
-            Grid.ColumnSpan="3"
+            Grid.ColumnSpan="3">
+            <Grid 
             VerticalAlignment="Center">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2"/>
-                <ColumnDefinition Width="101.2"/>
-                <ColumnDefinition Width="18.8"/>
-                <ColumnDefinition Width="2"/>
-                <ColumnDefinition Width="39.2"/>
-                <ColumnDefinition Width="80.8"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" x:Name="txtCurURL"/>
-            <Button Grid.Column="2" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2" />
-            <Button Grid.Column="5" x:Name="btnNextPage" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2" />
-        </Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2"/>
+                    <ColumnDefinition Width="101.2"/>
+                    <ColumnDefinition Width="18.8"/>
+                    <ColumnDefinition Width="2"/>
+                    <ColumnDefinition Width="39.2"/>
+                    <ColumnDefinition Width="80.8"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" x:Name="txtCurURL"/>
+                <Button Grid.Column="2" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2" />
+                <Button Grid.Column="5" x:Name="btnNextPage" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2" />
+            </Grid>
+        </GroupBox>
         <WebBrowser 
             Grid.Row="2" 
             Grid.Column="0"
@@ -121,6 +126,16 @@
                 BorderThickness="1" 
                 FontSize="12" FontWeight="Thin">
             </TextBox>
+        </Grid>
+        <Grid  Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Center" AutomationProperties.HelpText="" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="202" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="txtStatus"  Grid.Column="0" FontSize="12" FontWeight="Thin" Text="{Binding Path=StartBarMsg,Mode=OneWay}" Margin="5,0,2,0" VerticalAlignment="Center"/>
+            <Separator Grid.Column="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+            <ProgressBar Height="12" Width="200" x:Name="txtProgress" Grid.Column="2" Value="{Binding Path=ProcessBarValue,Mode=OneWay}" Margin="2,0,10,0"/>
         </Grid>
     </Grid>
 </Window>

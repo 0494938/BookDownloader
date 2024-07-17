@@ -1,6 +1,7 @@
 ﻿using MSHTML;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace iKbook8
 {
@@ -25,6 +26,11 @@ namespace iKbook8
 
         private void btnAnalysisCurURL_Click(object sender, RoutedEventArgs e)
         {
+            AnalysisCurURL();
+        }
+        
+        private void AnalysisCurURL()
+        {
             Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             Debug.Assert(datacontext!=null);
@@ -48,11 +54,8 @@ namespace iKbook8
             }
 
             IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
-            //IHTMLDocument? hTMLDocument = webBrowser.Document as IHTMLDocument;
-
             IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
             string? strBody = body?.outerHTML ?? "";
-            //string? strHtml = hTMLDocument2.boday
             txtWebContents.Text = body?.outerHTML;
             AnalysisHtmlBody(ref datacontext, ref strBody);
         }
@@ -99,5 +102,21 @@ namespace iKbook8
             }
         }
         */
+
+        public void UpdateStatusMsg(WndContextData datacontext, string msg, bool bDev = true)
+        {
+
+            Debug.WriteLine(msg);
+            datacontext.StartBarMsg = msg;
+            //datacontext.StartBarMsg = msg + "(" + txtProgress.Value + "%)";
+            txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
+        }
+
+        public void UpdateStatusProgress(WndContextData datacontext, int value)
+        {
+            datacontext.ProcessBarValue = value;
+            txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+        }
+
     }
 }

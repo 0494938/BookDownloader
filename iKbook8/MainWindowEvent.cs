@@ -29,6 +29,9 @@ namespace iKbook8
         public bool ContentsAnalysised { get; set; } = false;
         public bool NextLinkAnalysized { get; set; } = false;
         public BatchQueryNovelContents SiteType { get; set; } = BatchQueryNovelContents.IKBOOK8;
+        public string StartBarMsg { get; set; }
+        public int ProcessBarValue { get; set; }
+        
     }
 
     public partial class MainWindow : Window

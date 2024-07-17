@@ -82,9 +82,6 @@ namespace iKbook8
                 }
                 else
                 {
-
-                }
-                {
                     Debug.Assert(false);
                 }
             }

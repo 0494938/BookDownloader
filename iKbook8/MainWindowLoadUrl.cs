@@ -16,12 +16,14 @@ namespace iKbook8
         {
             Debug.WriteLine("btnInitURL_Click invoked...");
             ClickBtntnInitURL(txtInitURL.Text);
+            AnalysisCurURL();
         }
 
         private void btnNextPage_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("btnNextPage_Click invoked...");
             ClickBtntnInitURL(txtCurURL.Text);
+            AnalysisCurURL();
         }
 
         private void ClickBtntnInitURL(string strUrl)
@@ -32,6 +34,7 @@ namespace iKbook8
                 try
                 {
                     webBrowser.Navigate(strUrl);
+                    UpdateStatusMsg(datacontext, "Begin to download " + strUrl + "...");
                 }
                 catch (Exception ex)
                 {
@@ -73,6 +76,7 @@ namespace iKbook8
                 {
                     dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished =false , URL = strURL, NextUrl="", StartTime=DateTime.Now, Depth=0, ThreadNum= dictDownloadStatus.Count+1};
                     webBrowser.Navigate(strURL);
+                    UpdateStatusMsg(datacontext, "Begin to download " + strURL + "...");
                     WaitFinish(strURL);
                 }
                 catch (Exception ex)
@@ -191,7 +195,7 @@ namespace iKbook8
             dictDownloadStatus.Clear();
             txtAggregatedContents.Clear();
             string strNextPage = "";
-            int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 10 : int.Parse(txtPages.Text.Trim());
+            int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 100 : int.Parse(txtPages.Text.Trim());
             DownloadOneURLAndGetNext(txtInitURL.Text);
             DownloadStatus.ThreadMax = nMaxPage;
             //int i = 0;

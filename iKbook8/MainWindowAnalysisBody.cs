@@ -12,7 +12,8 @@ namespace iKbook8
         {
             Debug.Assert(!bSilenceMode || (bSilenceMode && atatus !=null));
 
-            switch(datacontext.SiteType){
+            UpdateStatusMsg(datacontext, "Begin to Analysize downloaded Uri Contents Body...");
+            switch (datacontext.SiteType){
                 case BatchQueryNovelContents.IKBOOK8:
                     AnalysisHtmlIkBookBody(ref datacontext, 
                         /*
@@ -43,6 +44,7 @@ namespace iKbook8
                 default:
                     break;
             }
+            UpdateStatusMsg(datacontext, "Finished Analysing of  downloaded Uri Contents Body...");
         }
 
     }
