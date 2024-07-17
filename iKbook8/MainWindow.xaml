@@ -39,7 +39,7 @@
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/>
             <Button Grid.Column="2" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click" Height="20" VerticalAlignment="Top"/>
-            <Button Grid.Column="4" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click"/>
+            <Button Grid.Column="4" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click" Height="20" VerticalAlignment="Top"/>
             <TextBox Grid.Column="5" x:Name="txtPages" Text="10" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput" DataObject.Pasting="PagesPaste"/>
         </Grid>
         <Grid 
@@ -75,6 +75,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
             <TextBox
@@ -99,16 +100,23 @@
                 VerticalScrollBarVisibility="Auto"
                 HorizontalScrollBarVisibility="Auto"
                 FontSize="12" FontWeight="Thin">
+            </TextBox>
+            <TextBox
+                Grid.Row="2" 
+                x:Name="txtAggregatedContents" 
+                BorderThickness="1" 
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Auto"
+                FontSize="12" FontWeight="Thin">
                 <TextBox.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="CadetBlue"/>
                         <GradientStop Color="LightBlue" Offset="0.7"/>
                     </LinearGradientBrush>
                 </TextBox.Background>
-
             </TextBox>
             <TextBox
-                Grid.Row="2" 
+                Grid.Row="3" 
                 x:Name="txtNextUrl" 
                 BorderThickness="1" 
                 FontSize="12" FontWeight="Thin">

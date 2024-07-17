@@ -1,7 +1,5 @@
 ﻿using MSHTML;
 using System.Diagnostics;
-using System.Reflection.Metadata;
-using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -42,16 +40,14 @@ namespace iKbook8
                         return;
 
                     var webBrowserPtr = GetWebBrowserPtr(webBrowser);
+                    if (webBrowserPtr.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
+                        return;
 
                     /*dynamic document = webBrowser.Document;
 
                     if (document.readyState != "complete")
                         return;
                     */
-
-                    if (webBrowserPtr.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
-                        return;
-                    
                 }
             }
         }
@@ -89,16 +85,13 @@ namespace iKbook8
                     }
 
                     var webBrowserPtr = GetWebBrowserPtr(webBrowser);
-
+                    if (webBrowserPtr.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
+                        return;
                     /*dynamic document = webBrowser.Document;
 
                     if (document.readyState != "complete")
                         return;
                     */
-
-                    if (webBrowserPtr.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
-                        WaitFinish(strURL);
-
                 }
             }
         }
@@ -128,7 +121,7 @@ namespace iKbook8
                 IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
                 string? strBody = body?.outerHTML ?? "";
                 //string? strHtml = hTMLDocument2.boday
-                txtWebContents.Text = body?.outerHTML;
+                txtWebContents.Text = strBody;
                 WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
                 AnalysisHtmlBody(ref datacontext, ref strBody, true, status);
                 if(status.ThreadNum < DownloadStatus.ThreadMax && !string.IsNullOrEmpty(status.NextUrl))
@@ -155,7 +148,10 @@ namespace iKbook8
 
                 dynamic document = browser.Document;
 
-                if (document.readyState != "complete")
+                //if (document.readyState != "complete")
+                //    return;
+                var webBrowserPtr = GetWebBrowserPtr(webBrowser);
+                if (webBrowserPtr.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
                     return;
 
                 //int nStep = 0;
@@ -193,6 +189,7 @@ namespace iKbook8
         private void btnAutoURL_Click(object sender, RoutedEventArgs e)
         {
             dictDownloadStatus.Clear();
+            txtAggregatedContents.Clear();
             string strNextPage = "";
             int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 10 : int.Parse(txtPages.Text.Trim());
             DownloadOneURLAndGetNext(txtInitURL.Text);

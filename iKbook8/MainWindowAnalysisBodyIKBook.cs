@@ -1,11 +1,8 @@
 ﻿using HtmlAgilityPack;
-using System;
 using System.Diagnostics;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Xml.Linq;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace iKbook8
@@ -74,6 +71,8 @@ namespace iKbook8
                             if (bSilenceMode) {
                                 Debug.Assert(status!=null);
                                 status.NextUrl = strNextLink;
+                                txtAggregatedContents.Text += strContents;
+                                txtAggregatedContents.ScrollToEnd();
                             }
                             datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
                             btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
@@ -82,6 +81,9 @@ namespace iKbook8
                     }
                 }
                 else
+                {
+
+                }
                 {
                     Debug.Assert(false);
                 }
@@ -118,7 +120,7 @@ namespace iKbook8
                 //hrefTags.Add(element.GetAttribute("href"));
                 if (string.Equals("a", element.Name))
                 {
-                    if (string.Equals(element.InnerHtml, "下一页"))
+                    if (string.Equals(element.InnerHtml, "下一页") || string.Equals(element.InnerHtml, "下一章"))
                     {
                         return element.Attributes["href"]?.Value;
                     }
