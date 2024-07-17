@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 
 namespace iKbook8
 {
@@ -7,8 +8,10 @@ namespace iKbook8
     /// </summary>
     public partial class MainWindow : Window
     {
-        private void AnalysisHtmlBody(ref WndContextData datacontext,ref string strBody)
+        private void AnalysisHtmlBody(ref WndContextData datacontext,ref string strBody, bool bSilenceMode=false, DownloadStatus? atatus=null)
         {
+            Debug.Assert(!bSilenceMode || (bSilenceMode && atatus !=null));
+
             switch(datacontext.SiteType){
                 case BatchQueryNovelContents.IKBOOK8:
                     AnalysisHtmlIkBookBody(ref datacontext, 
@@ -35,7 +38,7 @@ namespace iKbook8
                         */
                         strBody
                         // + "\r\n</html>"
-                        );
+                        , bSilenceMode, atatus);
                     break;
                 default:
                     break;

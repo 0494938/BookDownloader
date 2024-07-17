@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Xml.Linq;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
@@ -14,37 +15,9 @@ namespace iKbook8
     /// </summary>
     public partial class MainWindow : Window
     {
-        private void AnalysisHtmlIkBookBody(ref WndContextData datacontext, string strBody)
+        private void AnalysisHtmlIkBookBody(ref WndContextData datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
-            /*
-            var doc = new HTMLDocument();
-            doc.load(htmlContent);
-            var nodes = doc.DocumentNode.SelectNodes("//ul[@class='list']/li");
-            var result = new List<string>();
-            if (nodes != null)
-            {
-                foreach (var node in nodes)
-                {
-                    result.Add(node.InnerText);
-                }
-            }
-            */
-
-            /*
-            HtmlDocument htmlSnippet = new HtmlDocument();
-            htmlSnippet.LoadHtml(Html);
-
-            List<string> hrefTags = new List<string>();
-
-            HtmlParser parser = new HtmlParser();
-            var doc = parser.Parse(strBody) as IHTMLDocument;
-            //IHTMLDocument2? docbody = doc.;
-            if (doc != null)
-            {
-                doc.doc;
-            }
-            */
-
+            Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(strBody);
             Debug.Assert(html.DocumentNode.ChildNodes.Count == 1 && string.Equals(html.DocumentNode.ChildNodes[0].Name, "body"));
@@ -65,6 +38,24 @@ namespace iKbook8
                 else if (string.Equals("ins", element.Name))
                 {
                 }
+                else if (string.Equals("br", element.Name))
+                {
+                }
+                else if (string.Equals("b", element.Name))
+                {
+                }
+                else if (string.Equals("a", element.Name))
+                {
+                }
+                else if (string.Equals("link", element.Name))
+                {
+                }
+                else if (string.Equals("meta", element.Name))
+                {
+                }
+                else if (string.Equals("title", element.Name))
+                {
+                }
                 else if (string.Equals("div", element.Name))
                 {
                     if (string.Equals(element.Attributes["class"]?.Value, "container"))
@@ -79,9 +70,14 @@ namespace iKbook8
 
                             txtAnalysizedContents.Text = strContents;
                             txtNextUrl.Text = strNextLink;
-                            txtCurURL.Text = strContents;
-
-
+                            txtCurURL.Text = strNextLink;
+                            if (bSilenceMode) {
+                                Debug.Assert(status!=null);
+                                status.NextUrl = strNextLink;
+                            }
+                            datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
+                            btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                            return;
                         }
                     }
                 }
@@ -90,30 +86,6 @@ namespace iKbook8
                     Debug.Assert(false);
                 }
             }
-
-            /*
-            // yields: [<p class="content">Fizzler</p>]
-            document.QuerySelectorAll(".content");
-
-            // yields: [<p class="content">Fizzler</p>,<p>CSS Selector Engine</p>]
-            document.QuerySelectorAll("p");
-
-            // yields empty sequence
-            document.QuerySelectorAll("body>p");
-
-            // yields [<p class="content">Fizzler</p>,<p>CSS Selector Engine</p>]
-            document.QuerySelectorAll("body p");
-
-            // yields [<p class="content">Fizzler</p>]
-            document.QuerySelectorAll("p:first-child");
-            */
-
-            /*
-            foreach (IElement element in document?.body)
-            {
-                hrefTags.Add(element.GetAttribute("href"));
-            }
-            */
         }
         void FindNextLinkAndContents(HtmlNode parent, ref HtmlNode section_opt, ref HtmlNode content) {
             foreach (HtmlNode element in parent?.ChildNodes)
@@ -163,18 +135,21 @@ namespace iKbook8
                 //hrefTags.Add(element.GetAttribute("href"));
                 if (string.Equals("#text", element.Name))
                 {
-                    sbContent.Append(element.InnerText?.Replace("\r","")?.Replace("\n","")?.Replace("&nbsp;"," ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
+                    string? strLine = element.InnerText?.Replace("\r", "")?.Replace("\n", "")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
                         .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
-                        .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„"))?
-                        .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″")
-                        ;
+                        .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
+                        .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″");
+                    if(!string.IsNullOrEmpty(strLine?.Trim()) && !string.Equals(strLine?.Trim(), "\\/阅|读|模|式|内|容|加|载|不|完|整|，退出可阅读完整内容|点|击|屏|幕|中|间可|退|出|阅-读|模|式|."))
+                    {
+                        sbContent.Append(strLine);
+                    }
                 }
                 else if (string.Equals("br", element.Name))
                 {
                     sbContent.Append("\r\n");
                 }
             }
-            return sbContent.ToString();
+            return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
         }
     }
 }

@@ -33,9 +33,14 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2"/>
                 <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="2"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/>
-            <Button Grid.Column="2" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click"/>
+            <Button Grid.Column="2" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click" Height="20" VerticalAlignment="Top"/>
+            <Button Grid.Column="4" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click"/>
+            <TextBox Grid.Column="5" x:Name="txtPages" Text="10" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput" DataObject.Pasting="PagesPaste"/>
         </Grid>
         <Grid 
             Grid.Row="1" 
@@ -44,22 +49,23 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2"/>
-                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="101.2"/>
+                <ColumnDefinition Width="18.8"/>
                 <ColumnDefinition Width="2"/>
-                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="39.2"/>
+                <ColumnDefinition Width="80.8"/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0" x:Name="txtCurURL"/>
-            <Button Grid.Column="2" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" />
-            <Button Grid.Column="4" x:Name="btnNextPage" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" />
+            <Button Grid.Column="2" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2" />
+            <Button Grid.Column="5" x:Name="btnNextPage" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2" />
         </Grid>
         <WebBrowser 
             Grid.Row="2" 
             Grid.Column="0"
             LoadCompleted="MainFrameWebLoadCompleted"
             Loaded="MainFrameWebLoaded"
-            
             x:Name="webBrowser" >
-            
+
         </WebBrowser>
 
         <Grid

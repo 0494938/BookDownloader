@@ -9,6 +9,20 @@ namespace iKbook8
     /// </summary>
     public partial class MainWindow : Window
     {
+        static SHDocVw.WebBrowser? GetWebBrowserPtr(System.Windows.Controls.WebBrowser webBrowser)
+        {
+            var serviceProvider = (IServiceProvider)webBrowser.Document;
+            if (serviceProvider != null)
+            {
+                Guid serviceGuid = new Guid("0002DF05-0000-0000-C000-000000000046");
+                Guid iid = typeof(SHDocVw.WebBrowser).GUID;
+                var webBrowserPtr = (SHDocVw.WebBrowser)serviceProvider
+                    .QueryService(ref serviceGuid, ref iid);
+                return webBrowserPtr;
+            }
+            return (SHDocVw.WebBrowser?) null;
+        }
+
         private void btnAnalysisCurURL_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
@@ -29,6 +43,7 @@ namespace iKbook8
                 {
                     webBrowserPtr.NewWindow2 += webBrowser1_NewWindow2;
                     webBrowserPtr.NewWindow3+= webBrowser1_NewWindow3;
+                    
                 }
             }
 

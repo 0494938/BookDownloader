@@ -23,12 +23,22 @@ namespace iKbook8
             Debug.WriteLine("MainFrameWebLoaded invoked...");
         }
 
-
-
-        private void btnNextPage_Click(object sender, RoutedEventArgs e)
+        private void PagesPaste(object sender, DataObjectPastingEventArgs e)
         {
-            Debug.WriteLine("btnNextPage_Click invoked...");
+            if (e.DataObject.GetDataPresent(typeof(String)))
+            {
+                String text = (String)e.DataObject.GetData(typeof(String));
+                if (!IsTextAllowed(text))
+                {
+                    e.CancelCommand();
+                }
+            }
+            else
+            {
+                e.CancelCommand();
+            }
         }
+
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -38,5 +48,4 @@ namespace iKbook8
         [return: MarshalAs(UnmanagedType.IUnknown)]
         object QueryService(ref Guid guidService, ref Guid riid);
     }
-
 }
