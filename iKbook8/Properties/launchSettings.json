@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "iKbook8": {
+      "commandName": "Project",
+      "nativeDebugging": true,
+      "jsWebView2Debugging": false
+    }
+  }
+}

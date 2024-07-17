@@ -1,0 +1,81 @@
+﻿<Window x:Class="iKbook8.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:iKbook8"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="1100" Width="1800" 
+        Loaded="OnMainWindowLoaded"
+        Activated="OnMainWindowActivated"
+        Unloaded="OnMainWindowUnloaded"
+        Closing="OnMainWindowClosing"
+        >
+    <Window.DataContext>
+        <local:WndContextData/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="26"/>
+            <RowDefinition Height="26"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid 
+            Grid.Row="0" 
+            Grid.ColumnSpan="3"
+            VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2"/>
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/18897986.html"/>
+            <Button Grid.Column="2" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click"/>
+        </Grid>
+        <Grid 
+            Grid.Row="1" 
+            Grid.ColumnSpan="3"
+            VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="2"/>
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" x:Name="txtCurURL"/>
+            <Button Grid.Column="2" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" />
+            <Button Grid.Column="4" x:Name="btnNextPage" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" />
+        </Grid>
+        <WebBrowser 
+            Grid.Row="2" 
+            Grid.Column="0"
+            LoadCompleted="MainFrameWebLoadCompleted"
+            Loaded="MainFrameWebLoaded"
+            
+            x:Name="webBrowser" >
+            
+        </WebBrowser>
+        <TextBox
+            Grid.Row="2" 
+            Grid.Column="2"
+            x:Name="txtWebContents" 
+            BorderThickness="1" 
+            VerticalScrollBarVisibility="Auto"
+            HorizontalScrollBarVisibility="Auto"
+            FontSize="12" FontWeight="Thin">
+            <TextBox.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="CadetBlue"/>
+                    <GradientStop Color="LightBlue" Offset="0.7"/>
+                </LinearGradientBrush>
+            </TextBox.Background>
+
+        </TextBox>
+    </Grid>
+</Window>
