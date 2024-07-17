@@ -1,5 +1,7 @@
 ﻿using MSHTML;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -12,18 +14,22 @@ namespace iKbook8
     /// </summary>
     public partial class MainWindow : Window
     {
+        Dictionary<string, DownloadStatus> dictDownloadStatus = new Dictionary<string, DownloadStatus>();
+
         private void btnInitURL_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("btnInitURL_Click invoked...");
             ClickBtntnInitURL(txtInitURL.Text);
-            AnalysisCurURL();
         }
 
         private void btnNextPage_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("btnNextPage_Click invoked...");
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if ((datacontext != null))
+                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
+
             ClickBtntnInitURL(txtCurURL.Text);
-            AnalysisCurURL();
         }
 
         private void ClickBtntnInitURL(string strUrl)
@@ -31,6 +37,7 @@ namespace iKbook8
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if ((datacontext != null))
             {
+                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
                 try
                 {
                     webBrowser.Navigate(strUrl);
@@ -55,18 +62,6 @@ namespace iKbook8
             }
         }
 
-        class DownloadStatus {
-            public bool DownloadFinished { get; set; } = false;
-            public string URL { get; set; }
-            public string NextUrl { get; set; }
-            public DateTime StartTime { get; set; }
-            public DateTime FinishTime { get; set; }
-            public int Depth { get; set; } = 0;
-            public int ThreadNum { get; set; }
-            public static int ThreadMax { get; set; }
-        }
-
-        Dictionary<string, DownloadStatus> dictDownloadStatus = new Dictionary<string, DownloadStatus>();
         private void DownloadOneURLAndGetNext(string strURL)
         {
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
@@ -128,9 +123,15 @@ namespace iKbook8
                 txtWebContents.Text = strBody;
                 WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
                 AnalysisHtmlBody(ref datacontext, ref strBody, true, status);
-                if(status.ThreadNum < DownloadStatus.ThreadMax && !string.IsNullOrEmpty(status.NextUrl))
+                if (status.ThreadNum < DownloadStatus.ThreadMax && !string.IsNullOrEmpty(status.NextUrl))
                 {
                     DownloadOneURLAndGetNext(status.NextUrl);
+                }
+                else {
+                    if(!string.IsNullOrEmpty(status.NextUrl))
+                        txtInitURL.Text = status.NextUrl;
+                    DownloadStatus.ContentsWriter = null;
+
                 }
 
             }
@@ -139,7 +140,6 @@ namespace iKbook8
 
         private void MainFrameWebLoadCompleted(object sender, NavigationEventArgs e)
         {
-
             Debug.WriteLine("MainFrameWebLoadCompleted invoked...");
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if ((datacontext!=null))
@@ -182,6 +182,10 @@ namespace iKbook8
                         status.DownloadFinished = true;
                         status.FinishTime = DateTime.Now;
                     }
+                    else
+                    {
+                        AnalysisCurURL();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -192,29 +196,40 @@ namespace iKbook8
 
         private void btnAutoURL_Click(object sender, RoutedEventArgs e)
         {
-            dictDownloadStatus.Clear();
-            txtAggregatedContents.Clear();
-            string strNextPage = "";
-            int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 100 : int.Parse(txtPages.Text.Trim());
-            DownloadOneURLAndGetNext(txtInitURL.Text);
-            DownloadStatus.ThreadMax = nMaxPage;
-            //int i = 0;
-            //while (i <= nMaxPage)
-            //{
-            //    i++;
-            //    if (i == 1)
-            //    {
-            //        strNextPage = DownloadOneURLAndGetNext(txtInitURL.Text);
-            //        Debug.WriteLine("Downloadeed <" + txtInitURL.Text + "> and try to get next as <" + strNextPage + ">...");
-            //    }
-            //    else
-            //    {
-            //        string sNextPage = DownloadOneURLAndGetNext(strNextPage);
-            //        Debug.WriteLine("Downloadeed <" + strNextPage + "> and try to get next as <" + sNextPage + ">...");
-            //        strNextPage = sNextPage;
-            //    }
+            Debug.WriteLine("btnAutoURL_Click invoked...");
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if (datacontext != null)
+            {
+                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
+                dictDownloadStatus.Clear();
+                txtAggregatedContents.Clear();
+                string strNextPage = "";
+                int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 100 : int.Parse(txtPages.Text.Trim());
+                DownloadStatus.ThreadMax = nMaxPage;
+                DownloadStatus.ContentsWriter = new StreamWriter(File.Open(AppDomain.CurrentDomain.BaseDirectory + @"Content" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + ".txt", FileMode.CreateNew),
+                    //Encoding.GetEncoding("iso-8859-1")
+                    Encoding.UTF8
+                    );
 
-            //}
+                DownloadOneURLAndGetNext(txtInitURL.Text);
+                //int i = 0;
+                //while (i <= nMaxPage)
+                //{
+                //    i++;
+                //    if (i == 1)
+                //    {
+                //        strNextPage = DownloadOneURLAndGetNext(txtInitURL.Text);
+                //        Debug.WriteLine("Downloadeed <" + txtInitURL.Text + "> and try to get next as <" + strNextPage + ">...");
+                //    }
+                //    else
+                //    {
+                //        string sNextPage = DownloadOneURLAndGetNext(strNextPage);
+                //        Debug.WriteLine("Downloadeed <" + strNextPage + "> and try to get next as <" + sNextPage + ">...");
+                //        strNextPage = sNextPage;
+                //    }
+                //}
+
+            }
         }
     }
 }

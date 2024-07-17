@@ -32,6 +32,7 @@
             <Grid 
             VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2"/>
                     <ColumnDefinition Width="120"/>
@@ -39,10 +40,16 @@
                     <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/>
-                <Button Grid.Column="2" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click"/>
-                <Button Grid.Column="4" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click" Height="20" VerticalAlignment="Top"/>
-                <TextBox Grid.Column="5" x:Name="txtPages" Text="100" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput" DataObject.Pasting="PagesPaste"/>
+                <ComboBox Grid.Column="0" x:Name="cmbNovelType" SelectedIndex="1">
+                    <ComboBoxItem Content="m.ikbook8.com"></ComboBoxItem>
+                    <ComboBoxItem Content="book.qq.com"></ComboBoxItem>
+                </ComboBox>
+                <!--TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/-->
+                <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://book.qq.com/book-read/47135031/1"/>
+                
+                <Button Grid.Column="3" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click"/>
+                <Button Grid.Column="5" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click" Margin="0,0,0,2"/>
+                <TextBox Grid.Column="6" x:Name="txtPages" Text="100" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput" DataObject.Pasting="PagesPaste"/>
             </Grid>
         </GroupBox>
         <GroupBox VerticalAlignment="Center"

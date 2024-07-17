@@ -41,6 +41,9 @@ namespace iKbook8
                         // + "\r\n</html>"
                         , bSilenceMode, atatus);
                     break;
+                case BatchQueryNovelContents.QQBOOK:
+                    AnalysisHtmlQQBookBody(ref datacontext, strBody, bSilenceMode, atatus);
+                    break;
                 default:
                     break;
             }

@@ -9,31 +9,14 @@ namespace iKbook8
 {
     public enum BatchQueryNovelContents
     {
-        IKBOOK8=0,
-        XXX=1,
+        IKBOOK8 = 0,
+        QQBOOK = 1,
+        XXX = 2,
     }
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public class WndContextData : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler? PropertyChanged;
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public bool PageLoaded { get; set; } = false;
-        public bool ContentsAnalysised { get; set; } = false;
-        public bool NextLinkAnalysized { get; set; } = false;
-        public BatchQueryNovelContents SiteType { get; set; } = BatchQueryNovelContents.IKBOOK8;
-        public string StartBarMsg { get; set; }
-        public int ProcessBarValue { get; set; }
-        
-    }
-
     public partial class MainWindow : Window
     {
      
