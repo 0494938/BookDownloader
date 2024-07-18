@@ -19,7 +19,7 @@ namespace iKbook8
             HtmlNode nextLink = null;
             HtmlNode content = null;
             HtmlNode header = null;
-            HtmlNodeCollection topDiv = body.SelectNodes("//div[@id='PageBody']");
+            HtmlNodeCollection topDiv = body.SelectNodes(".//div[@id='PageBody']");
             if ((topDiv?.Count ?? 0) > 0)
             {
                 FindBookNextLinkAndContents(topDiv.First(), ref nextLink, ref header, ref content);
@@ -61,27 +61,19 @@ namespace iKbook8
 
         public void FindBookNextLinkAndContents(HtmlNode top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
-            HtmlNodeCollection ?collCont = top.SelectNodes("//div[@id='Lab_Contents']");
+            HtmlNodeCollection ?collCont = top.SelectNodes(".//div[@id='Lab_Contents']");
             content = collCont?.First();
 
-            HtmlNodeCollection? collHeader = top.SelectNodes("//h1[@id='ChapterTitle']");
+            HtmlNodeCollection? collHeader = top.SelectNodes(".//h1[@id='ChapterTitle']");
             header = collHeader?.First();
 
-            HtmlNodeCollection? collNextDiv = top.SelectNodes("//div[@id='Pan_Top']");
+            HtmlNodeCollection? collNextDiv = top.SelectNodes(".//div[@id='Pan_Top']");
             HtmlNode nextLinkDiv = collNextDiv?.First();
 
-            HtmlNodeCollection? collNext= nextLinkDiv.SelectNodes("//div[@onclick='JumpNext();']");
             //<div onclick="JumpNext();" class="erzitop_"><a title="第002章 抓捕  我的谍战岁月" href="/wxread/94612_43816525.html">下一章</a> </div>
-            foreach (HtmlNode divNext in collNext)
-            {
-                //HtmlNodeCollection? collNextARef = divNext.SelectNodes("//a");
-                IEnumerable<HtmlNode>? collNextARef = divNext.Descendants().Where(n => n?.Name == "a") as IEnumerable<HtmlNode>;
-                if (collNextARef?.Count() > 0)
-                {
-                    nextLink = collNextARef?.First();
-                    break;
-                }
-            }
+            HtmlNodeCollection? collNext= nextLinkDiv.SelectNodes(".//div[@onclick='JumpNext();']");
+            HtmlNodeCollection? collNextARef = collNext.First()?.SelectNodes(".//a");
+            nextLink = collNextARef?.First();
         }
 
         public string GetBookHeader(HtmlNode header)

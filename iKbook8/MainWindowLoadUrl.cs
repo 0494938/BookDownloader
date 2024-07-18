@@ -103,7 +103,7 @@ namespace iKbook8
             {
                 status.Depth = status.Depth - 1;
 
-                Debug.WriteLine($"{strURL} download finished, begin analysis...");
+                Debug.WriteLine($"{strURL} : Download Finished, Begin Analysis ...");
                 Debug.Assert(webBrowser != null || webBrowser.Document != null);
 
                 IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
@@ -113,15 +113,6 @@ namespace iKbook8
                 txtWebContents.Text = strBody;
                 WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
                 AnalysisHtmlBody(datacontext, strURL, strBody, true, status);
-                //if (status.ThreadNum < DownloadStatus.ThreadMax && !string.IsNullOrEmpty(status.NextUrl))
-                //{
-                //    DownloadOneURLAndGetNext(status.NextUrl);
-                //}
-                //else {
-                //    if(!string.IsNullOrEmpty(status.NextUrl))
-                //        txtInitURL.Text = status.NextUrl;
-                //    DownloadStatus.ContentsWriter = null;
-                //}
             }
         }
     
