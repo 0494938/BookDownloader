@@ -38,6 +38,14 @@ namespace iKbook8
 
         }
     }
+
+    public enum BatchQueryNovelContents
+    {
+        IKBOOK8 = 0,
+        QQBOOK = 1,
+        BIQUGE = 2,
+    }
+
     public class WndContextData : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -7,13 +7,6 @@ using System.Windows.Controls;
 
 namespace iKbook8
 {
-    public enum BatchQueryNovelContents
-    {
-        IKBOOK8 = 0,
-        QQBOOK = 1,
-        XXX = 2,
-    }
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>

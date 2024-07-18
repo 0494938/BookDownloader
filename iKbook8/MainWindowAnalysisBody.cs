@@ -58,6 +58,10 @@ namespace iKbook8
                     //AnalysisHtmlQQBookBody(ref datacontext, strBody, bSilenceMode, atatus);
                     (new OOBookNovelContent()).AnalysisHtmlBookBody(this, ref datacontext, strBody, bSilenceMode, atatus);
                     break;
+                case BatchQueryNovelContents.BIQUGE:
+                    //AnalysisHtmlQQBookBody(ref datacontext, strBody, bSilenceMode, atatus);
+                    (new BiQuGeBookNovelContent()).AnalysisHtmlBookBody(this, ref datacontext, strBody, bSilenceMode, atatus);
+                    break;
                 default:
                     break;
             }
