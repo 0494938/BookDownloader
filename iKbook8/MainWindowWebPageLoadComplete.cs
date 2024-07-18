@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using WebBrowser = System.Windows.Controls.WebBrowser;
 
-namespace iKbook8
+namespace BookDownloader
 {
     public partial class MainWindow : Window
     {

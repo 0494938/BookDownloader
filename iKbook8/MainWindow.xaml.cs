@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 //using HtmlElement = System.Windows.Forms.HtmlElement;
 
-namespace iKbook8
+namespace BookDownloader
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -50,11 +50,6 @@ namespace iKbook8
             e.Handled = !IsTextAllowed(e.Text);
         }
 
-        private void OnMainWindowActivated(object sender, EventArgs e)
-        {
-            Debug.WriteLine("OnMainWindowActivated invoked...");
-            //ClickBtntnInitURL(txtInitURL.Text);
-        }
         private void OnMainWindowUnloaded(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("OnMainWindowUnloaded invoked...");

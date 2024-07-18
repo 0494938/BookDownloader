@@ -1,4 +1,4 @@
-﻿namespace iKbook8.Properties {
+﻿namespace BookDownloader.Properties {
     
     
     // このクラスでは設定クラスでの特定のイベントを処理することができます:

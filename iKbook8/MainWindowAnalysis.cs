@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace iKbook8
+namespace BookDownloader
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

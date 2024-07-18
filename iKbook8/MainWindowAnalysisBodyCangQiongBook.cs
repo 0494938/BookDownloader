@@ -1,12 +1,14 @@
 ﻿using HtmlAgilityPack;
 using System.Diagnostics;
+using System.Text;
 using System.Windows.Controls;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BookDownloader
 {
-    public class WxdzsBookNovelContent : IFetchNovelContent
+    public class CangQiongBookNovelContent : IFetchNovelContent
     {
+        
         public void AnalysisHtmlBookBody(MainWindow wndMain, WndContextData datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
@@ -17,15 +19,15 @@ namespace BookDownloader
             HtmlNode nextLink = null;
             HtmlNode content = null;
             HtmlNode header = null;
-            HtmlNodeCollection topDiv = body.SelectNodes(".//div[@id='PageBody']");
+            HtmlNodeCollection topDiv = body.SelectNodes(".//div[@class='reader-main']");
             if ((topDiv?.Count ?? 0) > 0)
             {
                 FindBookNextLinkAndContents(topDiv.First(), ref nextLink, ref header, ref content);
                 if (content != null || nextLink != null)
                 {
                     string strNextLink = GetBookNextLink(nextLink);
-                    string strChapterHeader = GetBookHeader(header);
-                    string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
+                    //string strChapterHeader = GetBookHeader(header);
+                    string strContents = " \r\n \r\n " + GetBookContents(content);
 
                     wndMain.Dispatcher.Invoke(() =>
                     {
@@ -59,24 +61,23 @@ namespace BookDownloader
 
         public void FindBookNextLinkAndContents(HtmlNode top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
-            HtmlNodeCollection ?collCont = top.SelectNodes(".//div[@id='Lab_Contents']");
+            HtmlNodeCollection ?collCont = top.SelectNodes(".//div[@class='content']");
             content = collCont?.First();
 
-            HtmlNodeCollection? collHeader = top.SelectNodes(".//h1[@id='ChapterTitle']");
+            HtmlNodeCollection? collHeader = top.SelectNodes("//div[@class='layout-tit xs-hidden']");
             header = collHeader?.First();
 
-            HtmlNodeCollection? collNextDiv = top.SelectNodes(".//div[@id='Pan_Top']");
+            HtmlNodeCollection? collNextDiv = top.SelectNodes("//div[@class='section-opt']");
             HtmlNode nextLinkDiv = collNextDiv?.First();
 
             //<div onclick="JumpNext();" class="erzitop_"><a title="第002章 抓捕  我的谍战岁月" href="/wxread/94612_43816525.html">下一章</a> </div>
-            HtmlNodeCollection? collNext= nextLinkDiv.SelectNodes(".//div[@onclick='JumpNext();']");
-            HtmlNodeCollection? collNextARef = collNext.First()?.SelectNodes(".//a");
-            nextLink = collNextARef?.First();
+            IEnumerable<HtmlNode>? collNext= nextLinkDiv?.Descendants().Where(n => n?.Name == "a" && (n.InnerText == "下一页" || n.InnerText == "下一章")) as IEnumerable<HtmlNode>;
+            nextLink = collNext?.First();
         }
 
         public string GetBookHeader(HtmlNode header)
         {
-            return header.InnerText;
+            return header?.Attributes["href"]?.Value;
         }
 
         public string GetBookNextLink(HtmlNode nextLink)
@@ -88,15 +89,33 @@ namespace BookDownloader
             {
                 return "https://" + sUrl;
             }
-            return "https://www.wxdzs.net" + sUrl;
+            return "http://www.cqhhhs.com" + sUrl;
         }
 
         public string GetBookContents(HtmlNode content)
         {
-            return content?.InnerText?.Replace("\r", "")?.Replace("\n", "\r\n")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
+            StringBuilder sbContent = new StringBuilder();
+            //strContents = "";
+            foreach (HtmlNode element in content?.ChildNodes)
+            {
+                //hrefTags.Add(element.GetAttribute("href"));
+                if (string.Equals("#text", element.Name))
+                {
+                    string? strLine = element.InnerText?.Replace("\r", "")?.Replace("\n", "")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
                         .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
                         .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
-                        .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″").Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
+                        .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″");
+                    if (!string.IsNullOrEmpty(strLine?.Trim()) && !string.Equals(strLine?.Trim(), "\\/阅|读|模|式|内|容|加|载|不|完|整|，退出可阅读完整内容|点|击|屏|幕|中|间可|退|出|阅-读|模|式|."))
+                    {
+                        sbContent.Append(strLine);
+                    }
+                }
+                else if (string.Equals("br", element.Name))
+                {
+                    sbContent.Append("\r\n");
+                }
+            }
+            return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
         }
 
         public string GetBookName(HtmlNode content)
@@ -108,5 +127,6 @@ namespace BookDownloader
         {
             throw new NotImplementedException();
         }
+        
     }
 }

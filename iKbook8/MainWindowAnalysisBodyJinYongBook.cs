@@ -5,7 +5,7 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BookDownloader
 {
-    public class WxdzsBookNovelContent : IFetchNovelContent
+    public class JinYongBookNovelContent : IFetchNovelContent
     {
         public void AnalysisHtmlBookBody(MainWindow wndMain, WndContextData datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
@@ -17,7 +17,7 @@ namespace BookDownloader
             HtmlNode nextLink = null;
             HtmlNode content = null;
             HtmlNode header = null;
-            HtmlNodeCollection topDiv = body.SelectNodes(".//div[@id='PageBody']");
+            HtmlNodeCollection topDiv = body.SelectNodes(".//div[@class='read_bg']");
             if ((topDiv?.Count ?? 0) > 0)
             {
                 FindBookNextLinkAndContents(topDiv.First(), ref nextLink, ref header, ref content);
@@ -59,19 +59,19 @@ namespace BookDownloader
 
         public void FindBookNextLinkAndContents(HtmlNode top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
-            HtmlNodeCollection ?collCont = top.SelectNodes(".//div[@id='Lab_Contents']");
+            HtmlNodeCollection ?collCont = top.SelectNodes("//article[@class='content']");
             content = collCont?.First();
 
-            HtmlNodeCollection? collHeader = top.SelectNodes(".//h1[@id='ChapterTitle']");
+            HtmlNodeCollection? collHeader = top.SelectNodes("//p[@class='style_h1']");
             header = collHeader?.First();
 
-            HtmlNodeCollection? collNextDiv = top.SelectNodes(".//div[@id='Pan_Top']");
+            HtmlNodeCollection? collNextDiv = top.SelectNodes(".//div[@class='read_nav']");
             HtmlNode nextLinkDiv = collNextDiv?.First();
 
-            //<div onclick="JumpNext();" class="erzitop_"><a title="第002章 抓捕  我的谍战岁月" href="/wxread/94612_43816525.html">下一章</a> </div>
-            HtmlNodeCollection? collNext= nextLinkDiv.SelectNodes(".//div[@onclick='JumpNext();']");
-            HtmlNodeCollection? collNextARef = collNext.First()?.SelectNodes(".//a");
-            nextLink = collNextARef?.First();
+            //<a id="next_url" href="/b/184315/976061_2.html"><i class="fa fa-forward"></i> 下一页</a>
+            HtmlNodeCollection? collNext= nextLinkDiv.SelectNodes(".//a[@id='next_url']");
+            //HtmlNodeCollection? collNextARef = collNext.First()?.SelectNodes(".//a");
+            nextLink = collNext?.First();
         }
 
         public string GetBookHeader(HtmlNode header)
@@ -88,7 +88,7 @@ namespace BookDownloader
             {
                 return "https://" + sUrl;
             }
-            return "https://www.wxdzs.net" + sUrl;
+            return "http://www.jinhuaja.com" + sUrl;
         }
 
         public string GetBookContents(HtmlNode content)

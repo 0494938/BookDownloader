@@ -1,9 +1,9 @@
-﻿<Window x:Class="iKbook8.MainWindow"
+﻿<Window x:Class="BookDownloader.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:iKbook8"
+        xmlns:local="clr-namespace:BookDownloader"
         mc:Ignorable="d"
         Title="MainWindow" Height="1100" Width="1800" 
         Loaded="OnMainWindowLoaded"
@@ -45,12 +45,15 @@
                     <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Column="0" x:Name="cmbNovelType" SelectedIndex="4" SelectionChanged="OnBookTypeSelectChagned" FontSize="12" FontWeight="Bold">
+                <ComboBox Grid.Column="0" x:Name="cmbNovelType" SelectedIndex="6" SelectionChanged="OnBookTypeSelectChagned" FontSize="12" FontWeight="Bold">
                     <ComboBoxItem Content="爱看书吧 m.ikbook8.com"></ComboBoxItem>
                     <ComboBoxItem Content="QQ电子书 book.qq.com"></ComboBoxItem>
                     <ComboBoxItem Content="笔趣阁 m.xbiqugew.com"></ComboBoxItem>
                     <ComboBoxItem Content="笔趣阁 m.xbiqugew.com2"></ComboBoxItem>
                     <ComboBoxItem Content="无线电子书 www.wxdzs.net"></ComboBoxItem>
+                    <ComboBoxItem Content="苍穹小说 www.cqhhhs.com"></ComboBoxItem>
+                    <ComboBoxItem Content="金庸小说网 www.jinhuaja.com"></ComboBoxItem>
+
                 </ComboBox>
                 <!--TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/-->
                 <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://www.wxdzs.net/wxread/94612_43816524.html" VerticalAlignment="Center"/>

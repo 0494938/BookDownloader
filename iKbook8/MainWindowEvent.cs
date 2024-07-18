@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace iKbook8
+namespace BookDownloader
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -29,28 +29,18 @@ namespace iKbook8
         {
             if (txtInitURL != null)
             {
-                switch (cmbNovelType.SelectedIndex)
-                {
-                    case 0:
-                        txtInitURL.Text = "https://m.ikbook8.com/book/i116399132/18897986.html";
-                        break;
-                    case 1:
-                        txtInitURL.Text = "https://book.qq.com/book-read/47135031/1";
-                        break;
-                    case 2:
-                        txtInitURL.Text = "https://m.xbiqugew.com/book/50761/32248795.html";
-                        break;
-                    case 3:
-                        txtInitURL.Text = "https://www.xbiqugew.com/book/18927/12811470.html";
-                        break;
-                    case 4:
-                        txtInitURL.Text = "https://www.wxdzs.net/wxread/94612_43816524.html";
-                        break;
-                    default:
-                        Debug.Assert(false);
-                        break;
-                }
+                NovelTyhpeChangeToIndex(cmbNovelType.SelectedIndex);
             }
         }
+
+        private void OnMainWindowActivated(object sender, EventArgs e)
+        {
+            Debug.WriteLine("OnMainWindowActivated invoked...");
+            if (txtInitURL != null)
+            {
+                NovelTyhpeChangeToIndex(cmbNovelType.SelectedIndex);
+            }
+        }
+
     }
 }

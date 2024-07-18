@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows;
 
-namespace iKbook8
+namespace BookDownloader
 {
     public interface IFetchNovelContent {
         public void AnalysisHtmlBookBody(MainWindow  wndMain, WndContextData datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null);
@@ -27,30 +27,42 @@ namespace iKbook8
         public void AnalysisHtmlBodyThreadFunc(WndContextData datacontext, string strURL, string strBody, bool bSilenceMode=false, DownloadStatus? status = null)
         {
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
-            if (bSilenceMode)
-            {
-                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body ...", (int)((100.0 / DownloadStatus.ThreadMax * (status.ThreadNum-1+0.5))));
-            }
-            else
-                UpdateStatusMsg(datacontext, strURL+ " : Begin to Analysize downloaded Contents Body ...", 50);
-
+            IFetchNovelContent? fetchNovelContent = null;
             switch (datacontext.SiteType)
             {
                 case BatchQueryNovelContents.IKBOOK8:
-                    (new IKBook8NovelContent()).AnalysisHtmlBookBody(this, datacontext, strBody, bSilenceMode, status);
+                    fetchNovelContent = new IKBook8NovelContent();
                     break;
                 case BatchQueryNovelContents.QQBOOK:
-                    (new OOBookNovelContent()).AnalysisHtmlBookBody(this, datacontext, strBody, bSilenceMode, status);
+                    fetchNovelContent = new OOBookNovelContent();
                     break;
                 case BatchQueryNovelContents.WXDZH:
-                    (new WxdzsBookNovelContent()).AnalysisHtmlBookBody(this, datacontext, strBody, bSilenceMode, status);
+                    fetchNovelContent = new WxdzsBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.CANGQIONG:
+                    fetchNovelContent = new CangQiongBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.JINYONG:
+                    fetchNovelContent = new JinYongBookNovelContent();
                     break;
                 case BatchQueryNovelContents.BIQUGE:
                 case BatchQueryNovelContents.BIQUGE2:
-                    (new BiQuGeBookNovelContent()).AnalysisHtmlBookBody(this, datacontext, strBody, bSilenceMode, status);
+                    fetchNovelContent = new BiQuGeBookNovelContent();
                     break;
                 default:
                     break;
+            }
+
+            if (bSilenceMode)
+            {
+                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext.SiteType.ToString() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", (int)((100.0 / DownloadStatus.ThreadMax * (status.ThreadNum-1+0.5))));
+            }
+            else
+                UpdateStatusMsg(datacontext, strURL+ " : Begin to Analysize downloaded Contents Body using " + datacontext.SiteType.ToString() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", 50);
+
+            if(fetchNovelContent!=null)
+            {
+                    fetchNovelContent.AnalysisHtmlBookBody(this, datacontext, strBody, bSilenceMode, status);
             }
             if (bSilenceMode)
             {
@@ -58,13 +70,13 @@ namespace iKbook8
             }
             else
                 UpdateStatusMsg(datacontext, strURL + " : Finished Analysing of downloaded Uri Contents Body ...", 100);
+
             if (bSilenceMode)
             {
                 if (status.ThreadNum < DownloadStatus.ThreadMax && !string.IsNullOrEmpty(status.NextUrl))
                 {
                     DownloadOneURLAndGetNext(datacontext, status.NextUrl);
-                }
-                else
+                }else
                 {
                     DownloadStatus.ContentsWriter = null;
                     UpdateStatusMsg(datacontext, "Finished batch download ...", 100);
