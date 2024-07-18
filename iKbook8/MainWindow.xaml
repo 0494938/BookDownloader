@@ -26,14 +26,19 @@
             <ColumnDefinition Width="2"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <GroupBox VerticalAlignment="Center"
+        <GroupBox 
+            VerticalAlignment="Center" 
+            VerticalContentAlignment="Center"
             Grid.Row="0" 
             Grid.ColumnSpan="3">
             <Grid 
-            VerticalAlignment="Center">
+                Margin="0,4,0,0"
+                VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="140"/>
                     <ColumnDefinition Width="2"/>
                     <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="2"/>
@@ -46,18 +51,22 @@
                     <ComboBoxItem Content="m.xbiqugew.com"></ComboBoxItem>
                 </ComboBox>
                 <!--TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/-->
-                <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://m.xbiqugew.com/book/50761/32248795.html"/>
-                
-                <Button Grid.Column="3" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click"/>
-                <Button Grid.Column="5" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click" Margin="0,0,0,2"/>
-                <TextBox Grid.Column="6" x:Name="txtPages" Text="100" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput" DataObject.Pasting="PagesPaste"/>
+                <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://m.xbiqugew.com/book/50761/32248795.html" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="Fileame" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="3" x:Name="txtOutputFileName" Text="Novel" VerticalAlignment="Center"/>
+                <Button Grid.Column="5" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click" VerticalAlignment="Center"/>
+                <Button Grid.Column="7" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="8" x:Name="txtPages" Text="100" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput"  VerticalAlignment="Center" DataObject.Pasting="PagesPaste"/>
             </Grid>
         </GroupBox>
-        <GroupBox VerticalAlignment="Center"
+        <GroupBox 
+            VerticalAlignment="Center"
+            VerticalContentAlignment="Center"
             Grid.Row="1" 
             Grid.ColumnSpan="3">
             <Grid 
-            VerticalAlignment="Center">
+                Margin="0,4,0,0"
+                VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2"/>
@@ -67,9 +76,9 @@
                     <ColumnDefinition Width="39.2"/>
                     <ColumnDefinition Width="80.8"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="txtCurURL"/>
-                <Button Grid.Column="2" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2" />
-                <Button Grid.Column="5" x:Name="btnNextPage" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2" />
+                <TextBox Grid.Column="0" x:Name="txtCurURL" VerticalAlignment="Center"/>
+                <Button Grid.Column="2" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center"/>
+                <Button Grid.Column="5" x:Name="btnNextPage" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center"/>
             </Grid>
         </GroupBox>
         <WebBrowser 

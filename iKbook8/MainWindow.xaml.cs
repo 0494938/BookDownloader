@@ -14,8 +14,6 @@ namespace iKbook8
         public MainWindow()
         {
             InitializeComponent();
-            //this.OnClosing += OnMainWindowClosing;
-            //this.OnActivated += OnMainWindowActivated;
         }
 
         private void MainFrameWebLoaded(object sender, RoutedEventArgs e)

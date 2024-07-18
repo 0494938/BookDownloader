@@ -49,7 +49,6 @@ namespace iKbook8
                 {
                     webBrowserPtr.NewWindow2 += webBrowser1_NewWindow2;
                     webBrowserPtr.NewWindow3+= webBrowser1_NewWindow3;
-                    
                 }
             }
 
@@ -71,37 +70,6 @@ namespace iKbook8
             // Handle the event.  
             Cancel = true;
         }
-
-        /*
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public HtmlDocument Document {
-            get {
-                object objDoc = this.AxIWebBrowser2.Document;
-                if (objDoc != null) {
-                    // Document is not necessarily an IHTMLDocument, it might be an office document as well.
-                    UnsafeNativeMethods.IHTMLDocument2 iHTMLDocument2 = null;
-                    try {
-                        iHTMLDocument2 = objDoc as UnsafeNativeMethods.IHTMLDocument2;
-                    } 
-                    catch (InvalidCastException) { 
-                    }
-                    if (iHTMLDocument2 != null) {
-                        UnsafeNativeMethods.IHTMLLocation iHTMLLocation = iHTMLDocument2.GetLocation();
-                        if (iHTMLLocation != null) {
-                            string href = iHTMLLocation.GetHref();
-                            if (!string.IsNullOrEmpty(href))
-                            {
-                                Uri url = new Uri(href);
-                                WebBrowser.EnsureUrlConnectPermission(url);  // Security check
-                                return new HtmlDocument (ShimManager, iHTMLDocument2 as UnsafeNativeMethods.IHTMLDocument);
-                            }
-                        }
-                    }
-                }
-                return null;
-            }
-        }
-        */
 
         public void UpdateStatusMsg(WndContextData datacontext, string msg, bool bDev = true)
         {

@@ -9,9 +9,6 @@ using WebBrowser = System.Windows.Controls.WebBrowser;
 
 namespace iKbook8
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         Dictionary<string, DownloadStatus> dictDownloadStatus = new Dictionary<string, DownloadStatus>();
@@ -52,12 +49,6 @@ namespace iKbook8
                     var webBrowserPtr = GetWebBrowserPtr(webBrowser);
                     if (webBrowserPtr.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
                         return;
-
-                    /*dynamic document = webBrowser.Document;
-
-                    if (document.readyState != "complete")
-                        return;
-                    */
                 }
             }
         }
@@ -86,11 +77,6 @@ namespace iKbook8
                     var webBrowserPtr = GetWebBrowserPtr(webBrowser);
                     if (webBrowserPtr.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
                         return;
-                    /*dynamic document = webBrowser.Document;
-
-                    if (document.readyState != "complete")
-                        return;
-                    */
                 }
             }
         }
@@ -115,8 +101,6 @@ namespace iKbook8
                 Debug.Assert(webBrowser != null || webBrowser.Document != null);
 
                 IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
-                //IHTMLDocument? hTMLDocument = webBrowser.Document as IHTMLDocument;
-
                 IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
                 string? strBody = body?.outerHTML ?? "";
                 //string? strHtml = hTMLDocument2.boday
@@ -131,9 +115,7 @@ namespace iKbook8
                     if(!string.IsNullOrEmpty(status.NextUrl))
                         txtInitURL.Text = status.NextUrl;
                     DownloadStatus.ContentsWriter = null;
-
                 }
-
             }
         }
 
@@ -144,7 +126,6 @@ namespace iKbook8
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if ((datacontext!=null))
             {
-
                 var browser = sender as WebBrowser;
 
                 if (browser == null || browser.Document == null)
@@ -152,8 +133,6 @@ namespace iKbook8
 
                 dynamic document = browser.Document;
 
-                //if (document.readyState != "complete")
-                //    return;
                 var webBrowserPtr = GetWebBrowserPtr(webBrowser);
                 if (webBrowserPtr.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
                     return;
@@ -167,9 +146,8 @@ namespace iKbook8
                     script.text = @"window.onerror = function(msg,url,line){return true;}";
                     document.head.appendChild(script);
                 }
-                catch (Exception ex)
+                catch (Exception )
                 {
-                    //Debug.WriteLine(ex);
                 }
 
                 try
@@ -206,29 +184,12 @@ namespace iKbook8
                 string strNextPage = "";
                 int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 100 : int.Parse(txtPages.Text.Trim());
                 DownloadStatus.ThreadMax = nMaxPage;
-                DownloadStatus.ContentsWriter = new StreamWriter(File.Open(AppDomain.CurrentDomain.BaseDirectory + @"Content" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + ".txt", FileMode.CreateNew),
+                DownloadStatus.ContentsWriter = new StreamWriter(File.Open(AppDomain.CurrentDomain.BaseDirectory + (string.IsNullOrEmpty(txtOutputFileName.Text.Trim())? @"Content": txtOutputFileName.Text.Trim()) + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + ".txt", FileMode.CreateNew),
                     //Encoding.GetEncoding("iso-8859-1")
                     Encoding.UTF8
                     );
 
                 DownloadOneURLAndGetNext(txtInitURL.Text);
-                //int i = 0;
-                //while (i <= nMaxPage)
-                //{
-                //    i++;
-                //    if (i == 1)
-                //    {
-                //        strNextPage = DownloadOneURLAndGetNext(txtInitURL.Text);
-                //        Debug.WriteLine("Downloadeed <" + txtInitURL.Text + "> and try to get next as <" + strNextPage + ">...");
-                //    }
-                //    else
-                //    {
-                //        string sNextPage = DownloadOneURLAndGetNext(strNextPage);
-                //        Debug.WriteLine("Downloadeed <" + strNextPage + "> and try to get next as <" + sNextPage + ">...");
-                //        strNextPage = sNextPage;
-                //    }
-                //}
-
             }
         }
     }

@@ -35,7 +35,6 @@ namespace iKbook8
                 }
                 _output_writer = value;
             }
-
         }
     }
 
