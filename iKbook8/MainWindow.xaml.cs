@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -53,6 +54,24 @@ namespace iKbook8
         {
             Debug.WriteLine("OnMainWindowActivated invoked...");
             //ClickBtntnInitURL(txtInitURL.Text);
+        }
+        private void OnMainWindowUnloaded(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("OnMainWindowUnloaded invoked...");
+
+        }
+
+        private void OnMainWindowClosing(object sender, CancelEventArgs e)
+        {
+            Debug.WriteLine("OnMainWindowClosing invoked...");
+
+        }
+
+        private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("OnMainWindowLoaded invoked...");
+            HideScriptErrors(webBrowser, true);
+
         }
     }
 

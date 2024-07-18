@@ -12,26 +12,6 @@ namespace iKbook8
     /// </summary>
     public partial class MainWindow : Window
     {
-     
-        private void OnMainWindowUnloaded(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("OnMainWindowUnloaded invoked...");
-
-        }
-
-        private void OnMainWindowClosing(object sender, CancelEventArgs e)
-        {
-            Debug.WriteLine("OnMainWindowClosing invoked...");
-
-        }
-        
-        private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("OnMainWindowLoaded invoked...");
-            HideScriptErrors(webBrowser, true);
-
-        }
-
         public void HideScriptErrors(WebBrowser wb, bool hide)
         {
             var fiComWebBrowser = typeof(WebBrowser).GetField("_axIWebBrowser2", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -62,6 +42,9 @@ namespace iKbook8
                         break;
                     case 3:
                         txtInitURL.Text = "https://www.xbiqugew.com/book/18927/12811470.html";
+                        break;
+                    case 4:
+                        txtInitURL.Text = "https://www.wxdzs.net/wxread/94612_43816524.html";
                         break;
                     default:
                         Debug.Assert(false);

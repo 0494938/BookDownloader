@@ -45,14 +45,15 @@
                     <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Column="0" x:Name="cmbNovelType" SelectedIndex="2" SelectionChanged="OnBookTypeSelectChagned" FontSize="12" FontWeight="Bold">
-                    <ComboBoxItem Content="m.ikbook8.com"></ComboBoxItem>
-                    <ComboBoxItem Content="book.qq.com"></ComboBoxItem>
-                    <ComboBoxItem Content="m.xbiqugew.com"></ComboBoxItem>
-                    <ComboBoxItem Content="m.xbiqugew.com2"></ComboBoxItem>
+                <ComboBox Grid.Column="0" x:Name="cmbNovelType" SelectedIndex="4" SelectionChanged="OnBookTypeSelectChagned" FontSize="12" FontWeight="Bold">
+                    <ComboBoxItem Content="爱看书吧 m.ikbook8.com"></ComboBoxItem>
+                    <ComboBoxItem Content="QQ电子书 book.qq.com"></ComboBoxItem>
+                    <ComboBoxItem Content="笔趣阁 m.xbiqugew.com"></ComboBoxItem>
+                    <ComboBoxItem Content="笔趣阁 m.xbiqugew.com2"></ComboBoxItem>
+                    <ComboBoxItem Content="无线电子书 www.wxdzs.net"></ComboBoxItem>
                 </ComboBox>
                 <!--TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/-->
-                <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://m.xbiqugew.com/book/50761/32248795.html" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://www.wxdzs.net/wxread/94612_43816524.html" VerticalAlignment="Center"/>
                 <TextBlock Grid.Column="2" Text="Fileame" VerticalAlignment="Center"  FontSize="12" FontWeight="Bold"/>
                 <TextBox Grid.Column="3" x:Name="txtOutputFileName" Text="Novel" VerticalAlignment="Center"/>
                 <Button Grid.Column="5" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click" VerticalAlignment="Center"/>

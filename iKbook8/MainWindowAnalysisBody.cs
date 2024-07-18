@@ -47,6 +47,9 @@ namespace iKbook8
                 case BatchQueryNovelContents.QQBOOK:
                     (new OOBookNovelContent()).AnalysisHtmlBookBody(this, datacontext, strBody, bSilenceMode, status);
                     break;
+                case BatchQueryNovelContents.WXDZH:
+                    (new WxdzsBookNovelContent()).AnalysisHtmlBookBody(this, datacontext, strBody, bSilenceMode, status);
+                    break;
                 case BatchQueryNovelContents.BIQUGE:
                 case BatchQueryNovelContents.BIQUGE2:
                     (new BiQuGeBookNovelContent()).AnalysisHtmlBookBody(this, datacontext, strBody, bSilenceMode, status);

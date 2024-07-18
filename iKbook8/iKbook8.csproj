@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>False</UseWindowsForms>
-    <ApplicationIcon>internet-explorer-icon-2048x2012-tvwvn67s.ico</ApplicationIcon>
+    <ApplicationIcon>novel_3_TZV_icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="internet-explorer-icon-2048x2012-tvwvn67s.ico" />
+    <Content Include="novel_3_TZV_icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
