@@ -1,9 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System.Diagnostics;
 using System.Text;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.TextFormatting;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace iKbook8

@@ -1,7 +1,5 @@
 ﻿using HtmlAgilityPack;
 using System.Diagnostics;
-using System.Text;
-using System.Windows;
 using System.Windows.Controls;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 

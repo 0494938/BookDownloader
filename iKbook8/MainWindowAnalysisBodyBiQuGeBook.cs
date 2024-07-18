@@ -1,11 +1,7 @@
 ﻿using HtmlAgilityPack;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Windows;
 using System.Windows.Controls;
-using System.Xml.Linq;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace iKbook8

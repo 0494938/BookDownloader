@@ -1,11 +1,6 @@
 ﻿using HtmlAgilityPack;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Reflection.PortableExecutable;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Markup;
-using System.Windows.Threading;
 
 namespace iKbook8
 {
