@@ -45,17 +45,18 @@
                     <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Column="0" x:Name="cmbNovelType" SelectedIndex="2">
+                <ComboBox Grid.Column="0" x:Name="cmbNovelType" SelectedIndex="2" SelectionChanged="OnBookTypeSelectChagned" FontSize="12" FontWeight="Bold">
                     <ComboBoxItem Content="m.ikbook8.com"></ComboBoxItem>
                     <ComboBoxItem Content="book.qq.com"></ComboBoxItem>
                     <ComboBoxItem Content="m.xbiqugew.com"></ComboBoxItem>
+                    <ComboBoxItem Content="m.xbiqugew.com2"></ComboBoxItem>
                 </ComboBox>
                 <!--TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/-->
                 <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://m.xbiqugew.com/book/50761/32248795.html" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2" Text="Fileame" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="Fileame" VerticalAlignment="Center"  FontSize="12" FontWeight="Bold"/>
                 <TextBox Grid.Column="3" x:Name="txtOutputFileName" Text="Novel" VerticalAlignment="Center"/>
                 <Button Grid.Column="5" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click" VerticalAlignment="Center"/>
-                <Button Grid.Column="7" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click" VerticalAlignment="Center"/>
+                <Button Grid.Column="7" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click" VerticalAlignment="Bottom" Margin="0,0,0,1"/>
                 <TextBox Grid.Column="8" x:Name="txtPages" Text="100" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput"  VerticalAlignment="Center" DataObject.Pasting="PagesPaste"/>
             </Grid>
         </GroupBox>
@@ -68,28 +69,30 @@
                 Margin="0,4,0,0"
                 VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2"/>
-                    <ColumnDefinition Width="101.2"/>
-                    <ColumnDefinition Width="18.8"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="20"/>
                     <ColumnDefinition Width="2"/>
-                    <ColumnDefinition Width="39.2"/>
-                    <ColumnDefinition Width="80.8"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="txtCurURL" VerticalAlignment="Center"/>
-                <Button Grid.Column="2" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center"/>
-                <Button Grid.Column="5" x:Name="btnNextPage" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="Current URL:" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" x:Name="txtCurURL" VerticalAlignment="Center"/>
+                <Button Grid.Column="3" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center"/>
+                <Button Grid.Column="6" x:Name="btnNextPage" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center"/>
             </Grid>
         </GroupBox>
-        <WebBrowser 
+        <GroupBox
             Grid.Row="2" 
-            Grid.Column="0"
-            LoadCompleted="MainFrameWebLoadCompleted"
-            Loaded="MainFrameWebLoaded"
-            x:Name="webBrowser" >
-
-        </WebBrowser>
-
+            Grid.Column="0">
+            <WebBrowser 
+                LoadCompleted="MainFrameWebLoadCompleted"
+                Loaded="MainFrameWebLoaded"
+                x:Name="webBrowser" 
+            />
+        </GroupBox>
         <Grid
             Grid.Row="2" 
             Grid.Column="2"
@@ -98,6 +101,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="100"/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
             <TextBox
@@ -139,20 +143,36 @@
             </TextBox>
             <TextBox
                 Grid.Row="3" 
-                x:Name="txtNextUrl" 
+                x:Name="txtLog" 
+                Margin="0,2,1,2"
                 BorderThickness="1" 
-                FontSize="12" FontWeight="Thin">
+                Background="LightGray"
+                FontSize="12" 
+                FontWeight="Thin" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             </TextBox>
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Next Page Information:" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1"
+                x:Name="txtNextUrl" 
+                BorderThickness="1"  VerticalAlignment="Center"
+                FontSize="12" FontWeight="Thin">
+                </TextBox>
+
+            </Grid>
         </Grid>
-        <Grid  Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Center" AutomationProperties.HelpText="" >
+        <Grid  Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Center" AutomationProperties.HelpText="" Background="LightGray" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="202" />
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="txtStatus"  Grid.Column="0" FontSize="12" FontWeight="Thin" Text="{Binding Path=StartBarMsg,Mode=OneWay}" Margin="5,0,2,0" VerticalAlignment="Center"/>
+            <TextBlock x:Name="txtStatus"  Grid.Column="0" FontSize="12" FontWeight="Thin" Text="{Binding Path=StartBarMsg,Mode=OneWay}" Margin="5,0,2,0" VerticalAlignment="Center" Height="23"/>
             <Separator Grid.Column="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
-            <ProgressBar Height="12" Width="200" x:Name="txtProgress" Grid.Column="2" Value="{Binding Path=ProcessBarValue,Mode=OneWay}" Margin="2,0,10,0"/>
+            <ProgressBar Height="18" Width="200" x:Name="txtProgress" Grid.Column="2" Value="{Binding Path=ProcessBarValue,Mode=OneWay}" Margin="2,0,5,0" Background="Blue" BorderBrush="LightBlue" />
         </Grid>
     </Grid>
 </Window>

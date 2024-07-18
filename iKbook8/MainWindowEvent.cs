@@ -45,23 +45,29 @@ namespace iKbook8
             objComWebBrowser.GetType().InvokeMember("Silent", BindingFlags.SetProperty, null, objComWebBrowser, new object[] { hide });
         }
 
-        private static readonly Regex _regex = new Regex("[^0-9.-]+");
-        
-        private static bool IsTextAllowed(string text)
+        private void OnBookTypeSelectChagned(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            return !_regex.IsMatch(text);
+            if (txtInitURL != null)
+            {
+                switch (cmbNovelType.SelectedIndex)
+                {
+                    case 0:
+                        txtInitURL.Text = "https://m.ikbook8.com/book/i116399132/18897986.html";
+                        break;
+                    case 1:
+                        txtInitURL.Text = "https://book.qq.com/book-read/47135031/1";
+                        break;
+                    case 2:
+                        txtInitURL.Text = "https://m.xbiqugew.com/book/50761/32248795.html";
+                        break;
+                    case 3:
+                        txtInitURL.Text = "https://www.xbiqugew.com/book/18927/12811470.html";
+                        break;
+                    default:
+                        Debug.Assert(false);
+                        break;
+                }
+            }
         }
-        
-        private void PreviewPagesTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
-        {
-            e.Handled = !IsTextAllowed(e.Text);
-        }
-
-        private void OnMainWindowActivated(object sender, EventArgs e)
-        {
-            Debug.WriteLine("OnMainWindowActivated invoked...");
-            //ClickBtntnInitURL(txtInitURL.Text);
-        }
-
     }
 }

@@ -38,7 +38,7 @@ namespace iKbook8
                 try
                 {
                     webBrowser.Navigate(strUrl);
-                    UpdateStatusMsg(datacontext, "Begin to download " + strUrl + "...");
+                    UpdateStatusMsg(datacontext, strUrl + " : Begin to download ...", 0);
                 }
                 catch (Exception ex)
                 {
@@ -53,16 +53,19 @@ namespace iKbook8
             }
         }
 
-        private void DownloadOneURLAndGetNext(string strURL)
+        private void DownloadOneURLAndGetNext(WndContextData? datacontext, string strURL)
         {
-            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            //WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if ((datacontext != null))
             {
                 try
                 {
                     dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished =false , URL = strURL, NextUrl="", StartTime=DateTime.Now, Depth=0, ThreadNum= dictDownloadStatus.Count+1};
-                    webBrowser.Navigate(strURL);
-                    UpdateStatusMsg(datacontext, "Begin to download " + strURL + "...");
+                    webBrowser.Dispatcher.Invoke(() =>
+                    {
+                        webBrowser.Navigate(strURL);
+                    });
+                    UpdateStatusMsg(datacontext, strURL + " : Begin to download ...", (int)((100.0 / DownloadStatus.ThreadMax * (dictDownloadStatus[strURL].ThreadNum - 1))));
                     WaitFinish(strURL);
                 }
                 catch (Exception ex)
@@ -86,12 +89,15 @@ namespace iKbook8
             DownloadStatus status = dictDownloadStatus[strURL];
             if (status.DownloadFinished == false)
             {
-                Task.Factory.StartNew(() => Thread.Sleep(400))
-                .ContinueWith((t) =>
+                this.Dispatcher.Invoke(() =>
                 {
-                    status.Depth = status.Depth + 1;
-                    WaitFinish(strURL);
-                }, TaskScheduler.FromCurrentSynchronizationContext());
+                    Task.Factory.StartNew(() => Thread.Sleep(400))
+                    .ContinueWith((t) =>
+                    {
+                        status.Depth = status.Depth + 1;
+                        WaitFinish(strURL);
+                    }, TaskScheduler.FromCurrentSynchronizationContext());
+                });
             }
             else
             {
@@ -106,74 +112,22 @@ namespace iKbook8
                 //string? strHtml = hTMLDocument2.boday
                 txtWebContents.Text = strBody;
                 WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
-                AnalysisHtmlBody(ref datacontext, ref strBody, true, status);
-                if (status.ThreadNum < DownloadStatus.ThreadMax && !string.IsNullOrEmpty(status.NextUrl))
-                {
-                    DownloadOneURLAndGetNext(status.NextUrl);
-                }
-                else {
-                    if(!string.IsNullOrEmpty(status.NextUrl))
-                        txtInitURL.Text = status.NextUrl;
-                    DownloadStatus.ContentsWriter = null;
-                }
+                AnalysisHtmlBody(datacontext, strURL, strBody, true, status);
+                //if (status.ThreadNum < DownloadStatus.ThreadMax && !string.IsNullOrEmpty(status.NextUrl))
+                //{
+                //    DownloadOneURLAndGetNext(status.NextUrl);
+                //}
+                //else {
+                //    if(!string.IsNullOrEmpty(status.NextUrl))
+                //        txtInitURL.Text = status.NextUrl;
+                //    DownloadStatus.ContentsWriter = null;
+                //}
             }
         }
-
-
-        private void MainFrameWebLoadCompleted(object sender, NavigationEventArgs e)
-        {
-            Debug.WriteLine("MainFrameWebLoadCompleted invoked...");
-            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
-            if ((datacontext!=null))
-            {
-                var browser = sender as WebBrowser;
-
-                if (browser == null || browser.Document == null)
-                    return;
-
-                dynamic document = browser.Document;
-
-                var webBrowserPtr = GetWebBrowserPtr(webBrowser);
-                if (webBrowserPtr.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
-                    return;
-
-                //int nStep = 0;
-                dynamic script = null;
-                try
-                {
-                    script = document.createElement("script");
-                    script.type = @"text/javascript";
-                    script.text = @"window.onerror = function(msg,url,line){return true;}";
-                    document.head.appendChild(script);
-                }
-                catch (Exception )
-                {
-                }
-
-                try
-                {
-                    datacontext.PageLoaded = true;
-                    btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                    if (dictDownloadStatus.ContainsKey(e.Uri.ToString()))
-                    {
-                        DownloadStatus status = dictDownloadStatus[e.Uri.ToString()];
-                        status.DownloadFinished = true;
-                        status.FinishTime = DateTime.Now;
-                    }
-                    else
-                    {
-                        AnalysisCurURL();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                }
-            }
-        }
-
+    
         private void btnAutoURL_Click(object sender, RoutedEventArgs e)
         {
+            txtLog.Clear();
             Debug.WriteLine("btnAutoURL_Click invoked...");
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if (datacontext != null)
@@ -189,7 +143,7 @@ namespace iKbook8
                     Encoding.UTF8
                     );
 
-                DownloadOneURLAndGetNext(txtInitURL.Text);
+                DownloadOneURLAndGetNext(datacontext,txtInitURL.Text);
             }
         }
     }

@@ -26,10 +26,10 @@ namespace iKbook8
 
         private void btnAnalysisCurURL_Click(object sender, RoutedEventArgs e)
         {
-            AnalysisCurURL();
+            AnalysisCurURL(webBrowser.Source.ToString());
         }
         
-        private void AnalysisCurURL()
+        private void AnalysisCurURL(string strUrl)
         {
             Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
@@ -56,7 +56,7 @@ namespace iKbook8
             IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
             string? strBody = body?.outerHTML ?? "";
             txtWebContents.Text = body?.outerHTML;
-            AnalysisHtmlBody(ref datacontext, ref strBody);
+            AnalysisHtmlBody( datacontext, strUrl, strBody);
         }
 
         private void webBrowser1_NewWindow2(ref object ppDisp, ref bool Cancel)
@@ -71,19 +71,33 @@ namespace iKbook8
             Cancel = true;
         }
 
-        public void UpdateStatusMsg(WndContextData datacontext, string msg, bool bDev = true)
+        public void UpdateStatusMsg(WndContextData datacontext, string msg, int value)
         {
 
             Debug.WriteLine(msg);
             datacontext.StartBarMsg = msg;
-            //datacontext.StartBarMsg = msg + "(" + txtProgress.Value + "%)";
-            txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
+            datacontext.ProcessBarValue = value;
+            txtStatus.Dispatcher.Invoke(() =>
+            {
+                txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
+                if (!string.IsNullOrEmpty(msg))
+                {
+                    txtLog.AppendText(msg + "(" + value + "%)\r\n");
+                    txtLog.CaretIndex = txtLog.Text.Length;
+                    txtLog.ScrollToEnd();
+                }
+                txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+            });
         }
 
         public void UpdateStatusProgress(WndContextData datacontext, int value)
         {
             datacontext.ProcessBarValue = value;
-            txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+            //txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+            txtProgress.Dispatcher.Invoke(() =>
+            {
+                txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+            });
         }
 
     }

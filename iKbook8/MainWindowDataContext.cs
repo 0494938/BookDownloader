@@ -43,6 +43,7 @@ namespace iKbook8
         IKBOOK8 = 0,
         QQBOOK = 1,
         BIQUGE = 2,
+        BIQUGE2 = 3,
     }
 
     public class WndContextData : INotifyPropertyChanged

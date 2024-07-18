@@ -10,7 +10,7 @@ namespace iKbook8
 {
     public class IKBook8NovelContent : IFetchNovelContent
     {
-        public void AnalysisHtmlBookBody(MainWindow wndMain, ref WndContextData datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        public void AnalysisHtmlBookBody(MainWindow wndMain, WndContextData datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
@@ -51,21 +51,18 @@ namespace iKbook8
                             //string strContents = GetBookContents(content);
                             string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
 
-                            wndMain.txtAnalysizedContents.Text = strContents;
-                            wndMain.txtNextUrl.Text = strNextLink;
-                            wndMain.txtCurURL.Text = strNextLink;
-                            /*
-                            wndMain.txtAnalysizedContents.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
-                            wndMain.txtNextUrl.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
-                            wndMain.txtCurURL.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
-                            */
+                            wndMain.Dispatcher.Invoke(() =>
+                            {
+                                wndMain.txtAnalysizedContents.Text = strContents;
+                                wndMain.txtNextUrl.Text = strNextLink;
+                                wndMain.txtCurURL.Text = strNextLink;
+                                if (wndMain.txtAggregatedContents.Text.Length > 1024 * 64)
+                                    wndMain.txtAggregatedContents.Text = strContents;
+                                else
+                                    wndMain.txtAggregatedContents.Text += strContents;
+                                wndMain.txtAggregatedContents.ScrollToEnd();
+                            });
 
-                            if (wndMain.txtAggregatedContents.Text.Length > 1024 * 64)
-                                wndMain.txtAggregatedContents.Text = strContents;
-                            else
-                                wndMain.txtAggregatedContents.Text += strContents;
-                            //wndMain.txtAggregatedContents.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
-                            wndMain.txtAggregatedContents.ScrollToEnd();
                             if (bSilenceMode)
                             {
                                 Debug.Assert(status != null);
@@ -74,7 +71,11 @@ namespace iKbook8
                                 DownloadStatus.ContentsWriter?.Write(strContents);
                             }
                             datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
-                            wndMain.btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                            wndMain.Dispatcher.Invoke(() =>
+                            {
+                                wndMain.btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                            });
+
                             return;
                         }
                     }

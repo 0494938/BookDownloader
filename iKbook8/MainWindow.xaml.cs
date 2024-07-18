@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 //using HtmlElement = System.Windows.Forms.HtmlElement;
 
@@ -36,7 +37,23 @@ namespace iKbook8
                 e.CancelCommand();
             }
         }
+        private static readonly Regex _regex = new Regex("[^0-9]+");
 
+        private static bool IsTextAllowed(string text)
+        {
+            return !_regex.IsMatch(text);
+        }
+
+        private void PreviewPagesTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = !IsTextAllowed(e.Text);
+        }
+
+        private void OnMainWindowActivated(object sender, EventArgs e)
+        {
+            Debug.WriteLine("OnMainWindowActivated invoked...");
+            //ClickBtntnInitURL(txtInitURL.Text);
+        }
     }
 
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
