@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 //using HtmlElement = System.Windows.Forms.HtmlElement;
@@ -15,6 +16,7 @@ namespace BookDownloader
         //bool bWebPageLoadFinished = false;
         public MainWindow()
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             InitializeComponent();
         }
 

@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BookDownloader"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1100" Width="1800" 
+        Title="Book Downloader Window" Height="1100" Width="1800" 
         Loaded="OnMainWindowLoaded"
         Activated="OnMainWindowActivated"
         Unloaded="OnMainWindowUnloaded"
-        Closing="OnMainWindowClosing"
+        Closing="OnMainWindowClosing" WindowStartupLocation="CenterScreen"
         >
     <Window.DataContext>
         <local:WndContextData/>
@@ -45,23 +45,31 @@
                     <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Column="0" x:Name="cmbNovelType" SelectedIndex="6" SelectionChanged="OnBookTypeSelectChagned" FontSize="12" FontWeight="Bold">
-                    <ComboBoxItem Content="爱看书吧 m.ikbook8.com"></ComboBoxItem>
-                    <ComboBoxItem Content="QQ电子书 book.qq.com"></ComboBoxItem>
-                    <ComboBoxItem Content="笔趣阁 m.xbiqugew.com"></ComboBoxItem>
-                    <ComboBoxItem Content="笔趣阁 m.xbiqugew.com2"></ComboBoxItem>
-                    <ComboBoxItem Content="无线电子书 www.wxdzs.net"></ComboBoxItem>
-                    <ComboBoxItem Content="苍穹小说 www.cqhhhs.com"></ComboBoxItem>
-                    <ComboBoxItem Content="金庸小说网 www.jinhuaja.com"></ComboBoxItem>
-
+                <ComboBox 
+                    Grid.Column="0" 
+                    x:Name="cmbNovelType" 
+                    SelectedIndex="7" 
+                    SelectionChanged="OnBookTypeSelectChagned" 
+                    FontSize="12" FontWeight="Bold">
+                    <ComboBoxItem Content="0 爱看书吧 m.ikbook8.com"></ComboBoxItem>
+                    <ComboBoxItem Content="1 QQ电子书 book.qq.com"></ComboBoxItem>
+                    <ComboBoxItem Content="2 笔趣阁 m.xbiqugew.com"></ComboBoxItem>
+                    <ComboBoxItem Content="3 笔趣阁2 m.xbiqugew.com"></ComboBoxItem>
+                    <ComboBoxItem Content="4 无线电子书 www.wxdzs.net"></ComboBoxItem>
+                    <ComboBoxItem Content="5 苍穹小说 www.cqhhhs.com"></ComboBoxItem>
+                    <ComboBoxItem Content="6 金庸小说网 www.jinhuaja.com"></ComboBoxItem>
+                    <ComboBoxItem Content="7 书旗小说网 www.shuqi.com"></ComboBoxItem>
+                    <Separator/>
+                    <ComboBoxItem Content="9 bad 番茄小说网 fanqienovel.com"></ComboBoxItem>
+                    <ComboBoxItem Content="10 bad 番茄小说网2 fanqienovel.com"></ComboBoxItem>
                 </ComboBox>
                 <!--TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/-->
-                <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://www.wxdzs.net/wxread/94612_43816524.html" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2" Text="Fileame" VerticalAlignment="Center"  FontSize="12" FontWeight="Bold"/>
+                <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://www.wxdzs.net/wxread/94612_43816524.html" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                <TextBlock Grid.Column="2" Text="Fileame" VerticalAlignment="Center"  FontSize="12" FontWeight="Bold" Margin="3,0,0,0"/>
                 <TextBox Grid.Column="3" x:Name="txtOutputFileName" Text="Novel" VerticalAlignment="Center"/>
-                <Button Grid.Column="5" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click" VerticalAlignment="Center"/>
-                <Button Grid.Column="7" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click" VerticalAlignment="Bottom" Margin="0,0,0,1"/>
-                <TextBox Grid.Column="8" x:Name="txtPages" Text="100" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput"  VerticalAlignment="Center" DataObject.Pasting="PagesPaste"/>
+                <Button Grid.Column="5" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click" VerticalAlignment="Center" FontWeight="Bold"/>
+                <Button Grid.Column="7" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click" VerticalAlignment="Bottom" Margin="0,0,0,1" FontWeight="Bold"/>
+                <TextBox Grid.Column="8" x:Name="txtPages" Text="100" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput"  VerticalAlignment="Center" DataObject.Pasting="PagesPaste"  Margin="3,0,0,0"/>
             </Grid>
         </GroupBox>
         <GroupBox 
@@ -94,7 +102,8 @@
             <WebBrowser 
                 LoadCompleted="MainFrameWebLoadCompleted"
                 Loaded="MainFrameWebLoaded"
-                x:Name="webBrowser" 
+                Margin="0,3,0,-1"
+                x:Name="webBrowser" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" 
             />
         </GroupBox>
         <Grid
@@ -108,8 +117,36 @@
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0"
+                Grid.Column="0"
+                  >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock 
+                    Text="Raw Html:"
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    FontWeight="Bold" 
+                    FontSize="12" 
+                    x:Name="btnOutputTest"
+                    VerticalAlignment="Center"/>
+                <Button Grid.Row="2" Height="60" Click="OnTestEncoding" Margin="0,0,3,0">
+                    <Button.Content>
+                        <TextBlock Text="Test Encoding(output test.txt)" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible" TextAlignment="Center"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+
             <TextBox
                 Grid.Row="0" 
+                Grid.Column="1"
                 x:Name="txtWebContents" 
                 BorderThickness="1" 
                 VerticalScrollBarVisibility="Auto"
@@ -123,16 +160,54 @@
                 </TextBox.Background>
 
             </TextBox>
+            <Grid Grid.Row="1"
+                  Grid.Column="0" 
+                  >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="1"
+                    Text="Text Content(From Html):" 
+                    TextWrapping="WrapWithOverflow"
+                    HorizontalAlignment="Center"
+                    FontWeight="Bold" 
+                    FontSize="12" 
+                    VerticalAlignment="Center"/>
+                <Button Grid.Row="2" Height="60" Click="OnTestDecoding" Margin="0,0,3,0">
+                    <Button.Content>
+                        <TextBlock Text="Test Encoding(from test.txt)" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
             <TextBox
                 Grid.Row="1" 
+                Grid.Column="1"
                 x:Name="txtAnalysizedContents" 
                 BorderThickness="1" 
                 VerticalScrollBarVisibility="Auto"
                 HorizontalScrollBarVisibility="Auto"
                 FontSize="12" FontWeight="Thin">
+                <TextBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="LightGreen"/>
+                        <GradientStop Color="LightPink" Offset="0.7"/>
+                    </LinearGradientBrush>
+                </TextBox.Background>
             </TextBox>
+            <TextBlock 
+                Grid.Row="2"
+                Grid.Column="0"
+                HorizontalAlignment="Center"
+                Text="Merged Content:" 
+                TextWrapping="WrapWithOverflow"
+                FontWeight="Bold" 
+                FontSize="12" 
+                VerticalAlignment="Center"/>
             <TextBox
                 Grid.Row="2" 
+                Grid.Column="1"
                 x:Name="txtAggregatedContents" 
                 BorderThickness="1" 
                 VerticalScrollBarVisibility="Auto"
@@ -145,28 +220,46 @@
                     </LinearGradientBrush>
                 </TextBox.Background>
             </TextBox>
+            <TextBlock 
+                Grid.Row="3"
+                Grid.Column="0" 
+                Text="Log:"
+                HorizontalAlignment="Center"
+                FontWeight="Bold" 
+                FontSize="12" 
+                VerticalAlignment="Center"/>
             <TextBox
                 Grid.Row="3" 
+                Grid.Column="1"
                 x:Name="txtLog" 
                 Margin="0,2,1,2"
                 BorderThickness="1" 
-                Background="LightGray"
                 FontSize="12" 
                 FontWeight="Thin" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <!--Background="LightGray"-->
+                <TextBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="LightGray"/>
+                        <GradientStop Color="LightSlateGray" Offset="0.7"/>
+                    </LinearGradientBrush>
+                </TextBox.Background>
             </TextBox>
-            <Grid Grid.Row="4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Next Page Information:" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1"
+            <TextBlock 
+                Grid.Row="4"
+                Grid.Column="0" 
+                Text="Next Page URL:"
+                HorizontalAlignment="Center"
+                TextWrapping="WrapWithOverflow"
+                FontWeight="Bold" 
+                FontSize="12" 
+                VerticalAlignment="Center"/>
+            <TextBox 
+                Grid.Row="4"
+                Grid.Column="1"
                 x:Name="txtNextUrl" 
                 BorderThickness="1"  VerticalAlignment="Center"
                 FontSize="12" FontWeight="Thin">
-                </TextBox>
-
-            </Grid>
+            </TextBox>
         </Grid>
         <Grid  Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Center" AutomationProperties.HelpText="" Background="LightGray" >
             <Grid.ColumnDefinitions>

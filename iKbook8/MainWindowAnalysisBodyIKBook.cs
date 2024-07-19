@@ -6,14 +6,23 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BookDownloader
 {
-    public class IKBook8NovelContent : IFetchNovelContent
+    public class IKBook8NovelContent : BaseBookNovelContent, IFetchNovelContent
     {
-        public void AnalysisHtmlBookBody(MainWindow wndMain, WndContextData datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             html.LoadHtml(strBody);
             Debug.Assert(html.DocumentNode.ChildNodes.Count == 1 && string.Equals(html.DocumentNode.ChildNodes[0].Name, "body"));
+            if (html.DocumentNode.ChildNodes.Count == 0)
+            {
+                //.Print("URL downloaded BODY is empty ...");
+                wndMain.UpdateStatusMsg(datacontext, "URL downloaded BODY is empty ...", 0);
+                return;
+            }
+
+
             HtmlNode body = html.DocumentNode.ChildNodes[0];
 
             foreach (HtmlNode element in body?.ChildNodes)
@@ -38,10 +47,12 @@ namespace BookDownloader
                 {
                     if (string.Equals(element.Attributes["class"]?.Value, "container"))
                     {
-                        HtmlNode nextLink = null;
-                        HtmlNode header = null;
-                        HtmlNode content = null;
+                        HtmlNode? nextLink = null;
+                        HtmlNode? header = null;
+                        HtmlNode? content = null;
+#pragma warning disable CS8601 // Null 参照代入の可能性があります。
                         FindBookNextLinkAndContents(element, ref nextLink, ref header, ref content);
+#pragma warning restore CS8601 // Null 参照代入の可能性があります。
                         if (content != null || nextLink != null)
                         {
                             string strNextLink = GetBookNextLink(nextLink);
@@ -51,14 +62,8 @@ namespace BookDownloader
 
                             wndMain.Dispatcher.Invoke(() =>
                             {
-                                wndMain.txtAnalysizedContents.Text = strContents;
-                                wndMain.txtNextUrl.Text = strNextLink;
-                                wndMain.txtCurURL.Text = strNextLink;
-                                if (wndMain.txtAggregatedContents.Text.Length > 1024 * 64)
-                                    wndMain.txtAggregatedContents.Text = strContents;
-                                else
-                                    wndMain.txtAggregatedContents.Text += strContents;
-                                wndMain.txtAggregatedContents.ScrollToEnd();
+                                ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
+
                             });
 
                             if (bSilenceMode)
@@ -83,10 +88,12 @@ namespace BookDownloader
                     Debug.Assert(false);
                 }
             }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
         }
 
-        public void FindBookNextLinkAndContents(HtmlNode parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
+        public void FindBookNextLinkAndContents(HtmlNode? parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in parent?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -112,12 +119,14 @@ namespace BookDownloader
                     }
                 }
             }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
         }
 
-        public string GetBookContents(HtmlNode content)
+        public string GetBookContents(HtmlNode? content)
         {
             StringBuilder sbContent = new StringBuilder();
             //strContents = "";
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in content?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -137,21 +146,23 @@ namespace BookDownloader
                     sbContent.Append("\r\n");
                 }
             }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
             return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
         }
 
-        public string GetBookHeader(HtmlNode header)
+        public string GetBookHeader(HtmlNode? header)
         {
-            return header.InnerText;
+            return header?.InnerText??"";
         }
 
-        public string GetBookName(HtmlNode content)
+        public string GetBookName(HtmlNode? content)
         {
             throw new NotImplementedException();
         }
 
-        public string GetBookNextLink(HtmlNode nextLink)
+        public string GetBookNextLink(HtmlNode? nextLink)
         {
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in nextLink?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -159,10 +170,11 @@ namespace BookDownloader
                 {
                     if (string.Equals(element.InnerHtml, "下一页") || string.Equals(element.InnerHtml, "下一章"))
                     {
-                        return element.Attributes["href"]?.Value;
+                        return element?.Attributes["href"]?.Value??"";
                     }
                 }
             }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
             return "";
         }
     }

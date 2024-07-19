@@ -6,20 +6,28 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BookDownloader
 {
-    public class BiQuGeBookNovelContent : IFetchNovelContent
+    public class BiQuGeBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
-        public void AnalysisHtmlBookBody(MainWindow wndMain, WndContextData datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(strBody);
             HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
 
-            HtmlNode nextLink = null;
-            HtmlNode content = null;
-            HtmlNode header = null;
-            HtmlNodeCollection topDiv = body.SelectNodes("//div[@class='content_read']"); 
-            if((topDiv?.Count??0) > 0)
+            if (body == null)
+            {
+                Debug.Print("URL downloaded BODY is empty ...");
+                return;
+            }
+
+            HtmlNode? nextLink = null;
+            HtmlNode? content = null;
+            HtmlNode? header = null;
+            HtmlNodeCollection? topDiv = body.SelectNodes("//div[@class='content_read']");
+#pragma warning disable CS8601 // Null 参照代入の可能性があります。
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
+            if ((topDiv?.Count??0) > 0)
             {
                 Debug.Assert(topDiv.Count ==1);
                 FindBookNextLinkAndContents2(body, ref nextLink, ref header, ref content);
@@ -31,15 +39,7 @@ namespace BookDownloader
 
                     wndMain.Dispatcher.Invoke(() =>
                     {
-                        wndMain.txtAnalysizedContents.Text = strContents;
-                        wndMain.txtNextUrl.Text = strNextLink;
-                        wndMain.txtCurURL.Text = strNextLink;
-
-                        if (wndMain.txtAggregatedContents.Text.Length > 1024 * 64)
-                            wndMain.txtAggregatedContents.Text = strContents;
-                        else
-                            wndMain.txtAggregatedContents.Text += strContents;
-                        wndMain.txtAggregatedContents.ScrollToEnd();
+                        ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
                     });
                     if (bSilenceMode)
                     {
@@ -71,10 +71,17 @@ namespace BookDownloader
                         wndMain.txtAnalysizedContents.Text = strContents;
                         wndMain.txtNextUrl.Text = strNextLink;
                         wndMain.txtCurURL.Text = strNextLink;
-                        if (wndMain.txtAggregatedContents.Text.Length > 1024 * 64)
-                            wndMain.txtAggregatedContents.Text = strContents;
+                        if (bSilenceMode)
+                        {
+                            if (wndMain.txtAggregatedContents.Text.Length > 1024 * 64)
+                                wndMain.txtAggregatedContents.Text = strContents;
+                            else
+                                wndMain.txtAggregatedContents.Text += strContents;
+                        }
                         else
+                        {
                             wndMain.txtAggregatedContents.Text += strContents;
+                        }
                         wndMain.txtAggregatedContents.ScrollToEnd();
                     });
 
@@ -94,10 +101,13 @@ namespace BookDownloader
                 return;
                 }
             }
+#pragma warning restore CS8601 // Null 参照代入の可能性があります。
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
         }
 
-        public void FindBookNextLinkAndContents(HtmlNode parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
+        public void FindBookNextLinkAndContents(HtmlNode? parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in parent?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -124,10 +134,12 @@ namespace BookDownloader
                     }
                 }
             }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
         }
 
-        public void FindBookNextLinkAndContents2(HtmlNode parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
+        public void FindBookNextLinkAndContents2(HtmlNode? parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in parent?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -151,59 +163,64 @@ namespace BookDownloader
                     }
                 }
             }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
         }
 
-        public string GetBookHeader(HtmlNode header)
+        public string GetBookHeader(HtmlNode? header)
         {
-            return header.InnerText;
+            return header?.InnerText??"";
         }
 
-        public string GetBookHeader2(HtmlNode header)
+        public string GetBookHeader2(HtmlNode? header)
         {
             string sHeader="";
-            foreach (HtmlNode element in header.ChildNodes)
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
+            foreach (HtmlNode element in header?.ChildNodes)
             {
                 if (string.Equals("#text", element.Name))
                 {
                     sHeader += element.InnerText?.Replace("\r", "")?.Replace("\n", "")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
                         .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
                         .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
-                        .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″"); ;
+                        .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″") ;
                 }
             }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
             return sHeader;
         }
 
-        public string GetBookNextLink(HtmlNode nextLink)
+        public string GetBookNextLink(HtmlNode? nextLink)
         {
-            IEnumerable<HtmlNode> ?lstNodes = nextLink.Descendants().Where(n => n?.Name == "td" && n.Attributes["class"]?.Value == "mulu") as IEnumerable<HtmlNode>;
-            IEnumerable<HtmlNode> ?nxtNodes = nextLink.Descendants().Where(n => n?.Name == "td" && n.Attributes["class"]?.Value == "next") as IEnumerable<HtmlNode>;
-            Debug.Assert(lstNodes.Count()==1 && nxtNodes?.Count() ==1);
+            IEnumerable<HtmlNode> ?lstNodes = nextLink?.Descendants().Where(n => n?.Name == "td" && n.Attributes["class"]?.Value == "mulu") as IEnumerable<HtmlNode>;
+            IEnumerable<HtmlNode> ?nxtNodes = nextLink?.Descendants().Where(n => n?.Name == "td" && n.Attributes["class"]?.Value == "next") as IEnumerable<HtmlNode>;
+            Debug.Assert(lstNodes?.Count()==1 && nxtNodes?.Count() ==1);
 
             IEnumerable< HtmlNode > aLstNode = lstNodes.First().Descendants().Where(n => n?.Name == "a" && n.Attributes["id"]?.Value == "pb_mulu") as IEnumerable<HtmlNode>;
             IEnumerable<HtmlNode> aNxtNode = nxtNodes.First().Descendants().Where(n => n?.Name == "a" && n.Attributes["id"]?.Value == "pb_next") as IEnumerable<HtmlNode>;
 
-            Debug.Assert(aLstNode.Count() == 1 && aNxtNode?.Count() == 1);
-            string sLst = aLstNode.First().Attributes["href"]?.Value;
-            string sNxt = aNxtNode.First().Attributes["href"]?.Value;
-            return "https://m.xbiqugew.com/book" + sLst.Replace("chapters_","") + sNxt;
+            Debug.Assert(aLstNode?.Count() == 1 && aNxtNode?.Count() == 1);
+            string? sLst = aLstNode?.First()?.Attributes["href"]?.Value;
+            string? sNxt = aNxtNode?.First()?.Attributes["href"]?.Value;
+            return "https://m.xbiqugew.com/book" + sLst?.Replace("chapters_","") + sNxt;
         }
 
-        public string GetBookNextLink2(HtmlNode nextLink)
+        public string GetBookNextLink2(HtmlNode? nextLink)
         {
-            IEnumerable<HtmlNode>? idxNodes = nextLink.Descendants().Where(n => n?.Name == "a" && n.Attributes["id"]?.Value == "link-index") as IEnumerable<HtmlNode>;
-            IEnumerable<HtmlNode>? nxtNodes = nextLink.Descendants().Where(n => n?.Name == "a" && n.Attributes["id"]?.Value == "link-next") as IEnumerable<HtmlNode>;
-            Debug.Assert(idxNodes.Count() == 1 && nxtNodes?.Count() == 1);
+            //IEnumerable<HtmlNode>? idxNodes = nextLink?.Descendants().Where(n => n?.Name == "a" && n.Attributes["id"]?.Value == "link-index") as IEnumerable<HtmlNode>;
+            IEnumerable<HtmlNode>? nxtNodes = nextLink?.Descendants().Where(n => n?.Name == "a" && n.Attributes["id"]?.Value == "link-next") as IEnumerable<HtmlNode>;
+            //Debug.Assert(idxNodes?.Count() == 1);
+            Debug.Assert(nxtNodes?.Count() == 1);
 
-            string sIdx = idxNodes.First().Attributes["href"]?.Value;
-            string sNxt = nxtNodes.First().Attributes["href"]?.Value;
-            return sNxt;
+            //string? sIdx = idxNodes?.First()?.Attributes["href"]?.Value;
+            string? sNxt = nxtNodes?.First()?.Attributes["href"]?.Value;
+            return sNxt??"";
         }
 
-        public string GetBookContents(HtmlNode content)
+        public string GetBookContents(HtmlNode? content)
         {
             StringBuilder sbContent = new StringBuilder();
-            IEnumerable<HtmlNode>? contentNodes = content.Descendants().Where(n => n?.Name == "div" && n.Attributes["id"]?.Value == "nr1") as IEnumerable<HtmlNode>;
+            IEnumerable<HtmlNode>? contentNodes = content?.Descendants().Where(n => n?.Name == "div" && n.Attributes["id"]?.Value == "nr1") as IEnumerable<HtmlNode>;
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in contentNodes?.First().ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -223,13 +240,15 @@ namespace BookDownloader
                     sbContent.Append("\r\n");
                 }
             }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
             return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
         }
 
-        public string GetBookContents2(HtmlNode content)
+        public string GetBookContents2(HtmlNode? content)
         {
             StringBuilder sbContent = new StringBuilder();
             //IEnumerable<HtmlNode>? contentNodes = content.Descendants().Where(n => n?.Name == "div" && n.Attributes["id"]?.Value == "nr1") as IEnumerable<HtmlNode>;
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in content?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -249,10 +268,11 @@ namespace BookDownloader
                     sbContent.Append("\r\n");
                 }
             }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
             return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
         }
 
-        public string GetBookName(HtmlNode content)
+        public string GetBookName(HtmlNode? content)
         {
             throw new NotImplementedException();
         }

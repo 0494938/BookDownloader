@@ -26,10 +26,10 @@ namespace BookDownloader
 
         private void btnAnalysisCurURL_Click(object sender, RoutedEventArgs e)
         {
-            AnalysisCurURL(webBrowser.Source.ToString());
+            AnalysisCurURL(webBrowser.Source.ToString(), false);
         }
         
-        private void AnalysisCurURL(string strUrl)
+        private void AnalysisCurURL(string strUrl, bool bWaitOptoin=true)
         {
             Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
@@ -43,8 +43,9 @@ namespace BookDownloader
             {
                 Guid serviceGuid = new Guid("0002DF05-0000-0000-C000-000000000046");
                 Guid iid = typeof(SHDocVw.WebBrowser).GUID;
-                var webBrowserPtr = (SHDocVw.WebBrowser)serviceProvider
-                    .QueryService(ref serviceGuid, ref iid);
+                SHDocVw.WebBrowser? webBrowserPtr = serviceProvider
+                    .QueryService(ref serviceGuid, ref iid) as SHDocVw.WebBrowser;
+                Debug.WriteLine(strUrl + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
                 if (webBrowserPtr != null)
                 {
                     webBrowserPtr.NewWindow2 += webBrowser1_NewWindow2;
@@ -56,7 +57,7 @@ namespace BookDownloader
             IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
             string? strBody = body?.outerHTML ?? "";
             txtWebContents.Text = body?.outerHTML;
-            AnalysisHtmlBody( datacontext, strUrl, strBody);
+            AnalysisHtmlBody( datacontext, bWaitOptoin, strUrl, strBody);
         }
 
         private void webBrowser1_NewWindow2(ref object ppDisp, ref bool Cancel)
@@ -71,7 +72,8 @@ namespace BookDownloader
             Cancel = true;
         }
 
-        public void UpdateStatusMsg(WndContextData datacontext, string msg, int value)
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
+        public void UpdateStatusMsg(WndContextData? datacontext, string msg, int value)
         {
 
             Debug.WriteLine(msg);
@@ -90,7 +92,7 @@ namespace BookDownloader
             });
         }
 
-        public void UpdateStatusProgress(WndContextData datacontext, int value)
+        public void UpdateStatusProgress(WndContextData? datacontext, int value)
         {
             datacontext.ProcessBarValue = value;
             //txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
@@ -99,6 +101,6 @@ namespace BookDownloader
                 txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
             });
         }
-
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
     }
 }

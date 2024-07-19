@@ -46,8 +46,9 @@ namespace BookDownloader
                     if (webBrowser == null || webBrowser.Document == null)
                         return;
 
-                    var webBrowserPtr = GetWebBrowserPtr(webBrowser);
-                    if (webBrowserPtr.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
+                    SHDocVw.WebBrowser? webBrowserPtr = GetWebBrowserPtr(webBrowser);
+                    Debug.WriteLine(strUrl + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
+                    if (webBrowserPtr?.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
                         return;
                 }
             }
@@ -77,8 +78,9 @@ namespace BookDownloader
                         WaitFinish(strURL);
                     }
 
-                    var webBrowserPtr = GetWebBrowserPtr(webBrowser);
-                    if (webBrowserPtr.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
+                    SHDocVw.WebBrowser? webBrowserPtr = GetWebBrowserPtr(webBrowser);
+                    Debug.WriteLine(strURL + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
+                    if (webBrowserPtr?.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
                         return;
                 }
             }
@@ -104,7 +106,7 @@ namespace BookDownloader
                 status.Depth = status.Depth - 1;
 
                 Debug.WriteLine($"{strURL} : Download Finished, Begin Analysis ...");
-                Debug.Assert(webBrowser != null || webBrowser.Document != null);
+                Debug.Assert(webBrowser != null || webBrowser?.Document != null);
 
                 IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
                 IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
@@ -112,7 +114,7 @@ namespace BookDownloader
                 //string? strHtml = hTMLDocument2.boday
                 txtWebContents.Text = strBody;
                 WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
-                AnalysisHtmlBody(datacontext, strURL, strBody, true, status);
+                AnalysisHtmlBody(datacontext, true, strURL, strBody, true, status);
             }
         }
     
@@ -126,13 +128,16 @@ namespace BookDownloader
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
                 dictDownloadStatus.Clear();
                 txtAggregatedContents.Clear();
-                string strNextPage = "";
                 int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 100 : int.Parse(txtPages.Text.Trim());
                 DownloadStatus.ThreadMax = nMaxPage;
-                DownloadStatus.ContentsWriter = new StreamWriter(File.Open(AppDomain.CurrentDomain.BaseDirectory + (string.IsNullOrEmpty(txtOutputFileName.Text.Trim())? @"Content": txtOutputFileName.Text.Trim()) + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + ".txt", FileMode.CreateNew),
-                    //Encoding.GetEncoding("iso-8859-1")
+
+                DownloadStatus.ContentsWriter = new StreamWriter(
+                    File.Open( AppDomain.CurrentDomain.BaseDirectory + (string.IsNullOrEmpty(txtOutputFileName.Text.Trim()) ? @"Content" : txtOutputFileName.Text.Trim()) + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + ".txt", 
+                    FileMode.CreateNew, 
+                    FileAccess.ReadWrite,
+                    FileShare.Read),
                     Encoding.UTF8
-                    );
+                );
 
                 DownloadOneURLAndGetNext(datacontext,txtInitURL.Text);
             }

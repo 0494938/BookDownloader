@@ -13,7 +13,7 @@ namespace BookDownloader
     {
         private void MainFrameWebLoadCompleted(object sender, NavigationEventArgs e)
         {
-            Debug.WriteLine("MainFrameWebLoadCompleted invoked...");
+            Debug.WriteLine("----------------------------------------------------------------------------- MainFrameWebLoadCompleted invoked -----------------------------------------------------------------------------");
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if ((datacontext != null))
             {
@@ -24,12 +24,13 @@ namespace BookDownloader
 
                 dynamic document = browser.Document;
 
-                var webBrowserPtr = GetWebBrowserPtr(webBrowser);
-                if (webBrowserPtr.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
+                SHDocVw.WebBrowser? webBrowserPtr = GetWebBrowserPtr(webBrowser);
+                Debug.WriteLine(e.Uri.ToString() + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
+                if (webBrowserPtr?.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
                     return;
 
                 //int nStep = 0;
-                dynamic script = null;
+                dynamic? script = null;
                 try
                 {
                     script = document.createElement("script");

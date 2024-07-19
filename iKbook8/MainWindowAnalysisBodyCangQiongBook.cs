@@ -6,20 +6,29 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BookDownloader
 {
-    public class CangQiongBookNovelContent : IFetchNovelContent
+    public class CangQiongBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
         
-        public void AnalysisHtmlBookBody(MainWindow wndMain, WndContextData datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(strBody);
             HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
 
-            HtmlNode nextLink = null;
-            HtmlNode content = null;
-            HtmlNode header = null;
-            HtmlNodeCollection topDiv = body.SelectNodes(".//div[@class='reader-main']");
+            if (body == null)
+            {
+                Debug.Print("URL downloaded BODY is empty ...");
+                return;
+            }
+
+            HtmlNode? nextLink = null;
+            HtmlNode? content = null;
+            HtmlNode? header = null;
+            HtmlNodeCollection? topDiv = body.SelectNodes(".//div[@class='reader-main']");
+#pragma warning disable CS8604 // Null 参照引数の可能性があります。
+#pragma warning disable CS8601 // Null 参照代入の可能性があります。
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             if ((topDiv?.Count ?? 0) > 0)
             {
                 FindBookNextLinkAndContents(topDiv.First(), ref nextLink, ref header, ref content);
@@ -31,14 +40,8 @@ namespace BookDownloader
 
                     wndMain.Dispatcher.Invoke(() =>
                     {
-                        wndMain.txtAnalysizedContents.Text = strContents;
-                        wndMain.txtNextUrl.Text = strNextLink;
-                        wndMain.txtCurURL.Text = strNextLink;
-                        if (wndMain.txtAggregatedContents.Text.Length > 1024 * 64)
-                            wndMain.txtAggregatedContents.Text = strContents;
-                        else
-                            wndMain.txtAggregatedContents.Text += strContents;
-                        wndMain.txtAggregatedContents.ScrollToEnd();
+                        ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
+
                     });
 
                     if (bSilenceMode)
@@ -57,32 +60,37 @@ namespace BookDownloader
                     return;
                 }
             }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning restore CS8601 // Null 参照代入の可能性があります。
+#pragma warning restore CS8604 // Null 参照引数の可能性があります。
         }
 
-        public void FindBookNextLinkAndContents(HtmlNode top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
+        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
-            HtmlNodeCollection ?collCont = top.SelectNodes(".//div[@class='content']");
+#pragma warning disable CS8601 // Null 参照代入の可能性があります。
+            HtmlNodeCollection? collCont = top?.SelectNodes(".//div[@class='content']");
             content = collCont?.First();
 
-            HtmlNodeCollection? collHeader = top.SelectNodes("//div[@class='layout-tit xs-hidden']");
+            HtmlNodeCollection? collHeader = top?.SelectNodes("//div[@class='layout-tit xs-hidden']");
             header = collHeader?.First();
 
-            HtmlNodeCollection? collNextDiv = top.SelectNodes("//div[@class='section-opt']");
-            HtmlNode nextLinkDiv = collNextDiv?.First();
+            HtmlNodeCollection? collNextDiv = top?.SelectNodes("//div[@class='section-opt']");
+            HtmlNode? nextLinkDiv = collNextDiv?.First();
 
             //<div onclick="JumpNext();" class="erzitop_"><a title="第002章 抓捕  我的谍战岁月" href="/wxread/94612_43816525.html">下一章</a> </div>
             IEnumerable<HtmlNode>? collNext= nextLinkDiv?.Descendants().Where(n => n?.Name == "a" && (n.InnerText == "下一页" || n.InnerText == "下一章")) as IEnumerable<HtmlNode>;
             nextLink = collNext?.First();
+#pragma warning restore CS8601 // Null 参照代入の可能性があります。
         }
 
-        public string GetBookHeader(HtmlNode header)
+        public string GetBookHeader(HtmlNode? header)
         {
-            return header?.Attributes["href"]?.Value;
+            return header?.Attributes["href"]?.Value??"";
         }
 
-        public string GetBookNextLink(HtmlNode nextLink)
+        public string GetBookNextLink(HtmlNode? nextLink)
         {
-            string sUrl = nextLink.Attributes["href"]?.Value??"";
+            string sUrl = nextLink?.Attributes["href"]?.Value??"";
             if (sUrl.StartsWith("http"))
                 return sUrl;
             if (sUrl.StartsWith("www"))
@@ -92,10 +100,11 @@ namespace BookDownloader
             return "http://www.cqhhhs.com" + sUrl;
         }
 
-        public string GetBookContents(HtmlNode content)
+        public string GetBookContents(HtmlNode? content)
         {
             StringBuilder sbContent = new StringBuilder();
             //strContents = "";
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in content?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -115,10 +124,11 @@ namespace BookDownloader
                     sbContent.Append("\r\n");
                 }
             }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
             return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
         }
 
-        public string GetBookName(HtmlNode content)
+        public string GetBookName(HtmlNode? content)
         {
             throw new NotImplementedException();
         }
