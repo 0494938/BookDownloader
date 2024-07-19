@@ -137,9 +137,14 @@
                     FontSize="12" 
                     x:Name="btnOutputTest"
                     VerticalAlignment="Center"/>
-                <Button Grid.Row="2" Height="60" Click="OnTestEncoding" Margin="0,0,3,0">
+                <Button 
+                    Grid.Row="2" 
+                    Height="60" 
+                    Click="OnTestEncoding" 
+                    Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" 
+                    Margin="0,0,3,0" >
                     <Button.Content>
-                        <TextBlock Text="Test Encoding(output test.txt)" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible" TextAlignment="Center"/>
+                        <TextBlock Text="Test Encoding(output test.txt)" TextWrapping="WrapWithOverflow" FontWeight="Bold" TextAlignment="Center"/>
                     </Button.Content>
                 </Button>
             </Grid>
@@ -175,7 +180,10 @@
                     FontWeight="Bold" 
                     FontSize="12" 
                     VerticalAlignment="Center"/>
-                <Button Grid.Row="2" Height="60" Click="OnTestDecoding" Margin="0,0,3,0">
+                <Button 
+                    Grid.Row="2" Height="60" 
+                    Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" 
+                    Click="OnTestDecoding" Margin="0,0,3,0">
                     <Button.Content>
                         <TextBlock Text="Test Encoding(from test.txt)" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"/>
                     </Button.Content>

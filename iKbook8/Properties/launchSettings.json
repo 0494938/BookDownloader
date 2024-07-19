@@ -2,7 +2,7 @@
   "profiles": {
     "iKbook8": {
       "commandName": "Project",
-      "nativeDebugging": true,
+      "nativeDebugging": false,
       "jsWebView2Debugging": false
     }
   }
