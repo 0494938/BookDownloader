@@ -1,14 +1,9 @@
 ﻿using HtmlAgilityPack;
-using Microsoft.VisualBasic;
 using MSHTML;
-using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace BookDownloader
 {

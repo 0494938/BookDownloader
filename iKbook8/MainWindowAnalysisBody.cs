@@ -1,8 +1,6 @@
 ﻿using HtmlAgilityPack;
-using MSHTML;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-using System.Text.Json.Nodes;
 using System.Windows;
 
 namespace BookDownloader

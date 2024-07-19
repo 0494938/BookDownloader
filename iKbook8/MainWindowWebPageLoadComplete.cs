@@ -1,7 +1,4 @@
-﻿using MSHTML;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;

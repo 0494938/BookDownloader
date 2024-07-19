@@ -60,8 +60,8 @@
                     <ComboBoxItem Content="6 金庸小说网 www.jinhuaja.com"></ComboBoxItem>
                     <ComboBoxItem Content="7 书旗小说网 www.shuqi.com"></ComboBoxItem>
                     <Separator/>
-                    <ComboBoxItem Content="9 bad 番茄小说网 fanqienovel.com"></ComboBoxItem>
-                    <ComboBoxItem Content="10 bad 番茄小说网2 fanqienovel.com"></ComboBoxItem>
+                    <ComboBoxItem Content="9 番茄小说网 fanqienovel.com"></ComboBoxItem>
+                    <ComboBoxItem Content="10 番茄小说网2 fanqienovel.com"></ComboBoxItem>
                 </ComboBox>
                 <!--TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/-->
                 <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://www.wxdzs.net/wxread/94612_43816524.html" VerticalAlignment="Center" Margin="3,0,0,0"/>
