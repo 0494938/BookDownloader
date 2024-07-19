@@ -34,6 +34,13 @@ namespace BookDownloader
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if ((datacontext != null))
             {
+                datacontext.PageLoaded = false;
+                datacontext.NextLinkAnalysized = false;
+                btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                txtWebContents.Text = "";
+                txtAnalysizedContents.Text = "";
+
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
                 try
                 {
@@ -59,11 +66,16 @@ namespace BookDownloader
             //WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if ((datacontext != null))
             {
+
                 try
                 {
                     dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished =false , URL = strURL, NextUrl="", StartTime=DateTime.Now, Depth=0, ThreadNum= dictDownloadStatus.Count+1};
                     webBrowser.Dispatcher.Invoke(() =>
                     {
+                        datacontext.PageLoaded = false;
+                        datacontext.NextLinkAnalysized = false;
+                        btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                        btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                         webBrowser.Navigate(strURL);
                     });
                     UpdateStatusMsg(datacontext, strURL + " : Begin to download ...", (int)((100.0 / DownloadStatus.ThreadMax * (dictDownloadStatus[strURL].ThreadNum - 1))));

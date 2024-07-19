@@ -1,17 +1,11 @@
 ﻿using HtmlAgilityPack;
 using MSHTML;
-using System;
-using System.Collections;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BookDownloader
 {

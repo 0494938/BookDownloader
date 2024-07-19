@@ -18,7 +18,7 @@ namespace BookDownloader
             if (html.DocumentNode.ChildNodes.Count == 0)
             {
                 //.Print("URL downloaded BODY is empty ...");
-                wndMain.UpdateStatusMsg(datacontext, "URL downloaded BODY is empty ...", 0);
+                wndMain.UpdateStatusMsg(datacontext, "*** URL downloaded BODY is empty, skip this Page *** ", 0);
                 return;
             }
 

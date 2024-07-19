@@ -93,6 +93,11 @@ namespace BookDownloader
                     nMaxRetry = 60;
                     fetchNovelContent = new ShuQiBookNovelContent();
                     break;
+                case BatchQueryNovelContents.FANQIE:
+                case BatchQueryNovelContents.FANQIE2:
+                    nMaxRetry = 60;
+                    fetchNovelContent = new FanQieBookNovelContent();
+                    break;
                 case BatchQueryNovelContents.BIQUGE:
                 case BatchQueryNovelContents.BIQUGE2:
                     fetchNovelContent = new BiQuGeBookNovelContent();

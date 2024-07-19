@@ -8,6 +8,7 @@ namespace BookDownloader
     public class JinYongBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
         public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
@@ -18,7 +19,7 @@ namespace BookDownloader
 
             if (body == null)
             {
-                Debug.Print("URL downloaded BODY is empty ...");
+                wndMain.UpdateStatusMsg(datacontext, "*** URL downloaded BODY is empty, skip this Page *** ", 0);
                 return;
             }
 
@@ -35,13 +36,11 @@ namespace BookDownloader
                     string strChapterHeader = GetBookHeader(header);
                     string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
 
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
                     wndMain.Dispatcher.Invoke(() =>
                     {
                         ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
 
                     });
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 
                     if (bSilenceMode)
                     {
@@ -51,9 +50,7 @@ namespace BookDownloader
                         DownloadStatus.ContentsWriter?.Write(strContents);
                         DownloadStatus.ContentsWriter?.Flush();
                     }
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
                     wndMain.Dispatcher.Invoke(() =>
                     {
                         wndMain.btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
@@ -62,6 +59,7 @@ namespace BookDownloader
                 }
             }
         }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning restore CS8604 // Null 参照引数の可能性があります。
 #pragma warning restore CS8601 // Null 参照代入の可能性があります。
 

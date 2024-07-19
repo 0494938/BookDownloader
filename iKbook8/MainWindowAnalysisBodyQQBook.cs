@@ -16,14 +16,15 @@ namespace BookDownloader
             Debug.Assert(html.DocumentNode.ChildNodes.Count == 1 && string.Equals(html.DocumentNode.ChildNodes[0].Name, "body"));
             HtmlNode? body = html.DocumentNode.ChildNodes["BODY"];
 
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning disable CS8601 // Null 参照代入の可能性があります。
             if (body == null)
             {
-                Debug.Print("URL downloaded BODY is empty ...");
+                wndMain.UpdateStatusMsg(datacontext, "*** URL downloaded BODY is empty, skip this Page *** ", 0);
                 return;
             }
             else
             {
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
                 foreach (HtmlNode element in body?.ChildNodes)
                 {
                     //hrefTags.Add(element.GetAttribute("href"));
@@ -43,9 +44,7 @@ namespace BookDownloader
                             HtmlNode? nextLink = null;
                             HtmlNode? content = null;
                             HtmlNode? header = null;
-#pragma warning disable CS8601 // Null 参照代入の可能性があります。
                             FindBookNextLinkAndContents(element, ref nextLink, ref header, ref content);
-#pragma warning restore CS8601 // Null 参照代入の可能性があります。
                             if (content != null || nextLink != null)
                             {
                                 string strNextLink = GetBookNextLink(nextLink);
@@ -80,6 +79,7 @@ namespace BookDownloader
                     }
                 }
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning restore CS8601 // Null 参照代入の可能性があります。
             }
         }
 
@@ -183,7 +183,7 @@ namespace BookDownloader
                         sbContent.Append("\r\n");
                     }
                 }
-                return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
+                return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
             }
             return "";
         }

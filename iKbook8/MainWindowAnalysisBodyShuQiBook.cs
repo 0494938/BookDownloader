@@ -20,9 +20,11 @@ namespace BookDownloader
             html.LoadHtml(strBody);
             HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
 
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning disable CS8601 // Null 参照代入の可能性があります。
             if (body == null)
             {
-                Debug.Print("URL downloaded BODY is empty ...");
+                wndMain.UpdateStatusMsg(datacontext, "*** URL downloaded BODY is empty, skip this Page *** ", 0);
                 return;
             }
             HtmlNode? nextLink = null;
@@ -32,8 +34,6 @@ namespace BookDownloader
 
 
             int nRetry = 0;
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
-#pragma warning disable CS8601 // Null 参照代入の可能性があります。
             while (nRetry <= nMaxRetry && body !=null && FindBookNextLinkAndContents2(body, ref nextLink, ref header, ref title, ref content))
             {
                 nRetry++;

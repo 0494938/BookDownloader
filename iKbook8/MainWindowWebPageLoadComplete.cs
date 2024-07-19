@@ -45,7 +45,6 @@ namespace BookDownloader
                 try
                 {
                     datacontext.PageLoaded = true;
-
                     btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                     if (dictDownloadStatus.ContainsKey(e.Uri.ToString()))
                     {

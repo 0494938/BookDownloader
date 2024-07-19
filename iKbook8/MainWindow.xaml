@@ -48,7 +48,7 @@
                 <ComboBox 
                     Grid.Column="0" 
                     x:Name="cmbNovelType" 
-                    SelectedIndex="7" 
+                    SelectedIndex="9" 
                     SelectionChanged="OnBookTypeSelectChagned" 
                     FontSize="12" FontWeight="Bold">
                     <ComboBoxItem Content="0 爱看书吧 m.ikbook8.com"></ComboBoxItem>
