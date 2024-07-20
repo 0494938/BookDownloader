@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using BaseBookDownload;
+using HtmlAgilityPack;
 using MSHTML;
 using System.Diagnostics;
 using System.IO;
@@ -10,7 +11,7 @@ namespace BookDownloader
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class WPFMainWindow : BaseDownloadWnd
     {
         public static string DumpString(byte[] bytes)
         {

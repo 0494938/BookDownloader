@@ -78,4 +78,8 @@
     <Folder Include="packages\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BaseBookDownload\BaseBookDownload.csproj" />
+  </ItemGroup>
+
 </Project>

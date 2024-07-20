@@ -6,7 +6,7 @@ using WebBrowser = System.Windows.Controls.WebBrowser;
 
 namespace BookDownloader
 {
-    public partial class MainWindow : Window
+    public partial class WPFMainWindow : BaseDownloadWnd
     {
         private void MainFrameWebLoadCompleted(object sender, NavigationEventArgs e)
         {
@@ -55,7 +55,7 @@ namespace BookDownloader
                         else
                         {
                             UpdateStatusMsg(datacontext, e.Uri.ToString() + " : Finished Page download ...", 50);
-                            AnalysisCurURL(e.Uri.ToString());
+                            AnalysisURL(e.Uri.ToString());
                         }
                     }
                     catch (Exception ex)

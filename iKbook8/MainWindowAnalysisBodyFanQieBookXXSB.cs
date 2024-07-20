@@ -14,7 +14,7 @@ namespace BookDownloader
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
     public class XXSBBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
-        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public void AnalysisHtmlBookBody(WPFMainWindow? wndMain, WndContextData? datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
             this.URL = strUrl;
 

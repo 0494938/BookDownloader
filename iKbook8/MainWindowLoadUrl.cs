@@ -8,7 +8,7 @@ using System.Windows.Markup;
 
 namespace BookDownloader
 {
-    public partial class MainWindow : Window
+    public partial class WPFMainWindow : BaseDownloadWnd
     {
         Dictionary<string, DownloadStatus> dictDownloadStatus = new Dictionary<string, DownloadStatus>();
 
@@ -62,7 +62,7 @@ namespace BookDownloader
             }
         }
 
-        private void DownloadOneURLAndGetNext(WndContextData? datacontext, MainWindow wndMain,  string strURL)
+        private void DownloadOneURLAndGetNext(WndContextData? datacontext, WPFMainWindow wndMain,  string strURL)
         {
             if ((datacontext != null) && !datacontext.UnloadPgm)
             {
@@ -102,7 +102,7 @@ namespace BookDownloader
             }
         }
 
-        void WaitFinishForNext(WndContextData? datacontext, MainWindow wndMain, string strURL, bool bSilenceMode=false)
+        void WaitFinishForNext(WndContextData? datacontext, WPFMainWindow wndMain, string strURL, bool bSilenceMode=false)
         {
 #if false
             DownloadStatus status = dictDownloadStatus[strURL];
@@ -136,14 +136,21 @@ namespace BookDownloader
 #else
             DownloadStatus status = dictDownloadStatus[strURL];
 
-            Thread thread = new Thread(() => WaitAndLaunchAnalsysi(datacontext, wndMain, strURL, bSilenceMode, status));
-            thread.Start();
+            try
+            {
+                Thread thread = new Thread(() => WaitAndLaunchAnalsysi(datacontext, wndMain, strURL, bSilenceMode, status));
+                thread.Start();
+            }
+            catch (TaskCanceledException)
+            {
+                //ignore TaskCanceledException
+            }
 
 #endif
         }
 
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
-        public void WaitAndLaunchAnalsysi(WndContextData? datacontext, MainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status )
+        public void WaitAndLaunchAnalsysi(WndContextData? datacontext, WPFMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status )
         {
             while (status.DownloadFinished == false && !datacontext.UnloadPgm)
             {

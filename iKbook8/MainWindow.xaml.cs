@@ -11,10 +11,10 @@ namespace BookDownloader
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class WPFMainWindow : BaseDownloadWnd
     {
         //bool bWebPageLoadFinished = false;
-        public MainWindow()
+        public WPFMainWindow()
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             InitializeComponent();

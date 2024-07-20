@@ -4,8 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookDownloader", "BookDownloader.csproj", "{A634A389-FF23-45EA-AADA-797A23C1921C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{692FE6A3-00AF-482F-9B41-2D0C424B853C} = {692FE6A3-00AF-482F-9B41-2D0C424B853C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp", "..\WindowsFormsApp\WindowsFormsApp.csproj", "{95958DCB-325C-4C4C-A3F0-B5BFAF36C774}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseBookDownload", "..\BaseBookDownload\BaseBookDownload.csproj", "{692FE6A3-00AF-482F-9B41-2D0C424B853C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,10 @@ Global
 		{95958DCB-325C-4C4C-A3F0-B5BFAF36C774}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95958DCB-325C-4C4C-A3F0-B5BFAF36C774}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95958DCB-325C-4C4C-A3F0-B5BFAF36C774}.Release|Any CPU.Build.0 = Release|Any CPU
+		{692FE6A3-00AF-482F-9B41-2D0C424B853C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{692FE6A3-00AF-482F-9B41-2D0C424B853C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{692FE6A3-00AF-482F-9B41-2D0C424B853C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{692FE6A3-00AF-482F-9B41-2D0C424B853C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

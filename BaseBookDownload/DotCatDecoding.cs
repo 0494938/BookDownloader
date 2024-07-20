@@ -1,6 +1,7 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 
-namespace BookDownloader
+namespace BaseBookDownload
 {
     public class GID
     {

@@ -9,7 +9,7 @@ namespace BookDownloader
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class WPFMainWindow : BaseDownloadWnd
     {
         static SHDocVw.WebBrowser? GetWebBrowserPtr(System.Windows.Controls.WebBrowser webBrowser)
         {
@@ -28,17 +28,13 @@ namespace BookDownloader
         private void btnAnalysisCurURL_Click(object sender, RoutedEventArgs e)
         {
             dictDownloadStatus.Clear();
-            AnalysisCurURL(webBrowser.Source.ToString(), false);
+            AnalysisURL(webBrowser.Source.ToString(), false);
         }
-        
-        private void AnalysisCurURL(string strUrl, bool bWaitOptoin=true)
-        {
-            Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
-            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
-            Debug.Assert(datacontext!=null);
 
+        private string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
+        {
             if (webBrowser == null || webBrowser.Document == null)
-                return;
+                return null;
 
             var serviceProvider = (IServiceProvider)webBrowser.Document;
             if (serviceProvider != null)
@@ -51,15 +47,28 @@ namespace BookDownloader
                 if (webBrowserPtr != null)
                 {
                     webBrowserPtr.NewWindow2 += webBrowser1_NewWindow2;
-                    webBrowserPtr.NewWindow3+= webBrowser1_NewWindow3;
+                    webBrowserPtr.NewWindow3 += webBrowser1_NewWindow3;
                 }
             }
 
             IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
             IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
-            string? strBody = body?.outerHTML ?? "";
-            txtWebContents.Text = body?.outerHTML;
-            AnalysisHtmlBody( datacontext, bWaitOptoin, strUrl, strBody);
+            string? strBody = body?.outerHTML;
+            return strBody;
+        }
+
+        private void AnalysisURL(string strUrl, bool bWaitOptoin=true)
+        {
+            Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            Debug.Assert(datacontext!=null);
+
+            string? strBody = GetWebDocHtmlBody(strUrl, bWaitOptoin);
+            if (!string.IsNullOrEmpty(strBody.Trim()))
+            {
+                txtWebContents.Text = strBody;
+                AnalysisHtmlBody(datacontext, bWaitOptoin, strUrl, strBody);
+            }
         }
 
         private void webBrowser1_NewWindow2(ref object ppDisp, ref bool Cancel)
