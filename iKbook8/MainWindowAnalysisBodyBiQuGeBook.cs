@@ -6,17 +6,18 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BookDownloader
 {
+#pragma warning disable CS8601 // Null 参照代入の可能性があります。
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
     public class BiQuGeBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
-        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
+            this.URL = strUrl;
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(strBody);
             HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
 
-#pragma warning disable CS8601 // Null 参照代入の可能性があります。
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             if (body == null)
             {
                 wndMain.UpdateStatusMsg(datacontext, "*** URL downloaded BODY is empty, skip this Page *** ", 0);
@@ -101,13 +102,10 @@ namespace BookDownloader
                 return;
                 }
             }
-#pragma warning restore CS8601 // Null 参照代入の可能性があります。
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
         }
 
         public void FindBookNextLinkAndContents(HtmlNode? parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in parent?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -134,12 +132,10 @@ namespace BookDownloader
                     }
                 }
             }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
         }
 
         public void FindBookNextLinkAndContents2(HtmlNode? parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in parent?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -163,7 +159,6 @@ namespace BookDownloader
                     }
                 }
             }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
         }
 
         public string GetBookHeader(HtmlNode? header)
@@ -174,7 +169,6 @@ namespace BookDownloader
         public string GetBookHeader2(HtmlNode? header)
         {
             string sHeader="";
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in header?.ChildNodes)
             {
                 if (string.Equals("#text", element.Name))
@@ -185,7 +179,6 @@ namespace BookDownloader
                         .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″") ;
                 }
             }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
             return sHeader;
         }
 
@@ -220,7 +213,6 @@ namespace BookDownloader
         {
             StringBuilder sbContent = new StringBuilder();
             IEnumerable<HtmlNode>? contentNodes = content?.Descendants().Where(n => n?.Name == "div" && n.Attributes["id"]?.Value == "nr1") as IEnumerable<HtmlNode>;
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in contentNodes?.First().ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -240,7 +232,6 @@ namespace BookDownloader
                     sbContent.Append("\r\n");
                 }
             }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
             return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
         }
 
@@ -248,7 +239,6 @@ namespace BookDownloader
         {
             StringBuilder sbContent = new StringBuilder();
             //IEnumerable<HtmlNode>? contentNodes = content.Descendants().Where(n => n?.Name == "div" && n.Attributes["id"]?.Value == "nr1") as IEnumerable<HtmlNode>;
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in content?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -268,7 +258,6 @@ namespace BookDownloader
                     sbContent.Append("\r\n");
                 }
             }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
             return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
         }
 
@@ -282,4 +271,6 @@ namespace BookDownloader
             throw new NotImplementedException();
         }
     }
+#pragma warning restore CS8601 // Null 参照代入の可能性があります。
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Markup;
 
 namespace BookDownloader
 {
@@ -29,6 +30,7 @@ namespace BookDownloader
 
         private void ClickBtntnInitURL(string strUrl)
         {
+            dictDownloadStatus.Clear();
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if ((datacontext != null))
             {
@@ -59,12 +61,10 @@ namespace BookDownloader
             }
         }
 
-        private void DownloadOneURLAndGetNext(WndContextData? datacontext, string strURL)
+        private void DownloadOneURLAndGetNext(WndContextData? datacontext, MainWindow wndMain,  string strURL)
         {
-            //WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if ((datacontext != null))
             {
-
                 try
                 {
                     dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished =false , URL = strURL, NextUrl="", StartTime=DateTime.Now, Depth=0, ThreadNum= dictDownloadStatus.Count+1};
@@ -77,7 +77,7 @@ namespace BookDownloader
                         webBrowser.Navigate(strURL);
                     });
                     UpdateStatusMsg(datacontext, strURL + " : Begin to download ...", (int)((100.0 / DownloadStatus.ThreadMax * (dictDownloadStatus[strURL].ThreadNum - 1))));
-                    WaitFinish(strURL);
+                    WaitFinishForNext(datacontext, wndMain, strURL, true);
                 }
                 catch (Exception ex)
                 {
@@ -85,7 +85,7 @@ namespace BookDownloader
                     if (webBrowser == null || webBrowser.Document == null)
                     {
                         Debug.Assert(false);
-                        WaitFinish(strURL);
+                        WaitFinishForNext(datacontext,wndMain, strURL, true);
                     }
 
                     SHDocVw.WebBrowser? webBrowserPtr = GetWebBrowserPtr(webBrowser);
@@ -96,8 +96,9 @@ namespace BookDownloader
             }
         }
 
-        void WaitFinish(string strURL)
+        void WaitFinishForNext(WndContextData? datacontext, MainWindow wndMain, string strURL, bool bSilenceMode=false)
         {
+#if false
             DownloadStatus status = dictDownloadStatus[strURL];
             if (status.DownloadFinished == false)
             {
@@ -126,19 +127,54 @@ namespace BookDownloader
                 WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
                 AnalysisHtmlBody(datacontext, true, strURL, strBody, true, status);
             }
+#else
+            DownloadStatus status = dictDownloadStatus[strURL];
+
+            Thread thread = new Thread(() => WaitAndLaunchAnalsysi(datacontext, wndMain, strURL, bSilenceMode, status));
+            thread.Start();
+
+#endif
         }
-    
+
+        public void WaitAndLaunchAnalsysi(WndContextData? datacontext, MainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status )
+        {
+            while (status.DownloadFinished == false)
+            {
+                Thread.Sleep(200);
+            }
+
+            status.Depth = status.Depth - 1;
+
+            Debug.WriteLine($"{strURL} : Download Finished, Begin Analysis ...");
+            Debug.Assert(webBrowser != null || webBrowser?.Document != null);
+
+            wndMain.Dispatcher.Invoke(() =>
+            {
+                IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
+                IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
+                string? strBody = body?.outerHTML ?? "";
+                //string? strHtml = hTMLDocument2.boday
+                txtWebContents.Text = strBody;
+                AnalysisHtmlBody(datacontext, true, strURL, strBody, true, status);
+            });
+
+        }
+
         private void btnAutoURL_Click(object sender, RoutedEventArgs e)
         {
             txtLog.Clear();
+            dictDownloadStatus.Clear();
             Debug.WriteLine("btnAutoURL_Click invoked...");
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if (datacontext != null)
             {
+                datacontext.BackGroundNotRunning = false;
+                btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
                 dictDownloadStatus.Clear();
                 txtAggregatedContents.Clear();
-                int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 100 : int.Parse(txtPages.Text.Trim());
+                int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 20 : int.Parse(txtPages.Text.Trim());
                 DownloadStatus.ThreadMax = nMaxPage;
 
                 DownloadStatus.ContentsWriter = new StreamWriter(
@@ -149,7 +185,7 @@ namespace BookDownloader
                     Encoding.UTF8
                 );
 
-                DownloadOneURLAndGetNext(datacontext,txtInitURL.Text);
+                DownloadOneURLAndGetNext(datacontext,this, txtInitURL.Text);
             }
         }
     }

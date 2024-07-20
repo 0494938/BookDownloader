@@ -6,16 +6,17 @@ using System.Windows;
 namespace BookDownloader
 {
     public interface IFetchNovelContent {
-        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0);
-        public void FindBookNextLinkAndContents(HtmlNode? parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content);
-        public string GetBookHeader(HtmlNode? header);
-        public string GetBookNextLink(HtmlNode? nextLink);
-        public string GetBookContents(HtmlNode? content);
+        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0);
+        protected void FindBookNextLinkAndContents(HtmlNode? parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content);
+        protected string GetBookHeader(HtmlNode? header);
+        protected string GetBookNextLink(HtmlNode? nextLink);
+        protected string GetBookContents(HtmlNode? content);
         public string GetBookName(HtmlNode? content);
     }
 
     public class BaseBookNovelContent
     {
+        protected string? URL { get; set; } = null;
         public static JToken? GetValueByKeyFromJObject(JObject jObj, string sKey)
         {
             JToken? value;
@@ -55,8 +56,9 @@ namespace BookDownloader
         public void AnalysisHtmlBody(WndContextData? datacontext, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             Debug.Assert(datacontext != null);
-            Thread thread = new Thread(() => AnalysisHtmlBodyThreadFunc(datacontext, strURL, strBody, bSilenceMode, status));
+            Thread thread = new Thread(() => AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status));
             thread.Start();
+            //AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status);
         }
     }
 }

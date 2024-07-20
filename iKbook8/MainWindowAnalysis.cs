@@ -5,6 +5,7 @@ using System.Windows.Controls;
 
 namespace BookDownloader
 {
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -26,6 +27,7 @@ namespace BookDownloader
 
         private void btnAnalysisCurURL_Click(object sender, RoutedEventArgs e)
         {
+            dictDownloadStatus.Clear();
             AnalysisCurURL(webBrowser.Source.ToString(), false);
         }
         
@@ -72,23 +74,24 @@ namespace BookDownloader
             Cancel = true;
         }
 
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
         public void UpdateStatusMsg(WndContextData? datacontext, string msg, int value)
         {
 
             Debug.WriteLine(msg);
             datacontext.StartBarMsg = msg;
-            datacontext.ProcessBarValue = value;
+            if(value >= 0 )
+                datacontext.ProcessBarValue = value;
             txtStatus.Dispatcher.Invoke(() =>
             {
                 txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
                 if (!string.IsNullOrEmpty(msg))
                 {
-                    txtLog.AppendText(msg + "(" + value + "%)\r\n");
+                    txtLog.AppendText(msg + ((value >= 0) ?("(" + value + "%)"):"") + "\r\n");
                     txtLog.CaretIndex = txtLog.Text.Length;
                     txtLog.ScrollToEnd();
                 }
-                txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+                if (value >= 0)
+                    txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
             });
         }
 
@@ -101,6 +104,6 @@ namespace BookDownloader
                 txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
             });
         }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
     }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 }

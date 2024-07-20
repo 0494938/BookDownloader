@@ -8,13 +8,15 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BookDownloader
 {
-    public class HXTXBookNovelContent : BaseBookNovelContent, IFetchNovelContent
-    {
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
-        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+    public class HXTXBookNovelContent : BaseBookNovelContent, IFetchNovelContent
+    {
+        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
+            this.URL = strUrl;
+
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(strBody);
@@ -62,11 +64,7 @@ namespace BookDownloader
                 }
             }
         }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
-#pragma warning restore CS8604 // Null 参照引数の可能性があります。
-#pragma warning restore CS8601 // Null 参照代入の可能性があります。
 
-#pragma warning disable CS8601 // Null 参照代入の可能性があります。
         public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
             HtmlNodeCollection ?collCont = top?.SelectNodes(".//div[@class='read-content j_readContent']");
@@ -83,7 +81,6 @@ namespace BookDownloader
             IEnumerable<HtmlNode>? collNextScript = top?.SelectNodes(".//div[@class='chapter-control dib-wrap']"); 
             nextLink = collNextScript?.FirstOrDefault();
         }
-#pragma warning restore CS8601 // Null 参照代入の可能性があります。
 
         public string GetBookHeader(HtmlNode? header)
         {
@@ -103,7 +100,6 @@ namespace BookDownloader
             return "";
         }
 
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
         public string GetBookContents(HtmlNode? content)
         {
             if (content != null)
@@ -132,7 +128,6 @@ namespace BookDownloader
 
             return "";
         }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 
         public string GetBookName(HtmlNode? content)
         {
@@ -144,4 +139,7 @@ namespace BookDownloader
             throw new NotImplementedException();
         }
     }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning restore CS8604 // Null 参照引数の可能性があります。
+#pragma warning restore CS8601 // Null 参照代入の可能性があります。
 }

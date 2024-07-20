@@ -10,17 +10,24 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BookDownloader
 {
+#pragma warning disable IDE0019 // パターン マッチングを使用します
+#pragma warning disable IDE0090 // 'new(...)' を使用する
+#pragma warning disable CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
+#pragma warning disable CS8601 // Null 参照代入の可能性があります。
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning disable CS8604 // Null 参照引数の可能性があります。
+#pragma warning disable CS8629 // Null 許容値型は Null になる場合があります。
     public class ShuQiBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
-        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
+            this.URL = strUrl;
+
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(strBody);
             HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
 
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
-#pragma warning disable CS8601 // Null 参照代入の可能性があります。
             if (body == null)
             {
                 wndMain.UpdateStatusMsg(datacontext, "*** URL downloaded BODY is empty, skip this Page *** ", 0);
@@ -78,8 +85,6 @@ namespace BookDownloader
                 });
                 return;
             }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
-#pragma warning restore CS8601 // Null 参照代入の可能性があります。
         }
 
         public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
@@ -95,7 +100,6 @@ namespace BookDownloader
         /// <param name="content"></param>
         /// <returns> when return True, means need Retry... when False, means No Retry
         /// </returns>
-#pragma warning disable CS8601 // Null 参照代入の可能性があります。
         public bool FindBookNextLinkAndContents2(HtmlNode? top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode title, ref HtmlNode content)
         {
             HtmlNodeCollection ?collCont = top?.SelectNodes(".//div[@class='chapter-content']");
@@ -128,17 +132,13 @@ namespace BookDownloader
             }
             return "";
         }
-#pragma warning restore CS8601 // Null 参照代入の可能性があります。
 
-#pragma warning disable CS8629 // Null 許容値型は Null になる場合があります。
-#pragma warning disable CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
         public string GetBookNextLink(HtmlNode? nextLink)
         {
-#pragma warning disable IDE0019 // パターン マッチングを使用します
-#pragma warning disable CS8604 // Null 参照引数の可能性があります。
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             if (nextLink != null)
             {
+                Uri uri = new Uri(URL);
+                string sCurChapterId = HttpUtility.ParseQueryString(uri.Query).Get("cid");
                 JObject? data = JsonConvert.DeserializeObject(nextLink.InnerHtml) as JObject;
                 Debug.Assert(data != null);
                 if (data != null)
@@ -149,7 +149,7 @@ namespace BookDownloader
                         JArray? volumeList = GetValueByKeyFromJObject(chapter as JObject, "volumeList") as JArray;
                         if (volumeList!=null)
                         {
-                            JObject? matchedVolumn = volumeList?.Children().FirstOrDefault(i => GetValueByKeyFromJObject(i as JObject, "chapterId").ToString() == "2589796") as JObject;
+                            JObject? matchedVolumn = volumeList?.Children().FirstOrDefault(i => GetValueByKeyFromJObject(i as JObject, "chapterId").ToString() == sCurChapterId) as JObject;
                             if (matchedVolumn != null)
                             {
                                 string strUri = GetValueByKeyFromJObject(matchedVolumn as JObject, "contUrlSuffix")?.ToString();
@@ -175,16 +175,12 @@ namespace BookDownloader
                     }
                 }
             }
-#pragma warning restore CS8604 // Null 参照引数の可能性があります。
-#pragma warning restore IDE0019 // パターン マッチングを使用します
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
             return "";
         }
 
         public string GetBookContents(HtmlNode? content)
         {
             StringBuilder sbContent = new StringBuilder();
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in content?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -204,11 +200,8 @@ namespace BookDownloader
                     sbContent.Append("\r\n");
                 }
             }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
             return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
         }
-#pragma warning restore CS8629 // Null 許容値型は Null になる場合があります。
-#pragma warning restore CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
 
         public string GetBookName(HtmlNode? content)
         {
@@ -220,4 +213,11 @@ namespace BookDownloader
             throw new NotImplementedException();
         }
     }
+#pragma warning restore CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
+#pragma warning restore CS8601 // Null 参照代入の可能性があります。
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning restore CS8604 // Null 参照引数の可能性があります。
+#pragma warning restore CS8629 // Null 許容値型は Null になる場合があります。
+#pragma warning restore IDE0019 // パターン マッチングを使用します
+#pragma warning restore IDE0090 // 'new(...)' を使用する
 }

@@ -8,13 +8,14 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BookDownloader
 {
-    public class FanQieBookNovelContent : BaseBookNovelContent, IFetchNovelContent
-    {
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
-        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+    public class FanQieBookNovelContent : BaseBookNovelContent, IFetchNovelContent
+    {
+        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
+            this.URL = strUrl;
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(strBody);
@@ -62,11 +63,7 @@ namespace BookDownloader
                 }
             }
         }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
-#pragma warning restore CS8604 // Null 参照引数の可能性があります。
-#pragma warning restore CS8601 // Null 参照代入の可能性があります。
 
-#pragma warning disable CS8601 // Null 参照代入の可能性があります。
         public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
             HtmlNodeCollection ?collCont = top?.SelectNodes("//div[@class='muye-reader-content noselect']");
@@ -78,7 +75,6 @@ namespace BookDownloader
             IEnumerable<HtmlNode>? collNextScript = top?.SelectNodes(".//script")?.Where(n => n.InnerHtml.Contains("window.__INITIAL_STATE__="));
             nextLink = collNextScript?.First();
         }
-#pragma warning restore CS8601 // Null 参照代入の可能性があります。
 
         public string GetBookHeader(HtmlNode? header)
         {
@@ -116,7 +112,6 @@ namespace BookDownloader
                 {
                     content = divContents.FirstOrDefault();
                     StringBuilder sbContent = new StringBuilder();
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
                     foreach (HtmlNode element in content?.ChildNodes)
                     {
                         //hrefTags.Add(element.GetAttribute("href"));
@@ -136,7 +131,6 @@ namespace BookDownloader
                             sbContent.Append("\r\n");
                         }
                     }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
                     return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
                 }
             }
@@ -154,4 +148,7 @@ namespace BookDownloader
             throw new NotImplementedException();
         }
     }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning restore CS8604 // Null 参照引数の可能性があります。
+#pragma warning restore CS8601 // Null 参照代入の可能性があります。
 }

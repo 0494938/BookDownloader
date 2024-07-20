@@ -1,10 +1,15 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
+using System.Xaml;
 
 namespace BookDownloader
 {
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
     public class DownloadStatus
     {
         public bool DownloadFinished { get; set; } = false;
@@ -43,9 +48,13 @@ namespace BookDownloader
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public bool PageLoaded { get; set; } = false;
-        public bool ContentsAnalysised { get; set; } = false;
-        public bool NextLinkAnalysized { get; set; } = false;
+        public bool BackGroundNotRunning { get; set; } = true;
+        bool _pageLoaded = false;
+        public bool PageLoaded { get { return _pageLoaded && BackGroundNotRunning; } set { _pageLoaded = value; } }
+        bool _contentsAnalysised = false;
+        public bool ContentsAnalysised { get { return _contentsAnalysised && BackGroundNotRunning; } set { _contentsAnalysised = value; } }
+        bool _nextLinkAnalysized = false;
+        public bool NextLinkAnalysized { get { return _nextLinkAnalysized && BackGroundNotRunning; } set { _nextLinkAnalysized = value; } } 
         public BatchQueryNovelContents SiteType { get; set; } = BatchQueryNovelContents.IKBOOK8;
         public string? StartBarMsg { get; set; }
         public int ProcessBarValue { get; set; }
@@ -76,11 +85,10 @@ namespace BookDownloader
         HXTX =10,//红袖添香
         XXSB = 11, //新小说吧
         YQXSB = 12,//言情小说吧
+        _17K = 13, //17K，Script Over Flow
         //TOBEDONE = 13,
-        //_17K = 14, //17K，Script Over Flow
     }
 
-   
     public partial class MainWindow : Window
     {
         private void NovelTyhpeChangeToIndex(int nIndex)
@@ -129,9 +137,9 @@ namespace BookDownloader
                     case (int)BatchQueryNovelContents.YQXSB:
                         txtInitURL.Text = "https://www.xs8.cn/chapter/3738025904323901/10686192507259378";
                         break;
-                    //case (int)BatchQueryNovelContents._17K:
-                    //    txtInitURL.Text = "https://www.17k.com/chapter/3589602/48625472.html";
-                    //    break;
+                    case (int)BatchQueryNovelContents._17K:
+                        txtInitURL.Text = "https://www.17k.com/chapter/3589602/48625472.html";
+                        break;
                     //case (int)BatchQueryNovelContents.TOBEDONE:
                     //    break;
                     default:
@@ -141,14 +149,9 @@ namespace BookDownloader
             }
         }
 
-        public void AnalysisHtmlBodyThreadFunc(WndContextData? datacontext, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        public void AnalysisHtmlBodyThreadFunc(WndContextData? datacontext, MainWindow wndMain, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
-            /*
-            if (nDelayMiliSeconds > 0) { 
-                Thread.Sleep(nDelayMiliSeconds);
-            }
-            */
 
             IFetchNovelContent? fetchNovelContent = null;
             int nMaxRetry = 60; //span is 3s.
@@ -197,14 +200,24 @@ namespace BookDownloader
 
             if (bSilenceMode)
             {
+                while (status?.DownloadFinished == false)
+                {
+                    Thread.Sleep(200);
+                }
                 UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext?.SiteType.ToString() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", (int)((100.0 / DownloadStatus.ThreadMax * (status?.ThreadNum ?? 1 - 1 + 0.5))));
             }
             else
+            {
+                while(datacontext?.PageLoaded == false)
+                {
+                    Thread.Sleep(200);
+                }
                 UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext?.SiteType.ToString() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", 50);
+            }
 
             if (fetchNovelContent != null)
             {
-                fetchNovelContent.AnalysisHtmlBookBody(this, datacontext, strBody, bSilenceMode, status, nMaxRetry);
+                fetchNovelContent.AnalysisHtmlBookBody(this, datacontext, strURL, strBody, bSilenceMode, status, nMaxRetry);
             }
             if (bSilenceMode)
             {
@@ -217,20 +230,50 @@ namespace BookDownloader
             {
                 if (status?.ThreadNum < DownloadStatus.ThreadMax && !string.IsNullOrEmpty(status.NextUrl))
                 {
-                    DownloadOneURLAndGetNext(datacontext, status.NextUrl);
+                    DownloadOneURLAndGetNext(datacontext, wndMain,status.NextUrl);
                 }
                 else
                 {
+                    string sDownloadFileName = ((FileStream)DownloadStatus.ContentsWriter.BaseStream).Name;
                     DownloadStatus.ContentsWriter = null;
+
+                    const Int32 BufferSize = 2048;
+                    using (FileStream fileStream = File.OpenRead(sDownloadFileName))
+                    using (StreamReader streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
+                    {
+                        UpdateStatusMsg(datacontext, "Analysize of Chapter in download file : " + sDownloadFileName, -1);
+                        String? sLine;
+                        long lLine = 0;
+                        while ((sLine = streamReader.ReadLine()) != null)
+                        {
+                            lLine++;
+                            if (!string.IsNullOrEmpty(sLine.Trim()))
+                            {
+                                //Match matche = Regex.Match(line, "[^第]*(第[]*[][^章节页]*");// Process line
+                                string sPattern = "第[0-9０-９ \t一二三四五六七八九十百千万亿壹贰叁肆伍陆柒捌玖拾佰仟零]+[章节页]";
+                                bool result = Regex.IsMatch(sLine, sPattern);
+                                if(result)
+                                    UpdateStatusMsg(datacontext, lLine.ToString()+ " : " + sLine.Trim(), -1);
+                                //Match matche = Regex.Match(line, sPattern);// Process line
+                            }
+                        }
+                    }
+
+                    datacontext.BackGroundNotRunning = true;
+
                     UpdateStatusMsg(datacontext, "Finished batch download(Total " + status?.ThreadNum + " Downloaded) ...", 100);
                     this.Dispatcher.Invoke(() =>
                     {
+                        wndMain.btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                        wndMain.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                         if (!string.IsNullOrEmpty(status?.NextUrl))
                             txtInitURL.Text = status.NextUrl;
+
                         MessageBox.Show(this, "Batch download finished...", "Web Novel Downloader", MessageBoxButton.OK);
                     });
                 }
             }
         }
     }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 }

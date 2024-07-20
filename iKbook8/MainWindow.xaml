@@ -48,7 +48,7 @@
                 <ComboBox 
                     Grid.Column="0" 
                     x:Name="cmbNovelType" 
-                    SelectedIndex="11" 
+                    SelectedIndex="12" 
                     SelectionChanged="OnBookTypeSelectChagned" 
                     FontSize="12" FontWeight="Bold">
                     <ComboBoxItem Content="0 爱看书吧 m.ikbook8.com"></ComboBoxItem>
@@ -64,16 +64,16 @@
                     <ComboBoxItem Content="10 红袖添香 www.hongxiu.com"></ComboBoxItem>
                     <ComboBoxItem Content="11 新小说吧 www.xxs8.com"></ComboBoxItem>
                     <ComboBoxItem Content="12 言情小说吧 www.xs8.cn"></ComboBoxItem>
-                    <!--Separator/>
-                    <ComboBoxItem Content="14 Bad 17小说网 www.17k.com"></ComboBoxItem-->
+                    <!--Separator/-->
+                    <ComboBoxItem Content="13 Bad 17小说网 www.17k.com"></ComboBoxItem>
                 </ComboBox>
                 <!--TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/-->
                 <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://www.wxdzs.net/wxread/94612_43816524.html" VerticalAlignment="Center" Margin="3,0,0,0"/>
                 <TextBlock Grid.Column="2" Text="Fileame" VerticalAlignment="Center"  FontSize="12" FontWeight="Bold" Margin="3,0,0,0"/>
                 <TextBox Grid.Column="3" x:Name="txtOutputFileName" Text="Novel" VerticalAlignment="Center"/>
-                <Button Grid.Column="5" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click" VerticalAlignment="Center" FontWeight="Bold"/>
-                <Button Grid.Column="7" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click" VerticalAlignment="Bottom" Margin="0,0,0,1" FontWeight="Bold"/>
-                <TextBox Grid.Column="8" x:Name="txtPages" Text="100" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput"  VerticalAlignment="Center" DataObject.Pasting="PagesPaste"  Margin="3,0,0,0"/>
+                <Button Grid.Column="5" x:Name="btnInitURL" Content="Load Init URL" Click="btnInitURL_Click" VerticalAlignment="Top" FontWeight="Bold" Margin="0,1,0,0" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" />
+                <Button Grid.Column="7" x:Name="btnAutoDownload" Content="Auto from" Click="btnAutoURL_Click" VerticalAlignment="Bottom" Margin="0,0,0,1" FontWeight="Bold" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" />
+                <TextBox Grid.Column="8" x:Name="txtPages" Text="20" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput"  VerticalAlignment="Center" DataObject.Pasting="PagesPaste"  Margin="3,0,0,0"/>
             </Grid>
         </GroupBox>
         <GroupBox 
@@ -97,7 +97,7 @@
                 <TextBlock Grid.Column="0" Text="Current URL:" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
                 <TextBox Grid.Column="1" x:Name="txtCurURL" VerticalAlignment="Center"/>
                 <Button Grid.Column="3" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center"/>
-                <Button Grid.Column="6" x:Name="btnNextPage" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center"/>
+                <Button Grid.Column="6" x:Name="btnNextPage" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Bottom"/>
             </Grid>
         </GroupBox>
         <GroupBox

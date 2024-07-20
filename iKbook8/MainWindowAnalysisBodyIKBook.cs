@@ -6,24 +6,24 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BookDownloader
 {
+#pragma warning disable CS8601 // Null 参照代入の可能性があります。
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
     public class IKBook8NovelContent : BaseBookNovelContent, IFetchNovelContent
     {
-        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public void AnalysisHtmlBookBody(MainWindow? wndMain, WndContextData? datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
+            this.URL = strUrl;
+
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             html.LoadHtml(strBody);
-            Debug.Assert(html.DocumentNode.ChildNodes.Count == 1 && string.Equals(html.DocumentNode.ChildNodes[0].Name, "body"));
-            if (html.DocumentNode.ChildNodes.Count == 0)
+            HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
+            if (body == null)
             {
                 //.Print("URL downloaded BODY is empty ...");
                 wndMain.UpdateStatusMsg(datacontext, "*** URL downloaded BODY is empty, skip this Page *** ", 0);
                 return;
             }
-
-
-            HtmlNode body = html.DocumentNode.ChildNodes[0];
 
             foreach (HtmlNode element in body?.ChildNodes)
             {
@@ -50,9 +50,7 @@ namespace BookDownloader
                         HtmlNode? nextLink = null;
                         HtmlNode? header = null;
                         HtmlNode? content = null;
-#pragma warning disable CS8601 // Null 参照代入の可能性があります。
                         FindBookNextLinkAndContents(element, ref nextLink, ref header, ref content);
-#pragma warning restore CS8601 // Null 参照代入の可能性があります。
                         if (content != null || nextLink != null)
                         {
                             string strNextLink = GetBookNextLink(nextLink);
@@ -88,12 +86,10 @@ namespace BookDownloader
                     Debug.Assert(false);
                 }
             }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
         }
 
         public void FindBookNextLinkAndContents(HtmlNode? parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in parent?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -119,14 +115,12 @@ namespace BookDownloader
                     }
                 }
             }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
         }
 
         public string GetBookContents(HtmlNode? content)
         {
             StringBuilder sbContent = new StringBuilder();
             //strContents = "";
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in content?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -146,7 +140,6 @@ namespace BookDownloader
                     sbContent.Append("\r\n");
                 }
             }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
             return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
         }
 
@@ -162,7 +155,6 @@ namespace BookDownloader
 
         public string GetBookNextLink(HtmlNode? nextLink)
         {
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
             foreach (HtmlNode element in nextLink?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));
@@ -174,8 +166,9 @@ namespace BookDownloader
                     }
                 }
             }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
             return "";
         }
     }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning restore CS8601 // Null 参照代入の可能性があります。
 }
