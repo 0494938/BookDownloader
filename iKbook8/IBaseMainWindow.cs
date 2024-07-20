@@ -1,10 +1,4 @@
 ﻿using BaseBookDownload;
-using HtmlAgilityPack;
-using MSHTML;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Windows;
 using System.Windows.Threading;
 
 namespace BookDownloader
@@ -19,11 +13,15 @@ namespace BookDownloader
 
         public Dispatcher GetDispatcher();
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true);
+        
         public void UpdateNextPageButton();
+        public void UpdateInitPageButton();
+        public void UpdateAutoDownloadPageButton();
+
         public void UpdateNextUrl(string url);
         public void UpdateCurUrl(string url);
 
-        public void UpdateWebBodyOuterHtml(string strBody);
+        public void UpdateWebBodyOuterHtml(string? strBody);
         public void UpdateAnalysizedContents(string strContents);
         public void UpdateAggragatedContents(string strContents);
         public void UpdateAggragatedContentsWithLimit(string strContents);

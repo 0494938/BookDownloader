@@ -1,11 +1,9 @@
 ﻿using BaseBookDownload;
-using MSHTML;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Markup;
 
 namespace BookDownloader
 {
@@ -63,7 +61,7 @@ namespace BookDownloader
             }
         }
 
-        private void DownloadOneURLAndGetNext(WndContextData? datacontext, WPFMainWindow wndMain,  string strURL)
+        private void DownloadOneURLAndGetNext(WndContextData? datacontext, IBaseMainWindow wndMain,  string strURL)
         {
             if ((datacontext != null) && !datacontext.UnloadPgm)
             {
@@ -103,7 +101,7 @@ namespace BookDownloader
             }
         }
 
-        void WaitFinishForNext(WndContextData? datacontext, WPFMainWindow wndMain, string strURL, bool bSilenceMode=false)
+        void WaitFinishForNext(WndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode=false)
         {
 #if false
             DownloadStatus status = dictDownloadStatus[strURL];
@@ -151,7 +149,7 @@ namespace BookDownloader
         }
 
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
-        public void WaitAndLaunchAnalsysi(WndContextData? datacontext, WPFMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status )
+        public void WaitAndLaunchAnalsysi(WndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status )
         {
             while (status.DownloadFinished == false && !datacontext.UnloadPgm)
             {
@@ -167,7 +165,7 @@ namespace BookDownloader
             {
                 try
                 {
-                    wndMain.Dispatcher.Invoke(() =>
+                    wndMain.GetDispatcher().Invoke(() =>
                     {
                         string? strBody = wndMain.GetWebDocHtmlBody(strURL);
 

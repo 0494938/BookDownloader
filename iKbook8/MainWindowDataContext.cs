@@ -5,9 +5,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Threading;
-using System.Xaml;
 
 namespace BookDownloader
 {
@@ -92,7 +90,7 @@ namespace BookDownloader
                 }
             }
         }
-        public void AnalysisHtmlBodyThreadFunc(WndContextData datacontext, WPFMainWindow wndMain, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        public void AnalysisHtmlBodyThreadFunc(WndContextData datacontext, IBaseMainWindow wndMain, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
 
@@ -208,8 +206,11 @@ namespace BookDownloader
                     String strMsgAreaLog="";
                     this.Dispatcher.Invoke(() =>
                     {
-                        wndMain.btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                        wndMain.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                        //wndMain.btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                        wndMain.UpdateInitPageButton();
+                        //wndMain.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                        wndMain.UpdateAutoDownloadPageButton();
+
                         UpdateStatusMsg(datacontext, "Flush Log to file: " + sDownloadFileName + ".log", -1);
                         if (!string.IsNullOrEmpty(status?.NextUrl))
                             txtInitURL.Text = status.NextUrl;

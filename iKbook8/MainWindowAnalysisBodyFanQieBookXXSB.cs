@@ -1,11 +1,7 @@
 ﻿using BaseBookDownload;
 using HtmlAgilityPack;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Text;
-using System.Windows.Controls;
-using System.Windows.Media.TextFormatting;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BookDownloader

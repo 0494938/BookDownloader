@@ -1,9 +1,6 @@
 ﻿using BaseBookDownload;
 using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
-using System.Diagnostics;
-using System.Linq.Expressions;
-using System.Windows;
 
 namespace BookDownloader
 {
