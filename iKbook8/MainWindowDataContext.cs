@@ -71,380 +71,18 @@ namespace BookDownloader
         CANGQIONG = 5,
         JINYONG = 6,
         SHUQI = 7,
-        TOBEDONE = 8,
-        FANQIE = TOBEDONE + 1,
-        FANQIE2 = TOBEDONE + 2,
+        FANQIE = 8,
+        FANQIE2 = 9,
+        HXTX =10,//红袖添香
+        XXSB = 11, //新小说吧
+        YQXSB = 12,//言情小说吧
+        //TOBEDONE = 13,
+        //_17K = 14, //17K，Script Over Flow
     }
 
    
-
     public partial class MainWindow : Window
     {
-        public static GID[] dit_data = new GID[]{
-            new GID(58670, '0'),
-            new GID(58413, '1'),
-            new GID(58678, '2'),
-            new GID(58371, '3'),
-            new GID(58353, '4'),
-            new GID(58480, '5'),
-            new GID(58359, '6'),
-            new GID(58449, '7'),
-            new GID(58540, '8'),
-            new GID(58692, '9'),
-            new GID(58712, 'a'),
-            new GID(58542, 'b'),
-            new GID(58575, 'c'),
-            new GID(58626, 'd'),
-            new GID(58691, 'e'),
-            new GID(58561, 'f'),
-            new GID(58362, 'g'),
-            new GID(58619, 'h'),
-            new GID(58430, 'i'),
-            new GID(58531, 'j'),
-            new GID(58588, 'k'),
-            new GID(58440, 'l'),
-            new GID(58681, 'm'),
-            new GID(58631, 'n'),
-            new GID(58376, 'o'),
-            new GID(58429, 'p'),
-            new GID(58555, 'q'),
-            new GID(58498, 'r'),
-            new GID(58518, 's'),
-            new GID(58453, 't'),
-            new GID(58397, 'u'),
-            new GID(58356, 'v'),
-            new GID(58435, 'w'),
-            new GID(58514, 'x'),
-            new GID(58482, 'y'),
-            new GID(58529, 'z'),
-            new GID(58515, 'A'),
-            new GID(58688, 'B'),
-            new GID(58709, 'C'),
-            new GID(58344, 'D'),
-            new GID(58656, 'E'),
-            new GID(58381, 'F'),
-            new GID(58576, 'G'),
-            new GID(58516, 'H'),
-            new GID(58463, 'I'),
-            new GID(58649, 'J'),
-            new GID(58571, 'K'),
-            new GID(58558, 'L'),
-            new GID(58433, 'M'),
-            new GID(58517, 'N'),
-            new GID(58387, 'O'),
-            new GID(58687, 'P'),
-            new GID(58537, 'Q'),
-            new GID(58541, 'R'),
-            new GID(58458, 'S'),
-            new GID(58390, 'T'),
-            new GID(58466, 'U'),
-            new GID(58386, 'V'),
-            new GID(58697, 'W'),
-            new GID(58519, 'X'),
-            new GID(58511, 'Y'),
-            new GID(58634, 'Z'),
-            new GID(58611, '的'),
-            new GID(58590, '一'),
-            new GID(58398, '是'),
-            new GID(58422, '了'),
-            new GID(58657, '我'),
-            new GID(58666, '不'),
-            new GID(58562, '人'),
-            new GID(58345, '在'),
-            new GID(58510, '他'),
-            new GID(58496, '有'),
-            new GID(58654, '这'),
-            new GID(58441, '个'),
-            new GID(58493, '上'),
-            new GID(58714, '们'),
-            new GID(58618, '来'),
-            new GID(58528, '到'),
-            new GID(58403, '大'),
-            new GID(58461, '地'),
-            new GID(58481, '为'),
-            new GID(58700, '子'),
-            new GID(58708, '中'),
-            new GID(58503, '你'),
-            new GID(58442, '说'),
-            new GID(58639, '生'),
-            new GID(58506, '国'),
-            new GID(58663, '年'),
-            new GID(58436, '着'),
-            new GID(58563, '就'),
-            new GID(58391, '那'),
-            new GID(58357, '和'),
-            new GID(58354, '要'),
-            new GID(58695, '她'),
-            new GID(58372, '出'),
-            new GID(58696, '也'),
-            new GID(58551, '得'),
-            new GID(58445, '里'),
-            new GID(58408, '后'),
-            new GID(58599, '自'),
-            new GID(58424, '以'),
-            new GID(58394, '会'),
-            new GID(58348, '家'),
-            new GID(58426, '可'),
-            new GID(58673, '下'),
-            new GID(58417, '而'),
-            new GID(58556, '过'),
-            new GID(58603, '天'),
-            new GID(58565, '去'),
-            new GID(58604, '能'),
-            new GID(58522, '对'),
-            new GID(58632, '小'),
-            new GID(58622, '多'),
-            new GID(58350, '然'),
-            new GID(58605, '于'),
-            new GID(58617, '心'),
-            new GID(58401, '学'),
-            new GID(58637, '么'),
-            new GID(58684, '之'),
-            new GID(58382, '都'),
-            new GID(58464, '好'),
-            new GID(58487, '看'),
-            new GID(58693, '起'),
-            new GID(58608, '发'),
-            new GID(58392, '当'),
-            new GID(58474, '没'),
-            new GID(58601, '成'),
-            new GID(58355, '只'),
-            new GID(58573, '如'),
-            new GID(58499, '事'),
-            new GID(58469, '把'),
-            new GID(58361, '还'),
-            new GID(58698, '用'),
-            new GID(58489, '第'),
-            new GID(58711, '样'),
-            new GID(58457, '道'),
-            new GID(58635, '想'),
-            new GID(58492, '作'),
-            new GID(58647, '种'),
-            new GID(58623, '开'),
-            new GID(58521, '美'),
-            new GID(58609, '总'),
-            new GID(58530, '从'),
-            new GID(58665, '无'),
-            new GID(58652, '情'),
-            new GID(58676, '己'),
-            new GID(58456, '面'),
-            new GID(58581, '最'),
-            new GID(58509, '女'),
-            new GID(58488, '但'),
-            new GID(58363, '现'),
-            new GID(58685, '前'),
-            new GID(58396, '些'),
-            new GID(58523, '所'),
-            new GID(58471, '同'),
-            new GID(58485, '日'),
-            new GID(58613, '手'),
-            new GID(58533, '又'),
-            new GID(58589, '行'),
-            new GID(58527, '意'),
-            new GID(58593, '动'),
-            new GID(58699, '方'),
-            new GID(58707, '期'),
-            new GID(58414, '它'),
-            new GID(58596, '头'),
-            new GID(58570, '经'),
-            new GID(58660, '长'),
-            new GID(58364, '儿'),
-            new GID(58526, '回'),
-            new GID(58501, '位'),
-            new GID(58638, '分'),
-            new GID(58404, '爱'),
-            new GID(58677, '老'),
-            new GID(58535, '因'),
-            new GID(58629, '很'),
-            new GID(58577, '绘'),
-            new GID(58606, '多'),
-            new GID(58497, '法'),
-            new GID(58662, '间'),
-            new GID(58479, '斯'),
-            new GID(58532, '知'),
-            new GID(58380, '世'),
-            new GID(58385, '什'),
-            new GID(58405, '两'),
-            new GID(58644, '次'),
-            new GID(58578, '使'),
-            new GID(58505, '身'),
-            new GID(58564, '者'),
-            new GID(58412, '被'),
-            new GID(58686, '高'),
-            new GID(58624, '已'),
-            new GID(58667, '亲'),
-            new GID(58607, '其'),
-            new GID(58616, '进'),
-            new GID(58368, '此'),
-            new GID(58427, '话'),
-            new GID(58423, '常'),
-            new GID(58633, '与'),
-            new GID(58525, '活'),
-            new GID(58543, '正'),
-            new GID(58418, '感'),
-            new GID(58597, '见'),
-            new GID(58683, '明'),
-            new GID(58507, '问'),
-            new GID(58621, '力'),
-            new GID(58703, '理'),
-            new GID(58438, '尔'),
-            new GID(58536, '占'),
-            new GID(58384, '文'),
-            new GID(58484, '几'),
-            new GID(58539, '定'),
-            new GID(58554, '木'),
-            new GID(58421, '公'),
-            new GID(58347, '特'),
-            new GID(58569, '做'),
-            new GID(58710, '外'),
-            new GID(58574, '孩'),
-            new GID(58375, '相'),
-            new GID(58645, '西'),
-            new GID(58592, '果'),
-            new GID(58572, '走'),
-            new GID(58388, '将'),
-            new GID(58370, '月'),
-            new GID(58399, '十'),
-            new GID(58651, '实'),
-            new GID(58546, '向'),
-            new GID(58504, '声'),
-            new GID(58419, '车'),
-            new GID(58407, '全'),
-            new GID(58672, '信'),
-            new GID(58675, '重'),
-            new GID(58538, '三'),
-            new GID(58465, '机'),
-            new GID(58374, '工'),
-            new GID(58579, '物'),
-            new GID(58402, '气'),
-            new GID(58702, '每'),
-            new GID(58553, '并'),
-            new GID(58360, '别'),
-            new GID(58389, '真'),
-            new GID(58560, '打'),
-            new GID(58690, '太'),
-            new GID(58473, '新'),
-            new GID(58512, '比'),
-            new GID(58653, '才'),
-            new GID(58704, '便'),
-            new GID(58545, '夫'),
-            new GID(58641, '再'),
-            new GID(58475, '书'),
-            new GID(58583, '部'),
-            new GID(58472, '水'),
-            new GID(58478, '像'),
-            new GID(58664, '眼'),
-            new GID(58586, '等'),
-            new GID(58568, '体'),
-            new GID(58674, '却'),
-            new GID(58490, '加'),
-            new GID(58476, '电'),
-            new GID(58346, '主'),
-            new GID(58630, '界'),
-            new GID(58595, '门'),
-            new GID(58502, '利'),
-            new GID(58713, '海'),
-            new GID(58587, '受'),
-            new GID(58548, '听'),
-            new GID(58351, '表'),
-            new GID(58547, '德'),
-            new GID(58443, '少'),
-            new GID(58460, '克'),
-            new GID(58636, '代'),
-            new GID(58585, '员'),
-            new GID(58625, '许'),
-            new GID(58694, '稜'),
-            new GID(58428, '先'),
-            new GID(58640, '口'),
-            new GID(58628, '由'),
-            new GID(58612, '死'),
-            new GID(58446, '安'),
-            new GID(58468, '写'),
-            new GID(58410, '性'),
-            new GID(58508, '马'),
-            new GID(58594, '光'),
-            new GID(58483, '白'),
-            new GID(58544, '或'),
-            new GID(58495, '住'),
-            new GID(58450, '难'),
-            new GID(58643, '望'),
-            new GID(58486, '教'),
-            new GID(58406, '命'),
-            new GID(58447, '花'),
-            new GID(58669, '结'),
-            new GID(58415, '乐'),
-            new GID(58444, '色'),
-            new GID(58549, '更'),
-            new GID(58494, '拉'),
-            new GID(58409, '东'),
-            new GID(58658, '神'),
-            new GID(58557, '记'),
-            new GID(58602, '处'),
-            new GID(58559, '让'),
-            new GID(58610, '母'),
-            new GID(58513, '父'),
-            new GID(58500, '应'),
-            new GID(58378, '直'),
-            new GID(58680, '字'),
-            new GID(58352, '场'),
-            new GID(58383, '平'),
-            new GID(58454, '报'),
-            new GID(58671, '友'),
-            new GID(58668, '关'),
-            new GID(58452, '放'),
-            new GID(58627, '至'),
-            new GID(58400, '张'),
-            new GID(58455, '认'),
-            new GID(58416, '接'),
-            new GID(58552, '告'),
-            new GID(58614, '入'),
-            new GID(58582, '笑'),
-            new GID(58534, '内'),
-            new GID(58701, '英'),
-            new GID(58349, '军'),
-            new GID(58491, '候'),
-            new GID(58467, '民'),
-            new GID(58365, '岁'),
-            new GID(58598, '往'),
-            new GID(58425, '何'),
-            new GID(58462, '度'),
-            new GID(58420, '山'),
-            new GID(58661, '觉'),
-            new GID(58615, '路'),
-            new GID(58648, '带'),
-            new GID(58470, '万'),
-            new GID(58377, '男'),
-            new GID(58520, '边'),
-            new GID(58646, '风'),
-            new GID(58600, '解'),
-            new GID(58431, '叫'),
-            new GID(58715, '任'),
-            new GID(58524, '金'),
-            new GID(58439, '快'),
-            new GID(58566, '原'),
-            new GID(58477, '吃'),
-            new GID(58642, '妈'),
-            new GID(58437, '变'),
-            new GID(58411, '通'),
-            new GID(58451, '师'),
-            new GID(58395, '立'),
-            new GID(58369, '象'),
-            new GID(58706, '数'),
-            new GID(58705, '四'),
-            new GID(58379, '失'),
-            new GID(58567, '满'),
-            new GID(58373, '战'),
-            new GID(58448, '远'),
-            new GID(58659, '格'),
-            new GID(58434, '士'),
-            new GID(58679, '音'),
-            new GID(58432, '轻'),
-            new GID(58689, '目'),
-            new GID(58591, '条'),
-            new GID(58682, '呢'),
-
-        };
-
         private void NovelTyhpeChangeToIndex(int nIndex)
         {
             if (txtInitURL != null)
@@ -476,18 +114,121 @@ namespace BookDownloader
                     case (int)BatchQueryNovelContents.SHUQI:
                         txtInitURL.Text = "https://www.shuqi.com/reader?bid=8991909&cid=2589796";
                         break;
-
-                    case (int)BatchQueryNovelContents.TOBEDONE:
-                        break;
                     case (int)BatchQueryNovelContents.FANQIE:
                         txtInitURL.Text = "https://fanqienovel.com/reader/7100359997917397512?enter_from=page";
                         break;
                     case (int)BatchQueryNovelContents.FANQIE2:
                         txtInitURL.Text = "https://fanqienovel.com/reader/7268154919981580800?source=seo_fq_juhe";
                         break;
+                    case (int)BatchQueryNovelContents.HXTX:
+                        txtInitURL.Text = "https://www.hongxiu.com/chapter/7200532503839703/19328808342308247";
+                        break;
+                    case (int)BatchQueryNovelContents.XXSB:
+                        txtInitURL.Text = "https://book.xxs8.com/677942/94808.html";
+                        break;
+                    case (int)BatchQueryNovelContents.YQXSB:
+                        txtInitURL.Text = "https://www.xs8.cn/chapter/3738025904323901/10686192507259378";
+                        break;
+                    //case (int)BatchQueryNovelContents._17K:
+                    //    txtInitURL.Text = "https://www.17k.com/chapter/3589602/48625472.html";
+                    //    break;
+                    //case (int)BatchQueryNovelContents.TOBEDONE:
+                    //    break;
                     default:
                         Debug.Assert(false);
                         break;
+                }
+            }
+        }
+
+        public void AnalysisHtmlBodyThreadFunc(WndContextData? datacontext, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        {
+            Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
+            /*
+            if (nDelayMiliSeconds > 0) { 
+                Thread.Sleep(nDelayMiliSeconds);
+            }
+            */
+
+            IFetchNovelContent? fetchNovelContent = null;
+            int nMaxRetry = 60; //span is 3s.
+            switch (datacontext?.SiteType)
+            {
+                case BatchQueryNovelContents.IKBOOK8:
+                    fetchNovelContent = new IKBook8NovelContent();
+                    break;
+                case BatchQueryNovelContents.QQBOOK:
+                    fetchNovelContent = new OOBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.WXDZH:
+                    fetchNovelContent = new WxdzsBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.CANGQIONG:
+                    fetchNovelContent = new CangQiongBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.JINYONG:
+                    fetchNovelContent = new JinYongBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.SHUQI:
+                    nMaxRetry = 60;
+                    fetchNovelContent = new ShuQiBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.FANQIE:
+                case BatchQueryNovelContents.FANQIE2:
+                    nMaxRetry = 60;
+                    fetchNovelContent = new FanQieBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.BIQUGE:
+                case BatchQueryNovelContents.BIQUGE2:
+                    fetchNovelContent = new BiQuGeBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.HXTX:
+                    fetchNovelContent = new HXTXBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.XXSB:
+                    fetchNovelContent = new XXSBBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.YQXSB:
+                    fetchNovelContent = new YQXSBBookNovelContent();
+                    break;
+                default:
+                    break;
+            }
+
+            if (bSilenceMode)
+            {
+                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext?.SiteType.ToString() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", (int)((100.0 / DownloadStatus.ThreadMax * (status?.ThreadNum ?? 1 - 1 + 0.5))));
+            }
+            else
+                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext?.SiteType.ToString() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", 50);
+
+            if (fetchNovelContent != null)
+            {
+                fetchNovelContent.AnalysisHtmlBookBody(this, datacontext, strBody, bSilenceMode, status, nMaxRetry);
+            }
+            if (bSilenceMode)
+            {
+                UpdateStatusMsg(datacontext, strURL + " : Finished Analysing of downloaded Uri Contents Body of No." + status?.ThreadNum ?? 1 + " ...", (int)((100.0 / DownloadStatus.ThreadMax * (status?.ThreadNum ?? 1))));
+            }
+            else
+                UpdateStatusMsg(datacontext, strURL + " : Finished Analysing of downloaded Uri Contents Body of No. " + status?.ThreadNum ?? 1 + "...", 100);
+
+            if (bSilenceMode)
+            {
+                if (status?.ThreadNum < DownloadStatus.ThreadMax && !string.IsNullOrEmpty(status.NextUrl))
+                {
+                    DownloadOneURLAndGetNext(datacontext, status.NextUrl);
+                }
+                else
+                {
+                    DownloadStatus.ContentsWriter = null;
+                    UpdateStatusMsg(datacontext, "Finished batch download(Total " + status?.ThreadNum + " Downloaded) ...", 100);
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        if (!string.IsNullOrEmpty(status?.NextUrl))
+                            txtInitURL.Text = status.NextUrl;
+                        MessageBox.Show(this, "Batch download finished...", "Web Novel Downloader", MessageBoxButton.OK);
+                    });
                 }
             }
         }

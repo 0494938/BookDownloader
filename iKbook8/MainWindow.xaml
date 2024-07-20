@@ -48,7 +48,7 @@
                 <ComboBox 
                     Grid.Column="0" 
                     x:Name="cmbNovelType" 
-                    SelectedIndex="9" 
+                    SelectedIndex="11" 
                     SelectionChanged="OnBookTypeSelectChagned" 
                     FontSize="12" FontWeight="Bold">
                     <ComboBoxItem Content="0 爱看书吧 m.ikbook8.com"></ComboBoxItem>
@@ -59,9 +59,13 @@
                     <ComboBoxItem Content="5 苍穹小说 www.cqhhhs.com"></ComboBoxItem>
                     <ComboBoxItem Content="6 金庸小说网 www.jinhuaja.com"></ComboBoxItem>
                     <ComboBoxItem Content="7 书旗小说网 www.shuqi.com"></ComboBoxItem>
-                    <Separator/>
-                    <ComboBoxItem Content="9 番茄小说网 fanqienovel.com"></ComboBoxItem>
-                    <ComboBoxItem Content="10 番茄小说网2 fanqienovel.com"></ComboBoxItem>
+                    <ComboBoxItem Content="8 番茄小说网 fanqienovel.com"></ComboBoxItem>
+                    <ComboBoxItem Content="9 番茄小说网2 fanqienovel.com"></ComboBoxItem>
+                    <ComboBoxItem Content="10 红袖添香 www.hongxiu.com"></ComboBoxItem>
+                    <ComboBoxItem Content="11 新小说吧 www.xxs8.com"></ComboBoxItem>
+                    <ComboBoxItem Content="12 言情小说吧 www.xs8.cn"></ComboBoxItem>
+                    <!--Separator/>
+                    <ComboBoxItem Content="14 Bad 17小说网 www.17k.com"></ComboBoxItem-->
                 </ComboBox>
                 <!--TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/-->
                 <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://www.wxdzs.net/wxread/94612_43816524.html" VerticalAlignment="Center" Margin="3,0,0,0"/>

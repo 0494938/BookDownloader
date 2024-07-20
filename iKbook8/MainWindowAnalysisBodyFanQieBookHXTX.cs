@@ -8,7 +8,7 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BookDownloader
 {
-    public class FanQieBookNovelContent : BaseBookNovelContent, IFetchNovelContent
+    public class HXTXBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
@@ -29,10 +29,10 @@ namespace BookDownloader
             HtmlNode? nextLink = null;
             HtmlNode? content = null;
             HtmlNode? header = null;
-            //HtmlNodeCollection? topDiv = body.SelectNodes(".//div[@class='read_bg']");
-            if (body!=null)
+            HtmlNodeCollection? topDiv = body.SelectNodes(".//div[@class='read-main-wrap font-family01'][@id='j_readMainWrap']");
+            if (topDiv != null && topDiv.Count()>0)
             {
-                FindBookNextLinkAndContents(body, ref nextLink, ref header, ref content);
+                FindBookNextLinkAndContents(topDiv.FirstOrDefault(), ref nextLink, ref header, ref content);
                 if (content != null || nextLink != null)
                 {
                     string strNextLink = GetBookNextLink(nextLink);
@@ -69,14 +69,19 @@ namespace BookDownloader
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
         public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
-            HtmlNodeCollection ?collCont = top?.SelectNodes("//div[@class='muye-reader-content noselect']");
-            content = collCont?.First()??null;
+            HtmlNodeCollection ?collCont = top?.SelectNodes(".//div[@class='read-content j_readContent']");
+            content = collCont?.FirstOrDefault();
+            IEnumerable<HtmlNode>? subContent = content?.Descendants()?.Where(n => n.Name == "div");
+            if (subContent!=null && subContent?.Count()>0)
+            {
+                content = subContent?.FirstOrDefault();
+            }
 
-            HtmlNodeCollection? collHeader = top?.SelectNodes("//h1[@class='muye-reader-title']");
-            header = collHeader?.First();
+            HtmlNodeCollection? collHeader = top?.SelectNodes(".//h1[@class='j_chapterName']");
+            header = collHeader?.FirstOrDefault();
 
-            IEnumerable<HtmlNode>? collNextScript = top?.SelectNodes(".//script")?.Where(n => n.InnerHtml.Contains("window.__INITIAL_STATE__="));
-            nextLink = collNextScript?.First();
+            IEnumerable<HtmlNode>? collNextScript = top?.SelectNodes(".//div[@class='chapter-control dib-wrap']"); 
+            nextLink = collNextScript?.FirstOrDefault();
         }
 #pragma warning restore CS8601 // Null 参照代入の可能性があります。
 
@@ -89,60 +94,45 @@ namespace BookDownloader
 
         public string GetBookNextLink(HtmlNode? nextLink)
         {
-            string sScript = nextLink?.InnerText?.Trim()??"";
-            sScript = sScript.Substring(1, sScript.Length-4).Trim();
-            sScript = sScript.Substring("function()".Length).Trim();
-            sScript = sScript.Substring(1,sScript.Length-2).Trim();
-            sScript = sScript.Substring("window.__INITIAL_STATE__=".Length);
-            sScript = sScript.Substring(0, sScript.Length-1).Trim();
-
-            JObject? data = JsonConvert.DeserializeObject(sScript) as JObject;
-            JObject? reader = data?["reader"] as JObject;
-            JObject? chapterData = reader?["chapterData"] as JObject;
-            var nextItemId = chapterData?["nextItemId"];
-
-            if (nextItemId == null)
-                return "";
-            else 
-                return "https://fanqienovel.com/reader/" + nextItemId.ToString() + "?enter_from=page";
+            if (nextLink != null)
+            {
+                HtmlNode? aNext = nextLink?.SelectNodes(".//a[@id='j_chapterNext']").FirstOrDefault();
+                if (aNext != null)
+                    return "https://www.hongxiu.com" + aNext?.Attributes["href"]?.Value;
+            }
+            return "";
         }
 
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
         public string GetBookContents(HtmlNode? content)
         {
             if (content != null)
             {
-                IEnumerable<HtmlNode>? divContents = content.Descendants().Where(n => n.Name == "div" && string.IsNullOrEmpty(n.Attributes["id"]?.Value ?? "") && string.IsNullOrEmpty(n.Attributes["name"]?.Value ?? ""));
-                if(divContents!=null && divContents?.Count() > 0)
+                StringBuilder sbContent = new StringBuilder();
+                foreach (HtmlNode element in content?.ChildNodes)
                 {
-                    content = divContents.FirstOrDefault();
-                    StringBuilder sbContent = new StringBuilder();
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
-                    foreach (HtmlNode element in content?.ChildNodes)
+                    if (string.Equals("p", element.Name))
                     {
-                        //hrefTags.Add(element.GetAttribute("href"));
-                        if (string.Equals("p", element.Name))
+                        string? strLine = element.InnerText?.Replace("\r", "")?.Replace("\n", "\r\n")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&") ?
+                            .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
+                            .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
+                            .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″");
+                        if (!string.IsNullOrEmpty(strLine?.Trim()))
                         {
-                            string? strLine = DotDecodingUtil.DecodeDitStr(element.InnerText)?.Replace("\r", "")?.Replace("\n", "")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&") ?
-                                .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
-                                .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
-                                .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″");
-                            if (!string.IsNullOrEmpty(strLine?.Trim()))
-                            {
-                                sbContent.Append(strLine).AppendLine();
-                            }
-                        }
-                        else if (string.Equals("br", element.Name))
-                        {
-                            sbContent.Append("\r\n");
+                            sbContent.Append(strLine).AppendLine();
                         }
                     }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
-                    return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
+                    else if (string.Equals("br", element.Name))
+                    {
+                        sbContent.Append("\r\n");
+                    }
                 }
+                return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
             }
 
             return "";
         }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 
         public string GetBookName(HtmlNode? content)
         {
