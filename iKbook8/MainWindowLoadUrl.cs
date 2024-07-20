@@ -8,7 +8,7 @@ using System.Windows.Markup;
 
 namespace BookDownloader
 {
-    public partial class WPFMainWindow : BaseDownloadWnd
+    public partial class WPFMainWindow : Window, IBaseMainWindow
     {
         Dictionary<string, DownloadStatus> dictDownloadStatus = new Dictionary<string, DownloadStatus>();
 
@@ -168,12 +168,10 @@ namespace BookDownloader
                 {
                     wndMain.Dispatcher.Invoke(() =>
                     {
-                            IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
-                            IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
-                            string? strBody = body?.outerHTML ?? "";
-                            //string? strHtml = hTMLDocument2.boday
-                            txtWebContents.Text = strBody;
-                            AnalysisHtmlBody(datacontext, true, strURL, strBody, true, status);
+                        string? strBody = wndMain.GetWebDocHtmlBody(strURL);
+
+                        wndMain.UpdateWebBodyOuterHtml(strBody);
+                        AnalysisHtmlBody(datacontext, true, strURL, strBody, true, status);
                     });
                 }
                 catch (Exception ex)

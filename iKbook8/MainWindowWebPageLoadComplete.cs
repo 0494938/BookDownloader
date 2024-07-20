@@ -6,7 +6,7 @@ using WebBrowser = System.Windows.Controls.WebBrowser;
 
 namespace BookDownloader
 {
-    public partial class WPFMainWindow : BaseDownloadWnd
+    public partial class WPFMainWindow : Window, IBaseMainWindow
     {
         private void MainFrameWebLoadCompleted(object sender, NavigationEventArgs e)
         {

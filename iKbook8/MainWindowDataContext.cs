@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using System.Xaml;
 
 namespace BookDownloader
@@ -26,9 +27,14 @@ namespace BookDownloader
 
     }
         
-    public partial class WPFMainWindow : BaseDownloadWnd
+    public partial class WPFMainWindow : Window, IBaseMainWindow
     {
-        private void NovelTyhpeChangeToIndex(int nIndex)
+        public Dispatcher GetDispatcher()
+        {
+            return this.Dispatcher;
+        }
+
+        private void NovelTypeChangeEvent(int nIndex)
         {
             if (txtInitURL != null)
             {
@@ -85,8 +91,7 @@ namespace BookDownloader
                 }
             }
         }
-
-        public void AnalysisHtmlBodyThreadFunc(WndContextData? datacontext, WPFMainWindow wndMain, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        public void AnalysisHtmlBodyThreadFunc(WndContextData datacontext, WPFMainWindow wndMain, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
 

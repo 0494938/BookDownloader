@@ -9,7 +9,7 @@ namespace BookDownloader
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class WPFMainWindow : BaseDownloadWnd
+    public partial class WPFMainWindow : Window, IBaseMainWindow
     {
         public void HideScriptErrors(WebBrowser wb, bool hide)
         {
@@ -28,7 +28,7 @@ namespace BookDownloader
         {
             if (txtInitURL != null)
             {
-                NovelTyhpeChangeToIndex(cmbNovelType.SelectedIndex);
+                NovelTypeChangeEvent(cmbNovelType.SelectedIndex);
             }
         }
 
@@ -37,7 +37,7 @@ namespace BookDownloader
             Debug.WriteLine("OnMainWindowActivated invoked...");
             if (txtInitURL != null)
             {
-                NovelTyhpeChangeToIndex(cmbNovelType.SelectedIndex);
+                NovelTypeChangeEvent(cmbNovelType.SelectedIndex);
             }
         }
 

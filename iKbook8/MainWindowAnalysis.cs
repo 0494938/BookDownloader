@@ -9,7 +9,7 @@ namespace BookDownloader
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class WPFMainWindow : BaseDownloadWnd
+    public partial class WPFMainWindow : Window, IBaseMainWindow
     {
         static SHDocVw.WebBrowser? GetWebBrowserPtr(System.Windows.Controls.WebBrowser webBrowser)
         {
@@ -31,7 +31,7 @@ namespace BookDownloader
             AnalysisURL(webBrowser.Source.ToString(), false);
         }
 
-        private string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
+        public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
         {
             if (webBrowser == null || webBrowser.Document == null)
                 return null;
@@ -83,7 +83,7 @@ namespace BookDownloader
             Cancel = true;
         }
 
-        public void UpdateStatusMsg(WndContextData? datacontext, string msg, int value)
+        public void UpdateStatusMsg(BaseWndContextData datacontext, string msg, int value)
         {
 
             Debug.WriteLine(msg);
@@ -104,7 +104,7 @@ namespace BookDownloader
             });
         }
 
-        public void UpdateStatusProgress(WndContextData? datacontext, int value)
+        public void UpdateStatusProgress(BaseWndContextData datacontext, int value)
         {
             datacontext.ProcessBarValue = value;
             //txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();

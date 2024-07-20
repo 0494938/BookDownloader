@@ -79,7 +79,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BaseBookDownload\BaseBookDownload.csproj" />
+    <ProjectReference Include="..\BaseBookDownload\BaseBookDownload.Net.csproj" />
   </ItemGroup>
 
 </Project>

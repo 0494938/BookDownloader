@@ -10,7 +10,7 @@ namespace BookDownloader
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
     public class JinYongBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
-        public void AnalysisHtmlBookBody(WPFMainWindow? wndMain, WndContextData? datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public void AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
             this.URL = strUrl;
 
@@ -38,7 +38,7 @@ namespace BookDownloader
                     string strChapterHeader = GetBookHeader(header);
                     string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
 
-                    wndMain.Dispatcher.Invoke(() =>
+                    wndMain.GetDispatcher().Invoke(() =>
                     {
                         ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
 
@@ -53,9 +53,9 @@ namespace BookDownloader
                         DownloadStatus.ContentsWriter?.Flush();
                     }
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
-                    wndMain.Dispatcher.Invoke(() =>
+                    wndMain.GetDispatcher().Invoke(() =>
                     {
-                        wndMain.btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                        wndMain.UpdateNextPageButton();
                     });
                     return;
                 }

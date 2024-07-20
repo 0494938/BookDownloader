@@ -10,7 +10,7 @@ namespace BookDownloader
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
     public class BiQuGeBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
-        public void AnalysisHtmlBookBody(WPFMainWindow? wndMain, WndContextData? datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public void AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
             this.URL = strUrl;
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
@@ -38,7 +38,7 @@ namespace BookDownloader
                     string strChapterHeader = GetBookHeader2(header);
                     string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents2(content);
 
-                    wndMain.Dispatcher.Invoke(() =>
+                    wndMain.GetDispatcher().Invoke(() =>
                     {
                         ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
                     });
@@ -51,9 +51,9 @@ namespace BookDownloader
                         DownloadStatus.ContentsWriter?.Flush();
                     }
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
-                    wndMain.Dispatcher.Invoke(() =>
+                    wndMain.GetDispatcher().Invoke(() =>
                     {
-                        wndMain.btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                        wndMain.UpdateNextPageButton();
                     });
                     return;
                 }
@@ -67,23 +67,9 @@ namespace BookDownloader
                     string strChapterHeader = GetBookHeader(header);
                     string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
 
-                    wndMain.Dispatcher.Invoke(() =>
+                    wndMain.GetDispatcher().Invoke(() =>
                     {
-                        wndMain.txtAnalysizedContents.Text = strContents;
-                        wndMain.txtNextUrl.Text = strNextLink;
-                        wndMain.txtCurURL.Text = strNextLink;
-                        if (bSilenceMode)
-                        {
-                            if (wndMain.txtAggregatedContents.Text.Length > 1024 * 64)
-                                wndMain.txtAggregatedContents.Text = strContents;
-                            else
-                                wndMain.txtAggregatedContents.Text += strContents;
-                        }
-                        else
-                        {
-                            wndMain.txtAggregatedContents.Text += strContents;
-                        }
-                        wndMain.txtAggregatedContents.ScrollToEnd();
+                        ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
                     });
 
                     if (bSilenceMode)
@@ -95,9 +81,9 @@ namespace BookDownloader
                         DownloadStatus.ContentsWriter?.Flush();
                     }
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
-                    wndMain.Dispatcher.Invoke(() =>
+                    wndMain.GetDispatcher().Invoke(() =>
                     {
-                        wndMain.btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                        wndMain.UpdateNextPageButton();
                     });
                 return;
                 }

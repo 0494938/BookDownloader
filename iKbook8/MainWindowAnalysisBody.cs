@@ -8,7 +8,7 @@ namespace BookDownloader
 {
     public interface IFetchNovelContent
     {
-        public void AnalysisHtmlBookBody(WPFMainWindow? wndMain, WndContextData? datacontext, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0);
+        public void AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0);
         protected void FindBookNextLinkAndContents(HtmlNode? parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content);
         protected string GetBookHeader(HtmlNode? header);
         protected string GetBookNextLink(HtmlNode? nextLink);
@@ -29,30 +29,27 @@ namespace BookDownloader
         }
 
 
-        protected void ParseResultToUI(WPFMainWindow wndMain, bool bSilenceMode, string strContents, string strNextLink)
+        protected void ParseResultToUI(IBaseMainWindow IWndMain, bool bSilenceMode, string strContents, string strNextLink)
         {
-            wndMain.txtAnalysizedContents.Text = strContents;
-            wndMain.txtNextUrl.Text = strNextLink;
-            wndMain.txtCurURL.Text = strNextLink;
+            WPFMainWindow wndMain = (WPFMainWindow)IWndMain;
+            wndMain.UpdateAnalysizedContents(strContents);
+            wndMain.UpdateNextUrl(strNextLink);
+            wndMain.UpdateCurUrl(strNextLink);
             if (bSilenceMode)
             {
-                if (wndMain.txtAggregatedContents.Text.Length > 1024 * 64)
-                    wndMain.txtAggregatedContents.Text = strContents;
-                else
-                    wndMain.txtAggregatedContents.Text += strContents;
+                wndMain.UpdateAggragatedContentsWithLimit(strContents);
             }
             else
             {
-                wndMain.txtAggregatedContents.Text += strContents;
+                wndMain.UpdateAggragatedContents(strContents);
             }
-            wndMain.txtAggregatedContents.ScrollToEnd();
         }
     }
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class WPFMainWindow : BaseDownloadWnd
+    public partial class WPFMainWindow : Window, IBaseMainWindow
     {
         public void AnalysisHtmlBody(WndContextData? datacontext, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {

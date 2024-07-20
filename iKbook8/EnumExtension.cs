@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace BaseBookDownload
+namespace BookDownloader
 {
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
 #pragma warning disable CS8600 // Null 参照引数の可能性があります。

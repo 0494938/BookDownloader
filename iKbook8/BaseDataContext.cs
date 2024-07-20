@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 
-namespace BaseBookDownload
+namespace BookDownloader
 {
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
     public class DownloadStatus
