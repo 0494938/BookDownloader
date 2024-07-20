@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using BaseBookDownload;
+using HtmlAgilityPack;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;

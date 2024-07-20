@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using BaseBookDownload;
+using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Linq.Expressions;
@@ -15,6 +16,7 @@ namespace BookDownloader
         protected string GetBookContents(HtmlNode? content);
         public string GetBookName(HtmlNode? content);
     }
+
     public class BaseBookNovelContent
     {
         protected string? URL { get; set; } = null;
@@ -27,7 +29,6 @@ namespace BookDownloader
             }
             return null;
         }
-
 
         protected void ParseResultToUI(IBaseMainWindow IWndMain, bool bSilenceMode, string strContents, string strNextLink)
         {
@@ -43,27 +44,6 @@ namespace BookDownloader
             {
                 wndMain.UpdateAggragatedContents(strContents);
             }
-        }
-    }
-
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class WPFMainWindow : Window, IBaseMainWindow
-    {
-        public void AnalysisHtmlBody(WndContextData? datacontext, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
-        {
-            Debug.Assert(datacontext != null);
-            try
-            {
-                Thread thread = new Thread(() => AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status));
-                thread.Start();
-            }
-            catch (TaskCanceledException)
-            {
-                //ignore TaskCanceledException
-            }
-            //AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status);
         }
     }
 }

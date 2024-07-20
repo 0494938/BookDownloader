@@ -2,7 +2,6 @@
 
 namespace BaseBookDownload
 {
-  
     public class BaseBookDownloader
     {
 

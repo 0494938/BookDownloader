@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using BaseBookDownload;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
@@ -47,6 +48,21 @@ namespace BookDownloader
         public void UpdateCurUrl(string url)
         {
             txtCurURL.Text = url;
+        }
+
+        public void AnalysisHtmlBody(WndContextData? datacontext, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        {
+            Debug.Assert(datacontext != null);
+            try
+            {
+                Thread thread = new Thread(() => AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status));
+                thread.Start();
+            }
+            catch (TaskCanceledException)
+            {
+                //ignore TaskCanceledException
+            }
+            //AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status);
         }
 
     }
