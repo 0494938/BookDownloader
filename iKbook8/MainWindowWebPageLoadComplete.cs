@@ -27,19 +27,6 @@ namespace BookDownloader
                 if (webBrowserPtr?.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
                     return;
 
-                //int nStep = 0;
-                //dynamic? script = null;
-                //try
-                //{
-                //    script = document.createElement("script");
-                //    script.type = @"text/javascript";
-                //    script.text = @"window.onerror = function(msg,url,line){return true;}";
-                //    document.head.appendChild(script);
-                //}
-                //catch (Exception)
-                //{
-                //}
-
                 if (e.Uri.ToString() == datacontext.PgmNaviUrl)
                 {
                     try

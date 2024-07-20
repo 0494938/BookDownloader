@@ -40,10 +40,7 @@ namespace BookDownloader
                     string strChapterHeader = GetBookHeader(header);
                     string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
 
-                    wndMain.GetDispatcher().Invoke(() =>
-                    {
-                        ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
-                    });
+                    ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
 
                     if (bSilenceMode)
                     {
@@ -54,10 +51,7 @@ namespace BookDownloader
                         DownloadStatus.ContentsWriter?.Flush();
                     }
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
-                    wndMain.GetDispatcher().Invoke(() =>
-                    {
-                        wndMain.UpdateNextPageButton();
-                    });
+                    wndMain.UpdateNextPageButton();
                     return;
                 }
             }

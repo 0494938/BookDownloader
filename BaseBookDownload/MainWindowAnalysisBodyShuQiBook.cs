@@ -44,12 +44,8 @@ namespace BookDownloader
                 nRetry++;
                 Thread.Sleep(3000);
 
-                wndMain.GetDispatcher().Invoke(() =>
-                {
-                    strBody = wndMain.GetWebDocHtmlBody(strUrl, true);
-                    wndMain.UpdateWebBodyOuterHtml(strBody);
-                });
-
+                strBody = wndMain.GetWebDocHtmlBody(strUrl, true);
+                wndMain.UpdateWebBodyOuterHtml(strBody);
 
                 html.LoadHtml(strBody);
                 body = html.DocumentNode.ChildNodes["BODY"];
@@ -61,11 +57,7 @@ namespace BookDownloader
                 string strChapterHeader = GetBookHeader(header);
                 string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
 
-                wndMain.GetDispatcher().Invoke(() =>
-                {
-                    ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
-
-                });
+                ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
 
                 if (bSilenceMode)
                 {
@@ -76,10 +68,7 @@ namespace BookDownloader
                     DownloadStatus.ContentsWriter?.Flush();
                 }
                 datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
-                wndMain.GetDispatcher().Invoke(() =>
-                {
-                    wndMain.UpdateNextPageButton();
-                });
+                wndMain.UpdateNextPageButton();
                 return;
             }
         }

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
-namespace BookDownloader
+namespace BaseBookDownload
 {
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
@@ -38,10 +38,7 @@ namespace BookDownloader
                     string strChapterHeader = GetBookHeader2(header);
                     string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents2(content);
 
-                    wndMain.GetDispatcher().Invoke(() =>
-                    {
-                        ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
-                    });
+                    ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
                     if (bSilenceMode)
                     {
                         Debug.Assert(status != null);
@@ -51,10 +48,7 @@ namespace BookDownloader
                         DownloadStatus.ContentsWriter?.Flush();
                     }
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
-                    wndMain.GetDispatcher().Invoke(() =>
-                    {
-                        wndMain.UpdateNextPageButton();
-                    });
+                    wndMain.UpdateNextPageButton();
                     return;
                 }
             }
@@ -67,10 +61,7 @@ namespace BookDownloader
                     string strChapterHeader = GetBookHeader(header);
                     string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
 
-                    wndMain.GetDispatcher().Invoke(() =>
-                    {
-                        ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
-                    });
+                    ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
 
                     if (bSilenceMode)
                     {
@@ -81,11 +72,8 @@ namespace BookDownloader
                         DownloadStatus.ContentsWriter?.Flush();
                     }
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
-                    wndMain.GetDispatcher().Invoke(() =>
-                    {
-                        wndMain.UpdateNextPageButton();
-                    });
-                return;
+                    wndMain.UpdateNextPageButton();
+                    return;
                 }
             }
         }

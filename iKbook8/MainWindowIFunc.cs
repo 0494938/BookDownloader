@@ -1,6 +1,8 @@
 ﻿using BaseBookDownload;
 using MSHTML;
+using System;
 using System.Diagnostics;
+using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,51 +14,78 @@ namespace BookDownloader
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
         public void UpdateNextPageButton() {
-            this.btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+            this.Dispatcher.Invoke(() =>
+            {
+                btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+            });
         }
 
         public void UpdateInitPageButton()
         {
-            this.btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+            this.Dispatcher.Invoke(() =>
+            {
+                this.btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+            });
         }
 
         public void UpdateAutoDownloadPageButton()
         {
-            this.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+            this.Dispatcher.Invoke(() =>
+            {
+                this.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+            });
         }
 
         public void UpdateAnalysizedContents(string ? strContents)
         {
-            txtAnalysizedContents.Text = strContents;
+            this.Dispatcher.Invoke(() =>
+            {
+                txtAnalysizedContents.Text = strContents;
+            });
         }
         
         public void UpdateAggragatedContents(string strContents)
         {
-            txtAggregatedContents.Text += strContents;
-            txtAggregatedContents.ScrollToEnd();
+            this.Dispatcher.Invoke(() =>
+            {
+                txtAggregatedContents.Text += strContents;
+                txtAggregatedContents.ScrollToEnd();
+            });
         }
         
         public void UpdateAggragatedContentsWithLimit(string strContents)
         {
-            if (txtAggregatedContents.Text.Length > 1024 * 64)
-                txtAggregatedContents.Text = strContents;
-            else
-                txtAggregatedContents.Text += strContents;
-            txtAggregatedContents.ScrollToEnd();
+            this.Dispatcher.Invoke(() =>
+            {
+                if (txtAggregatedContents.Text.Length > 1024 * 64)
+                    txtAggregatedContents.Text = strContents;
+                else
+                    txtAggregatedContents.Text += strContents;
+                txtAggregatedContents.ScrollToEnd();
+            });
         }
         public void UpdateWebBodyOuterHtml(string? strBody)
         {
-            txtWebContents.Text = strBody;
+            this.Dispatcher.Invoke(() =>
+            {
+                txtWebContents.Text = strBody;
+            });
         }
 
         public void UpdateNextUrl(string url)
         {
-            txtNextUrl.Text = url;
+            this.Dispatcher.Invoke(() =>
+            {
+                txtNextUrl.Text = url;
+            });
         }
 
         public void UpdateCurUrl(string url)
         {
-            txtCurURL.Text = url;
+            this.Dispatcher.Invoke(() =>
+            {
+                txtCurURL.Text = url;
+            });
         }
 
         public void AnalysisHtmlBody(WndContextData? datacontext, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
@@ -76,27 +105,40 @@ namespace BookDownloader
 
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
         {
-            if (webBrowser == null || webBrowser.Document == null)
-                return null;
 
-            var serviceProvider = (IServiceProvider)webBrowser.Document;
-            if (serviceProvider != null)
+            bool bFailed = false;
+            this.Dispatcher.Invoke(() =>
             {
-                Guid serviceGuid = new Guid("0002DF05-0000-0000-C000-000000000046");
-                Guid iid = typeof(SHDocVw.WebBrowser).GUID;
-                SHDocVw.WebBrowser? webBrowserPtr = serviceProvider
-                    .QueryService(ref serviceGuid, ref iid) as SHDocVw.WebBrowser;
-                Debug.WriteLine(strUrl + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
-                if (webBrowserPtr != null)
-                {
-                    webBrowserPtr.NewWindow2 += webBrowser1_NewWindow2;
-                    webBrowserPtr.NewWindow3 += webBrowser1_NewWindow3;
-                }
-            }
+                if (webBrowser == null || webBrowser.Document == null)
+                    bFailed = true;
+            });
 
-            IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
-            IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
-            string? strBody = body?.outerHTML;
+            string? strBody = null;
+            if(!bFailed)
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    var serviceProvider = (IServiceProvider)webBrowser.Document;
+                    if (serviceProvider != null)
+                    {
+                        Guid serviceGuid = new Guid("0002DF05-0000-0000-C000-000000000046");
+                        Guid iid = typeof(SHDocVw.WebBrowser).GUID;
+                        SHDocVw.WebBrowser? webBrowserPtr = serviceProvider
+                            .QueryService(ref serviceGuid, ref iid) as SHDocVw.WebBrowser;
+                        Debug.WriteLine(strUrl + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
+                        if (webBrowserPtr != null)
+                        {
+                            webBrowserPtr.NewWindow2 += webBrowser1_NewWindow2;
+                            webBrowserPtr.NewWindow3 += webBrowser1_NewWindow3;
+                        }
+                    }
+
+                    IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
+                    IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
+                    strBody = body?.outerHTML;
+                });
+
+            }
             return strBody;
         }
 

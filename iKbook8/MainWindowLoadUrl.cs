@@ -165,13 +165,9 @@ namespace BookDownloader
             {
                 try
                 {
-                    wndMain.GetDispatcher().Invoke(() =>
-                    {
-                        string? strBody = wndMain.GetWebDocHtmlBody(strURL);
-
-                        wndMain.UpdateWebBodyOuterHtml(strBody);
-                        AnalysisHtmlBody(datacontext, true, strURL, strBody, true, status);
-                    });
+                    string? strBody = wndMain.GetWebDocHtmlBody(strURL);
+                    wndMain.UpdateWebBodyOuterHtml(strBody);
+                    AnalysisHtmlBody(datacontext, true, strURL, strBody, true, status);
                 }
                 catch (Exception ex)
                 {

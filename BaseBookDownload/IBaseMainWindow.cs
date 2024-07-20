@@ -1,7 +1,4 @@
-﻿using BaseBookDownload;
-using System.Windows.Threading;
-
-namespace BookDownloader
+﻿namespace BaseBookDownload
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -11,7 +8,7 @@ namespace BookDownloader
         public void UpdateStatusMsg(BaseWndContextData datacontext, string msg, int value);
         public void UpdateStatusProgress(BaseWndContextData datacontext, int value);
 
-        public Dispatcher GetDispatcher();
+        //public Dispatcher GetDispatcher();
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true);
         
         public void UpdateNextPageButton();
