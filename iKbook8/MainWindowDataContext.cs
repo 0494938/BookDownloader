@@ -75,21 +75,48 @@ namespace BookDownloader
 
     public enum BatchQueryNovelContents
     {
+        [EnumCode("爱看书吧")]
         IKBOOK8 = 0,
+        [EnumCode("QQ电子书")]
         QQBOOK = 1,
+        [EnumCode("笔趣阁")]
         BIQUGE = 2,
+        [EnumCode("笔趣阁")]
         BIQUGE2 = 3,
+        [EnumCode("无线电子书")]
         WXDZH = 4,
+        [EnumCode("苍穹小说")]
         CANGQIONG = 5,
+        [EnumCode("金庸小说网")]
         JINYONG = 6,
+        [EnumCode("书旗小说网")]
         SHUQI = 7,
+        [EnumCode("番茄小说网")]
         FANQIE = 8,
+        [EnumCode("番茄小说网")]
         FANQIE2 = 9,
-        HXTX =10,//红袖添香
+        [EnumCode("红袖添香")]
+        HXTX = 10,//红袖添香
+        [EnumCode("新小说吧")]
         XXSB = 11, //新小说吧
+        [EnumCode("言情小说吧")]
         YQXSB = 12,//言情小说吧
+        [EnumCode("17K小说网")]
         _17K = 13, //17K，Script Over Flow
         //TOBEDONE = 13,
+    }
+
+    public static class AlphabetTypeExtensions
+    {
+        static AlphabetTypeExtensions()
+        {
+            EnumCodeExtensions.AddEnumCodeCache<BatchQueryNovelContents>();
+        }
+
+        public static string ToCode(this BatchQueryNovelContents enumKey)
+        {
+            return EnumCodeExtensions.GetEnumCode(enumKey);
+        }
     }
 
     public partial class MainWindow : Window
@@ -207,7 +234,7 @@ namespace BookDownloader
                 {
                     Thread.Sleep(200);
                 }
-                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext?.SiteType.ToString() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", (int)((100.0 / DownloadStatus.ThreadMax * (status?.ThreadNum ?? 1 - 1 + 0.5))));
+                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext?.SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", (int)((100.0 / DownloadStatus.ThreadMax * (status?.ThreadNum ?? 1 - 1 + 0.5))));
             }
             else
             {
@@ -215,7 +242,7 @@ namespace BookDownloader
                 {
                     Thread.Sleep(200);
                 }
-                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext?.SiteType.ToString() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", 50);
+                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext?.SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", 50);
             }
 
             if (fetchNovelContent != null)

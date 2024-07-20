@@ -11,25 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="packages\CefSharp.Common.126.2.180\**" />
-    <Compile Remove="packages\CefSharp.WinForms.126.2.180\**" />
-    <Compile Remove="packages\chromiumembeddedframework.runtime.win-x64.126.2.18\**" />
-    <Compile Remove="packages\chromiumembeddedframework.runtime.win-x86.126.2.18\**" />
-    <EmbeddedResource Remove="packages\CefSharp.Common.126.2.180\**" />
-    <EmbeddedResource Remove="packages\CefSharp.WinForms.126.2.180\**" />
-    <EmbeddedResource Remove="packages\chromiumembeddedframework.runtime.win-x64.126.2.18\**" />
-    <EmbeddedResource Remove="packages\chromiumembeddedframework.runtime.win-x86.126.2.18\**" />
-    <None Remove="packages\CefSharp.Common.126.2.180\**" />
-    <None Remove="packages\CefSharp.WinForms.126.2.180\**" />
-    <None Remove="packages\chromiumembeddedframework.runtime.win-x64.126.2.18\**" />
-    <None Remove="packages\chromiumembeddedframework.runtime.win-x86.126.2.18\**" />
-    <Page Remove="packages\CefSharp.Common.126.2.180\**" />
-    <Page Remove="packages\CefSharp.WinForms.126.2.180\**" />
-    <Page Remove="packages\chromiumembeddedframework.runtime.win-x64.126.2.18\**" />
-    <Page Remove="packages\chromiumembeddedframework.runtime.win-x86.126.2.18\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <COMReference Include="SHDocVw">
       <VersionMinor>1</VersionMinor>
       <VersionMajor>1</VersionMajor>
@@ -55,6 +36,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CefSharp.Wpf" Version="126.2.180" />
+    <PackageReference Include="CefSharp.Wpf.NETCore" Version="126.2.180" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
@@ -72,10 +55,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="packages\" />
   </ItemGroup>
 
 </Project>
