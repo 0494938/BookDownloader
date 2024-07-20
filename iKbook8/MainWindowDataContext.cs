@@ -41,6 +41,17 @@ namespace BookDownloader
 
     public class WndContextData : INotifyPropertyChanged
     {
+        public Visibility EnabledDbgButtons { get; set; } =
+#if DEBUG
+#if true
+            Visibility.Visible;
+#else
+            Visibility.Hidden;
+#endif
+#else
+            Visibility.Hidden;
+#endif
+
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {
@@ -58,16 +69,8 @@ namespace BookDownloader
         public BatchQueryNovelContents SiteType { get; set; } = BatchQueryNovelContents.IKBOOK8;
         public string? StartBarMsg { get; set; }
         public int ProcessBarValue { get; set; }
-        public Visibility EnabledDbgButtons { get; set; } =
-#if DEBUG
-#if true
-            Visibility.Visible;
-#else
-            Visibility.Hidden;
-#endif
-#else
-            Visibility.Hidden;
-#endif
+        public string? PgmNaviUrl { get; set; }
+        public bool UnloadPgm { get; set; } = false;
     }
 
     public enum BatchQueryNovelContents
@@ -200,7 +203,7 @@ namespace BookDownloader
 
             if (bSilenceMode)
             {
-                while (status?.DownloadFinished == false)
+                while (status?.DownloadFinished == false && !datacontext.UnloadPgm)
                 {
                     Thread.Sleep(200);
                 }
@@ -208,7 +211,7 @@ namespace BookDownloader
             }
             else
             {
-                while(datacontext?.PageLoaded == false)
+                while(datacontext?.PageLoaded == false && !datacontext.UnloadPgm)
                 {
                     Thread.Sleep(200);
                 }
@@ -262,15 +265,23 @@ namespace BookDownloader
                     datacontext.BackGroundNotRunning = true;
 
                     UpdateStatusMsg(datacontext, "Finished batch download(Total " + status?.ThreadNum + " Downloaded) ...", 100);
+                    String strMsgAreaLog="";
                     this.Dispatcher.Invoke(() =>
                     {
                         wndMain.btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                         wndMain.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                        UpdateStatusMsg(datacontext, "Flush Log to file: " + sDownloadFileName + ".log", -1);
                         if (!string.IsNullOrEmpty(status?.NextUrl))
                             txtInitURL.Text = status.NextUrl;
 
+                        strMsgAreaLog = txtLog.Text;
                         MessageBox.Show(this, "Batch download finished...", "Web Novel Downloader", MessageBoxButton.OK);
                     });
+                    using (FileStream fileStream = File.OpenWrite(sDownloadFileName.Replace(".txt","_log.log")))
+                    using (StreamWriter streamWriter = new StreamWriter(fileStream, Encoding.UTF8, BufferSize))
+                    {
+                        streamWriter.WriteLine(strMsgAreaLog);
+                    }
                 }
             }
         }

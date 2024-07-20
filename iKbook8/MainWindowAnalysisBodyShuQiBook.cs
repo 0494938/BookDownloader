@@ -40,7 +40,7 @@ namespace BookDownloader
 
 
             int nRetry = 0;
-            while (nRetry <= nMaxRetry && body !=null && FindBookNextLinkAndContents2(body, ref nextLink, ref header, ref title, ref content))
+            while (nRetry <= nMaxRetry && body !=null && FindBookNextLinkAndContents2(body, ref nextLink, ref header, ref title, ref content) && !datacontext.UnloadPgm)
             {
                 nRetry++;
                 Thread.Sleep(3000);

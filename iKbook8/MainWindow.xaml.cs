@@ -52,23 +52,16 @@ namespace BookDownloader
             e.Handled = !IsTextAllowed(e.Text);
         }
 
-        private void OnMainWindowUnloaded(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("OnMainWindowUnloaded invoked...");
-
-        }
-
-        private void OnMainWindowClosing(object sender, CancelEventArgs e)
-        {
-            Debug.WriteLine("OnMainWindowClosing invoked...");
-
-        }
-
         private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("OnMainWindowLoaded invoked...");
             HideScriptErrors(webBrowser, true);
+        }
 
+        private void OnSyncFromBrowser(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("OnSyncFromBrowser invoked...");
+            txtCurURL.Text = webBrowser.Source.ToString();
         }
     }
 

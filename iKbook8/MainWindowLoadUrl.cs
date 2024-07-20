@@ -44,6 +44,7 @@ namespace BookDownloader
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
                 try
                 {
+                    datacontext.PgmNaviUrl = strUrl;
                     webBrowser.Navigate(strUrl);
                     UpdateStatusMsg(datacontext, strUrl + " : Begin to download ...", 0);
                 }
@@ -63,7 +64,7 @@ namespace BookDownloader
 
         private void DownloadOneURLAndGetNext(WndContextData? datacontext, MainWindow wndMain,  string strURL)
         {
-            if ((datacontext != null))
+            if ((datacontext != null) && !datacontext.UnloadPgm)
             {
                 try
                 {
@@ -74,6 +75,7 @@ namespace BookDownloader
                         datacontext.NextLinkAnalysized = false;
                         btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                         btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                        datacontext.PgmNaviUrl = strURL;
                         webBrowser.Navigate(strURL);
                     });
                     UpdateStatusMsg(datacontext, strURL + " : Begin to download ...", (int)((100.0 / DownloadStatus.ThreadMax * (dictDownloadStatus[strURL].ThreadNum - 1))));
@@ -93,6 +95,10 @@ namespace BookDownloader
                     if (webBrowserPtr?.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
                         return;
                 }
+            }
+            else
+            {
+                Debug.Assert(true);
             }
         }
 
@@ -136,9 +142,10 @@ namespace BookDownloader
 #endif
         }
 
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
         public void WaitAndLaunchAnalsysi(WndContextData? datacontext, MainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status )
         {
-            while (status.DownloadFinished == false)
+            while (status.DownloadFinished == false && !datacontext.UnloadPgm)
             {
                 Thread.Sleep(200);
             }
@@ -148,17 +155,27 @@ namespace BookDownloader
             Debug.WriteLine($"{strURL} : Download Finished, Begin Analysis ...");
             Debug.Assert(webBrowser != null || webBrowser?.Document != null);
 
-            wndMain.Dispatcher.Invoke(() =>
+            if (!datacontext.UnloadPgm)
             {
-                IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
-                IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
-                string? strBody = body?.outerHTML ?? "";
-                //string? strHtml = hTMLDocument2.boday
-                txtWebContents.Text = strBody;
-                AnalysisHtmlBody(datacontext, true, strURL, strBody, true, status);
-            });
-
+                try
+                {
+                    wndMain.Dispatcher.Invoke(() =>
+                    {
+                            IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
+                            IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
+                            string? strBody = body?.outerHTML ?? "";
+                            //string? strHtml = hTMLDocument2.boday
+                            txtWebContents.Text = strBody;
+                            AnalysisHtmlBody(datacontext, true, strURL, strBody, true, status);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                }
+            }
         }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 
         private void btnAutoURL_Click(object sender, RoutedEventArgs e)
         {

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -39,5 +40,21 @@ namespace BookDownloader
                 NovelTyhpeChangeToIndex(cmbNovelType.SelectedIndex);
             }
         }
+
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
+        private void OnMainWindowClosing(object sender, CancelEventArgs e)
+        {
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            Debug.WriteLine("OnMainWindowClosing invoked...");
+            datacontext.UnloadPgm = true;
+        }
+
+        private void OnMainWindowUnloaded(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("OnMainWindowUnloaded invoked...");
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            datacontext.UnloadPgm = true;
+        }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
     }
 }

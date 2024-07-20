@@ -27,38 +27,41 @@ namespace BookDownloader
                     return;
 
                 //int nStep = 0;
-                dynamic? script = null;
-                try
-                {
-                    script = document.createElement("script");
-                    script.type = @"text/javascript";
-                    script.text = @"window.onerror = function(msg,url,line){return true;}";
-                    document.head.appendChild(script);
-                }
-                catch (Exception)
-                {
-                }
+                //dynamic? script = null;
+                //try
+                //{
+                //    script = document.createElement("script");
+                //    script.type = @"text/javascript";
+                //    script.text = @"window.onerror = function(msg,url,line){return true;}";
+                //    document.head.appendChild(script);
+                //}
+                //catch (Exception)
+                //{
+                //}
 
-                try
+                if (e.Uri.ToString() == datacontext.PgmNaviUrl)
                 {
-                    datacontext.PageLoaded = true;
-                    btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                    if (dictDownloadStatus.ContainsKey(e.Uri.ToString()))
+                    try
                     {
-                        DownloadStatus status = dictDownloadStatus[e.Uri.ToString()];
-                        UpdateStatusMsg(datacontext, e.Uri.ToString() + " : Finished Page download ...", (int)((100.0 / DownloadStatus.ThreadMax * (status.ThreadNum - 1 + 0.5))));
-                        status.DownloadFinished = true;
-                        status.FinishTime = DateTime.Now;
+                        datacontext.PageLoaded = true;
+                        btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                        if (dictDownloadStatus.ContainsKey(e.Uri.ToString()))
+                        {
+                            DownloadStatus status = dictDownloadStatus[e.Uri.ToString()];
+                            UpdateStatusMsg(datacontext, e.Uri.ToString() + " : Finished Page download ...", (int)((100.0 / DownloadStatus.ThreadMax * (status.ThreadNum - 1 + 0.5))));
+                            status.DownloadFinished = true;
+                            status.FinishTime = DateTime.Now;
+                        }
+                        else
+                        {
+                            UpdateStatusMsg(datacontext, e.Uri.ToString() + " : Finished Page download ...", 50);
+                            AnalysisCurURL(e.Uri.ToString());
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        UpdateStatusMsg(datacontext, e.Uri.ToString() + " : Finished Page download ...", 50);
-                        AnalysisCurURL(e.Uri.ToString());
+                        Debug.WriteLine(ex);
                     }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
                 }
             }
         }

@@ -23,7 +23,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="2"/>
+            <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <GroupBox 
@@ -85,7 +85,7 @@
                 Margin="0,4,0,0"
                 VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2"/>
                     <ColumnDefinition Width="100"/>
@@ -94,10 +94,14 @@
                     <ColumnDefinition Width="40"/>
                     <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Current URL:" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button x:Name="btnSyncFromBrowser" Click="OnSyncFromBrowser" Content="Sync From Browser"/>
+                    <TextBlock Text="Current URL:" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="5,0,0,0" TextAlignment="Right"/>
+                </StackPanel>
+                
                 <TextBox Grid.Column="1" x:Name="txtCurURL" VerticalAlignment="Center"/>
-                <Button Grid.Column="3" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center"/>
-                <Button Grid.Column="6" x:Name="btnNextPage" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Bottom"/>
+                <Button Grid.Column="3" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center" FontWeight="Bold" />
+                <Button Grid.Column="6" x:Name="btnNextPage" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Bottom" FontWeight="Bold" />
             </Grid>
         </GroupBox>
         <GroupBox
@@ -106,10 +110,138 @@
             <WebBrowser 
                 LoadCompleted="MainFrameWebLoadCompleted"
                 Loaded="MainFrameWebLoaded"
-                Margin="0,3,0,-1"
+                Margin="-3,-1,-3,-3"
                 x:Name="webBrowser" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" 
             />
+            <GroupBox.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="CadetBlue"/>
+                    <GradientStop Color="LightBlue" Offset="0.7"/>
+                </LinearGradientBrush>
+            </GroupBox.Background>
         </GroupBox>
+        <Grid Grid.Row="2"
+                Grid.Column="1"
+                  >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0"
+                  Grid.Column="1" 
+                  >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0"
+                    Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" >
+                    <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center"/>
+                </StackPanel>
+                <TextBlock 
+                    Text="Raw Html:"
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    FontWeight="Bold" 
+                    FontSize="12" 
+                    x:Name="btnOutputTest"
+                    VerticalAlignment="Center"/>
+                <StackPanel 
+                    Grid.Row="2"
+                    Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}">
+                    <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center"/>
+                    <Button 
+                    Height="40" 
+                    Click="OnTestEncoding" 
+                    Margin="0,0,3,0" >
+                        <Button.Content>
+                            <TextBlock Text="Test Encoding(output test.txt)" TextWrapping="WrapWithOverflow" FontWeight="Bold" TextAlignment="Center"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1"
+                  Grid.Column="1" 
+                  >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0"
+                    Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" >
+                    <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center"/>
+                </StackPanel>
+                <TextBlock Grid.Row="1"
+                    Text="Text Content(From Html):" 
+                    TextWrapping="WrapWithOverflow"
+                    HorizontalAlignment="Center"
+                    FontWeight="Bold" 
+                    FontSize="12" 
+                    VerticalAlignment="Center"/>
+                <StackPanel 
+                    Grid.Row="2"
+                    Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}">
+                    <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center"/>
+                    <Button 
+                        Height="40" 
+                        Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" 
+                        Click="OnTestDecoding" Margin="0,0,3,0">
+                        <Button.Content>
+                            <TextBlock Text="Test Encoding(from test.txt)" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <Grid
+                Grid.Row="2"
+                Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0"
+                    Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" >
+                    <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center"/>
+                </StackPanel>
+                <TextBlock 
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    Text="Merged Content:" 
+                    TextWrapping="WrapWithOverflow"
+                    FontWeight="Bold" 
+                    FontSize="12" 
+                    VerticalAlignment="Center"/>
+                <StackPanel Grid.Row="2"
+                    Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" >
+                    <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center"/>
+                </StackPanel>
+
+            </Grid>
+            <TextBlock 
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Text="Log:"
+                    HorizontalAlignment="Center"
+                    FontWeight="Bold" 
+                    FontSize="12" 
+                    VerticalAlignment="Center"/>
+
+            <TextBlock 
+                Grid.Row="4"
+                Grid.Column="0" 
+                Text="Next Page URL:"
+                HorizontalAlignment="Center"
+                TextWrapping="WrapWithOverflow"
+                FontWeight="Bold" 
+                FontSize="12" 
+                VerticalAlignment="Center"/>
+        </Grid>
         <Grid
             Grid.Row="2" 
             Grid.Column="2"
@@ -121,38 +253,6 @@
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Row="0"
-                Grid.Column="0"
-                  >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <TextBlock 
-                    Text="Raw Html:"
-                    Grid.Row="1"
-                    HorizontalAlignment="Center"
-                    FontWeight="Bold" 
-                    FontSize="12" 
-                    x:Name="btnOutputTest"
-                    VerticalAlignment="Center"/>
-                <Button 
-                    Grid.Row="2" 
-                    Height="60" 
-                    Click="OnTestEncoding" 
-                    Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" 
-                    Margin="0,0,3,0" >
-                    <Button.Content>
-                        <TextBlock Text="Test Encoding(output test.txt)" TextWrapping="WrapWithOverflow" FontWeight="Bold" TextAlignment="Center"/>
-                    </Button.Content>
-                </Button>
-            </Grid>
-
             <TextBox
                 Grid.Row="0" 
                 Grid.Column="1"
@@ -167,32 +267,7 @@
                         <GradientStop Color="LightBlue" Offset="0.7"/>
                     </LinearGradientBrush>
                 </TextBox.Background>
-
             </TextBox>
-            <Grid Grid.Row="1"
-                  Grid.Column="0" 
-                  >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="1"
-                    Text="Text Content(From Html):" 
-                    TextWrapping="WrapWithOverflow"
-                    HorizontalAlignment="Center"
-                    FontWeight="Bold" 
-                    FontSize="12" 
-                    VerticalAlignment="Center"/>
-                <Button 
-                    Grid.Row="2" Height="60" 
-                    Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" 
-                    Click="OnTestDecoding" Margin="0,0,3,0">
-                    <Button.Content>
-                        <TextBlock Text="Test Encoding(from test.txt)" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"/>
-                    </Button.Content>
-                </Button>
-            </Grid>
             <TextBox
                 Grid.Row="1" 
                 Grid.Column="1"
@@ -208,15 +283,6 @@
                     </LinearGradientBrush>
                 </TextBox.Background>
             </TextBox>
-            <TextBlock 
-                Grid.Row="2"
-                Grid.Column="0"
-                HorizontalAlignment="Center"
-                Text="Merged Content:" 
-                TextWrapping="WrapWithOverflow"
-                FontWeight="Bold" 
-                FontSize="12" 
-                VerticalAlignment="Center"/>
             <TextBox
                 Grid.Row="2" 
                 Grid.Column="1"
@@ -232,14 +298,6 @@
                     </LinearGradientBrush>
                 </TextBox.Background>
             </TextBox>
-            <TextBlock 
-                Grid.Row="3"
-                Grid.Column="0" 
-                Text="Log:"
-                HorizontalAlignment="Center"
-                FontWeight="Bold" 
-                FontSize="12" 
-                VerticalAlignment="Center"/>
             <TextBox
                 Grid.Row="3" 
                 Grid.Column="1"
@@ -256,15 +314,6 @@
                     </LinearGradientBrush>
                 </TextBox.Background>
             </TextBox>
-            <TextBlock 
-                Grid.Row="4"
-                Grid.Column="0" 
-                Text="Next Page URL:"
-                HorizontalAlignment="Center"
-                TextWrapping="WrapWithOverflow"
-                FontWeight="Bold" 
-                FontSize="12" 
-                VerticalAlignment="Center"/>
             <TextBox 
                 Grid.Row="4"
                 Grid.Column="1"
