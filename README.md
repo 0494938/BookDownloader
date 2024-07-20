@@ -9,6 +9,11 @@ Dynamic get contents from web page、current support following:
    - 金庸小说网 www.jinhuaja.com
    - 书旗小说网 www.shuqi.com
    - 番茄小说网 fanqienovel.com
+   - 红袖添香 www.hongxiu.com
+   - 新小说吧 www.xxs8.com
+   - 言情小说吧 www.xs8.cn
+
+————————————————
 
 # 番茄小说网 use DotDig Encoding, I am using following algorism to decode the Contents.
     '58670':'0',
@@ -373,8 +378,3 @@ Dynamic get contents from web page、current support following:
     '58591':'条',
     '58682':'呢',
 
-————————————————
-
-                            版权声明：本文为博主原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明。
-                        
-原文链接：https://blog.csdn.net/m0_57265868/article/details/137511029
