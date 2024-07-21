@@ -21,12 +21,11 @@ namespace WindowsFormsApp
             {
                 txtLog.AppendText(msg.TrimEnd(new char[] { '\r', '\n', ' ', '\t' }) + "\r\n");
             }));
-            //throw new NotImplementedException();
         }
 
         public void UpdateStatusProgress(BaseWndContextData datacontext, int value)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void UpdateNextPageButton()
@@ -42,7 +41,6 @@ namespace WindowsFormsApp
         {
             //throw new NotImplementedException();
         }
-        
 
         public void UpdateAutoDownloadPageButton()
         {
@@ -51,33 +49,38 @@ namespace WindowsFormsApp
 
         public void UpdateNextUrl(string url)
         {
-            //throw new NotImplementedException();
-            this.txtNextUrl.Text = url;
+            this.Invoke(() => {
+                txtNextUrl.Text = url;
+            });
         }
 
         public void UpdateCurUrl(string url)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void UpdateWebBodyOuterHtml(string strBody)
         {
-            throw new NotImplementedException();
+            this.Invoke(() => { 
+                txtHtml.Text = strBody.Replace("\r","").Replace("\n","\r\n"); 
+            });
         }
 
         public void UpdateAnalysizedContents(string strContents)
         {
-            throw new NotImplementedException();
+            this.Invoke(() => {
+                txtContent.Text = strContents.Replace("\r", "").Replace("\n", "\r\n");
+            });
         }
 
         public void UpdateAggragatedContents(string strContents)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void UpdateAggragatedContentsWithLimit(string strContents)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
 

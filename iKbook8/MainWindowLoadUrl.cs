@@ -101,7 +101,11 @@ namespace BookDownloader
             }
         }
 
-        void WaitFinishForNext(WndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode=false)
+
+
+
+
+        void WaitFinishForNext(BaseWndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode=false)
         {
 #if false
             DownloadStatus status = dictDownloadStatus[strURL];
@@ -149,7 +153,7 @@ namespace BookDownloader
         }
 
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
-        public void WaitAndLaunchAnalsysi(WndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status )
+        public void WaitAndLaunchAnalsysi(BaseWndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status )
         {
             while (status.DownloadFinished == false && !datacontext.UnloadPgm)
             {

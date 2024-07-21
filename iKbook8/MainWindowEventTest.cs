@@ -85,7 +85,8 @@ namespace BookDownloader
 
                 HtmlDocument html = new HtmlDocument();
                 html.LoadHtml(strBody);
-                HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
+                //HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
+                HtmlNode? body = BaseBookNovelContent.GetHtmlBody(html);
 
                 HtmlNodeCollection topDivs = body.SelectNodes(".//div[@class='muye-reader-content noselect']");
                 if (topDivs.Count() > 0)

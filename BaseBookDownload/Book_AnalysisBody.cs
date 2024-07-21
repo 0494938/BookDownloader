@@ -17,6 +17,23 @@ namespace BaseBookDownload
             }
             return null;
         }
+        
+        public static HtmlNode? GetHtmlBody(HtmlDocument html)
+        {
+            HtmlNode? parent = null;
+            foreach (HtmlNode child in html.DocumentNode.ChildNodes) { 
+                if(child.Name == "html")
+                {
+                    parent = child;
+                    break;
+                }
+            }
+            if (parent != null) {
+                return parent.ChildNodes["BODY"];
+            }
+            //HtmlNode? ret = html.DocumentNode.ChildNodes["BODY"];
+            return html.DocumentNode.ChildNodes["BODY"];
+        }
 
         protected void ParseResultToUI(IBaseMainWindow wndMain, bool bSilenceMode, string strContents, string strNextLink)
         {

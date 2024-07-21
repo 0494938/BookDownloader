@@ -30,6 +30,7 @@ namespace WindowsFormsApp
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WindowsFormChrome));
             this.scTop = new System.Windows.Forms.SplitContainer();
             this.panelTop = new System.Windows.Forms.Panel();
             this.txtLog = new System.Windows.Forms.TextBox();
@@ -159,6 +160,7 @@ namespace WindowsFormsApp
             this.cmbNovelType.Size = new System.Drawing.Size(289, 28);
             this.cmbNovelType.TabIndex = 3;
             this.cmbNovelType.Text = "无线电子书 www.wxdzs.net";
+            this.cmbNovelType.SelectedIndexChanged += new System.EventHandler(this.cmbNovelType_SelectedIndexChanged);
             // 
             // btnBrowser
             // 
@@ -200,7 +202,7 @@ namespace WindowsFormsApp
             // 
             this.scBottom.Panel2.Controls.Add(this.scResult);
             this.scBottom.Size = new System.Drawing.Size(1601, 808);
-            this.scBottom.SplitterDistance = 800;
+            this.scBottom.SplitterDistance = 799;
             this.scBottom.TabIndex = 0;
             // 
             // scResult
@@ -225,6 +227,7 @@ namespace WindowsFormsApp
             // txtHtml
             // 
             this.txtHtml.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtHtml.Font = new System.Drawing.Font("MS UI Gothic", 10F);
             this.txtHtml.Location = new System.Drawing.Point(0, 0);
             this.txtHtml.Multiline = true;
             this.txtHtml.Name = "txtHtml";
@@ -234,6 +237,7 @@ namespace WindowsFormsApp
             // txtContent
             // 
             this.txtContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtContent.Font = new System.Drawing.Font("MS UI Gothic", 10F);
             this.txtContent.Location = new System.Drawing.Point(0, 0);
             this.txtContent.Multiline = true;
             this.txtContent.Name = "txtContent";
@@ -246,6 +250,7 @@ namespace WindowsFormsApp
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1601, 1012);
             this.Controls.Add(this.scTop);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WindowsFormChrome";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Windows Web Form ";

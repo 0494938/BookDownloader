@@ -35,7 +35,14 @@ namespace BookDownloader
                 this.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
             });
         }
-
+        public void UpdateAnalysisPageButton()
+        {
+            //throw new NotImplementedException();
+            this.Dispatcher.Invoke(() =>
+            {
+                this.btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+            });
+        }
         public void UpdateAnalysizedContents(string ? strContents)
         {
             this.Dispatcher.Invoke(() =>
@@ -88,7 +95,7 @@ namespace BookDownloader
             });
         }
 
-        public void AnalysisHtmlBody(WndContextData? datacontext, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        public void AnalysisHtmlBody(BaseWndContextData? datacontext, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             Debug.Assert(datacontext != null);
             try

@@ -210,6 +210,7 @@ namespace WindowsFormsApp
         {
             Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
             string? strBody = GetWebDocHtmlBody(strUrl, bWaitOptoin);
+            
             if (!string.IsNullOrEmpty(strBody.Trim()))
             {
                 //WndContextData datacontext = new WndContextData();
@@ -217,25 +218,37 @@ namespace WindowsFormsApp
             }
         }
 
+        class _DocContents
+        {
+            public string sHtml="";
+        }
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
         {
-
+            _DocContents doc = new _DocContents() ;
+            string ?strBody = null;
+            GetWebDocHtml(doc);
+            this.Invoke(() => { strBody = txtHtml.Text; });
+            while (string.IsNullOrEmpty(doc.sHtml))
+            {
+                Thread.Sleep(200);
+                GetWebDocHtml(doc);
+                this.Invoke(() => { strBody = doc.sHtml; });
+            }
+            return strBody;
+        }
+        //string strTmp = "";
+        private void GetWebDocHtml(_DocContents doc)
+        {
             if (browser == null || browser.IsLoading == true)
-                return "";
+                return ;
 
-            string? strBody = null;
-
-            //browser.ViewSource();
-            //browser.GetSourceAsync().ContinueWith(taskHtml =>
-            //{
-            //    strBody = taskHtml.Result;
-            //});
             browser.GetSourceAsync().ContinueWith(taskHtml =>
             {
-                strBody = taskHtml.Result;
+                this.Invoke(() =>
+                {
+                    doc.sHtml = taskHtml.Result;
+                });
             });
-
-            return strBody;
         }
 
         public void AnalysisHtmlBody(BaseWndContextData? datacontext, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
@@ -298,20 +311,24 @@ namespace WindowsFormsApp
 
         public void WaitAndLaunchAnalsysi(BaseWndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status)
         {
-            while (status.DownloadFinished == false)
+            string? strBody = null;
+            if (status != null)
             {
-                Thread.Sleep(200);
+                while (status.DownloadFinished == false)
+                {
+                    Thread.Sleep(200);
+                }
             }
 
-            status.Depth = status.Depth - 1;
+            strBody = GetWebDocHtmlBody(strURL, true);
+            if (status != null)
+                status.Depth = status.Depth - 1;
 
             Debug.WriteLine($"{strURL} : Download Finished, Begin Analysis ...");
             Debug.Assert(browser != null || browser.IsLoading!=true);
 
-            string? strBody = GetWebDocHtmlBody(strURL, true);
-
             wndMain.UpdateWebBodyOuterHtml(strBody);
-            AnalysisHtmlBody(datacontext, true, strURL, strBody, true, status);
+            AnalysisHtmlBody(datacontext, true, strURL, strBody, bSilenceMode, status);
 
         }
 

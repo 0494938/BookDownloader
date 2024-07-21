@@ -1,7 +1,7 @@
-﻿using BaseBookDownload;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
@@ -19,7 +19,8 @@ namespace BaseBookDownload
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(strBody);
-            HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
+            HtmlNode? body = GetHtmlBody(html);//.DocumentNode.ChildNodes["BODY"];
+
             if (body == null)
             {
                 //.Print("URL downloaded BODY is empty ...");
@@ -27,89 +28,46 @@ namespace BaseBookDownload
                 return;
             }
 
-            foreach (HtmlNode element in body?.ChildNodes)
+            HtmlNode? nextLink = null;
+            HtmlNode? header = null;
+            HtmlNode? content = null;
+            FindBookNextLinkAndContents(body, ref nextLink, ref header, ref content);
+            if (content != null || nextLink != null)
             {
-                //hrefTags.Add(element.GetAttribute("href"));
-                if (string.Equals("#text", element.Name))
-                {
-                }
-                else if (string.Equals("script", element.Name) || string.Equals("ul", element.Name) || string.Equals("ins", element.Name))
-                {
-                }
-                else if (string.Equals("br", element.Name) || string.Equals("b", element.Name) || string.Equals("a", element.Name))
-                {
-                }
-                else if (string.Equals("link", element.Name) || string.Equals("meta", element.Name) || string.Equals("title", element.Name))
-                {
-                }
-                else if (string.Equals("#comment", element.Name) || string.Equals("xxxx", element.Name) || string.Equals("xxxx", element.Name))
-                {
-                }
-                else if (string.Equals("div", element.Name))
-                {
-                    if (string.Equals(element.Attributes["class"]?.Value, "container"))
-                    {
-                        HtmlNode? nextLink = null;
-                        HtmlNode? header = null;
-                        HtmlNode? content = null;
-                        FindBookNextLinkAndContents(element, ref nextLink, ref header, ref content);
-                        if (content != null || nextLink != null)
-                        {
-                            string strNextLink = GetBookNextLink(nextLink);
-                            string strChapterHeader = GetBookHeader(header);
-                            //string strContents = GetBookContents(content);
-                            string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
+                string strNextLink = GetBookNextLink(nextLink);
+                string strChapterHeader = GetBookHeader(header);
+                //string strContents = GetBookContents(content);
+                string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
 
-                            ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
+                ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
 
-                            if (bSilenceMode)
-                            {
-                                Debug.Assert(status != null);
-                                status.NextUrl = strNextLink;
-
-                                DownloadStatus.ContentsWriter?.Write(strContents);
-                            }
-                            datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
-                            wndMain.UpdateNextPageButton();
-
-                            return;
-                        }
-                    }
-                }
-                else
+                if (bSilenceMode)
                 {
-                    Debug.Assert(false);
+                    Debug.Assert(status != null);
+                    status.NextUrl = strNextLink;
+
+                    DownloadStatus.ContentsWriter?.Write(strContents);
                 }
+                datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
+                wndMain.UpdateNextPageButton();
+
+                return;
             }
         }
 
-        public void FindBookNextLinkAndContents(HtmlNode? parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
+        public void FindBookNextLinkAndContents(HtmlNode? parent, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
         {
-            foreach (HtmlNode element in parent?.ChildNodes)
-            {
-                //hrefTags.Add(element.GetAttribute("href"));
-                if (string.Equals("div", element.Name))
-                {
-                    if (string.Equals(element.Attributes["class"]?.Value, "content"))
-                    {
-                        content = element;
-                    }
-                    else if (string.Equals(element.Attributes["class"]?.Value, "section-opt") && nextLink == null)
-                    {
-                        nextLink = element;
-                    }
-                    else
-                    {
-                        FindBookNextLinkAndContents(element, ref nextLink, ref header, ref content);
-                    }
-                }else if (string.Equals("h1", element.Name))
-                {
-                    if (string.Equals(element.Attributes["class"]?.Value, "title"))
-                    {
-                        header = element;
-                    }
-                }
-            }
+            HtmlNodeCollection ?collCont=  parent?.SelectNodes(".//div[@id='Lab_Contents'][@class='kong']");
+            content = (collCont?.Count?? 0) > 0 ? (collCont[0]):null;
+            HtmlNodeCollection? collHeader = parent?.SelectNodes(".//h1[@id='ChapterTitle']");
+            header = (collHeader?.Count ?? 0) > 0 ? (collHeader[0]) : null;
+
+            var collNext = parent?.SelectNodes(".//div[@onclick='JumpNext();']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0);
+            //IEnumerable<HtmlNode> 
+            //var collA = collNext;
+            //(collNext?.Count() ?? 0) > 0 ? (collNext[0]) : null;
+            nextLink = collNext?.FirstOrDefault();
+
         }
 
         public string GetBookContents(HtmlNode? content)
@@ -134,6 +92,17 @@ namespace BaseBookDownload
                 {
                     sbContent.Append("\r\n");
                 }
+                else if (string.Equals("p", element.Name))
+                {
+                    string? strLine = element.InnerText?.Replace("\r", "")?.Replace("\n", "")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
+                        .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
+                        .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
+                        .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″");
+                    if (!string.IsNullOrEmpty(strLine?.Trim()) && !string.Equals(strLine?.Trim(), "\\/阅|读|模|式|内|容|加|载|不|完|整|，退出可阅读完整内容|点|击|屏|幕|中|间可|退|出|阅-读|模|式|."))
+                    {
+                        sbContent.Append(strLine).AppendLine();
+                    }
+                }
             }
             return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
         }
@@ -157,7 +126,7 @@ namespace BaseBookDownload
                 {
                     if (string.Equals(element.InnerHtml, "下一页") || string.Equals(element.InnerHtml, "下一章"))
                     {
-                        return element?.Attributes["href"]?.Value??"";
+                        return "https://www.wxdzs.net" + element?.Attributes["href"]?.Value??"";
                     }
                 }
             }

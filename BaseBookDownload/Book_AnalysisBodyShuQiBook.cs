@@ -29,7 +29,9 @@ namespace BaseBookDownload
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(strBody);
-            HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
+            //HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
+            HtmlNode? body = GetHtmlBody(html);
+
 
             if (body == null)
             {
@@ -52,7 +54,8 @@ namespace BaseBookDownload
                 wndMain.UpdateWebBodyOuterHtml(strBody);
 
                 html.LoadHtml(strBody);
-                body = html.DocumentNode.ChildNodes["BODY"];
+                //body = html.DocumentNode.ChildNodes["BODY"];
+                body = GetHtmlBody(html);
             }
 
             if (content != null || nextLink != null)

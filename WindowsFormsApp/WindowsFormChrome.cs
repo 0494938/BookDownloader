@@ -43,6 +43,8 @@ namespace WindowsFormsApp
 
         private void WindowsForm_Load(object sender, EventArgs e)
         {
+            //cmbNovelType.SelectedText(cmbNovelType.Text);
+            cmbNovelType.SelectedIndex = cmbNovelType.FindString("4 无线电子书");
         }
 
         public void Test(String message)
@@ -103,6 +105,11 @@ namespace WindowsFormsApp
         {
             txtHtml.Width = scResult.Panel1.Width - 2 * txtHtml.Top;
             txtContent.Width = scResult.Panel1.Width - 2 * txtContent.Top;
+        }
+
+        private void cmbNovelType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            NovelTypeChangeEvent(cmbNovelType.SelectedIndex);
         }
     }
 

@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace WindowsFormsApp
@@ -41,8 +42,11 @@ namespace WindowsFormsApp
                         }
                         else
                         {
-                            UpdateStatusMsg(datacontext, e.Url.ToString() + " : Finished Page download ...", 50);
-                            AnalysisURL(e.Url.ToString());
+                            Thread thread = new Thread(() => WaitAndLaunchAnalsysi(datacontext, this, e.Url.ToString(), false, null));
+                            thread.Start();
+                            //UpdateStatusMsg(datacontext, e.Url.ToString() + " : Finished Page download ...", 50);
+                            //AnalysisURL(e.Url.ToString());
+
                         }
                     }
                     catch (Exception ex)
