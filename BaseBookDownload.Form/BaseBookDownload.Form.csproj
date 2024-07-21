@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5D92C6CF-CA00-4D3A-BE4A-6866BC68A8AE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BaseBookDownload.Form</RootNamespace>
+    <AssemblyName>BaseBookDownload.Form</AssemblyName>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.11.61.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\iKbook8\packages\HtmlAgilityPack.1.11.61\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\iKbook8\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\BaseBookDownload\AnalysisHtmlBody.cs">
+      <Link>AnalysisHtmlBody.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\BaseBookDownloader.cs">
+      <Link>BaseBookDownloader.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\BaseDataContext.cs">
+      <Link>BaseDataContext.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\DotCatDecoding.cs">
+      <Link>DotCatDecoding.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\EnumExtension.cs">
+      <Link>EnumExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\IBaseBookDownloader.cs">
+      <Link>IBaseBookDownloader.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\IBaseMainWindow.cs">
+      <Link>IBaseMainWindow.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBody.cs">
+      <Link>MainWindowAnalysisBody.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyBiQuGeBook.cs">
+      <Link>MainWindowAnalysisBodyBiQuGeBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyCangQiongBook.cs">
+      <Link>MainWindowAnalysisBodyCangQiongBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyFanQieBook.cs">
+      <Link>MainWindowAnalysisBodyFanQieBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyFanQieBookHXTX.cs">
+      <Link>MainWindowAnalysisBodyFanQieBookHXTX.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyFanQieBookXXSB.cs">
+      <Link>MainWindowAnalysisBodyFanQieBookXXSB.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyFanQieBookYQXSB.cs">
+      <Link>MainWindowAnalysisBodyFanQieBookYQXSB.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyIKBook.cs">
+      <Link>MainWindowAnalysisBodyIKBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyJinYongBook.cs">
+      <Link>MainWindowAnalysisBodyJinYongBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyQQBook.cs">
+      <Link>MainWindowAnalysisBodyQQBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyShuQiBook.cs">
+      <Link>MainWindowAnalysisBodyShuQiBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyWXDZSBook.cs">
+      <Link>MainWindowAnalysisBodyWXDZSBook.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HandleDownload.cs" />
     <Compile Include="WindowsFormChrome.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +103,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaseBookDownload.Form\BaseBookDownload.Form.csproj">
+      <Project>{5d92c6cf-ca00-4d3a-be4a-6866bc68a8ae}</Project>
+      <Name>BaseBookDownload.Form</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

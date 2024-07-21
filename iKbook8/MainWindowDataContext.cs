@@ -11,7 +11,7 @@ namespace BookDownloader
 {
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
 
-    public class WndContextData : BaseWndContextData, INotifyPropertyChanged
+    public class WndContextData : BaseWndContextData
     {
         public Visibility EnabledDbgButtons { get; set; } =
 #if DEBUG

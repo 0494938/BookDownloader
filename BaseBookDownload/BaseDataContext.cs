@@ -8,15 +8,15 @@ namespace BaseBookDownload
     public class DownloadStatus
     {
         public bool DownloadFinished { get; set; } = false;
-        public string? URL { get; set; }
-        public string? NextUrl { get; set; }
+        public string URL { get; set; }
+        public string NextUrl { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime FinishTime { get; set; }
         public int Depth { get; set; } = 0;
         public int ThreadNum { get; set; }
         public static int ThreadMax { get; set; }
-        private static StreamWriter? _output_writer = null;
-        public static StreamWriter? ContentsWriter
+        private static StreamWriter _output_writer = null;
+        public static StreamWriter ContentsWriter
         {
             get
             {

@@ -380,7 +380,7 @@ namespace BaseBookDownload
             new GID(58682, '呢'),
         };
     
-        public static string ?DecodeDitStr(string? sDotEncoded){
+        public static string DecodeDitStr(string sDotEncoded){
             if (string.IsNullOrEmpty(sDotEncoded))
             {
                 return null;
@@ -388,7 +388,7 @@ namespace BaseBookDownload
             StringBuilder sb = new StringBuilder();
             foreach (char c in sDotEncoded)
             {
-                GID? foundGid = DotDecodingUtil.dit_data.Where(n => n.NChar == (int)c)?.FirstOrDefault();
+                GID foundGid = DotDecodingUtil.dit_data.Where(n => n.NChar == (int)c)?.FirstOrDefault();
                 if (foundGid != null)
                 {
                     sb.Append(foundGid.CChar);

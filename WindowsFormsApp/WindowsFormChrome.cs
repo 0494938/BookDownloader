@@ -55,20 +55,7 @@ namespace WindowsFormsApp
                     args.Frame.ExecuteJavaScriptAsync(script);
                 }
             };
-            browser.FrameLoadEnd += new EventHandler<CefSharp.FrameLoadEndEventArgs>(wb_FrameLoadEnd);
-        }
-
-        void wb_FrameLoadEnd(object sender, CefSharp.FrameLoadEndEventArgs e)
-        {
-            Debug.WriteLine("wb_FrameLoadEnd ....");
-            if (e.Frame.IsMain)
-            {
-                //browser.ViewSource();
-                browser.GetSourceAsync().ContinueWith(taskHtml =>
-                {
-                    var html = taskHtml.Result;
-                });
-            }
+            browser.FrameLoadEnd += new EventHandler<CefSharp.FrameLoadEndEventArgs>(Browser_FrameLoadComplete);
         }
 
 
