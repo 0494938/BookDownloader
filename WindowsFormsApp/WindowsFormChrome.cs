@@ -26,6 +26,9 @@ namespace WindowsFormsApp
         {
             if (!string.IsNullOrEmpty(txtInitURL.Text.Trim()))
             {
+                txtHtml.Clear();    
+                txtContent.Clear();
+                txtLog.Clear();
                 datacontext.PgmNaviUrl = txtInitURL.Text.Trim();
                 browser.LoadUrl(txtInitURL.Text.Trim());
             }
@@ -35,6 +38,9 @@ namespace WindowsFormsApp
         {
             if (!string.IsNullOrEmpty(txtNextUrl.Text.Trim()))
             {
+                txtHtml.Clear();
+                txtContent.Clear();
+                txtLog.Clear();
                 datacontext.PgmNaviUrl = txtNextUrl.Text.Trim();
                 browser.LoadUrl(txtNextUrl.Text.Trim());
             }

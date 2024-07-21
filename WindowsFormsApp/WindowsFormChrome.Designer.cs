@@ -227,7 +227,7 @@ namespace WindowsFormsApp
             // txtHtml
             // 
             this.txtHtml.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtHtml.Font = new System.Drawing.Font("MS UI Gothic", 10F);
+            this.txtHtml.Font = new System.Drawing.Font("MS UI Gothic", 12F);
             this.txtHtml.Location = new System.Drawing.Point(0, 0);
             this.txtHtml.Multiline = true;
             this.txtHtml.Name = "txtHtml";
@@ -237,7 +237,7 @@ namespace WindowsFormsApp
             // txtContent
             // 
             this.txtContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtContent.Font = new System.Drawing.Font("MS UI Gothic", 10F);
+            this.txtContent.Font = new System.Drawing.Font("MS UI Gothic", 12F);
             this.txtContent.Location = new System.Drawing.Point(0, 0);
             this.txtContent.Multiline = true;
             this.txtContent.Name = "txtContent";

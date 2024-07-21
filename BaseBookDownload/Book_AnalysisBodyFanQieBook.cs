@@ -62,7 +62,7 @@ namespace BaseBookDownload
             }
         }
 
-        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
+        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
         {
             HtmlNodeCollection ?collCont = top?.SelectNodes("//div[@class='muye-reader-content noselect']");
             content = collCont?.First()??null;

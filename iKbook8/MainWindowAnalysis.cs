@@ -1,4 +1,5 @@
 ﻿using BaseBookDownload;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 
 namespace BookDownloader
@@ -9,15 +10,17 @@ namespace BookDownloader
     /// </summary>
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "consistent naming")]
+        private static readonly Guid SID_SWebBrowserApp = new Guid("0002DF05-0000-0000-C000-000000000046");
+
         static SHDocVw.WebBrowser? GetWebBrowserPtr(System.Windows.Controls.WebBrowser webBrowser)
         {
             var serviceProvider = (IServiceProvider)webBrowser.Document;
             if (serviceProvider != null)
             {
-                Guid serviceGuid = new Guid("0002DF05-0000-0000-C000-000000000046");
                 Guid iid = typeof(SHDocVw.WebBrowser).GUID;
                 var webBrowserPtr = (SHDocVw.WebBrowser)serviceProvider
-                    .QueryService(ref serviceGuid, ref iid);
+                    .QueryService(SID_SWebBrowserApp, ref iid);
                 return webBrowserPtr;
             }
             return (SHDocVw.WebBrowser?) null;

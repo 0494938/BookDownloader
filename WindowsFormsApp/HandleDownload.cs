@@ -13,6 +13,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace WindowsFormsApp
 {
+#pragma warning disable CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
     public partial class WndContextData: BaseWndContextData
     {
 
@@ -83,7 +84,7 @@ namespace WindowsFormsApp
 
             IFetchNovelContent? fetchNovelContent = null;
             int nMaxRetry = 60; //span is 3s.
-            switch (datacontext?.SiteType)
+            switch (datacontext.SiteType)
             {
                 case BatchQueryNovelContents.IKBOOK8:
                     fetchNovelContent = new IKBook8NovelContent();
@@ -132,15 +133,15 @@ namespace WindowsFormsApp
                 {
                     Thread.Sleep(200);
                 }
-                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext?.SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", (int)((100.0 / DownloadStatus.ThreadMax * (status?.ThreadNum ?? 1 - 1 + 0.5))));
+                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext.SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", (int)((100.0 / DownloadStatus.ThreadMax * (status?.ThreadNum ?? 1 - 1 + 0.5))));
             }
             else
             {
-                while (datacontext?.PageLoaded == false && !datacontext.UnloadPgm)
+                while (datacontext.PageLoaded == false && !datacontext.UnloadPgm)
                 {
                     Thread.Sleep(200);
                 }
-                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext?.SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", 50);
+                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext.SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", 50);
             }
 
             if (fetchNovelContent != null)
@@ -190,7 +191,6 @@ namespace WindowsFormsApp
                     datacontext.BackGroundNotRunning = true;
 
                     UpdateStatusMsg(datacontext, "Finished batch download(Total " + status?.ThreadNum + " Downloaded) ...", 100);
-                    String strMsgAreaLog = "";
                     //wndMain.btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                     wndMain.UpdateInitPageButton();
                     //wndMain.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
@@ -204,7 +204,6 @@ namespace WindowsFormsApp
                 }
             }
         }
-
         
         private void AnalysisURL(string strUrl, bool bWaitOptoin = true)
         {
@@ -222,6 +221,7 @@ namespace WindowsFormsApp
         {
             public string sHtml="";
         }
+
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
         {
             _DocContents doc = new _DocContents() ;
@@ -331,6 +331,6 @@ namespace WindowsFormsApp
             AnalysisHtmlBody(datacontext, true, strURL, strBody, bSilenceMode, status);
 
         }
-
     }
+#pragma warning restore CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
 }

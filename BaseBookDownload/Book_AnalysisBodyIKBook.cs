@@ -57,16 +57,29 @@ namespace BaseBookDownload
 
         public void FindBookNextLinkAndContents(HtmlNode? parent, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
         {
+            //Treat as chrome browser
             HtmlNodeCollection ?collCont=  parent?.SelectNodes(".//div[@id='Lab_Contents'][@class='kong']");
             content = (collCont?.Count?? 0) > 0 ? (collCont[0]):null;
+            
             HtmlNodeCollection? collHeader = parent?.SelectNodes(".//h1[@id='ChapterTitle']");
             header = (collHeader?.Count ?? 0) > 0 ? (collHeader[0]) : null;
 
             var collNext = parent?.SelectNodes(".//div[@onclick='JumpNext();']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0);
-            //IEnumerable<HtmlNode> 
-            //var collA = collNext;
-            //(collNext?.Count() ?? 0) > 0 ? (collNext[0]) : null;
             nextLink = collNext?.FirstOrDefault();
+
+            if(collCont == null && header== null && nextLink == null)
+            {
+                //Treat as IE core browser
+                collCont = parent?.SelectNodes(".//div[@class='content']");
+                content = collCont?.Where(n => n.ChildNodes.Count() >= 6).FirstOrDefault();
+
+
+                collHeader = parent?.SelectNodes(".//h1[@class='title']");
+                header = (collHeader?.Count ?? 0) > 0 ? (collHeader[0]) : null;
+
+                collNext = parent?.SelectNodes(".//div[@class='section-opt']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0);
+                nextLink = collNext?.FirstOrDefault();
+            }
 
         }
 
@@ -126,7 +139,11 @@ namespace BaseBookDownload
                 {
                     if (string.Equals(element.InnerHtml, "下一页") || string.Equals(element.InnerHtml, "下一章"))
                     {
-                        return "https://www.wxdzs.net" + element?.Attributes["href"]?.Value??"";
+                        string? sUrl = element?.Attributes["href"]?.Value ?? "";
+                        if (sUrl.StartsWith("http"))
+                            return sUrl;
+                        else
+                            return "https://www.wxdzs.net" + sUrl;
                     }
                 }
             }

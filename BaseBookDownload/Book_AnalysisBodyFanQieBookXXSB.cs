@@ -61,7 +61,7 @@ namespace BaseBookDownload
             }
         }
 
-        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
+        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
         {
             content = top?.SelectNodes(".//div[@class='read-content'][@id='read-content']")?.FirstOrDefault();
 

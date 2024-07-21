@@ -91,7 +91,7 @@ namespace BookDownloader
 
             IFetchNovelContent? fetchNovelContent = null;
             int nMaxRetry = 60; //span is 3s.
-            switch (datacontext?.SiteType)
+            switch (datacontext.SiteType)
             {
                 case BatchQueryNovelContents.IKBOOK8:
                     fetchNovelContent = new IKBook8NovelContent();
@@ -140,15 +140,15 @@ namespace BookDownloader
                 {
                     Thread.Sleep(200);
                 }
-                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext?.SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", (int)((100.0 / DownloadStatus.ThreadMax * (status?.ThreadNum ?? 1 - 1 + 0.5))));
+                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext.SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", (int)((100.0 / DownloadStatus.ThreadMax * (status?.ThreadNum ?? 1 - 1 + 0.5))));
             }
             else
             {
-                while(datacontext?.PageLoaded == false && !datacontext.UnloadPgm)
+                while(datacontext.PageLoaded == false && !datacontext.UnloadPgm)
                 {
                     Thread.Sleep(200);
                 }
-                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext?.SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", 50);
+                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext.SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", 50);
             }
 
             if (fetchNovelContent != null)

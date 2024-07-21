@@ -101,42 +101,8 @@ namespace BookDownloader
             }
         }
 
-
-
-
-
-        void WaitFinishForNext(BaseWndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode=false)
+        void WaitFinishForNext(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode=false)
         {
-#if false
-            DownloadStatus status = dictDownloadStatus[strURL];
-            if (status.DownloadFinished == false)
-            {
-                this.Dispatcher.Invoke(() =>
-                {
-                    Task.Factory.StartNew(() => Thread.Sleep(400))
-                    .ContinueWith((t) =>
-                    {
-                        status.Depth = status.Depth + 1;
-                        WaitFinish(strURL);
-                    }, TaskScheduler.FromCurrentSynchronizationContext());
-                });
-            }
-            else
-            {
-                status.Depth = status.Depth - 1;
-
-                Debug.WriteLine($"{strURL} : Download Finished, Begin Analysis ...");
-                Debug.Assert(webBrowser != null || webBrowser?.Document != null);
-
-                IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
-                IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
-                string? strBody = body?.outerHTML ?? "";
-                //string? strHtml = hTMLDocument2.boday
-                txtWebContents.Text = strBody;
-                WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
-                AnalysisHtmlBody(datacontext, true, strURL, strBody, true, status);
-            }
-#else
             DownloadStatus status = dictDownloadStatus[strURL];
 
             try
@@ -148,12 +114,11 @@ namespace BookDownloader
             {
                 //ignore TaskCanceledException
             }
-
-#endif
         }
 
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
-        public void WaitAndLaunchAnalsysi(BaseWndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status )
+#pragma warning disable CS8604 // Null 参照引数の可能性があります。
+        public void WaitAndLaunchAnalsysi(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status )
         {
             while (status.DownloadFinished == false && !datacontext.UnloadPgm)
             {
@@ -180,6 +145,7 @@ namespace BookDownloader
             }
         }
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning restore CS8604 // Null 参照引数の可能性があります。
 
         private void btnAutoURL_Click(object sender, RoutedEventArgs e)
         {

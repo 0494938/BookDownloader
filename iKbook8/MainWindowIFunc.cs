@@ -128,11 +128,10 @@ namespace BookDownloader
                     var serviceProvider = (IServiceProvider)webBrowser.Document;
                     if (serviceProvider != null)
                     {
-                        Guid serviceGuid = new Guid("0002DF05-0000-0000-C000-000000000046");
                         Guid iid = typeof(SHDocVw.WebBrowser).GUID;
-                        SHDocVw.WebBrowser? webBrowserPtr = serviceProvider
-                            .QueryService(ref serviceGuid, ref iid) as SHDocVw.WebBrowser;
-                        Debug.WriteLine(strUrl + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
+                        SHDocVw.WebBrowser? webBrowserPtr =
+                            //serviceProvider.QueryService(SID_SWebBrowserApp, ref iid) as SHDocVw.WebBrowser;
+                            GetWebBrowserPtr(webBrowser);
                         if (webBrowserPtr != null)
                         {
                             webBrowserPtr.NewWindow2 += webBrowser1_NewWindow2;

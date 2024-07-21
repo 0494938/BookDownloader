@@ -62,7 +62,7 @@ namespace BaseBookDownload
             }
         }
 
-        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
+        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
         {
             HtmlNodeCollection? collCont = top?.SelectNodes(".//div[@class='content']");
             content = collCont?.First();
@@ -117,7 +117,7 @@ namespace BaseBookDownload
                     sbContent.Append("\r\n");
                 }
             }
-            return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
+            return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
         }
 
         public string GetBookName(HtmlNode? content)

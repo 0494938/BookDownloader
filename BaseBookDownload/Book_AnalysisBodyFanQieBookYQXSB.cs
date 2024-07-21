@@ -60,7 +60,7 @@ namespace BaseBookDownload
                 }
             }
         }
-        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
+        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode?  content)
         {
             content = top?.SelectNodes(".//div[@class='ywskythunderfont']").FirstOrDefault();
 
