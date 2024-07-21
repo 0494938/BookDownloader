@@ -64,6 +64,13 @@ namespace WindowsFormsApp
             });
         }
 
+        public void UpdateInitUrl(string url)
+        {
+            this.Invoke(() => {
+                this.txtInitURL.Text = url;
+            });
+        }
+
         public void UpdateCurUrl(string url)
         {
             //throw new NotImplementedException();
@@ -93,6 +100,12 @@ namespace WindowsFormsApp
             //throw new NotImplementedException();
         }
 
-
+        public string GetLogContents(){
+            string strLog="";
+            this.Invoke(() => {
+                strLog= txtLog.Text.Replace("\r", "").Replace("\n", "\r\n");
+            });
+            return strLog;
+        }
     }
 }

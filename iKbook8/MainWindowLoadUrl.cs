@@ -67,7 +67,7 @@ namespace BookDownloader
             {
                 try
                 {
-                    dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished =false , URL = strURL, NextUrl="", StartTime=DateTime.Now, Depth=0, ThreadNum= dictDownloadStatus.Count+1};
+                    dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished =false , URL = strURL, NextUrl="", StartTime=DateTime.Now, ThreadNum= dictDownloadStatus.Count+1};
                     webBrowser.Dispatcher.Invoke(() =>
                     {
                         datacontext.PageLoaded = false;
@@ -120,12 +120,15 @@ namespace BookDownloader
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
         public void WaitAndLaunchAnalsysi(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status )
         {
-            while (status.DownloadFinished == false && !datacontext.UnloadPgm)
+            const int MAX_RETRY = 60 * 5 * 2; //wait loading up to 2 minutes.
+            int nWaitRetry = 0;
+            while (status.DownloadFinished == false && !datacontext.UnloadPgm && nWaitRetry < MAX_RETRY)
             {
                 Thread.Sleep(200);
+                nWaitRetry++;
             }
 
-            status.Depth = status.Depth - 1;
+            //status.Depth = status.Depth - 1;
 
             Debug.WriteLine($"{strURL} : Download Finished, Begin Analysis ...");
             Debug.Assert(webBrowser != null || webBrowser?.Document != null);

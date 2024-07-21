@@ -199,9 +199,16 @@ namespace WindowsFormsApp
 
                     UpdateStatusMsg(datacontext, "Flush Log to file: " + sDownloadFileName + ".log", -1);
                     if (!string.IsNullOrEmpty(status?.NextUrl))
-                        txtInitURL.Text = status.NextUrl;
+                        wndMain.UpdateInitUrl(status.NextUrl);
 
-                    MessageBox.Show(this, "Batch download finished...", "Web Novel Downloader", MessageBoxButtons.OK);
+                    string strMsgAreaLog = txtLog.Text;
+
+                    using (FileStream fileStream = File.OpenWrite(sDownloadFileName.Replace(".txt", "_log.log")))
+                    using (StreamWriter streamWriter = new StreamWriter(fileStream, Encoding.UTF8, BufferSize))
+                    {
+                        streamWriter.WriteLine(strMsgAreaLog);
+                    }
+                    //MessageBox.Show(this, "Batch download finished...", "Web Novel Downloader", MessageBoxButtons.OK);
                 }
             }
         }

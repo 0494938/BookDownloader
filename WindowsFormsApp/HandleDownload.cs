@@ -89,7 +89,7 @@ namespace WindowsFormsApp
             {
                 try
                 {
-                    dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished = false, URL = strURL, NextUrl = "", StartTime = DateTime.Now, Depth = 0, ThreadNum = dictDownloadStatus.Count + 1 };
+                    dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished = false, URL = strURL, NextUrl = "", StartTime = DateTime.Now, ThreadNum = dictDownloadStatus.Count + 1 };
 
                     datacontext.PageLoaded = false;
                     datacontext.NextLinkAnalysized = false;
@@ -118,7 +118,7 @@ namespace WindowsFormsApp
             }
         }
 
-        void WaitFinishForNext(BaseWndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode = false)
+        void WaitFinishForNext(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode = false)
         {
             DownloadStatus status = dictDownloadStatus[strURL];
 
@@ -126,20 +126,23 @@ namespace WindowsFormsApp
             thread.Start();
         }
 
-        public void WaitAndLaunchAnalsysi(BaseWndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status)
+        public void WaitAndLaunchAnalsysi(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status)
         {
             string? strBody = null;
             if (status != null)
             {
-                while (status.DownloadFinished == false)
+                const int MAX_RETRY = 60 * 5 * 2; //wait loading up to 2 minutes.
+                int nWaitRetry = 0;
+                while (status.DownloadFinished == false && !datacontext.UnloadPgm && nWaitRetry < MAX_RETRY)
                 {
                     Thread.Sleep(200);
+                    nWaitRetry++;
                 }
             }
 
             strBody = GetWebDocHtmlBody(strURL, true);
-            if (status != null)
-                status.Depth = status.Depth - 1;
+            //if (status != null)
+            //    status.Depth = status.Depth - 1;
 
             Debug.WriteLine($"{strURL} : Download Finished, Begin Analysis ...");
             Debug.Assert(browser != null || browser.IsLoading!=true);
@@ -148,6 +151,65 @@ namespace WindowsFormsApp
             AnalysisHtmlBody(datacontext, true, strURL, strBody, bSilenceMode, status);
 
         }
+
+        private void btnBrowser_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtInitURL.Text.Trim()))
+            {
+                txtHtml.Clear();
+                txtContent.Clear();
+                txtLog.Clear();
+                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
+                datacontext.PgmNaviUrl = txtInitURL.Text.Trim();
+                browser.LoadUrl(txtInitURL.Text.Trim());
+            }
+        }
+
+        private void btnNextPage_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtNextUrl.Text.Trim()))
+            {
+                txtHtml.Clear();
+                txtContent.Clear();
+                txtLog.Clear();
+                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
+                datacontext.PgmNaviUrl = txtNextUrl.Text.Trim();
+                browser.LoadUrl(txtNextUrl.Text.Trim());
+            }
+
+        }
+
+
+        private void btnAutoDownload_Click(object sender, EventArgs e)
+        {
+            txtHtml.Clear();
+            txtContent.Clear();
+            txtLog.Clear();
+
+            dictDownloadStatus.Clear();
+            Debug.WriteLine("btnAutoDownload_Click invoked...");
+
+            if (datacontext != null)
+            {
+                datacontext.BackGroundNotRunning = false;
+                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
+                dictDownloadStatus.Clear();
+
+                int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 20 : int.Parse(txtPages.Text.Trim());
+                DownloadStatus.ThreadMax = nMaxPage;
+
+                DownloadStatus.ContentsWriter = new StreamWriter(
+                    File.Open(AppDomain.CurrentDomain.BaseDirectory + "DumpNovel" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + ".txt",
+                    FileMode.CreateNew,
+                    FileAccess.ReadWrite,
+                    FileShare.Read),
+                    Encoding.UTF8
+                );
+
+                DownloadOneURLAndGetNext(datacontext, this, txtInitURL.Text);
+            }
+        }
+
     }
 #pragma warning restore CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
 }

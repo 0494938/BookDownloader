@@ -39,7 +39,7 @@ namespace WindowsFormsApp
             Debug.WriteLine("Browser_FrameLoadComplete ...");
             if (e.Frame.IsMain)
             {
-                if (e.Url.ToString() == datacontext.PgmNaviUrl)
+                //if (e.Url.ToString() == datacontext.PgmNaviUrl)
                 {
                     try
                     {

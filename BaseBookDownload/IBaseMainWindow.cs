@@ -11,12 +11,14 @@
 
         //public Dispatcher GetDispatcher();
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true);
-        
+        public string GetLogContents();
+
         public void UpdateNextPageButton();
         public void UpdateInitPageButton();
         public void UpdateAutoDownloadPageButton();
         public void UpdateAnalysisPageButton();
 
+        public void UpdateInitUrl(string url);
         public void UpdateNextUrl(string url);
         public void UpdateCurUrl(string url);
 

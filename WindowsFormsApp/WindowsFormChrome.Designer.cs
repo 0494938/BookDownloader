@@ -39,7 +39,7 @@ namespace WindowsFormsApp
             this.btnNextPage = new System.Windows.Forms.Button();
             this.txtNextUrl = new System.Windows.Forms.TextBox();
             this.cmbNovelType = new System.Windows.Forms.ComboBox();
-            this.btnBrowser = new System.Windows.Forms.Button();
+            this.btnInitURL = new System.Windows.Forms.Button();
             this.txtInitURL = new System.Windows.Forms.TextBox();
             this.scBottom = new System.Windows.Forms.SplitContainer();
             this.scResult = new System.Windows.Forms.SplitContainer();
@@ -93,7 +93,7 @@ namespace WindowsFormsApp
             this.panelTop.Controls.Add(this.btnNextPage);
             this.panelTop.Controls.Add(this.txtNextUrl);
             this.panelTop.Controls.Add(this.cmbNovelType);
-            this.panelTop.Controls.Add(this.btnBrowser);
+            this.panelTop.Controls.Add(this.btnInitURL);
             this.panelTop.Controls.Add(this.txtInitURL);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
@@ -182,16 +182,16 @@ namespace WindowsFormsApp
             this.cmbNovelType.TabIndex = 1;
             this.cmbNovelType.SelectedIndexChanged += new System.EventHandler(this.cmbNovelType_SelectedIndexChanged);
             // 
-            // btnBrowser
+            // btnInitURL
             // 
-            this.btnBrowser.Font = new System.Drawing.Font("MS UI Gothic", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnBrowser.Location = new System.Drawing.Point(334, 13);
-            this.btnBrowser.Name = "btnBrowser";
-            this.btnBrowser.Size = new System.Drawing.Size(129, 30);
-            this.btnBrowser.TabIndex = 2;
-            this.btnBrowser.Text = "-> Init Url";
-            this.btnBrowser.UseVisualStyleBackColor = true;
-            this.btnBrowser.Click += new System.EventHandler(this.btnBrowser_Click);
+            this.btnInitURL.Font = new System.Drawing.Font("MS UI Gothic", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.btnInitURL.Location = new System.Drawing.Point(334, 13);
+            this.btnInitURL.Name = "btnInitURL";
+            this.btnInitURL.Size = new System.Drawing.Size(129, 30);
+            this.btnInitURL.TabIndex = 2;
+            this.btnInitURL.Text = "-> Init Url";
+            this.btnInitURL.UseVisualStyleBackColor = true;
+            this.btnInitURL.Click += new System.EventHandler(this.btnBrowser_Click);
             // 
             // txtInitURL
             // 
@@ -272,14 +272,14 @@ namespace WindowsFormsApp
             this.gridPanel.Size = new System.Drawing.Size(1601, 1012);
             this.gridPanel.TabIndex = 10;
             // 
-            // flowLayoutPanel1
+            // statusPanel
             // 
             this.statusPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.statusPanel.Controls.Add(this.txtStatus);
             this.statusPanel.Controls.Add(this.txtProgress);
             this.statusPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.statusPanel.Location = new System.Drawing.Point(3, 985);
-            this.statusPanel.Name = "flowLayoutPanel1";
+            this.statusPanel.Name = "statusPanel";
             this.statusPanel.Size = new System.Drawing.Size(1595, 24);
             this.statusPanel.TabIndex = 1;
             this.statusPanel.Resize += new System.EventHandler(this.flowLayoutPanel1_Resize);
@@ -340,7 +340,7 @@ namespace WindowsFormsApp
 
         private System.Windows.Forms.SplitContainer scTop;
         private System.Windows.Forms.Panel panelTop;
-        private System.Windows.Forms.Button btnBrowser;
+        private System.Windows.Forms.Button btnInitURL;
         private System.Windows.Forms.TextBox txtInitURL;
         private System.Windows.Forms.ComboBox cmbNovelType;
         private System.Windows.Forms.TextBox txtNextUrl;

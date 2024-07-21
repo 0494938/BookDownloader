@@ -50,7 +50,16 @@ namespace BookDownloader
                 txtAnalysizedContents.Text = strContents;
             });
         }
-        
+
+        public string GetLogContents()
+        {
+            string strLog = "";
+            this.Dispatcher.Invoke(() => {
+                strLog = txtLog.Text.Replace("\r", "").Replace("\n", "\r\n");
+            });
+            return strLog;
+        }
+
         public void UpdateAggragatedContents(string strContents)
         {
             this.Dispatcher.Invoke(() =>
@@ -86,6 +95,15 @@ namespace BookDownloader
                 txtNextUrl.Text = url;
             });
         }
+
+        public void UpdateInitUrl(string url)
+        {
+            this.Dispatcher.Invoke(() => 
+            { 
+                this.txtInitURL.Text = url;
+            });
+        }
+
 
         public void UpdateCurUrl(string url)
         {

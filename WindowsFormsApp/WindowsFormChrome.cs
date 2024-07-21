@@ -23,33 +23,6 @@ namespace WindowsFormsApp
 
         }
 
-        private void btnBrowser_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(txtInitURL.Text.Trim()))
-            {
-                txtHtml.Clear();    
-                txtContent.Clear();
-                txtLog.Clear();
-                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
-                datacontext.PgmNaviUrl = txtInitURL.Text.Trim();
-                browser.LoadUrl(txtInitURL.Text.Trim());
-            }
-        }
-
-        private void btnNextPage_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(txtNextUrl.Text.Trim()))
-            {
-                txtHtml.Clear();
-                txtContent.Clear();
-                txtLog.Clear();
-                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
-                datacontext.PgmNaviUrl = txtNextUrl.Text.Trim();
-                browser.LoadUrl(txtNextUrl.Text.Trim());
-            }
-
-        }
-
         private void WindowsForm_Load(object sender, EventArgs e)
         {
             //cmbNovelType.SelectedIndex = cmbNovelType.FindString("4 无线电子书");
@@ -127,10 +100,6 @@ namespace WindowsFormsApp
             NovelTypeChangeEvent(cmbNovelType.SelectedIndex);
         }
 
-        private void btnAutoDownload_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void txtPages_KeyPress(object sender, KeyPressEventArgs e)
         {
