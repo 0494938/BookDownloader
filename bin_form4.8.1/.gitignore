@@ -1,10 +1,2 @@
-/*.dat
-/*.pak
-/*.pdb
-/*.dll
-/*.bin
-/*.exe
-/*.json
-/*.xml
-/locales
+/libcef.dll
 *.txt
