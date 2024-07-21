@@ -17,15 +17,25 @@ namespace WindowsFormsApp
     {
         public void UpdateStatusMsg(BaseWndContextData datacontext, string msg, int value)
         {
-            this.Invoke(new Action(() =>
+            this.Invoke(() =>
             {
+                txtStatus.Text = msg;
                 txtLog.AppendText(msg.TrimEnd(new char[] { '\r', '\n', ' ', '\t' }) + "\r\n");
-            }));
+                if(value >=0) 
+                    txtProgress.Value = value;
+            });
         }
 
         public void UpdateStatusProgress(BaseWndContextData datacontext, int value)
         {
-            //throw new NotImplementedException();
+            if(value >= 0)
+            {
+                this.Invoke(() =>
+                {
+                    txtProgress.Value = value;
+                });
+
+            }
         }
 
         public void UpdateNextPageButton()

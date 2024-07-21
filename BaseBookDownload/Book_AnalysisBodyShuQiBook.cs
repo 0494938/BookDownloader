@@ -45,7 +45,7 @@ namespace BaseBookDownload
 
 
             int nRetry = 0;
-            while (nRetry <= nMaxRetry && body !=null && FindBookNextLinkAndContents2(body, ref nextLink, ref header, ref title, ref content) && !datacontext.UnloadPgm)
+            while (nRetry <= nMaxRetry && body !=null && FindBookNextLinkAndContents2(wndMain, datacontext, body, ref nextLink, ref header, ref title, ref content) && !datacontext.UnloadPgm)
             {
                 nRetry++;
                 Thread.Sleep(3000);
@@ -60,9 +60,9 @@ namespace BaseBookDownload
 
             if (content != null || nextLink != null)
             {
-                string strNextLink = GetBookNextLink(nextLink);
-                string strChapterHeader = GetBookHeader(header);
-                string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
+                string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);
+                string strChapterHeader = GetBookHeader(wndMain, datacontext, header);
+                string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(wndMain, datacontext, content);
 
                 ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
 
@@ -80,7 +80,7 @@ namespace BaseBookDownload
             }
         }
 
-        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
+        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
         {
 
         }
@@ -93,7 +93,7 @@ namespace BaseBookDownload
         /// <param name="content"></param>
         /// <returns> when return True, means need Retry... when False, means No Retry
         /// </returns>
-        public bool FindBookNextLinkAndContents2(HtmlNode? top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode title, ref HtmlNode content)
+        public bool FindBookNextLinkAndContents2(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode title, ref HtmlNode content)
         {
             HtmlNodeCollection ?collCont = top?.SelectNodes(".//div[@class='chapter-content']");
             content = collCont?.First();
@@ -116,7 +116,7 @@ namespace BaseBookDownload
             return false;
         }
 
-        public string GetBookHeader(HtmlNode? header)
+        public string GetBookHeader(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
         {
             if (header != null)
             {
@@ -126,7 +126,7 @@ namespace BaseBookDownload
             return "";
         }
 
-        public string GetBookNextLink(HtmlNode? nextLink)
+        public string GetBookNextLink(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? nextLink)
         {
             if (nextLink != null)
             {
@@ -173,7 +173,7 @@ namespace BaseBookDownload
             return "";
         }
 
-        public string GetBookContents(HtmlNode? content)
+        public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             StringBuilder sbContent = new StringBuilder();
             foreach (HtmlNode element in content?.ChildNodes)
@@ -198,12 +198,12 @@ namespace BaseBookDownload
             return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
         }
 
-        public string GetBookName(HtmlNode? content)
+        public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             throw new NotImplementedException();
         }
 
-        public string GetBookName2(HtmlNode content)
+        public string GetBookName2(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode content)
         {
             throw new NotImplementedException();
         }

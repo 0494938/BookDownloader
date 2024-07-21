@@ -63,6 +63,9 @@
     <Compile Include="..\BaseBookDownload\Book_AnalysisBody.cs">
       <Link>Book_AnalysisBody.cs</Link>
     </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBody17K.cs">
+      <Link>Book_AnalysisBody17K.cs</Link>
+    </Compile>
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyBiQuGeBook.cs">
       <Link>Book_AnalysisBodyBiQuGeBook.cs</Link>
     </Compile>
@@ -72,14 +75,8 @@
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBook.cs">
       <Link>Book_AnalysisBodyFanQieBook.cs</Link>
     </Compile>
-    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBookHXTX.cs">
-      <Link>Book_AnalysisBodyFanQieBookHXTX.cs</Link>
-    </Compile>
-    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBookXXSB.cs">
-      <Link>Book_AnalysisBodyFanQieBookXXSB.cs</Link>
-    </Compile>
-    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBookYQXSB.cs">
-      <Link>Book_AnalysisBodyFanQieBookYQXSB.cs</Link>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyHongXiuTianXiang.cs">
+      <Link>Book_AnalysisBodyHongXiuTianXiang.cs</Link>
     </Compile>
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyIKBook.cs">
       <Link>Book_AnalysisBodyIKBook.cs</Link>
@@ -93,8 +90,14 @@
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyShuQiBook.cs">
       <Link>Book_AnalysisBodyShuQiBook.cs</Link>
     </Compile>
-    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyWXDZSBook.cs">
-      <Link>Book_AnalysisBodyWXDZSBook.cs</Link>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyWuXianBook.cs">
+      <Link>Book_AnalysisBodyWuXianBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyXinXiaoShuoBa.cs">
+      <Link>Book_AnalysisBodyXinXiaoShuoBa.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyYanQingXiaoshuoBa.cs">
+      <Link>Book_AnalysisBodyYanQingXiaoshuoBa.cs</Link>
     </Compile>
     <Compile Include="..\BaseBookDownload\DotCatDecoding.cs">
       <Link>DotCatDecoding.cs</Link>

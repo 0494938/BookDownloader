@@ -13,7 +13,7 @@ namespace BaseBookDownload
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
 #pragma warning disable CS8632 // Null 参照代入の可能性があります。
-    public class XXSBBookNovelContent : BaseBookNovelContent, IFetchNovelContent
+    public class HXTXBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
         public void AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
@@ -34,15 +34,15 @@ namespace BaseBookDownload
             HtmlNode? nextLink = null;
             HtmlNode? content = null;
             HtmlNode? header = null;
-            HtmlNode? topDiv = body.SelectNodes(".//div[@class='read-main'][@id='read-main']")?.FirstOrDefault();
+            HtmlNode? topDiv = body.SelectNodes(".//div[@class='read-main-wrap font-family01'][@id='j_readMainWrap']").FirstOrDefault();
             if (topDiv != null)
             {
-                FindBookNextLinkAndContents(topDiv, ref nextLink, ref header, ref content);
+                FindBookNextLinkAndContents(wndMain, datacontext, topDiv, ref nextLink, ref header, ref content);
                 if (content != null || nextLink != null)
                 {
-                    string strNextLink = GetBookNextLink(nextLink);
-                    string strChapterHeader = GetBookHeader(header);
-                    string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
+                    string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);
+                    string strChapterHeader = GetBookHeader(wndMain, datacontext, header);
+                    string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(wndMain, datacontext, content);
 
                     ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
 
@@ -61,44 +61,51 @@ namespace BaseBookDownload
             }
         }
 
-        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
+        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
         {
-            content = top?.SelectNodes(".//div[@class='read-content'][@id='read-content']")?.FirstOrDefault();
+            HtmlNodeCollection ?collCont = top?.SelectNodes(".//div[@class='read-content j_readContent']");
+            content = collCont?.FirstOrDefault();
+            IEnumerable<HtmlNode>? subContent = content?.Descendants()?.Where(n => n.Name == "div");
+            if (subContent!=null && subContent?.Count()>0)
+            {
+                content = subContent?.FirstOrDefault();
+            }
 
-            header = content?.SelectNodes(".//h2").FirstOrDefault();
+            HtmlNodeCollection? collHeader = top?.SelectNodes(".//h1[@class='j_chapterName']");
+            header = collHeader?.FirstOrDefault();
 
-            nextLink = top?.SelectNodes(".//div[@class='read-page']")?.FirstOrDefault();
+            IEnumerable<HtmlNode>? collNextScript = top?.SelectNodes(".//div[@class='chapter-control dib-wrap']"); 
+            nextLink = collNextScript?.FirstOrDefault();
         }
 
-        public string GetBookHeader(HtmlNode? header)
+        public string GetBookHeader(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
         {
             if (header != null)
                 return header.InnerText;
             return "";
         }
 
-        public string GetBookNextLink(HtmlNode? nextLink)
+        public string GetBookNextLink(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? nextLink)
         {
             if (nextLink != null)
             {
-                HtmlNode?  aNext = nextLink?.SelectNodes(".//a[@id='nextChapterBtn']")?.FirstOrDefault();
-
-                return aNext?.Attributes["href"]?.Value??"";
+                HtmlNode? aNext = nextLink?.SelectNodes(".//a[@id='j_chapterNext']").FirstOrDefault();
+                if (aNext != null)
+                    return "https://www.hongxiu.com" + aNext?.Attributes["href"]?.Value;
             }
             return "";
         }
 
-        public string GetBookContents(HtmlNode? content)
+        public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             if (content != null)
             {
-                IEnumerable<HtmlNode>? collContentP = content?.Descendants().Where(n => n.Name == "p");
-                if (collContentP!=null && collContentP?.Count()>0)
+                StringBuilder sbContent = new StringBuilder();
+                foreach (HtmlNode element in content?.ChildNodes)
                 {
-                    StringBuilder sbContent= new StringBuilder();
-                    foreach (HtmlNode element in collContentP)
+                    if (string.Equals("p", element.Name))
                     {
-                        string? strLine = element.InnerText?.Replace("\r", "")?.Replace("\n", "\r\n")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
+                        string? strLine = element.InnerText?.Replace("\r", "")?.Replace("\n", "\r\n")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&") ?
                             .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
                             .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
                             .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″");
@@ -107,18 +114,23 @@ namespace BaseBookDownload
                             sbContent.Append(strLine).AppendLine();
                         }
                     }
-                    return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
+                    else if (string.Equals("br", element.Name))
+                    {
+                        sbContent.Append("\r\n");
+                    }
                 }
+                return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
             }
+
             return "";
         }
 
-        public string GetBookName(HtmlNode? content)
+        public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             throw new NotImplementedException();
         }
 
-        public string GetBookName2(HtmlNode content)
+        public string GetBookName2(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode content)
         {
             throw new NotImplementedException();
         }

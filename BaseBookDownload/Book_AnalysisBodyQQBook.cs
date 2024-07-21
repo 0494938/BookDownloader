@@ -2,7 +2,10 @@
 using HtmlAgilityPack;
 using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Net.Mime;
 using System.Text;
+using System.Xml.Linq;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BaseBookDownload
@@ -27,88 +30,64 @@ namespace BaseBookDownload
                 wndMain.UpdateStatusMsg(datacontext, "*** URL downloaded BODY is empty, skip this Page *** ", 0);
                 return;
             }
-            else
+
+            HtmlNode? nextLink = null;
+            HtmlNode? content = null;
+            HtmlNode? header = null;
+            FindBookNextLinkAndContents(wndMain, datacontext, body, ref nextLink, ref header, ref content);
+            if (content != null || nextLink != null)
             {
-                foreach (HtmlNode element in body?.ChildNodes)
+                string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);
+                string strChapterHeader = GetBookHeader(wndMain, datacontext, header);
+                string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(wndMain, datacontext, content);
+
+                ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
+                if (bSilenceMode)
                 {
-                    //hrefTags.Add(element.GetAttribute("href"));
-                    if (string.Equals("#text", element.Name) || string.Equals("script", element.Name) || string.Equals("ul", element.Name))
-                    {
-                    }
-                    else if (string.Equals("ins", element.Name) || string.Equals("br", element.Name) || string.Equals("b", element.Name) || string.Equals("#comment", element.Name))
-                    {
-                    }
-                    else if (string.Equals("a", element.Name) || string.Equals("link", element.Name) || string.Equals("meta", element.Name) || string.Equals("title", element.Name))
-                    {
-                    }
-                    else if (string.Equals("div", element.Name))
-                    {
-                        if (string.Equals(element.Attributes["id"]?.Value, "__nuxt"))
-                        {
-                            HtmlNode? nextLink = null;
-                            HtmlNode? content = null;
-                            HtmlNode? header = null;
-                            FindBookNextLinkAndContents(element, ref nextLink, ref header, ref content);
-                            if (content != null || nextLink != null)
-                            {
-                                string strNextLink = GetBookNextLink(nextLink);
-                                string strChapterHeader = GetBookHeader(header);
-                                string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
+                    Debug.Assert(status != null);
+                    status.NextUrl = strNextLink;
 
-                                ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
-                                if (bSilenceMode)
-                                {
-                                    Debug.Assert(status != null);
-                                    status.NextUrl = strNextLink;
-
-                                    DownloadStatus.ContentsWriter?.Write(strContents);
-                                    DownloadStatus.ContentsWriter?.Flush();
-                                }
-                                datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
-                                wndMain.UpdateNextPageButton();
-                                return;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Debug.Assert(false);
-                    }
+                    DownloadStatus.ContentsWriter?.Write(strContents);
+                    DownloadStatus.ContentsWriter?.Flush();
                 }
+                datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
+                wndMain.UpdateNextPageButton();
+                return;
             }
         }
 
-        public void FindBookNextLinkAndContents(HtmlNode? parent, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
+        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? parent, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
         {
             if(parent != null)
             {
-                foreach (HtmlNode element in parent?.ChildNodes)
+
+                HtmlNodeCollection? collCont = parent?.SelectNodes(".//div[@id='Lab_Contents'][@class='kong']");
+                content = (collCont?.Count ?? 0) > 0 ? (collCont[0]) : null;
+
+                HtmlNodeCollection? collHeader = parent?.SelectNodes(".//h1[@id='ChapterTitle']");
+                header = (collHeader?.Count ?? 0) > 0 ? (collHeader[0]) : null;
+
+                var collNext = parent?.SelectNodes(".//div[@onclick='JumpNext();']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0);
+                nextLink = collNext?.FirstOrDefault();
+
+                if (nextLink==null && header==null && content==null)
                 {
-                    //hrefTags.Add(element.GetAttribute("href"));
-                    if (string.Equals("div", element.Name))
-                    {
-                        if (string.Equals(element.Attributes["class"]?.Value, "chapter-content isTxt"))
-                        {
-                            content = element;
-                        }
-                        else if (string.Equals(element.Attributes["class"]?.Value, "footer") && nextLink == null)
-                        {
-                            nextLink = element;
-                        }
-                        else if (string.Equals(element.Attributes["class"]?.Value, "read-header") && header == null)
-                        {
-                            header = element;
-                        }
-                        else
-                        {
-                            FindBookNextLinkAndContents(element, ref nextLink, ref header, ref content);
-                        }
-                    }
+                    collCont = parent?.SelectNodes(".//div[@class='chapter-content isTxt']");
+                    //content = (collCont?.Count ?? 0) > 0 ? (collCont[0]) : null;
+                    content = collCont?.FirstOrDefault();
+
+                    collHeader = parent?.SelectNodes(".//h1[@id='chapter-title']");
+                    //header = (collHeader?.Count ?? 0) > 0 ? (collHeader[0]) : null;
+                    header = collHeader?.FirstOrDefault();
+
+                    collNext = parent?.SelectNodes(".//div[@class='footer']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0);
+                    nextLink = collNext?.FirstOrDefault();
+
                 }
             }
         }
 
-        public string GetBookHeader(HtmlNode? header)
+        public string GetBookHeader(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
         {
             if (header != null)
             {
@@ -126,7 +105,7 @@ namespace BaseBookDownload
             return "";
         }
 
-        public string GetBookNextLink(HtmlNode? nextLink)
+        public string GetBookNextLink(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? nextLink)
         {
             if(nextLink != null)
             {
@@ -146,7 +125,7 @@ namespace BaseBookDownload
             return "";
         }
 
-        public string GetBookContents(HtmlNode? content)
+        public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             if (content != null)
             {
@@ -176,7 +155,7 @@ namespace BaseBookDownload
             return "";
         }
 
-        public string GetBookName(HtmlNode? content)
+        public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             throw new NotImplementedException();
         }

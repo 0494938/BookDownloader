@@ -36,12 +36,12 @@ namespace BaseBookDownload
             if ((topDiv?.Count??0) > 0)
             {
                 Debug.Assert(topDiv.Count ==1);
-                FindBookNextLinkAndContents2(body, ref nextLink, ref header, ref content);
+                FindBookNextLinkAndContents2(wndMain, datacontext, body, ref nextLink, ref header, ref content);
                 if (content != null || nextLink != null)
                 {
-                    string strNextLink = GetBookNextLink2(nextLink);
-                    string strChapterHeader = GetBookHeader2(header);
-                    string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents2(content);
+                    string strNextLink = GetBookNextLink2(wndMain, datacontext, nextLink);
+                    string strChapterHeader = GetBookHeader2(wndMain, datacontext, header);
+                    string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents2(wndMain, datacontext, content);
 
                     ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
                     if (bSilenceMode)
@@ -59,12 +59,12 @@ namespace BaseBookDownload
             }
             else
             {
-                FindBookNextLinkAndContents(body, ref nextLink, ref header, ref content);
+                FindBookNextLinkAndContents(wndMain, datacontext, body, ref nextLink, ref header, ref content);
                 if (content != null || nextLink != null)
                 {
-                    string strNextLink = GetBookNextLink(nextLink);
-                    string strChapterHeader = GetBookHeader(header);
-                    string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
+                    string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);
+                    string strChapterHeader = GetBookHeader(wndMain, datacontext, header);
+                    string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(wndMain, datacontext, content);
 
                     ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
 
@@ -83,7 +83,7 @@ namespace BaseBookDownload
             }
         }
 
-        public void FindBookNextLinkAndContents(HtmlNode? parent, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
+        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? parent, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
         {
             foreach (HtmlNode element in parent?.ChildNodes)
             {
@@ -100,7 +100,7 @@ namespace BaseBookDownload
                     }
                     else
                     {
-                        FindBookNextLinkAndContents(element, ref nextLink, ref header, ref content);
+                        FindBookNextLinkAndContents(wndMain, datacontext, element, ref nextLink, ref header, ref content);
                     }
                 }
                 else if (string.Equals("h1", element.Name))
@@ -113,7 +113,7 @@ namespace BaseBookDownload
             }
         }
 
-        public void FindBookNextLinkAndContents2(HtmlNode? parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
+        public void FindBookNextLinkAndContents2(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? parent, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
             foreach (HtmlNode element in parent?.ChildNodes)
             {
@@ -134,18 +134,18 @@ namespace BaseBookDownload
                     }
                     else
                     {
-                        FindBookNextLinkAndContents2(element, ref nextLink, ref header, ref content);
+                        FindBookNextLinkAndContents2(wndMain, datacontext, element, ref nextLink, ref header, ref content);
                     }
                 }
             }
         }
 
-        public string GetBookHeader(HtmlNode? header)
+        public string GetBookHeader(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
         {
             return header?.InnerText??"";
         }
 
-        public string GetBookHeader2(HtmlNode? header)
+        public string GetBookHeader2(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
         {
             string sHeader="";
             foreach (HtmlNode element in header?.ChildNodes)
@@ -161,7 +161,7 @@ namespace BaseBookDownload
             return sHeader;
         }
 
-        public string GetBookNextLink(HtmlNode? nextLink)
+        public string GetBookNextLink(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? nextLink)
         {
             IEnumerable<HtmlNode> ?lstNodes = nextLink?.Descendants().Where(n => n?.Name == "td" && n.Attributes["class"]?.Value == "mulu") as IEnumerable<HtmlNode>;
             IEnumerable<HtmlNode> ?nxtNodes = nextLink?.Descendants().Where(n => n?.Name == "td" && n.Attributes["class"]?.Value == "next") as IEnumerable<HtmlNode>;
@@ -176,7 +176,7 @@ namespace BaseBookDownload
             return "https://m.xbiqugew.com/book" + sLst?.Replace("chapters_","") + sNxt;
         }
 
-        public string GetBookNextLink2(HtmlNode? nextLink)
+        public string GetBookNextLink2(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? nextLink)
         {
             //IEnumerable<HtmlNode>? idxNodes = nextLink?.Descendants().Where(n => n?.Name == "a" && n.Attributes["id"]?.Value == "link-index") as IEnumerable<HtmlNode>;
             IEnumerable<HtmlNode>? nxtNodes = nextLink?.Descendants().Where(n => n?.Name == "a" && n.Attributes["id"]?.Value == "link-next") as IEnumerable<HtmlNode>;
@@ -188,7 +188,7 @@ namespace BaseBookDownload
             return sNxt??"";
         }
 
-        public string GetBookContents(HtmlNode? content)
+        public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             StringBuilder sbContent = new StringBuilder();
             IEnumerable<HtmlNode>? contentNodes = content?.Descendants().Where(n => n?.Name == "div" && n.Attributes["id"]?.Value == "nr1") as IEnumerable<HtmlNode>;
@@ -214,7 +214,7 @@ namespace BaseBookDownload
             return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
         }
 
-        public string GetBookContents2(HtmlNode? content)
+        public string GetBookContents2(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             StringBuilder sbContent = new StringBuilder();
             //IEnumerable<HtmlNode>? contentNodes = content.Descendants().Where(n => n?.Name == "div" && n.Attributes["id"]?.Value == "nr1") as IEnumerable<HtmlNode>;
@@ -240,7 +240,7 @@ namespace BaseBookDownload
             return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
         }
 
-        public string GetBookName(HtmlNode? content)
+        public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             throw new NotImplementedException();
         }

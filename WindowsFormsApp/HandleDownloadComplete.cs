@@ -21,6 +21,19 @@ namespace WindowsFormsApp
     partial class WindowsFormChrome: IBaseMainWindow
     {
         WndContextData datacontext = new WndContextData();
+
+        private void Browser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
+        {
+            if (e.IsLoading == false)
+            {
+                Debug.WriteLine("Load Completed ....");
+            }
+            else
+            {
+                Debug.WriteLine("still loading ....");
+            }
+        }
+
         void Browser_FrameLoadComplete(object sender, CefSharp.FrameLoadEndEventArgs e)
         {
             Debug.WriteLine("Browser_FrameLoadComplete ...");
@@ -42,9 +55,9 @@ namespace WindowsFormsApp
                         }
                         else
                         {
+                            UpdateStatusMsg(datacontext, e.Url.ToString() + " : Finished Page download ...", 50);
                             Thread thread = new Thread(() => WaitAndLaunchAnalsysi(datacontext, this, e.Url.ToString(), false, null));
                             thread.Start();
-                            //UpdateStatusMsg(datacontext, e.Url.ToString() + " : Finished Page download ...", 50);
                             //AnalysisURL(e.Url.ToString());
 
                         }

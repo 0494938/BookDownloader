@@ -9,6 +9,7 @@ namespace BookDownloader
 {
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
+
         private void MainFrameWebLoadCompleted(object sender, NavigationEventArgs e)
         {
             Debug.WriteLine("----------------------------------------------------------------------------- MainFrameWebLoadCompleted invoked -----------------------------------------------------------------------------");

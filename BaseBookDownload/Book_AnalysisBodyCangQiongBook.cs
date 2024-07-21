@@ -38,12 +38,12 @@ namespace BaseBookDownload
             HtmlNodeCollection? topDiv = body.SelectNodes(".//div[@class='reader-main']");
             if ((topDiv?.Count ?? 0) > 0)
             {
-                FindBookNextLinkAndContents(topDiv.First(), ref nextLink, ref header, ref content);
+                FindBookNextLinkAndContents( wndMain, datacontext, topDiv.First(), ref nextLink, ref header, ref content);
                 if (content != null || nextLink != null)
                 {
-                    string strNextLink = GetBookNextLink(nextLink);
+                    string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);
                     //string strChapterHeader = GetBookHeader(header);
-                    string strContents = " \r\n \r\n " + GetBookContents(content);
+                    string strContents = " \r\n \r\n " + GetBookContents(wndMain, datacontext, content);
 
                     ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
 
@@ -62,7 +62,7 @@ namespace BaseBookDownload
             }
         }
 
-        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
+        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
         {
             HtmlNodeCollection? collCont = top?.SelectNodes(".//div[@class='content']");
             content = collCont?.First();
@@ -78,12 +78,12 @@ namespace BaseBookDownload
             nextLink = collNext?.First();
         }
 
-        public string GetBookHeader(HtmlNode? header)
+        public string GetBookHeader(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
         {
             return header?.Attributes["href"]?.Value??"";
         }
 
-        public string GetBookNextLink(HtmlNode? nextLink)
+        public string GetBookNextLink(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? nextLink)
         {
             string sUrl = nextLink?.Attributes["href"]?.Value??"";
             if (sUrl.StartsWith("http"))
@@ -95,7 +95,7 @@ namespace BaseBookDownload
             return "http://www.cqhhhs.com" + sUrl;
         }
 
-        public string GetBookContents(HtmlNode? content)
+        public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             StringBuilder sbContent = new StringBuilder();
             foreach (HtmlNode element in content?.ChildNodes)
@@ -120,12 +120,12 @@ namespace BaseBookDownload
             return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
         }
 
-        public string GetBookName(HtmlNode? content)
+        public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             throw new NotImplementedException();
         }
 
-        public string GetBookName2(HtmlNode content)
+        public string GetBookName2(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode content)
         {
             throw new NotImplementedException();
         }

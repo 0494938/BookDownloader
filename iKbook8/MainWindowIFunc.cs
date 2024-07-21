@@ -155,7 +155,7 @@ namespace BookDownloader
             Debug.Assert(datacontext != null);
 
             string? strBody = GetWebDocHtmlBody(strUrl, bWaitOptoin);
-            if (!string.IsNullOrEmpty(strBody.Trim()))
+            if (!string.IsNullOrEmpty(strBody?.Trim()))
             {
                 txtWebContents.Text = strBody;
                 AnalysisHtmlBody(datacontext, bWaitOptoin, strUrl, strBody);

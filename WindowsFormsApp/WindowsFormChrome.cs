@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WindowsFormsApp
 {
@@ -29,6 +30,7 @@ namespace WindowsFormsApp
                 txtHtml.Clear();    
                 txtContent.Clear();
                 txtLog.Clear();
+                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
                 datacontext.PgmNaviUrl = txtInitURL.Text.Trim();
                 browser.LoadUrl(txtInitURL.Text.Trim());
             }
@@ -41,6 +43,7 @@ namespace WindowsFormsApp
                 txtHtml.Clear();
                 txtContent.Clear();
                 txtLog.Clear();
+                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
                 datacontext.PgmNaviUrl = txtNextUrl.Text.Trim();
                 browser.LoadUrl(txtNextUrl.Text.Trim());
             }
@@ -49,8 +52,9 @@ namespace WindowsFormsApp
 
         private void WindowsForm_Load(object sender, EventArgs e)
         {
-            //cmbNovelType.SelectedText(cmbNovelType.Text);
-            cmbNovelType.SelectedIndex = cmbNovelType.FindString("4 无线电子书");
+            //cmbNovelType.SelectedIndex = cmbNovelType.FindString("4 无线电子书");
+            cmbNovelType.SelectedIndex = 13;
+
         }
 
         public void Test(String message)
@@ -72,14 +76,28 @@ namespace WindowsFormsApp
             browser.FrameLoadStart += (sender, args) =>
             {
                 //MainFrame has started to load, too early to access the DOM, you can add event listeners for DOMContentLoaded etc.
+                Debug.WriteLine("browser.FrameLoadStart[Frame=" + (string.IsNullOrEmpty(args.Frame.Name)?"#NONAME": args.Frame.Name) + "] entered with (IsLoading = " + browser.IsLoading + ")...");
+                UpdateStatusMsg(datacontext, args.Url.ToString() + " : Start Frame Load ...", 0);
+
                 if (args.Frame.IsMain)
                 {
-                    const string script = "document.addEventListener('DOMContentLoaded', function(){ alert('DomLoaded'); });";
-                    args.Frame.ExecuteJavaScriptAsync(script);
-                    Debug.WriteLine("browser.FrameLoadStart entered with (IsLoading = " + browser.IsLoading + ")...");
+                    //const string script = "document.addEventListener('DOMContentLoaded', function(){ alert('DomLoaded'); });";
+                    //args.Frame.ExecuteJavaScriptAsync(script);
                 }
             };
             browser.FrameLoadEnd += new EventHandler<CefSharp.FrameLoadEndEventArgs>(Browser_FrameLoadComplete);
+            browser.AddressChanged += new EventHandler<CefSharp.AddressChangedEventArgs>(Browser_AddressChanged);
+            browser.IsBrowserInitializedChanged += new EventHandler(Browser_IsBrowserInitializedChanged);
+            browser.JavascriptMessageReceived += new EventHandler<CefSharp.JavascriptMessageReceivedEventArgs>(Browser_JavascriptMessageReceived);
+            browser.LocationChanged += new EventHandler(Browser_LocationChanged);
+            browser.RegionChanged += new EventHandler(Browser_RegionChanged);
+
+            browser.LoadError += new EventHandler<CefSharp.LoadErrorEventArgs>(Browser_LoadError);
+            browser.TitleChanged+= new EventHandler<CefSharp.TitleChangedEventArgs>(Browser_TitleChanged);
+
+            browser.ControlAdded += new ControlEventHandler(Browser_ControlAdded);
+            browser.ControlRemoved += new ControlEventHandler(Browser_ControlRemoved);
+            browser.BindingContextChanged += new EventHandler(Browser_BindingContextChanged);
         }
 
 
@@ -87,24 +105,15 @@ namespace WindowsFormsApp
         {
 
         }
-        private void Browser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
-        {
-            if (e.IsLoading == false)
-            {
-                Debug.WriteLine("Load Completed ....");
-                //e.Browser.ViewSource();
-                //Debug.WriteLine();
-            }
-            else
-            {
-                Debug.WriteLine("still loading ....");
-            }
-        }
 
         private void panelTop_Resize(object sender, EventArgs e)
         {
             txtLog.Height = panelTop.Height - txtLog.Top - 5;
-            txtLog.Width = panelTop.Width- txtLog.Left  *2 ;
+            txtLog.Width = panelTop.Width - txtLog.Left * 2;
+            txtInitURL.Width = panelTop.Width - txtInitURL.Left - 20 - 122;
+            txtNextUrl.Width = panelTop.Width - txtNextUrl.Left - 20 - 122;
+            btnAutoDownload.Left = txtInitURL.Left + txtInitURL.Width + 12;
+            txtPages.Left = txtInitURL.Left + txtInitURL.Width + 12;
         }
 
         private void scResult_Panel1_Resize(object sender, EventArgs e)
@@ -117,6 +126,30 @@ namespace WindowsFormsApp
         {
             NovelTypeChangeEvent(cmbNovelType.SelectedIndex);
         }
-    }
 
+        private void btnAutoDownload_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtPages_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
+        }
+
+        private void txtPages_TextChanged(object sender, EventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(txtPages.Text, "[^0-9]"))
+            {
+                //MessageBox.Show("Please enter only numbers.");
+                txtPages.Text = txtPages.Text.Remove(txtPages.Text.Length - 1);
+            }
+        }
+
+        private void flowLayoutPanel1_Resize(object sender, EventArgs e)
+        {
+            txtProgress.Left = statusPanel.Width - (txtProgress.Top + txtProgress.Width) - 5;
+            txtStatus.Width  = statusPanel.Width - txtStatus.Left - 5;
+        }
+    }
 }

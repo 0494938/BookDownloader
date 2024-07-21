@@ -38,12 +38,12 @@ namespace BaseBookDownload
             //HtmlNodeCollection? topDiv = body.SelectNodes(".//div[@class='read_bg']");
             if (body!=null)
             {
-                FindBookNextLinkAndContents(body, ref nextLink, ref header, ref content);
+                FindBookNextLinkAndContents(wndMain, datacontext, body, ref nextLink, ref header, ref content);
                 if (content != null || nextLink != null)
                 {
-                    string strNextLink = GetBookNextLink(nextLink);
-                    string strChapterHeader = GetBookHeader(header);
-                    string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
+                    string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);
+                    string strChapterHeader = GetBookHeader(wndMain, datacontext, header);
+                    string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(wndMain, datacontext, content);
 
                     ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
 
@@ -62,7 +62,7 @@ namespace BaseBookDownload
             }
         }
 
-        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
+        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
         {
             HtmlNodeCollection ?collCont = top?.SelectNodes("//div[@class='muye-reader-content noselect']");
             content = collCont?.First()??null;
@@ -74,14 +74,14 @@ namespace BaseBookDownload
             nextLink = collNextScript?.First();
         }
 
-        public string GetBookHeader(HtmlNode? header)
+        public string GetBookHeader(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
         {
             if (header != null)
                 return header.InnerText;
             return "";
         }
 
-        public string GetBookNextLink(HtmlNode? nextLink)
+        public string GetBookNextLink(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? nextLink)
         {
             string sScript = nextLink?.InnerText?.Trim()??"";
             sScript = sScript.Substring(1, sScript.Length-4).Trim();
@@ -101,7 +101,7 @@ namespace BaseBookDownload
                 return "https://fanqienovel.com/reader/" + nextItemId.ToString() + "?enter_from=page";
         }
 
-        public string GetBookContents(HtmlNode? content)
+        public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             if (content != null)
             {
@@ -136,7 +136,7 @@ namespace BaseBookDownload
             return "";
         }
 
-        public string GetBookName(HtmlNode? content)
+        public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             throw new NotImplementedException();
         }

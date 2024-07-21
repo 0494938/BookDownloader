@@ -34,12 +34,12 @@ namespace BaseBookDownload
             HtmlNodeCollection? topDiv = body.SelectNodes(".//div[@id='PageBody']");
             if ((topDiv?.Count ?? 0) > 0)
             {
-                FindBookNextLinkAndContents(topDiv?.First(), ref nextLink, ref header, ref content);
+                FindBookNextLinkAndContents(wndMain, datacontext, topDiv?.First(),  ref nextLink, ref header, ref content);
                 if (content != null || nextLink != null)
                 {
-                    string strNextLink = GetBookNextLink(nextLink);
-                    string strChapterHeader = GetBookHeader(header);
-                    string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
+                    string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);
+                    string strChapterHeader = GetBookHeader(wndMain, datacontext, header);
+                    string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(wndMain, datacontext, content);
 
                     ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
 
@@ -58,7 +58,7 @@ namespace BaseBookDownload
             }
         }
 
-        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
+        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
         {
             HtmlNodeCollection ?collCont = top?.SelectNodes(".//div[@id='Lab_Contents']");
             content = collCont?.First();
@@ -75,12 +75,12 @@ namespace BaseBookDownload
             nextLink = collNextARef?.First();
         }
 
-        public string GetBookHeader(HtmlNode? header)
+        public string GetBookHeader(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
         {
             return header?.InnerText??"";
         }
 
-        public string GetBookNextLink(HtmlNode? nextLink)
+        public string GetBookNextLink(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? nextLink)
         {
             string sUrl = nextLink?.Attributes["href"]?.Value??"";
             if (sUrl.StartsWith("http"))
@@ -92,7 +92,7 @@ namespace BaseBookDownload
             return "https://www.wxdzs.net" + sUrl;
         }
 
-        public string GetBookContents(HtmlNode? content)
+        public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             return content?.InnerText?.Replace("\r", "")?.Replace("\n", "\r\n")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
                         .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
@@ -100,7 +100,7 @@ namespace BaseBookDownload
                         .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″")?.Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n")??"";
         }
 
-        public string GetBookName(HtmlNode? content)
+        public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             throw new NotImplementedException();
         }

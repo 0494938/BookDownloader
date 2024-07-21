@@ -37,12 +37,12 @@ namespace BaseBookDownload
             HtmlNode? topDiv = body?.SelectNodes(".//div[@id='j_readMainWrap'][@class='read-main-wrap font-family01']")?.FirstOrDefault();
             if (topDiv != null)
             {
-                FindBookNextLinkAndContents(topDiv, ref nextLink, ref header, ref content);
+                FindBookNextLinkAndContents(wndMain, datacontext, topDiv, ref nextLink, ref header, ref content);
                 if (content != null || nextLink != null)
                 {
-                    string strNextLink = GetBookNextLink(nextLink);
-                    string strChapterHeader = GetBookHeader(header);
-                    string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(content);
+                    string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);
+                    string strChapterHeader = GetBookHeader(wndMain, datacontext, header);
+                    string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(wndMain, datacontext, content);
 
                     ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
 
@@ -60,7 +60,7 @@ namespace BaseBookDownload
                 }
             }
         }
-        public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode?  content)
+        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode?  content)
         {
             content = top?.SelectNodes(".//div[@class='ywskythunderfont']").FirstOrDefault();
 
@@ -69,14 +69,14 @@ namespace BaseBookDownload
             nextLink = top?.SelectNodes(".//a[@id='j_chapterNext']").FirstOrDefault();
         }
 
-        public string GetBookHeader(HtmlNode? header)
+        public string GetBookHeader(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
         {
             if (header != null)
                 return header.InnerText;
             return "";
         }
 
-        public string GetBookNextLink(HtmlNode? nextLink)
+        public string GetBookNextLink(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? nextLink)
         {
 
             if(nextLink != null)
@@ -89,7 +89,7 @@ namespace BaseBookDownload
             //return "https://www.xs8.cn" + sUrl;
         }
 
-        public string GetBookContents(HtmlNode? content)
+        public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             if (content != null)
             {
@@ -114,7 +114,7 @@ namespace BaseBookDownload
             return "";
         }
 
-        public string GetBookName(HtmlNode? content)
+        public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             throw new NotImplementedException();
         }

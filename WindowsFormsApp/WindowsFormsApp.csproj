@@ -64,6 +64,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BrowserEvents.cs" />
+    <Compile Include="HandleDownloadFix.cs" />
     <Compile Include="HandleDownloadComplete.cs" />
     <Compile Include="OverLoadFunc.cs" />
     <Compile Include="HandleDownload.cs" />
