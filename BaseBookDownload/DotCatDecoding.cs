@@ -379,8 +379,9 @@ namespace BaseBookDownload
             new GID(58591, '条'),
             new GID(58682, '呢'),
         };
-    
-        public static string DecodeDitStr(string sDotEncoded){
+
+#pragma warning disable CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
+        public static string? DecodeDitStr(string sDotEncoded){
             if (string.IsNullOrEmpty(sDotEncoded))
             {
                 return null;
@@ -388,7 +389,7 @@ namespace BaseBookDownload
             StringBuilder sb = new StringBuilder();
             foreach (char c in sDotEncoded)
             {
-                GID foundGid = DotDecodingUtil.dit_data.Where(n => n.NChar == (int)c)?.FirstOrDefault();
+                GID ?foundGid = DotDecodingUtil.dit_data.Where(n => n.NChar == (int)c)?.FirstOrDefault();
                 if (foundGid != null)
                 {
                     sb.Append(foundGid.CChar);
@@ -400,5 +401,6 @@ namespace BaseBookDownload
             }
             return sb.ToString();
         }
+#pragma warning restore CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
     }
 }

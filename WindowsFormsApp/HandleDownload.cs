@@ -1,82 +1,244 @@
-﻿using CefSharp;
+﻿using BaseBookDownload;
+using CefSharp;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace WindowsFormsApp
 {
-    public class WndContextData: BaseWndContextData
+    public partial class WndContextData: BaseWndContextData
     {
 
     }
-    partial class WindowsFormChrome
+    partial class WindowsFormChrome: IBaseMainWindow
     {
-        void Browser_FrameLoadComplete(object sender, CefSharp.FrameLoadEndEventArgs e)
+        Dictionary<string, DownloadStatus> dictDownloadStatus = new Dictionary<string, DownloadStatus>();
+        public void NovelTypeChangeEvent(int nIndex)
         {
-            Debug.WriteLine("wb_FrameLoadEnd ....");
-            if (e.Frame.IsMain)
+            if (txtInitURL != null)
             {
-                //browser.ViewSource();
-                browser.GetSourceAsync().ContinueWith(taskHtml =>
+                Debug.WriteLine("Select Combox Index : " + cmbNovelType.SelectedIndex);
+                switch (cmbNovelType.SelectedIndex)
                 {
-                    var html = taskHtml.Result;
-                    AnalysisURL(e.Uri.ToString());
+                    case (int)BatchQueryNovelContents.IKBOOK8:
+                        txtInitURL.Text = "https://m.ikbook8.com/book/i116399132/18897986.html";
+                        break;
+                    case (int)BatchQueryNovelContents.QQBOOK:
+                        txtInitURL.Text = "https://book.qq.com/book-read/47135031/1";
+                        break;
+                    case (int)BatchQueryNovelContents.BIQUGE:
+                        txtInitURL.Text = "https://m.xbiqugew.com/book/50761/32248795.html";
+                        break;
+                    case (int)BatchQueryNovelContents.BIQUGE2:
+                        txtInitURL.Text = "https://www.xbiqugew.com/book/18927/12811470.html";
+                        break;
+                    case (int)BatchQueryNovelContents.WXDZH:
+                        txtInitURL.Text = "https://www.wxdzs.net/wxread/94612_43816524.html";
+                        break;
+                    case (int)BatchQueryNovelContents.CANGQIONG:
+                        txtInitURL.Text = "http://www.cqhhhs.com/book/85756/28421368.html";
+                        break;
+                    case (int)BatchQueryNovelContents.JINYONG:
+                        txtInitURL.Text = "http://www.jinhuaja.com/b/184315/976061.html";
+                        break;
+                    case (int)BatchQueryNovelContents.SHUQI:
+                        txtInitURL.Text = "https://www.shuqi.com/reader?bid=8991909&cid=2589796";
+                        break;
+                    case (int)BatchQueryNovelContents.FANQIE:
+                        txtInitURL.Text = "https://fanqienovel.com/reader/7100359997917397512?enter_from=page";
+                        break;
+                    case (int)BatchQueryNovelContents.FANQIE2:
+                        txtInitURL.Text = "https://fanqienovel.com/reader/7268154919981580800?source=seo_fq_juhe";
+                        break;
+                    case (int)BatchQueryNovelContents.HXTX:
+                        txtInitURL.Text = "https://www.hongxiu.com/chapter/7200532503839703/19328808342308247";
+                        break;
+                    case (int)BatchQueryNovelContents.XXSB:
+                        txtInitURL.Text = "https://book.xxs8.com/677942/94808.html";
+                        break;
+                    case (int)BatchQueryNovelContents.YQXSB:
+                        txtInitURL.Text = "https://www.xs8.cn/chapter/3738025904323901/10686192507259378";
+                        break;
+                    case (int)BatchQueryNovelContents._17K:
+                        txtInitURL.Text = "https://www.17k.com/chapter/3589602/48625472.html";
+                        break;
+                    //case (int)BatchQueryNovelContents.TOBEDONE:
+                    //    break;
+                    default:
+                        Debug.Assert(false);
+                        break;
+                }
+            }
+        }
+        public void AnalysisHtmlBodyThreadFunc(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        {
+            Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
 
-                });
+            IFetchNovelContent? fetchNovelContent = null;
+            int nMaxRetry = 60; //span is 3s.
+            switch (datacontext?.SiteType)
+            {
+                case BatchQueryNovelContents.IKBOOK8:
+                    fetchNovelContent = new IKBook8NovelContent();
+                    break;
+                case BatchQueryNovelContents.QQBOOK:
+                    fetchNovelContent = new OOBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.WXDZH:
+                    fetchNovelContent = new WxdzsBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.CANGQIONG:
+                    fetchNovelContent = new CangQiongBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.JINYONG:
+                    fetchNovelContent = new JinYongBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.SHUQI:
+                    nMaxRetry = 60;
+                    fetchNovelContent = new ShuQiBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.FANQIE:
+                case BatchQueryNovelContents.FANQIE2:
+                    nMaxRetry = 60;
+                    fetchNovelContent = new FanQieBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.BIQUGE:
+                case BatchQueryNovelContents.BIQUGE2:
+                    fetchNovelContent = new BiQuGeBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.HXTX:
+                    fetchNovelContent = new HXTXBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.XXSB:
+                    fetchNovelContent = new XXSBBookNovelContent();
+                    break;
+                case BatchQueryNovelContents.YQXSB:
+                    fetchNovelContent = new YQXSBBookNovelContent();
+                    break;
+                default:
+                    break;
+            }
+
+            if (bSilenceMode)
+            {
+                while (status?.DownloadFinished == false && !datacontext.UnloadPgm)
+                {
+                    Thread.Sleep(200);
+                }
+                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext?.SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", (int)((100.0 / DownloadStatus.ThreadMax * (status?.ThreadNum ?? 1 - 1 + 0.5))));
+            }
+            else
+            {
+                while (datacontext?.PageLoaded == false && !datacontext.UnloadPgm)
+                {
+                    Thread.Sleep(200);
+                }
+                UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext?.SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", 50);
+            }
+
+            if (fetchNovelContent != null)
+            {
+                fetchNovelContent.AnalysisHtmlBookBody(this, datacontext, strURL, strBody, bSilenceMode, status, nMaxRetry);
+            }
+            if (bSilenceMode)
+            {
+                UpdateStatusMsg(datacontext, strURL + " : Finished Analysing of downloaded Uri Contents Body of No." + status?.ThreadNum ?? 1 + " ...", (int)((100.0 / DownloadStatus.ThreadMax * (status?.ThreadNum ?? 1))));
+            }
+            else
+                UpdateStatusMsg(datacontext, strURL + " : Finished Analysing of downloaded Uri Contents Body of No. " + status?.ThreadNum ?? 1 + "...", 100);
+
+            if (bSilenceMode)
+            {
+                if (status?.ThreadNum < DownloadStatus.ThreadMax && !string.IsNullOrEmpty(status.NextUrl))
+                {
+                    DownloadOneURLAndGetNext(datacontext, wndMain, status.NextUrl);
+                }
+                else
+                {
+                    string sDownloadFileName = ((FileStream)DownloadStatus.ContentsWriter.BaseStream).Name;
+                    DownloadStatus.ContentsWriter = null;
+
+                    const Int32 BufferSize = 2048;
+                    using (FileStream fileStream = File.OpenRead(sDownloadFileName))
+                    using (StreamReader streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
+                    {
+                        UpdateStatusMsg(datacontext, "Analysize of Chapter in download file : " + sDownloadFileName, -1);
+                        String? sLine;
+                        long lLine = 0;
+                        while ((sLine = streamReader.ReadLine()) != null)
+                        {
+                            lLine++;
+                            if (!string.IsNullOrEmpty(sLine.Trim()))
+                            {
+                                //Match matche = Regex.Match(line, "[^第]*(第[]*[][^章节页]*");// Process line
+                                string sPattern = "第[0-9０-９ \t一二三四五六七八九十百千万亿壹贰叁肆伍陆柒捌玖拾佰仟零]+[章节页]";
+                                bool result = Regex.IsMatch(sLine, sPattern);
+                                if (result)
+                                    UpdateStatusMsg(datacontext, lLine.ToString() + " : " + sLine.Trim(), -1);
+                                //Match matche = Regex.Match(line, sPattern);// Process line
+                            }
+                        }
+                    }
+
+                    datacontext.BackGroundNotRunning = true;
+
+                    UpdateStatusMsg(datacontext, "Finished batch download(Total " + status?.ThreadNum + " Downloaded) ...", 100);
+                    String strMsgAreaLog = "";
+                    //wndMain.btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                    wndMain.UpdateInitPageButton();
+                    //wndMain.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                    wndMain.UpdateAutoDownloadPageButton();
+
+                    UpdateStatusMsg(datacontext, "Flush Log to file: " + sDownloadFileName + ".log", -1);
+                    if (!string.IsNullOrEmpty(status?.NextUrl))
+                        txtInitURL.Text = status.NextUrl;
+
+                    MessageBox.Show(this, "Batch download finished...", "Web Novel Downloader", MessageBoxButtons.OK);
+                }
             }
         }
 
+        
         private void AnalysisURL(string strUrl, bool bWaitOptoin = true)
         {
             Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
             string? strBody = GetWebDocHtmlBody(strUrl, bWaitOptoin);
             if (!string.IsNullOrEmpty(strBody.Trim()))
             {
-                WndContextData datacontext = new WndContextData();
+                //WndContextData datacontext = new WndContextData();
                 AnalysisHtmlBody(datacontext, bWaitOptoin, strUrl, strBody);
             }
         }
+
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
         {
 
-            bool bFailed = false;
-            this.Dispatcher.Invoke(() =>
-            {
-                if (webBrowser == null || webBrowser.Document == null)
-                    bFailed = true;
-            });
+            if (browser == null || browser.IsLoading == true)
+                return "";
 
             string? strBody = null;
-            if (!bFailed)
+
+            //browser.ViewSource();
+            //browser.GetSourceAsync().ContinueWith(taskHtml =>
+            //{
+            //    strBody = taskHtml.Result;
+            //});
+            browser.GetSourceAsync().ContinueWith(taskHtml =>
             {
-                this.Dispatcher.Invoke(() =>
-                {
-                    var serviceProvider = (IServiceProvider)webBrowser.Document;
-                    if (serviceProvider != null)
-                    {
-                        Guid serviceGuid = new Guid("0002DF05-0000-0000-C000-000000000046");
-                        Guid iid = typeof(SHDocVw.WebBrowser).GUID;
-                        SHDocVw.WebBrowser? webBrowserPtr = serviceProvider
-                            .QueryService(ref serviceGuid, ref iid) as SHDocVw.WebBrowser;
-                        Debug.WriteLine(strUrl + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
-                        if (webBrowserPtr != null)
-                        {
-                            webBrowserPtr.NewWindow2 += webBrowser1_NewWindow2;
-                            webBrowserPtr.NewWindow3 += webBrowser1_NewWindow3;
-                        }
-                    }
+                strBody = taskHtml.Result;
+            });
 
-                    IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
-                    IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
-                    strBody = body?.outerHTML;
-                });
-
-            }
             return strBody;
         }
 
-        public void AnalysisHtmlBody(WndContextData? datacontext, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        public void AnalysisHtmlBody(BaseWndContextData? datacontext, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             Debug.Assert(datacontext != null);
             try
@@ -90,5 +252,68 @@ namespace WindowsFormsApp
             }
             //AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status);
         }
+
+        private void DownloadOneURLAndGetNext(BaseWndContextData? datacontext, IBaseMainWindow wndMain, string strURL)
+        {
+            if ((datacontext != null))
+            {
+                try
+                {
+                    dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished = false, URL = strURL, NextUrl = "", StartTime = DateTime.Now, Depth = 0, ThreadNum = dictDownloadStatus.Count + 1 };
+
+                    datacontext.PageLoaded = false;
+                    datacontext.NextLinkAnalysized = false;
+                    //btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                    wndMain.UpdateAnalysisPageButton();
+                    //btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                    wndMain.UpdateNextPageButton();
+                    browser.LoadUrl(strURL);
+
+                    UpdateStatusMsg(datacontext, strURL + " : Begin to download ...", (int)((100.0 / DownloadStatus.ThreadMax * (dictDownloadStatus[strURL].ThreadNum - 1))));
+                    WaitFinishForNext(datacontext, wndMain, strURL, true);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    if (browser== null || browser.IsLoading == true)
+                    {
+                        Debug.Assert(false);
+                        WaitFinishForNext(datacontext, wndMain, strURL, true);
+                    }
+
+                    Debug.WriteLine(strURL + " : Loading Status <" + (browser.IsLoading?"Loading":"Loaded") + ">");
+                    if (browser.IsLoading == true)
+                        return;
+                }
+            }
+        }
+
+        void WaitFinishForNext(BaseWndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode = false)
+        {
+            DownloadStatus status = dictDownloadStatus[strURL];
+
+            Thread thread = new Thread(() => WaitAndLaunchAnalsysi(datacontext, wndMain, strURL, bSilenceMode, status));
+            thread.Start();
+        }
+
+        public void WaitAndLaunchAnalsysi(BaseWndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status)
+        {
+            while (status.DownloadFinished == false)
+            {
+                Thread.Sleep(200);
+            }
+
+            status.Depth = status.Depth - 1;
+
+            Debug.WriteLine($"{strURL} : Download Finished, Begin Analysis ...");
+            Debug.Assert(browser != null || browser.IsLoading!=true);
+
+            string? strBody = GetWebDocHtmlBody(strURL, true);
+
+            wndMain.UpdateWebBodyOuterHtml(strBody);
+            AnalysisHtmlBody(datacontext, true, strURL, strBody, true, status);
+
+        }
+
     }
 }

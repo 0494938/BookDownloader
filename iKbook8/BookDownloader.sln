@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp", "..\Windo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseBookDownload.Form", "..\BaseBookDownload.Form\BaseBookDownload.Form.csproj", "{5D92C6CF-CA00-4D3A-BE4A-6866BC68A8AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseBookDownload.WPF", "..\BaseBookDownload.WPF\BaseBookDownload.WPF.csproj", "{8BB2C761-BC9F-489D-B51F-35854C27C1E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseBookDownload.WPF", "..\BaseBookDownload.WPF\BaseBookDownload.WPF.csproj", "{8BB2C761-BC9F-489D-B51F-35854C27C1E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,7 +18,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A634A389-FF23-45EA-AADA-797A23C1921C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A634A389-FF23-45EA-AADA-797A23C1921C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A634A389-FF23-45EA-AADA-797A23C1921C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A634A389-FF23-45EA-AADA-797A23C1921C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{95958DCB-325C-4C4C-A3F0-B5BFAF36C774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

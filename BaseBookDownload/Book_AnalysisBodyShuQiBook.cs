@@ -2,12 +2,15 @@
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Web;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
-namespace BookDownloader
+namespace BaseBookDownload
 {
 #pragma warning disable IDE0019 // パターン マッチングを使用します
 #pragma warning disable IDE0090 // 'new(...)' を使用する
@@ -16,6 +19,7 @@ namespace BookDownloader
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
 #pragma warning disable CS8629 // Null 許容値型は Null になる場合があります。
+#pragma warning disable CS8632 // Null 参照代入の可能性があります。
     public class ShuQiBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
         public void AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
@@ -124,7 +128,7 @@ namespace BookDownloader
             if (nextLink != null)
             {
                 Uri uri = new Uri(URL);
-                string sCurChapterId = HttpUtility.ParseQueryString(uri.Query).Get("cid");
+                string sCurChapterId = UrlUtil.ParseQueryString(uri.Query)["cid"];
                 JObject? data = JsonConvert.DeserializeObject(nextLink.InnerHtml) as JObject;
                 Debug.Assert(data != null);
                 if (data != null)
@@ -148,8 +152,10 @@ namespace BookDownloader
                                         string sQuery = GetValueByKeyFromJObject(nextObj, "contUrlSuffix")?.ToString()?.Replace("&amp;", "&");
                               //Uri myUri = new Uri("https://www.shuqi.com/reader" + GetValueByKeyFromJObject(nextObj, "contUrlSuffix")?.ToString());
 
-                                        String bookId = HttpUtility.ParseQueryString(sQuery).Get("bookId");
-                                        String chapterId = HttpUtility.ParseQueryString(sQuery).Get("chapterId");
+                                        //String bookId = HttpUtility.ParseQueryString(sQuery).Get("bookId");
+                                        //String chapterId = HttpUtility.ParseQueryString(sQuery).Get("chapterId");
+                                        String bookId = UrlUtil.ParseQueryString(sQuery)["bookId"];
+                                        String chapterId = UrlUtil.ParseQueryString(sQuery)["chapterId"];
                                         //"?bookId=8991909&amp;chapterId=2589796&amp;ut=1719899719&amp;ver=1&amp;aut=1720257026&amp;sign=072ac1f766f98a731553579ba714c7e2",
                                         // https://www.shuqi.com/reader?bid=8991909&cid=2589797
                                         return "https://www.shuqi.com/reader?bid=" + bookId + "&cid=" + chapterId;
@@ -204,6 +210,7 @@ namespace BookDownloader
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning restore CS8604 // Null 参照引数の可能性があります。
 #pragma warning restore CS8629 // Null 許容値型は Null になる場合があります。
+#pragma warning restore CS8632 // Null 参照代入の可能性があります。
 #pragma warning restore IDE0019 // パターン マッチングを使用します
 #pragma warning restore IDE0090 // 'new(...)' を使用する
 }

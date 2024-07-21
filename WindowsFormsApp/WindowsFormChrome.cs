@@ -1,4 +1,6 @@
-﻿using CefSharp;
+﻿using BaseBookDownload;
+using CefSharp;
+using CefSharp.BrowserSubprocess;
 using CefSharp.WinForms;
 using System;
 using System.Diagnostics;
@@ -8,23 +10,36 @@ using System.Windows.Forms;
 namespace WindowsFormsApp
 {
     [ComVisible(true)]
-    public partial class WindowsFormChrome : Form
+    public partial class WindowsFormChrome : Form, IBaseMainWindow
     {
         public WindowsFormChrome()
         {
             InitializeComponent();
             InitBrowser();
+
+            txtLog.Height = panelTop.Height - txtLog.Top - 5;
+            txtLog.Width = panelTop.Width - txtLog.Left * 2;
+
         }
 
         private void btnBrowser_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtURL.Text.Trim()))
+            if (!string.IsNullOrEmpty(txtInitURL.Text.Trim()))
             {
-                browser.LoadUrl(txtURL.Text.Trim());
+                datacontext.PgmNaviUrl = txtInitURL.Text.Trim();
+                browser.LoadUrl(txtInitURL.Text.Trim());
             }
         }
 
-       
+        private void btnNextPage_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtNextUrl.Text.Trim()))
+            {
+                datacontext.PgmNaviUrl = txtNextUrl.Text.Trim();
+                browser.LoadUrl(txtNextUrl.Text.Trim());
+            }
+
+        }
 
         private void WindowsForm_Load(object sender, EventArgs e)
         {
@@ -40,9 +55,10 @@ namespace WindowsFormsApp
         public void InitBrowser()
         {
             Cef.Initialize(new CefSettings());
-            browser = new ChromiumWebBrowser("www.google.com");
+            datacontext.PgmNaviUrl = txtInitURL.Text.Trim();
+            browser = new ChromiumWebBrowser(txtInitURL.Text.Trim());
             //this.Controls.Add(browser);
-            this.splitContainer1.Panel2.Controls.Add(browser);
+            this.scBottom.Panel1.Controls.Add(browser);
             browser.Dock = DockStyle.Fill;
             browser.LoadingStateChanged += Browser_LoadingStateChanged;
             browser.FrameLoadStart += (sender, args) =>
@@ -51,8 +67,8 @@ namespace WindowsFormsApp
                 if (args.Frame.IsMain)
                 {
                     const string script = "document.addEventListener('DOMContentLoaded', function(){ alert('DomLoaded'); });";
-
                     args.Frame.ExecuteJavaScriptAsync(script);
+                    Debug.WriteLine("browser.FrameLoadStart entered with (IsLoading = " + browser.IsLoading + ")...");
                 }
             };
             browser.FrameLoadEnd += new EventHandler<CefSharp.FrameLoadEndEventArgs>(Browser_FrameLoadComplete);
@@ -75,6 +91,18 @@ namespace WindowsFormsApp
             {
                 Debug.WriteLine("still loading ....");
             }
+        }
+
+        private void panelTop_Resize(object sender, EventArgs e)
+        {
+            txtLog.Height = panelTop.Height - txtLog.Top - 5;
+            txtLog.Width = panelTop.Width- txtLog.Left  *2 ;
+        }
+
+        private void scResult_Panel1_Resize(object sender, EventArgs e)
+        {
+            txtHtml.Width = scResult.Panel1.Width - 2 * txtHtml.Top;
+            txtContent.Width = scResult.Panel1.Width - 2 * txtContent.Top;
         }
     }
 

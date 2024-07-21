@@ -5,18 +5,19 @@ using System.IO;
 namespace BaseBookDownload
 {
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning disable CS8632 // Null 参照代入の可能性があります。
     public class DownloadStatus
     {
         public bool DownloadFinished { get; set; } = false;
-        public string URL { get; set; }
-        public string NextUrl { get; set; }
+        public string? URL { get; set; }
+        public string? NextUrl { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime FinishTime { get; set; }
         public int Depth { get; set; } = 0;
         public int ThreadNum { get; set; }
         public static int ThreadMax { get; set; }
-        private static StreamWriter _output_writer = null;
-        public static StreamWriter ContentsWriter
+        private static StreamWriter? _output_writer = null;
+        public static StreamWriter? ContentsWriter
         {
             get
             {
@@ -103,4 +104,5 @@ namespace BaseBookDownload
         }
     }
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning restore CS8632 // Null 参照代入の可能性があります。
 }

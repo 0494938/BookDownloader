@@ -2,15 +2,19 @@
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
-namespace BookDownloader
+namespace BaseBookDownload
 {
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
+#pragma warning disable CS8632 // Null 参照代入の可能性があります。
     public class FanQieBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
         public void AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
@@ -141,6 +145,7 @@ namespace BookDownloader
             throw new NotImplementedException();
         }
     }
+#pragma warning restore CS8632 // Null 参照代入の可能性があります。
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning restore CS8604 // Null 参照引数の可能性があります。
 #pragma warning restore CS8601 // Null 参照代入の可能性があります。

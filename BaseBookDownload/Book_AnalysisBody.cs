@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace BaseBookDownload
 {
+#pragma warning disable CS8632 // Null 参照代入の可能性があります。
     public class BaseBookNovelContent
     {
         protected string? URL { get; set; } = null;
@@ -33,4 +34,5 @@ namespace BaseBookDownload
             }
         }
     }
+#pragma warning restore CS8632 // Null 参照代入の可能性があります。
 }

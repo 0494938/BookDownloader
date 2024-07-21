@@ -28,12 +28,7 @@ namespace BookDownloader
         
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
-        public Dispatcher GetDispatcher()
-        {
-            return this.Dispatcher;
-        }
-
-        private void NovelTypeChangeEvent(int nIndex)
+        public void NovelTypeChangeEvent(int nIndex)
         {
             if (txtInitURL != null)
             {
@@ -90,7 +85,7 @@ namespace BookDownloader
                 }
             }
         }
-        public void AnalysisHtmlBodyThreadFunc(WndContextData datacontext, IBaseMainWindow wndMain, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        public void AnalysisHtmlBodyThreadFunc(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
 

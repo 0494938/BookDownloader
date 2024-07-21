@@ -10,6 +10,7 @@
     <RootNamespace>BaseBookDownload.Form</RootNamespace>
     <AssemblyName>BaseBookDownload.Form</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <LangVersion>10.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
@@ -56,6 +57,45 @@
     <Compile Include="..\BaseBookDownload\BaseDataContext.cs">
       <Link>BaseDataContext.cs</Link>
     </Compile>
+    <Compile Include="..\BaseBookDownload\BookDownloadUrlUtil.cs">
+      <Link>BookDownloadUrlUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBody.cs">
+      <Link>Book_AnalysisBody.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyBiQuGeBook.cs">
+      <Link>Book_AnalysisBodyBiQuGeBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyCangQiongBook.cs">
+      <Link>Book_AnalysisBodyCangQiongBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBook.cs">
+      <Link>Book_AnalysisBodyFanQieBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBookHXTX.cs">
+      <Link>Book_AnalysisBodyFanQieBookHXTX.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBookXXSB.cs">
+      <Link>Book_AnalysisBodyFanQieBookXXSB.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBookYQXSB.cs">
+      <Link>Book_AnalysisBodyFanQieBookYQXSB.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyIKBook.cs">
+      <Link>Book_AnalysisBodyIKBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyJinYongBook.cs">
+      <Link>Book_AnalysisBodyJinYongBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyQQBook.cs">
+      <Link>Book_AnalysisBodyQQBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyShuQiBook.cs">
+      <Link>Book_AnalysisBodyShuQiBook.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyWXDZSBook.cs">
+      <Link>Book_AnalysisBodyWXDZSBook.cs</Link>
+    </Compile>
     <Compile Include="..\BaseBookDownload\DotCatDecoding.cs">
       <Link>DotCatDecoding.cs</Link>
     </Compile>
@@ -67,42 +107,6 @@
     </Compile>
     <Compile Include="..\BaseBookDownload\IBaseMainWindow.cs">
       <Link>IBaseMainWindow.cs</Link>
-    </Compile>
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBody.cs">
-      <Link>MainWindowAnalysisBody.cs</Link>
-    </Compile>
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyBiQuGeBook.cs">
-      <Link>MainWindowAnalysisBodyBiQuGeBook.cs</Link>
-    </Compile>
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyCangQiongBook.cs">
-      <Link>MainWindowAnalysisBodyCangQiongBook.cs</Link>
-    </Compile>
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyFanQieBook.cs">
-      <Link>MainWindowAnalysisBodyFanQieBook.cs</Link>
-    </Compile>
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyFanQieBookHXTX.cs">
-      <Link>MainWindowAnalysisBodyFanQieBookHXTX.cs</Link>
-    </Compile>
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyFanQieBookXXSB.cs">
-      <Link>MainWindowAnalysisBodyFanQieBookXXSB.cs</Link>
-    </Compile>
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyFanQieBookYQXSB.cs">
-      <Link>MainWindowAnalysisBodyFanQieBookYQXSB.cs</Link>
-    </Compile>
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyIKBook.cs">
-      <Link>MainWindowAnalysisBodyIKBook.cs</Link>
-    </Compile>
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyJinYongBook.cs">
-      <Link>MainWindowAnalysisBodyJinYongBook.cs</Link>
-    </Compile>
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyQQBook.cs">
-      <Link>MainWindowAnalysisBodyQQBook.cs</Link>
-    </Compile>
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyShuQiBook.cs">
-      <Link>MainWindowAnalysisBodyShuQiBook.cs</Link>
-    </Compile>
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyWXDZSBook.cs">
-      <Link>MainWindowAnalysisBodyWXDZSBook.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

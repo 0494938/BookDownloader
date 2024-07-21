@@ -61,7 +61,7 @@ namespace BookDownloader
             }
         }
 
-        private void DownloadOneURLAndGetNext(WndContextData? datacontext, IBaseMainWindow wndMain,  string strURL)
+        private void DownloadOneURLAndGetNext(BaseWndContextData? datacontext, IBaseMainWindow wndMain,  string strURL)
         {
             if ((datacontext != null) && !datacontext.UnloadPgm)
             {

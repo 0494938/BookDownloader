@@ -4,6 +4,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <LangVersion>10.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -11,22 +12,23 @@
     <Compile Include="..\BaseBookDownload\AnalysisHtmlBody.cs" Link="AnalysisHtmlBody.cs" />
     <Compile Include="..\BaseBookDownload\BaseBookDownloader.cs" Link="BaseBookDownloader.cs" />
     <Compile Include="..\BaseBookDownload\BaseDataContext.cs" Link="BaseDataContext.cs" />
+    <Compile Include="..\BaseBookDownload\BookDownloadUrlUtil.cs" Link="BookDownloadUrlUtil.cs" />
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBody.cs" Link="Book_AnalysisBody.cs" />
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyBiQuGeBook.cs" Link="Book_AnalysisBodyBiQuGeBook.cs" />
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyCangQiongBook.cs" Link="Book_AnalysisBodyCangQiongBook.cs" />
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBook.cs" Link="Book_AnalysisBodyFanQieBook.cs" />
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBookHXTX.cs" Link="Book_AnalysisBodyFanQieBookHXTX.cs" />
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBookXXSB.cs" Link="Book_AnalysisBodyFanQieBookXXSB.cs" />
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBookYQXSB.cs" Link="Book_AnalysisBodyFanQieBookYQXSB.cs" />
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyIKBook.cs" Link="Book_AnalysisBodyIKBook.cs" />
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyJinYongBook.cs" Link="Book_AnalysisBodyJinYongBook.cs" />
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyQQBook.cs" Link="Book_AnalysisBodyQQBook.cs" />
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyShuQiBook.cs" Link="Book_AnalysisBodyShuQiBook.cs" />
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyWXDZSBook.cs" Link="Book_AnalysisBodyWXDZSBook.cs" />
     <Compile Include="..\BaseBookDownload\DotCatDecoding.cs" Link="DotCatDecoding.cs" />
     <Compile Include="..\BaseBookDownload\EnumExtension.cs" Link="EnumExtension.cs" />
     <Compile Include="..\BaseBookDownload\IBaseBookDownloader.cs" Link="IBaseBookDownloader.cs" />
     <Compile Include="..\BaseBookDownload\IBaseMainWindow.cs" Link="IBaseMainWindow.cs" />
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBody.cs" Link="MainWindowAnalysisBody.cs" />
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyBiQuGeBook.cs" Link="MainWindowAnalysisBodyBiQuGeBook.cs" />
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyCangQiongBook.cs" Link="MainWindowAnalysisBodyCangQiongBook.cs" />
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyFanQieBook.cs" Link="MainWindowAnalysisBodyFanQieBook.cs" />
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyFanQieBookHXTX.cs" Link="MainWindowAnalysisBodyFanQieBookHXTX.cs" />
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyFanQieBookXXSB.cs" Link="MainWindowAnalysisBodyFanQieBookXXSB.cs" />
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyFanQieBookYQXSB.cs" Link="MainWindowAnalysisBodyFanQieBookYQXSB.cs" />
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyIKBook.cs" Link="MainWindowAnalysisBodyIKBook.cs" />
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyJinYongBook.cs" Link="MainWindowAnalysisBodyJinYongBook.cs" />
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyQQBook.cs" Link="MainWindowAnalysisBodyQQBook.cs" />
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyShuQiBook.cs" Link="MainWindowAnalysisBodyShuQiBook.cs" />
-    <Compile Include="..\BaseBookDownload\MainWindowAnalysisBodyWXDZSBook.cs" Link="MainWindowAnalysisBodyWXDZSBook.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -12,6 +12,7 @@
     <RootNamespace>WindowsFormsApp</RootNamespace>
     <AssemblyName>WindowsFormsApp</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <LangVersion>10.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -60,6 +61,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HandleDownloadComplete.cs" />
+    <Compile Include="OverLoadFunc.cs" />
     <Compile Include="HandleDownload.cs" />
     <Compile Include="WindowsFormChrome.cs">
       <SubType>Form</SubType>

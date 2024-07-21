@@ -1,15 +1,19 @@
 ﻿using BaseBookDownload;
 using HtmlAgilityPack;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
-namespace BookDownloader
+namespace BaseBookDownload
 {
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
-    public class HXTXBookNovelContent : BaseBookNovelContent, IFetchNovelContent
+#pragma warning disable CS8632 // Null 参照代入の可能性があります。
+    public class XXSBBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
         public void AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
@@ -29,10 +33,10 @@ namespace BookDownloader
             HtmlNode? nextLink = null;
             HtmlNode? content = null;
             HtmlNode? header = null;
-            HtmlNodeCollection? topDiv = body.SelectNodes(".//div[@class='read-main-wrap font-family01'][@id='j_readMainWrap']");
-            if (topDiv != null && topDiv.Count()>0)
+            HtmlNode? topDiv = body.SelectNodes(".//div[@class='read-main'][@id='read-main']")?.FirstOrDefault();
+            if (topDiv != null)
             {
-                FindBookNextLinkAndContents(topDiv.FirstOrDefault(), ref nextLink, ref header, ref content);
+                FindBookNextLinkAndContents(topDiv, ref nextLink, ref header, ref content);
                 if (content != null || nextLink != null)
                 {
                     string strNextLink = GetBookNextLink(nextLink);
@@ -58,19 +62,11 @@ namespace BookDownloader
 
         public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
-            HtmlNodeCollection ?collCont = top?.SelectNodes(".//div[@class='read-content j_readContent']");
-            content = collCont?.FirstOrDefault();
-            IEnumerable<HtmlNode>? subContent = content?.Descendants()?.Where(n => n.Name == "div");
-            if (subContent!=null && subContent?.Count()>0)
-            {
-                content = subContent?.FirstOrDefault();
-            }
+            content = top?.SelectNodes(".//div[@class='read-content'][@id='read-content']")?.FirstOrDefault();
 
-            HtmlNodeCollection? collHeader = top?.SelectNodes(".//h1[@class='j_chapterName']");
-            header = collHeader?.FirstOrDefault();
+            header = content?.SelectNodes(".//h2").FirstOrDefault();
 
-            IEnumerable<HtmlNode>? collNextScript = top?.SelectNodes(".//div[@class='chapter-control dib-wrap']"); 
-            nextLink = collNextScript?.FirstOrDefault();
+            nextLink = top?.SelectNodes(".//div[@class='read-page']")?.FirstOrDefault();
         }
 
         public string GetBookHeader(HtmlNode? header)
@@ -84,9 +80,9 @@ namespace BookDownloader
         {
             if (nextLink != null)
             {
-                HtmlNode? aNext = nextLink?.SelectNodes(".//a[@id='j_chapterNext']").FirstOrDefault();
-                if (aNext != null)
-                    return "https://www.hongxiu.com" + aNext?.Attributes["href"]?.Value;
+                HtmlNode?  aNext = nextLink?.SelectNodes(".//a[@id='nextChapterBtn']")?.FirstOrDefault();
+
+                return aNext?.Attributes["href"]?.Value??"";
             }
             return "";
         }
@@ -95,12 +91,13 @@ namespace BookDownloader
         {
             if (content != null)
             {
-                StringBuilder sbContent = new StringBuilder();
-                foreach (HtmlNode element in content?.ChildNodes)
+                IEnumerable<HtmlNode>? collContentP = content?.Descendants().Where(n => n.Name == "p");
+                if (collContentP!=null && collContentP?.Count()>0)
                 {
-                    if (string.Equals("p", element.Name))
+                    StringBuilder sbContent= new StringBuilder();
+                    foreach (HtmlNode element in collContentP)
                     {
-                        string? strLine = element.InnerText?.Replace("\r", "")?.Replace("\n", "\r\n")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&") ?
+                        string? strLine = element.InnerText?.Replace("\r", "")?.Replace("\n", "\r\n")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
                             .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
                             .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
                             .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″");
@@ -109,14 +106,9 @@ namespace BookDownloader
                             sbContent.Append(strLine).AppendLine();
                         }
                     }
-                    else if (string.Equals("br", element.Name))
-                    {
-                        sbContent.Append("\r\n");
-                    }
+                    return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
                 }
-                return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
             }
-
             return "";
         }
 
@@ -133,4 +125,5 @@ namespace BookDownloader
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning restore CS8604 // Null 参照引数の可能性があります。
 #pragma warning restore CS8601 // Null 参照代入の可能性があります。
+#pragma warning restore CS8632 // Null 参照代入の可能性があります。
 }

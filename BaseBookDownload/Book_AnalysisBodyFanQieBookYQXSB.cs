@@ -1,13 +1,19 @@
 ﻿using BaseBookDownload;
 using HtmlAgilityPack;
+using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
-namespace BookDownloader
+namespace BaseBookDownload
 {
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
-    public class WxdzsBookNovelContent : BaseBookNovelContent, IFetchNovelContent
+#pragma warning disable CS8604 // Null 参照引数の可能性があります。
+#pragma warning disable CS8632 // Null 参照代入の可能性があります。
+
+    public class YQXSBBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
         public void AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
@@ -27,10 +33,10 @@ namespace BookDownloader
             HtmlNode? nextLink = null;
             HtmlNode? content = null;
             HtmlNode? header = null;
-            HtmlNodeCollection? topDiv = body.SelectNodes(".//div[@id='PageBody']");
-            if ((topDiv?.Count ?? 0) > 0)
+            HtmlNode? topDiv = body?.SelectNodes(".//div[@id='j_readMainWrap'][@class='read-main-wrap font-family01']")?.FirstOrDefault();
+            if (topDiv != null)
             {
-                FindBookNextLinkAndContents(topDiv?.First(), ref nextLink, ref header, ref content);
+                FindBookNextLinkAndContents(topDiv, ref nextLink, ref header, ref content);
                 if (content != null || nextLink != null)
                 {
                     string strNextLink = GetBookNextLink(nextLink);
@@ -53,47 +59,58 @@ namespace BookDownloader
                 }
             }
         }
-
         public void FindBookNextLinkAndContents(HtmlNode? top, ref HtmlNode nextLink, ref HtmlNode header, ref HtmlNode content)
         {
-            HtmlNodeCollection ?collCont = top?.SelectNodes(".//div[@id='Lab_Contents']");
-            content = collCont?.First();
+            content = top?.SelectNodes(".//div[@class='ywskythunderfont']").FirstOrDefault();
 
-            HtmlNodeCollection? collHeader = top?.SelectNodes(".//h1[@id='ChapterTitle']");
-            header = collHeader?.First();
+            header = top?.SelectNodes(".//h1[@class='j_chapterName']").FirstOrDefault();
 
-            HtmlNodeCollection? collNextDiv = top?.SelectNodes(".//div[@id='Pan_Top']");
-            HtmlNode? nextLinkDiv = collNextDiv?.First();
-
-            //<div onclick="JumpNext();" class="erzitop_"><a title="第002章 抓捕  我的谍战岁月" href="/wxread/94612_43816525.html">下一章</a> </div>
-            HtmlNodeCollection? collNext= nextLinkDiv?.SelectNodes(".//div[@onclick='JumpNext();']");
-            HtmlNodeCollection? collNextARef = collNext?.First()?.SelectNodes(".//a");
-            nextLink = collNextARef?.First();
+            nextLink = top?.SelectNodes(".//a[@id='j_chapterNext']").FirstOrDefault();
         }
 
         public string GetBookHeader(HtmlNode? header)
         {
-            return header?.InnerText??"";
+            if (header != null)
+                return header.InnerText;
+            return "";
         }
 
         public string GetBookNextLink(HtmlNode? nextLink)
         {
-            string sUrl = nextLink?.Attributes["href"]?.Value??"";
-            if (sUrl.StartsWith("http"))
-                return sUrl;
-            if (sUrl.StartsWith("www"))
+
+            if(nextLink != null)
             {
-                return "https://" + sUrl;
+                return "https://www.xs8.cn" + nextLink?.Attributes["href"]?.Value ;
             }
-            return "https://www.wxdzs.net" + sUrl;
+
+            return "";
+
+            //return "https://www.xs8.cn" + sUrl;
         }
 
         public string GetBookContents(HtmlNode? content)
         {
-            return content?.InnerText?.Replace("\r", "")?.Replace("\n", "\r\n")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
-                        .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
-                        .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
-                        .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″")?.Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n")??"";
+            if (content != null)
+            {
+                StringBuilder sbContent = new StringBuilder();
+                foreach (HtmlNode element in content?.ChildNodes)
+                {
+                    if(element.Name == "p")
+                    {
+                        string? strLine = element.InnerText?.Replace("\r", "")?.Replace("\n", "")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
+                            .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
+                            .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
+                            .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″");
+                        if (!string.IsNullOrEmpty(strLine?.Trim()))
+                        {
+                            sbContent.Append(strLine).AppendLine();
+                        }
+                    }
+                }
+                return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
+            }
+
+            return "";
         }
 
         public string GetBookName(HtmlNode? content)
@@ -106,6 +123,8 @@ namespace BookDownloader
             throw new NotImplementedException();
         }
     }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning restore CS8601 // Null 参照代入の可能性があります。
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning restore CS8604 // Null 参照引数の可能性があります。
+#pragma warning restore CS8632 // Null 参照代入の可能性があります。
 }

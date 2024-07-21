@@ -1,12 +1,16 @@
 ﻿using BaseBookDownload;
 using HtmlAgilityPack;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BaseBookDownload
 {
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
+#pragma warning disable CS8632 // Null 参照代入の可能性があります。
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
     public class BiQuGeBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
@@ -247,4 +251,5 @@ namespace BaseBookDownload
     }
 #pragma warning restore CS8601 // Null 参照代入の可能性があります。
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning restore CS8632 // Null 参照代入の可能性があります。
 }
