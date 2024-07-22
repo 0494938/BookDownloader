@@ -1,6 +1,7 @@
 ﻿using BaseBookDownload;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace BookDownloader
 {
@@ -28,11 +29,26 @@ namespace BookDownloader
 
         private void btnAnalysisCurURL_Click(object sender, RoutedEventArgs e)
         {
-            dictDownloadStatus.Clear();
-            AnalysisURL(webBrowser.Source.ToString(), false);
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if ((datacontext != null))
+            {
+                datacontext.DictDownloadStatus.Clear();
+                AnalysisURL(webBrowser.Source.ToString(), false);
+            }
         }
 
-        
+        public void LoadUiUrl(BaseWndContextData datacontext, string strURL)
+        {
+            webBrowser.Dispatcher.Invoke(() =>
+            {
+                datacontext.PageLoaded = false;
+                datacontext.NextLinkAnalysized = false;
+                btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                datacontext.PgmNaviUrl = strURL;
+                webBrowser.Navigate(strURL);
+            });
+        }
     }
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 }

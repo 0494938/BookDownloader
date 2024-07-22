@@ -36,7 +36,7 @@ namespace WindowsFormsApp
 
         void Browser_FrameLoadComplete(object sender, CefSharp.FrameLoadEndEventArgs e)
         {
-            Debug.WriteLine("Browser_FrameLoadComplete ...");
+            Debug.WriteLine("Browser_FrameLoadComplete : " + e.Url.ToString() + " ...");
             if (e.Frame.IsMain)
             {
                 //if (e.Url.ToString() == datacontext.PgmNaviUrl)
@@ -50,17 +50,17 @@ namespace WindowsFormsApp
                         {
                             Debug.Assert(true);
                         }
-                        if (dictDownloadStatus.ContainsKey(e.Url.ToString()))
+                        if (datacontext.DictDownloadStatus.ContainsKey(e.Url.ToString()))
                         {
-                            DownloadStatus status = dictDownloadStatus[e.Url.ToString()];
-                            UpdateStatusMsg(datacontext, e.Url.ToString() + " : Finished Page download ...", (int)((100.0 / DownloadStatus.MaxPageToDownload * (status.PageNum - 1 + 0.5))));
+                            DownloadStatus status = datacontext.DictDownloadStatus[e.Url.ToString()];
+                            UpdateStatusMsg(datacontext, "Finished Page download : " + e.Url.ToString() + " ...", (int)((100.0 / DownloadStatus.MaxPageToDownload * (status.PageNum - 1 + 0.5))));
                             status.DownloadFinished = true;
                             status.FinishTime = DateTime.Now;
                         }
                         else
                         {
-                            UpdateStatusMsg(datacontext, e.Url.ToString() + " : Finished Page download ...", 50);
-                            Thread thread = new Thread(() => WaitAndLaunchAnalsysi(datacontext, this, e.Url.ToString(), false, null));
+                            UpdateStatusMsg(datacontext, "Finished Page download : " + e.Url.ToString() + " ...", 50);
+                            Thread thread = new Thread(() => datacontext.WaitAndLaunchAnalsysi(this, e.Url.ToString(), false, null));
                             thread.Start();
                             //AnalysisURL(e.Url.ToString());
 

@@ -26,7 +26,7 @@ namespace WindowsFormsApp
         private void WindowsForm_Load(object sender, EventArgs e)
         {
             //cmbNovelType.SelectedIndex = cmbNovelType.FindString("4 无线电子书");
-            cmbNovelType.SelectedIndex = 14;
+            cmbNovelType.SelectedIndex = 4;
 
             //browser.LoadUrl(cmbNovelType.Text.Trim());
             btnInitURL.PerformClick();  
@@ -54,7 +54,7 @@ namespace WindowsFormsApp
             {
                 //MainFrame has started to load, too early to access the DOM, you can add event listeners for DOMContentLoaded etc.
                 Debug.WriteLine("browser.FrameLoadStart[Frame=" + (string.IsNullOrEmpty(args.Frame.Name)?"#NONAME": args.Frame.Name) + "] entered with (IsLoading = " + browser.IsLoading + ")...");
-                UpdateStatusMsg(datacontext, args.Url.ToString() + " : Start Frame Load ...", 0);
+                UpdateStatusMsg(datacontext, "Start Frame Load : " + args.Url.ToString() + " ...", 0);
 
                 if (args.Frame.IsMain)
                 {

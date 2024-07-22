@@ -80,6 +80,7 @@ namespace BookDownloader
                 txtAggregatedContents.ScrollToEnd();
             });
         }
+
         public void UpdateWebBodyOuterHtml(string? strBody)
         {
             this.Dispatcher.Invoke(() =>
@@ -111,21 +112,6 @@ namespace BookDownloader
             {
                 txtCurURL.Text = url;
             });
-        }
-
-        public void AnalysisHtmlBody(BaseWndContextData? datacontext, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
-        {
-            Debug.Assert(datacontext != null);
-            try
-            {
-                Thread thread = new Thread(() => AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status));
-                thread.Start();
-            }
-            catch (TaskCanceledException)
-            {
-                //ignore TaskCanceledException
-            }
-            //AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status);
         }
 
         public void RefreshPage()
@@ -183,7 +169,7 @@ namespace BookDownloader
             if (!string.IsNullOrEmpty(strBody?.Trim()))
             {
                 txtWebContents.Text = strBody;
-                AnalysisHtmlBody(datacontext, bWaitOptoin, strUrl, strBody);
+                datacontext.AnalysisHtmlBody(this, bWaitOptoin, strUrl, strBody);
             }
         }
 

@@ -29,7 +29,7 @@ namespace WindowsFormsApp
                 txtInitURL.Text = datacontext.GetDefaultUrlByIdx(cmbNovelType.SelectedIndex);
             }
         }
-
+#if false
         public void AnalysisHtmlBodyThreadFunc(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
@@ -84,7 +84,7 @@ namespace WindowsFormsApp
                         if (status != null)
                             status.DownloadFinished = false;
                         //wndMain.RefreshPage();
-                        DownloadOneURLAndGetNext(datacontext, wndMain,  strURL);
+                        DownloadOneURLAndGetNext(datacontext, wndMain,  strURL, true);
                         return;
                     }
                     else
@@ -96,7 +96,7 @@ namespace WindowsFormsApp
                         if (status != null)
                             status.DownloadFinished = false;
                         //wndMain.RefreshPage();
-                        DownloadOneURLAndGetNext(datacontext, wndMain, strURL);
+                        DownloadOneURLAndGetNext(datacontext, wndMain, strURL, true);
                     }
                 }
                 else
@@ -105,7 +105,7 @@ namespace WindowsFormsApp
                 }
                 if (status?.PageNum < DownloadStatus.MaxPageToDownload && !string.IsNullOrEmpty(status.NextUrl))
                 {
-                    DownloadOneURLAndGetNext(datacontext, wndMain, status.NextUrl);
+                    DownloadOneURLAndGetNext(datacontext, wndMain, status.NextUrl,false);
                 }
                 else
                 {
@@ -156,6 +156,7 @@ namespace WindowsFormsApp
                 }
             }
         }
+#endif
     }
 #pragma warning restore CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
 }

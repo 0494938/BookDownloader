@@ -9,7 +9,7 @@ namespace BookDownloader
 {
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
-        Dictionary<string, DownloadStatus> dictDownloadStatus = new Dictionary<string, DownloadStatus>();
+        //Dictionary<string, DownloadStatus> dictDownloadStatus = new Dictionary<string, DownloadStatus>();
 
         private void btnInitURL_Click(object sender, RoutedEventArgs e)
         {
@@ -29,10 +29,10 @@ namespace BookDownloader
 
         private void ClickBtntnInitURL(string strUrl)
         {
-            dictDownloadStatus.Clear();
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if ((datacontext != null))
             {
+                datacontext.DictDownloadStatus.Clear();
                 datacontext.PageLoaded = false;
                 datacontext.NextLinkAnalysized = false;
                 btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
@@ -61,108 +61,38 @@ namespace BookDownloader
             }
         }
 
-        private void DownloadOneURLAndGetNext(BaseWndContextData? datacontext, IBaseMainWindow wndMain,  string strURL)
+        public string BatchDownloadNotified(BaseWndContextData datacontext, DownloadStatus status, string sDownloadFileName)
         {
-            if ((datacontext != null) && !datacontext.UnloadPgm)
+            string strMsgAreaLog="";
+            this.Dispatcher.Invoke(() =>
             {
-                try
-                {
-                    dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished =false , URL = strURL, NextUrl="", StartTime=DateTime.Now, PageNum= dictDownloadStatus.Count+1};
-                    webBrowser.Dispatcher.Invoke(() =>
-                    {
-                        datacontext.PageLoaded = false;
-                        datacontext.NextLinkAnalysized = false;
-                        btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                        btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                        datacontext.PgmNaviUrl = strURL;
-                        webBrowser.Navigate(strURL);
-                    });
-                    UpdateStatusMsg(datacontext, strURL + " : Begin to download ...", (int)((100.0 / DownloadStatus.MaxPageToDownload * (dictDownloadStatus[strURL].PageNum - 1))));
-                    WaitFinishForNext(datacontext, wndMain, strURL, true);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                    if (webBrowser == null || webBrowser.Document == null)
-                    {
-                        Debug.Assert(false);
-                        WaitFinishForNext(datacontext,wndMain, strURL, true);
-                    }
+                //wndMain.btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                this.UpdateInitPageButton();
+                //wndMain.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                this.UpdateAutoDownloadPageButton();
 
-                    SHDocVw.WebBrowser? webBrowserPtr = GetWebBrowserPtr(webBrowser);
-                    Debug.WriteLine(strURL + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
-                    if (webBrowserPtr?.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
-                        return;
-                }
-            }
-            else
-            {
-                Debug.Assert(true);
-            }
+                UpdateStatusMsg(datacontext, "Flush Log to file: " + sDownloadFileName + ".log", -1);
+                if (!string.IsNullOrEmpty(status?.NextUrl))
+                    txtInitURL.Text = status.NextUrl;
+
+                strMsgAreaLog = txtLog.Text;
+                MessageBox.Show(this, "Batch download finished...", "Web Novel Downloader", MessageBoxButton.OK);
+            });
+            return strMsgAreaLog;
         }
-
-        void WaitFinishForNext(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode=false)
-        {
-            DownloadStatus status = dictDownloadStatus[strURL];
-
-            try
-            {
-                Thread thread = new Thread(() => WaitAndLaunchAnalsysi(datacontext, wndMain, strURL, bSilenceMode, status));
-                thread.Start();
-            }
-            catch (TaskCanceledException)
-            {
-                //ignore TaskCanceledException
-            }
-        }
-
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
-#pragma warning disable CS8604 // Null 参照引数の可能性があります。
-        public void WaitAndLaunchAnalsysi(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status )
-        {
-            const int MAX_RETRY = 60 * 5 * 2; //wait loading up to 2 minutes.
-            int nWaitRetry = 0;
-            while (status.DownloadFinished == false && !datacontext.UnloadPgm && nWaitRetry < MAX_RETRY)
-            {
-                Thread.Sleep(200);
-                nWaitRetry++;
-            }
-
-            //status.Depth = status.Depth - 1;
-
-            Debug.WriteLine($"{strURL} : Download Finished, Begin Analysis ...");
-            Debug.Assert(webBrowser != null || webBrowser?.Document != null);
-
-            if (!datacontext.UnloadPgm)
-            {
-                try
-                {
-                    string? strBody = wndMain.GetWebDocHtmlBody(strURL);
-                    wndMain.UpdateWebBodyOuterHtml(strBody);
-                    AnalysisHtmlBody(datacontext, true, strURL, strBody, true, status);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                }
-            }
-        }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
-#pragma warning restore CS8604 // Null 参照引数の可能性があります。
 
         private void btnAutoURL_Click(object sender, RoutedEventArgs e)
         {
             txtLog.Clear();
-            dictDownloadStatus.Clear();
             Debug.WriteLine("btnAutoURL_Click invoked...");
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if (datacontext != null)
             {
+                datacontext.DictDownloadStatus.Clear();
                 datacontext.BackGroundNotRunning = false;
                 btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
-                dictDownloadStatus.Clear();
                 txtAggregatedContents.Clear();
                 int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 20 : int.Parse(txtPages.Text.Trim());
                 DownloadStatus.MaxPageToDownload = nMaxPage;
@@ -175,7 +105,7 @@ namespace BookDownloader
                     Encoding.UTF8
                 );
 
-                DownloadOneURLAndGetNext(datacontext,this, txtInitURL.Text);
+                datacontext.DownloadOneURLAndGetNext(this, txtInitURL.Text, false);
             }
         }
     }

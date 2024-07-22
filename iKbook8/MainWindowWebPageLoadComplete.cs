@@ -34,9 +34,9 @@ namespace BookDownloader
                     {
                         datacontext.PageLoaded = true;
                         btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                        if (dictDownloadStatus.ContainsKey(e.Uri.ToString()))
+                        if (datacontext.DictDownloadStatus.ContainsKey(e.Uri.ToString()))
                         {
-                            DownloadStatus status = dictDownloadStatus[e.Uri.ToString()];
+                            DownloadStatus status = datacontext.DictDownloadStatus[e.Uri.ToString()];
                             UpdateStatusMsg(datacontext, e.Uri.ToString() + " : Finished Page download ...", (int)((100.0 / DownloadStatus.MaxPageToDownload * (status.PageNum - 1 + 0.5))));
                             status.DownloadFinished = true;
                             status.FinishTime = DateTime.Now;

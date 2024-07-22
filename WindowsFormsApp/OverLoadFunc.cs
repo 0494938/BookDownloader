@@ -108,5 +108,61 @@ namespace WindowsFormsApp
             });
             return strLog;
         }
+
+        public void LoadUiUrl(BaseWndContextData datacontext, string strURL)
+        {
+            this.Invoke(() =>
+            {
+                datacontext.PageLoaded = false;
+                datacontext.NextLinkAnalysized = false;
+                datacontext.PgmNaviUrl = strURL;
+                browser.LoadUrl(strURL);
+            });
+        }
+
+        public bool isWebBrowserEmpty()
+        {
+            try
+            {
+                bool bRet = false;
+                this.Invoke(() => {
+                    bRet = browser == null;//|| browser.IsLoading == true; 
+                });
+                return bRet;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool isWebPageLoadComplete(string strURL)
+        {
+            bool bRet = false;
+            this.Invoke(() => {
+                bRet = browser == null || browser.IsLoading == true;
+            });
+            return !bRet;
+        }
+        public string BatchDownloadNotified(BaseWndContextData datacontext, DownloadStatus status, string sDownloadFileName)
+        {
+            string strMsgAreaLog = "";
+            this.Invoke(() =>
+            {
+                //wndMain.btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                this.UpdateInitPageButton();
+                //wndMain.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                this.UpdateAutoDownloadPageButton();
+
+                UpdateStatusMsg(datacontext, "Flush Log to file: " + sDownloadFileName + ".log", -1);
+                if (!string.IsNullOrEmpty(status?.NextUrl))
+                    txtInitURL.Text = status.NextUrl;
+
+                strMsgAreaLog = txtLog.Text;
+                //MessageBox.Show(this, "Batch download finished...", "Web Novel Downloader", MessageBoxButton.OK);
+            });
+            return strMsgAreaLog;
+        }
+
     }
 }

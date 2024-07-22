@@ -47,7 +47,7 @@ namespace BaseBookDownload
             int nRetry = 0;
             while (nRetry <= nMaxRetry && body !=null && FindBookNextLinkAndContents2(wndMain, datacontext, body, ref nextLink, ref header, ref title, ref content) && !datacontext.UnloadPgm)
             {
-                Debug.Assert(false);
+                //Debug.Assert(false);
                 nRetry++;
                 Thread.Sleep(1000);
 

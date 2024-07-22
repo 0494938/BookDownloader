@@ -23,7 +23,6 @@ namespace BookDownloader
 #else
             Visibility.Hidden;
 #endif
-
     }
         
     public partial class WPFMainWindow : Window, IBaseMainWindow
@@ -41,6 +40,8 @@ namespace BookDownloader
 
             }
         }
+
+#if false 
         public void AnalysisHtmlBodyThreadFunc(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
@@ -66,9 +67,10 @@ namespace BookDownloader
                 UpdateStatusMsg(datacontext, strURL + " : Begin to Analysize downloaded Contents Body using " + datacontext.SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", 50);
             }
 
+            bool bNoNeedFresh = true;
             if (fetchNovelContent != null)
             {
-                fetchNovelContent.AnalysisHtmlBookBody(this, datacontext, strURL, strBody, bSilenceMode, status, nMaxRetry);
+                bNoNeedFresh = fetchNovelContent.AnalysisHtmlBookBody(this, datacontext, strURL, strBody, bSilenceMode, status, nMaxRetry);
             }
             if (bSilenceMode)
             {
@@ -79,9 +81,45 @@ namespace BookDownloader
 
             if (bSilenceMode)
             {
+                if (!bNoNeedFresh)
+                {
+                    if (datacontext.RefreshCount > 0)
+                    {
+                        Debug.Assert(true);
+                        datacontext.RefreshCount--;
+                        if (datacontext.RefreshCount == 0)
+                        {
+                            UpdateStatusMsg(datacontext, "Failed as over access reqencey by website, After Retry Max to 60 seconds ...", 100 / 20 * datacontext.RefreshCount);
+                            return;
+                        }
+                        UpdateStatusMsg(datacontext, "Failed as over access reqencey by website, Retry No." + datacontext.RefreshCount + " to 60 seconds ...", 100 / datacontext.MAX_REFRESH_CNT * datacontext.RefreshCount);
+                        Thread.Sleep(datacontext.SLEEP_BETWEEN_RFRESH_MILI_SECONDS);
+                        if (status != null)
+                            status.DownloadFinished = false;
+                        //wndMain.RefreshPage();
+                        datacontext.DownloadOneURLAndGetNext(wndMain, strURL, true);
+                        return;
+                    }
+                    else
+                    {
+                        datacontext.RefreshCount = datacontext.MAX_REFRESH_CNT;
+                        Debug.Assert(true);
+                        UpdateStatusMsg(datacontext, "Failed as over access reqencey by website, Retry No." + datacontext.RefreshCount + " to 60 seconds ...", 100 / datacontext.MAX_REFRESH_CNT * datacontext.RefreshCount);
+                        Thread.Sleep(datacontext.SLEEP_BETWEEN_RFRESH_MILI_SECONDS);
+                        if (status != null)
+                            status.DownloadFinished = false;
+                        //wndMain.RefreshPage();
+                        datacontext.DownloadOneURLAndGetNext(wndMain, strURL, true);
+                    }
+                }
+                else
+                {
+                    datacontext.RefreshCount = 0;
+                }
+
                 if (status?.PageNum < DownloadStatus.MaxPageToDownload && !string.IsNullOrEmpty(status.NextUrl))
                 {
-                    DownloadOneURLAndGetNext(datacontext, wndMain,status.NextUrl);
+                    datacontext.DownloadOneURLAndGetNext( wndMain,status.NextUrl, false);
                 }
                 else
                 {
@@ -135,6 +173,31 @@ namespace BookDownloader
                     }
                 }
             }
+        }
+#endif
+
+        public bool isWebBrowserEmpty()
+        {
+            try
+            {
+                bool bRet = false;
+                this.Dispatcher.Invoke(() => { bRet = webBrowser == null || webBrowser.Document == null; });
+                return bRet;
+            }catch(Exception) { 
+                return false; 
+            }
+        }
+
+        public bool isWebPageLoadComplete(string strURL)
+        {
+            SHDocVw.WebBrowser? webBrowserPtr = GetWebBrowserPtr(webBrowser);
+            if (webBrowserPtr == null)
+                return false;
+                Debug.WriteLine(strURL + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
+            if (webBrowserPtr?.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
+                return false;
+            else
+                return true;
         }
     }
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。

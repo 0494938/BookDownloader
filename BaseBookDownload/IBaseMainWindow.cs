@@ -13,6 +13,7 @@
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true);
         public string GetLogContents();
         public void RefreshPage();
+        public void LoadUiUrl(BaseWndContextData datacontext, string strURL);
 
         public void UpdateNextPageButton();
         public void UpdateInitPageButton();
@@ -27,9 +28,10 @@
         public void UpdateAnalysizedContents(string strContents);
         public void UpdateAggragatedContents(string strContents);
         public void UpdateAggragatedContentsWithLimit(string strContents);
-
+        public bool isWebBrowserEmpty();
+        public bool isWebPageLoadComplete(string strURL);
         public void NovelTypeChangeEvent(BaseWndContextData datacontext, int nIndex);
-        public void AnalysisHtmlBodyThreadFunc(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null);
+        public string BatchDownloadNotified(BaseWndContextData datacontext, DownloadStatus status, string sDownloadFileName);  //return log area contents
 
         //public void ParseResultToUI(IBaseMainWindow wndMain, bool bSilenceMode, string strContents, string strNextLink);
         //public void ParseResultToUI(bool bSilenceMode, string strContents, string strNextLink);

@@ -20,7 +20,7 @@ namespace WindowsFormsApp
     }
     partial class WindowsFormChrome: IBaseMainWindow
     {
-        Dictionary<string, DownloadStatus> dictDownloadStatus = new Dictionary<string, DownloadStatus>();
+        //Dictionary<string, DownloadStatus> dictDownloadStatus = new Dictionary<string, DownloadStatus>();
 
         private void AnalysisURL(string strUrl, bool bWaitOptoin = true)
         {
@@ -29,8 +29,7 @@ namespace WindowsFormsApp
             
             if (!string.IsNullOrEmpty(strBody.Trim()))
             {
-                //WndContextData datacontext = new WndContextData();
-                AnalysisHtmlBody(datacontext, bWaitOptoin, strUrl, strBody);
+               datacontext.AnalysisHtmlBody(this,bWaitOptoin, strUrl, strBody);
             }
         }
 
@@ -71,7 +70,7 @@ namespace WindowsFormsApp
                 });
             });
         }
-
+#if false
         public void AnalysisHtmlBody(BaseWndContextData? datacontext, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             Debug.Assert(datacontext != null);
@@ -95,19 +94,25 @@ namespace WindowsFormsApp
             //AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status);
         }
 
-        private void DownloadOneURLAndGetNext(BaseWndContextData? datacontext, IBaseMainWindow wndMain, string strURL)
+
+        private void DownloadOneURLAndGetNext(BaseWndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bRefresh)
         {
             if ((datacontext != null))
             {
                 try
                 {
-                    dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished = false, URL = strURL, NextUrl = "", StartTime = DateTime.Now, PageNum = dictDownloadStatus.Count + 1 };
+                    if (bRefresh) {
+                        DownloadStatus status = dictDownloadStatus[strURL];
+                        status.DownloadFinished = false;
+                        Debug.Assert(status.URL == strURL);
+                        status.NextUrl="";
+                    }
+                    else
+                        dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished = false, URL = strURL, NextUrl = "", StartTime = DateTime.Now, PageNum = dictDownloadStatus.Count + 1 };
 
                     datacontext.PageLoaded = false;
                     datacontext.NextLinkAnalysized = false;
-                    //btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                     wndMain.UpdateAnalysisPageButton();
-                    //btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                     wndMain.UpdateNextPageButton();
                     browser.LoadUrl(strURL);
 
@@ -153,8 +158,6 @@ namespace WindowsFormsApp
             }
 
             strBody = GetWebDocHtmlBody(strURL, true);
-            //if (status != null)
-            //    status.Depth = status.Depth - 1;
 
             Debug.WriteLine($"{strURL} : Download Finished, Begin Analysis ...");
             Debug.Assert(browser != null || browser.IsLoading!=true);
@@ -163,7 +166,7 @@ namespace WindowsFormsApp
             AnalysisHtmlBody(datacontext, true, strURL, strBody, bSilenceMode, status);
 
         }
-
+#endif
         private void btnBrowser_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(txtInitURL.Text.Trim()))
@@ -193,7 +196,6 @@ namespace WindowsFormsApp
 
         }
 
-
         private void btnAutoDownload_Click(object sender, EventArgs e)
         {
             txtHtml.Clear();
@@ -201,14 +203,14 @@ namespace WindowsFormsApp
             txtLog.Clear();
             datacontext.RefreshCount = 0;
 
-            dictDownloadStatus.Clear();
+            datacontext.DictDownloadStatus.Clear();
             Debug.WriteLine("btnAutoDownload_Click invoked...");
 
             if (datacontext != null)
             {
                 datacontext.BackGroundNotRunning = false;
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
-                dictDownloadStatus.Clear();
+                datacontext.DictDownloadStatus.Clear();
 
                 int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 20 : int.Parse(txtPages.Text.Trim());
                 DownloadStatus.MaxPageToDownload = nMaxPage;
@@ -221,7 +223,7 @@ namespace WindowsFormsApp
                     Encoding.UTF8
                 );
 
-                DownloadOneURLAndGetNext(datacontext, this, txtInitURL.Text);
+                datacontext.DownloadOneURLAndGetNext(this, txtInitURL.Text, false);
             }
         }
 
