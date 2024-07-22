@@ -12,7 +12,7 @@ namespace BaseBookDownload
 #pragma warning disable CS8632 // Null 参照代入の可能性があります。
     public class WxdzsBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
-        public void AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public bool AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
             this.URL = strUrl;
 
@@ -25,7 +25,7 @@ namespace BaseBookDownload
             if (body == null)
             {
                 wndMain.UpdateStatusMsg(datacontext, "*** URL downloaded BODY is empty, skip this Page *** ", 0);
-                return;
+                return true;
             }
 
             HtmlNode? nextLink = null;
@@ -53,9 +53,9 @@ namespace BaseBookDownload
                     }
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
                     wndMain.UpdateNextPageButton();
-                    return;
                 }
             }
+            return true;
         }
 
         public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
@@ -94,10 +94,7 @@ namespace BaseBookDownload
 
         public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
-            return content?.InnerText?.Replace("\r", "")?.Replace("\n", "\r\n")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
-                        .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
-                        .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
-                        .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″")?.Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n")??"";
+            return ReformContent(content?.InnerText??"")??"";
         }
 
         public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)

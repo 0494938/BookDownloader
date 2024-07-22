@@ -14,7 +14,7 @@ namespace BaseBookDownload
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
     public class BiQuGeBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
-        public void AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public bool AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
             this.URL = strUrl;
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
@@ -26,7 +26,7 @@ namespace BaseBookDownload
             if (body == null)
             {
                 wndMain.UpdateStatusMsg(datacontext, "*** URL downloaded BODY is empty, skip this Page *** ", 0);
-                return;
+                return true; ;
             }
 
             HtmlNode? nextLink = null;
@@ -54,7 +54,6 @@ namespace BaseBookDownload
                     }
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
                     wndMain.UpdateNextPageButton();
-                    return;
                 }
             }
             else
@@ -78,9 +77,9 @@ namespace BaseBookDownload
                     }
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
                     wndMain.UpdateNextPageButton();
-                    return;
                 }
             }
+            return true;
         }
 
         public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? parent, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
@@ -197,10 +196,7 @@ namespace BaseBookDownload
                 //hrefTags.Add(element.GetAttribute("href"));
                 if (string.Equals("#text", element.Name))
                 {
-                    string? strLine = element.InnerText?.Replace("\r", "")?.Replace("\n", "")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
-                        .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
-                        .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
-                        .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″").Replace("\r\n\r\n\rn", "\r\n").Replace("\r\n\r\n", "\r\n");
+                    string? strLine = ReformLine(element.InnerText);
                     if (!string.IsNullOrEmpty(strLine?.Trim()) && !string.Equals(strLine?.Trim(), "\\/阅|读|模|式|内|容|加|载|不|完|整|，退出可阅读完整内容|点|击|屏|幕|中|间可|退|出|阅-读|模|式|."))
                     {
                         sbContent.Append(strLine);
@@ -223,10 +219,7 @@ namespace BaseBookDownload
                 //hrefTags.Add(element.GetAttribute("href"));
                 if (string.Equals("#text", element.Name))
                 {
-                    string? strLine = element.InnerText?.Replace("\r", "")?.Replace("\n", "")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
-                        .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
-                        .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
-                        .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″").Replace("\r\n\r\n\rn", "\r\n").Replace("\r\n\r\n", "\r\n");
+                    string? strLine = ReformLine(element.InnerText);
                     if (!string.IsNullOrEmpty(strLine?.Trim()) && !string.Equals(strLine?.Trim(), "\\/阅|读|模|式|内|容|加|载|不|完|整|，退出可阅读完整内容|点|击|屏|幕|中|间可|退|出|阅-读|模|式|."))
                     {
                         sbContent.Append(strLine);

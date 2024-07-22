@@ -26,8 +26,10 @@ namespace WindowsFormsApp
         private void WindowsForm_Load(object sender, EventArgs e)
         {
             //cmbNovelType.SelectedIndex = cmbNovelType.FindString("4 无线电子书");
-            cmbNovelType.SelectedIndex = 13;
+            cmbNovelType.SelectedIndex = 14;
 
+            //browser.LoadUrl(cmbNovelType.Text.Trim());
+            btnInitURL.PerformClick();  
         }
 
         public void Test(String message)
@@ -41,7 +43,9 @@ namespace WindowsFormsApp
         {
             Cef.Initialize(new CefSettings());
             datacontext.PgmNaviUrl = txtInitURL.Text.Trim();
-            browser = new ChromiumWebBrowser(txtInitURL.Text.Trim());
+            browser = new ChromiumWebBrowser(
+                //txtInitURL.Text.Trim()
+            );
             //this.Controls.Add(browser);
             this.scBottom.Panel1.Controls.Add(browser);
             browser.Dock = DockStyle.Fill;
@@ -97,7 +101,7 @@ namespace WindowsFormsApp
 
         private void cmbNovelType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            NovelTypeChangeEvent(cmbNovelType.SelectedIndex);
+            NovelTypeChangeEvent(datacontext, cmbNovelType.SelectedIndex);
         }
 
 

@@ -25,6 +25,14 @@ namespace WindowsFormsApp
             UpdateStatusMsg(datacontext, "Browser_AddressChanged : " + e.Address + " ...", 0);
         }
 
+        public void RefreshPage()
+        {
+            this.Invoke(() =>{
+                browser.LoadUrl(browser.Address);
+                //browser.Refresh();
+            });
+        }
+
         private void Browser_ControlAdded(object sender, ControlEventArgs e)
         {
             UpdateStatusMsg(datacontext, "Browser_ControlAdded : Name->" + e.Control.Name + ", AccessibleName=" + e.Control.AccessibleName + " ...", -1);

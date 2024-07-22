@@ -24,6 +24,7 @@ namespace WindowsFormsApp
                 if(value >=0) 
                     txtProgress.Value = value;
             });
+            Debug.WriteLine(msg);
         }
 
         public void UpdateStatusProgress(BaseWndContextData datacontext, int value)

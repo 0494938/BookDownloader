@@ -26,11 +26,11 @@ namespace WindowsFormsApp
         {
             if (e.IsLoading == false)
             {
-                Debug.WriteLine("Load Completed ....");
+                Debug.WriteLine("Browser_LoadingStateChanged : Load Completed ....");
             }
             else
             {
-                Debug.WriteLine("still loading ....");
+                Debug.WriteLine("Browser_LoadingStateChanged : Still loading ....");
             }
         }
 
@@ -46,10 +46,14 @@ namespace WindowsFormsApp
                         datacontext.PageLoaded = true;
                         //btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                         this.UpdateAnalysisPageButton();
+                        if (datacontext.RefreshCount > 0 )
+                        {
+                            Debug.Assert(true);
+                        }
                         if (dictDownloadStatus.ContainsKey(e.Url.ToString()))
                         {
                             DownloadStatus status = dictDownloadStatus[e.Url.ToString()];
-                            UpdateStatusMsg(datacontext, e.Url.ToString() + " : Finished Page download ...", (int)((100.0 / DownloadStatus.ThreadMax * (status.ThreadNum - 1 + 0.5))));
+                            UpdateStatusMsg(datacontext, e.Url.ToString() + " : Finished Page download ...", (int)((100.0 / DownloadStatus.MaxPageToDownload * (status.PageNum - 1 + 0.5))));
                             status.DownloadFinished = true;
                             status.FinishTime = DateTime.Now;
                         }

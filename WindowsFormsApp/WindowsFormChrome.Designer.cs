@@ -175,7 +175,8 @@ namespace WindowsFormsApp
             "10 红袖添香 www.hongxiu.com",
             "11 新小说吧 www.xxs8.com",
             "12 言情小说吧 www.xs8.cn",
-            "13 17小说网 www.17k.com"});
+            "13 17小说网 www.17k.com",
+            "14 可乐小说网 www.keleshuba.net"});
             this.cmbNovelType.Location = new System.Drawing.Point(13, 14);
             this.cmbNovelType.Name = "cmbNovelType";
             this.cmbNovelType.Size = new System.Drawing.Size(315, 28);

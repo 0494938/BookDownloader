@@ -12,6 +12,7 @@
         //public Dispatcher GetDispatcher();
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true);
         public string GetLogContents();
+        public void RefreshPage();
 
         public void UpdateNextPageButton();
         public void UpdateInitPageButton();
@@ -27,7 +28,7 @@
         public void UpdateAggragatedContents(string strContents);
         public void UpdateAggragatedContentsWithLimit(string strContents);
 
-        public void NovelTypeChangeEvent(int nIndex);
+        public void NovelTypeChangeEvent(BaseWndContextData datacontext, int nIndex);
         public void AnalysisHtmlBodyThreadFunc(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null);
 
         //public void ParseResultToUI(IBaseMainWindow wndMain, bool bSilenceMode, string strContents, string strNextLink);

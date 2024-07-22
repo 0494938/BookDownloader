@@ -67,7 +67,7 @@ namespace BookDownloader
             {
                 try
                 {
-                    dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished =false , URL = strURL, NextUrl="", StartTime=DateTime.Now, ThreadNum= dictDownloadStatus.Count+1};
+                    dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished =false , URL = strURL, NextUrl="", StartTime=DateTime.Now, PageNum= dictDownloadStatus.Count+1};
                     webBrowser.Dispatcher.Invoke(() =>
                     {
                         datacontext.PageLoaded = false;
@@ -77,7 +77,7 @@ namespace BookDownloader
                         datacontext.PgmNaviUrl = strURL;
                         webBrowser.Navigate(strURL);
                     });
-                    UpdateStatusMsg(datacontext, strURL + " : Begin to download ...", (int)((100.0 / DownloadStatus.ThreadMax * (dictDownloadStatus[strURL].ThreadNum - 1))));
+                    UpdateStatusMsg(datacontext, strURL + " : Begin to download ...", (int)((100.0 / DownloadStatus.MaxPageToDownload * (dictDownloadStatus[strURL].PageNum - 1))));
                     WaitFinishForNext(datacontext, wndMain, strURL, true);
                 }
                 catch (Exception ex)
@@ -165,7 +165,7 @@ namespace BookDownloader
                 dictDownloadStatus.Clear();
                 txtAggregatedContents.Clear();
                 int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 20 : int.Parse(txtPages.Text.Trim());
-                DownloadStatus.ThreadMax = nMaxPage;
+                DownloadStatus.MaxPageToDownload = nMaxPage;
 
                 DownloadStatus.ContentsWriter = new StreamWriter(
                     File.Open( AppDomain.CurrentDomain.BaseDirectory + (string.IsNullOrEmpty(txtOutputFileName.Text.Trim()) ? @"Content" : txtOutputFileName.Text.Trim()) + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + ".txt", 

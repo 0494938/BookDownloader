@@ -10,6 +10,8 @@ namespace BookDownloader
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+#pragma warning disable CS8604 // Null 参照引数の可能性があります。
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
         public void HideScriptErrors(WebBrowser wb, bool hide)
@@ -29,7 +31,7 @@ namespace BookDownloader
         {
             if (txtInitURL != null)
             {
-                NovelTypeChangeEvent(cmbNovelType.SelectedIndex);
+                NovelTypeChangeEvent(App.Current.MainWindow.DataContext as WndContextData, cmbNovelType.SelectedIndex);
             }
         }
 
@@ -38,11 +40,10 @@ namespace BookDownloader
             Debug.WriteLine("OnMainWindowActivated invoked...");
             if (txtInitURL != null)
             {
-                NovelTypeChangeEvent(cmbNovelType.SelectedIndex);
+                NovelTypeChangeEvent(App.Current.MainWindow.DataContext as WndContextData, cmbNovelType.SelectedIndex);
             }
         }
 
-#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
         private void OnMainWindowClosing(object sender, CancelEventArgs e)
         {
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
@@ -56,6 +57,7 @@ namespace BookDownloader
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             datacontext.UnloadPgm = true;
         }
-#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
     }
+#pragma warning restore CS8604 // Null 参照引数の可能性があります。
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 }

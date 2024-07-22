@@ -128,6 +128,13 @@ namespace BookDownloader
             //AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status);
         }
 
+        public void RefreshPage()
+        {
+            this.Dispatcher.Invoke(() => {
+                webBrowser.Refresh();
+            });
+        }
+
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
         {
 

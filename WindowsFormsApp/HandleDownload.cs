@@ -49,7 +49,11 @@ namespace WindowsFormsApp
             {
                 Thread.Sleep(200);
                 GetWebDocHtml(doc);
-                this.Invoke(() => { strBody = doc.sHtml; });
+                this.Invoke(() => { 
+                    strBody = doc.sHtml;
+                    if (strBody.Length > 0 && strBody.Length < 200)
+                        Debug.Assert(false);
+                });
             }
             return strBody;
         }
@@ -71,14 +75,22 @@ namespace WindowsFormsApp
         public void AnalysisHtmlBody(BaseWndContextData? datacontext, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             Debug.Assert(datacontext != null);
-            try
+            if (!string.IsNullOrEmpty(strBody))
             {
-                Thread thread = new Thread(() => AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status));
-                thread.Start();
+                try
+                {
+                    Thread thread = new Thread(() => AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status));
+                    thread.Start();
+                }
+                catch (TaskCanceledException)
+                {
+                    //ignore TaskCanceledException
+                }
             }
-            catch (TaskCanceledException)
+            else
             {
-                //ignore TaskCanceledException
+                Debug.Assert(true);//got a empty body.
+
             }
             //AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status);
         }
@@ -89,7 +101,7 @@ namespace WindowsFormsApp
             {
                 try
                 {
-                    dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished = false, URL = strURL, NextUrl = "", StartTime = DateTime.Now, ThreadNum = dictDownloadStatus.Count + 1 };
+                    dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished = false, URL = strURL, NextUrl = "", StartTime = DateTime.Now, PageNum = dictDownloadStatus.Count + 1 };
 
                     datacontext.PageLoaded = false;
                     datacontext.NextLinkAnalysized = false;
@@ -99,7 +111,7 @@ namespace WindowsFormsApp
                     wndMain.UpdateNextPageButton();
                     browser.LoadUrl(strURL);
 
-                    UpdateStatusMsg(datacontext, strURL + " : Begin to download ...", (int)((100.0 / DownloadStatus.ThreadMax * (dictDownloadStatus[strURL].ThreadNum - 1))));
+                    UpdateStatusMsg(datacontext, strURL + " : Begin to download ...", (int)((100.0 / DownloadStatus.MaxPageToDownload * (dictDownloadStatus[strURL].PageNum - 1))));
                     WaitFinishForNext(datacontext, wndMain, strURL, true);
                 }
                 catch (Exception ex)
@@ -156,6 +168,7 @@ namespace WindowsFormsApp
         {
             if (!string.IsNullOrEmpty(txtInitURL.Text.Trim()))
             {
+                datacontext.RefreshCount = 0;
                 txtHtml.Clear();
                 txtContent.Clear();
                 txtLog.Clear();
@@ -169,6 +182,7 @@ namespace WindowsFormsApp
         {
             if (!string.IsNullOrEmpty(txtNextUrl.Text.Trim()))
             {
+                datacontext.RefreshCount = 0;
                 txtHtml.Clear();
                 txtContent.Clear();
                 txtLog.Clear();
@@ -185,6 +199,7 @@ namespace WindowsFormsApp
             txtHtml.Clear();
             txtContent.Clear();
             txtLog.Clear();
+            datacontext.RefreshCount = 0;
 
             dictDownloadStatus.Clear();
             Debug.WriteLine("btnAutoDownload_Click invoked...");
@@ -196,7 +211,7 @@ namespace WindowsFormsApp
                 dictDownloadStatus.Clear();
 
                 int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 20 : int.Parse(txtPages.Text.Trim());
-                DownloadStatus.ThreadMax = nMaxPage;
+                DownloadStatus.MaxPageToDownload = nMaxPage;
 
                 DownloadStatus.ContentsWriter = new StreamWriter(
                     File.Open(AppDomain.CurrentDomain.BaseDirectory + "DumpNovel" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + ".txt",
@@ -210,6 +225,14 @@ namespace WindowsFormsApp
             }
         }
 
+        public void FreshPage()
+        {
+            this.Invoke(() => {
+                UpdateStatusMsg(datacontext, "### Refresh " + browser.Address + " ...", 0);
+                //DownloadStatus.MaxPageToDownload++;
+                browser.Refresh();
+            });
+        }
     }
 #pragma warning restore CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
 }

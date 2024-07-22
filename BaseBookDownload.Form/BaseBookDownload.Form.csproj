@@ -72,6 +72,9 @@
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyCangQiongBook.cs">
       <Link>Book_AnalysisBodyCangQiongBook.cs</Link>
     </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyCola.cs">
+      <Link>Book_AnalysisBodyCola.cs</Link>
+    </Compile>
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBook.cs">
       <Link>Book_AnalysisBodyFanQieBook.cs</Link>
     </Compile>

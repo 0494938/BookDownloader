@@ -15,7 +15,7 @@ namespace BaseBookDownload
 
     public class YQXSBBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
-        public void AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public bool AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
             this.URL = strUrl;
 
@@ -28,7 +28,7 @@ namespace BaseBookDownload
             if (body == null)
             {
                 wndMain.UpdateStatusMsg(datacontext, "*** URL downloaded BODY is empty, skip this Page *** ", 0);
-                return;
+                return true;
             }
 
             HtmlNode? nextLink = null;
@@ -56,9 +56,9 @@ namespace BaseBookDownload
                     }
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
                     wndMain.UpdateNextPageButton();
-                    return;
                 }
             }
+            return true;
         }
         public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode?  content)
         {
@@ -98,10 +98,7 @@ namespace BaseBookDownload
                 {
                     if(element.Name == "p")
                     {
-                        string? strLine = element.InnerText?.Replace("\r", "")?.Replace("\n", "")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
-                            .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
-                            .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
-                            .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″");
+                        string? strLine = ReformLine(element.InnerText);
                         if (!string.IsNullOrEmpty(strLine?.Trim()))
                         {
                             sbContent.Append(strLine).AppendLine();
