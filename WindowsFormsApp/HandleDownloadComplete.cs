@@ -39,37 +39,34 @@ namespace WindowsFormsApp
             Debug.WriteLine("Browser_FrameLoadComplete : " + e.Url.ToString() + " ...");
             if (e.Frame.IsMain)
             {
-                //if (e.Url.ToString() == datacontext.PgmNaviUrl)
+                try
                 {
-                    try
+                    datacontext.PageLoaded = true;
+                    //btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                    this.UpdateAnalysisPageButton();
+                    if (datacontext.RefreshCount > 0 )
                     {
-                        datacontext.PageLoaded = true;
-                        //btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                        this.UpdateAnalysisPageButton();
-                        if (datacontext.RefreshCount > 0 )
-                        {
-                            Debug.Assert(true);
-                        }
-                        if (datacontext.DictDownloadStatus.ContainsKey(e.Url.ToString()))
-                        {
-                            DownloadStatus status = datacontext.DictDownloadStatus[e.Url.ToString()];
-                            UpdateStatusMsg(datacontext, "Finished Page download : " + e.Url.ToString() + " ...", (int)((100.0 / DownloadStatus.MaxPageToDownload * (status.PageNum - 1 + 0.5))));
-                            status.DownloadFinished = true;
-                            status.FinishTime = DateTime.Now;
-                        }
-                        else
-                        {
-                            UpdateStatusMsg(datacontext, "Finished Page download : " + e.Url.ToString() + " ...", 50);
-                            Thread thread = new Thread(() => datacontext.WaitAndLaunchAnalsysi(this, e.Url.ToString(), false, null));
-                            thread.Start();
-                            //AnalysisURL(e.Url.ToString());
+                        Debug.Assert(true);
+                    }
+                    if (datacontext.DictDownloadStatus.ContainsKey(e.Url.ToString()))
+                    {
+                        DownloadStatus status = datacontext.DictDownloadStatus[e.Url.ToString()];
+                        UpdateStatusMsg(datacontext, "Finished Page download : " + e.Url.ToString() + " ...", (int)((100.0 / DownloadStatus.MaxPageToDownload * (status.PageNum - 1 + 0.5))));
+                        status.DownloadFinished = true;
+                        status.FinishTime = DateTime.Now;
+                    }
+                    else
+                    {
+                        UpdateStatusMsg(datacontext, "Finished Page download : " + e.Url.ToString() + " ...", 50);
+                        Thread thread = new Thread(() => datacontext.WaitAndLaunchAnalsysi(this, e.Url.ToString(), false, null));
+                        thread.Start();
+                        //AnalysisURL(e.Url.ToString());
 
-                        }
                     }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex);
-                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
                 }
             }
         }

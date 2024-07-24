@@ -18,10 +18,9 @@ namespace WindowsFormsApp
     {
 
     }
+
     partial class WindowsFormChrome: IBaseMainWindow
     {
-        //Dictionary<string, DownloadStatus> dictDownloadStatus = new Dictionary<string, DownloadStatus>();
-
         private void AnalysisURL(string strUrl, bool bWaitOptoin = true)
         {
             Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
@@ -56,7 +55,7 @@ namespace WindowsFormsApp
             }
             return strBody;
         }
-        //string strTmp = "";
+
         private void GetWebDocHtml(_DocContents doc)
         {
             if (browser == null || browser.IsLoading == true)
@@ -70,103 +69,7 @@ namespace WindowsFormsApp
                 });
             });
         }
-#if false
-        public void AnalysisHtmlBody(BaseWndContextData? datacontext, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
-        {
-            Debug.Assert(datacontext != null);
-            if (!string.IsNullOrEmpty(strBody))
-            {
-                try
-                {
-                    Thread thread = new Thread(() => AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status));
-                    thread.Start();
-                }
-                catch (TaskCanceledException)
-                {
-                    //ignore TaskCanceledException
-                }
-            }
-            else
-            {
-                Debug.Assert(true);//got a empty body.
 
-            }
-            //AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status);
-        }
-
-
-        private void DownloadOneURLAndGetNext(BaseWndContextData? datacontext, IBaseMainWindow wndMain, string strURL, bool bRefresh)
-        {
-            if ((datacontext != null))
-            {
-                try
-                {
-                    if (bRefresh) {
-                        DownloadStatus status = dictDownloadStatus[strURL];
-                        status.DownloadFinished = false;
-                        Debug.Assert(status.URL == strURL);
-                        status.NextUrl="";
-                    }
-                    else
-                        dictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished = false, URL = strURL, NextUrl = "", StartTime = DateTime.Now, PageNum = dictDownloadStatus.Count + 1 };
-
-                    datacontext.PageLoaded = false;
-                    datacontext.NextLinkAnalysized = false;
-                    wndMain.UpdateAnalysisPageButton();
-                    wndMain.UpdateNextPageButton();
-                    browser.LoadUrl(strURL);
-
-                    UpdateStatusMsg(datacontext, strURL + " : Begin to download ...", (int)((100.0 / DownloadStatus.MaxPageToDownload * (dictDownloadStatus[strURL].PageNum - 1))));
-                    WaitFinishForNext(datacontext, wndMain, strURL, true);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                    if (browser== null || browser.IsLoading == true)
-                    {
-                        Debug.Assert(false);
-                        WaitFinishForNext(datacontext, wndMain, strURL, true);
-                    }
-
-                    Debug.WriteLine(strURL + " : Loading Status <" + (browser.IsLoading?"Loading":"Loaded") + ">");
-                    if (browser.IsLoading == true)
-                        return;
-                }
-            }
-        }
-
-        void WaitFinishForNext(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode = false)
-        {
-            DownloadStatus status = dictDownloadStatus[strURL];
-
-            Thread thread = new Thread(() => WaitAndLaunchAnalsysi(datacontext, wndMain, strURL, bSilenceMode, status));
-            thread.Start();
-        }
-
-        public void WaitAndLaunchAnalsysi(BaseWndContextData datacontext, IBaseMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status)
-        {
-            string? strBody = null;
-            if (status != null)
-            {
-                const int MAX_RETRY = 60 * 5 * 2; //wait loading up to 2 minutes.
-                int nWaitRetry = 0;
-                while (status.DownloadFinished == false && !datacontext.UnloadPgm && nWaitRetry < MAX_RETRY)
-                {
-                    Thread.Sleep(200);
-                    nWaitRetry++;
-                }
-            }
-
-            strBody = GetWebDocHtmlBody(strURL, true);
-
-            Debug.WriteLine($"{strURL} : Download Finished, Begin Analysis ...");
-            Debug.Assert(browser != null || browser.IsLoading!=true);
-
-            wndMain.UpdateWebBodyOuterHtml(strBody);
-            AnalysisHtmlBody(datacontext, true, strURL, strBody, bSilenceMode, status);
-
-        }
-#endif
         private void btnBrowser_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(txtInitURL.Text.Trim()))
@@ -193,7 +96,6 @@ namespace WindowsFormsApp
                 datacontext.PgmNaviUrl = txtNextUrl.Text.Trim();
                 browser.LoadUrl(txtNextUrl.Text.Trim());
             }
-
         }
 
         private void btnAutoDownload_Click(object sender, EventArgs e)

@@ -8,9 +8,6 @@ using System.Windows.Controls;
 
 namespace BookDownloader
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
         public void UpdateNextPageButton() {
@@ -104,7 +101,6 @@ namespace BookDownloader
                 this.txtInitURL.Text = url;
             });
         }
-
 
         public void UpdateCurUrl(string url)
         {

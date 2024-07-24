@@ -8,8 +8,6 @@
     {
         public void UpdateStatusMsg(BaseWndContextData datacontext, string msg, int value);
         public void UpdateStatusProgress(BaseWndContextData datacontext, int value);
-
-        //public Dispatcher GetDispatcher();
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true);
         public string GetLogContents();
         public void RefreshPage();
@@ -32,10 +30,6 @@
         public bool isWebPageLoadComplete(string strURL);
         public void NovelTypeChangeEvent(BaseWndContextData datacontext, int nIndex);
         public string BatchDownloadNotified(BaseWndContextData datacontext, DownloadStatus status, string sDownloadFileName);  //return log area contents
-
-        //public void ParseResultToUI(IBaseMainWindow wndMain, bool bSilenceMode, string strContents, string strNextLink);
-        //public void ParseResultToUI(bool bSilenceMode, string strContents, string strNextLink);
-
     }
 #pragma warning restore CS8632 // Null 参照代入の可能性があります。
 }

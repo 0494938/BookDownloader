@@ -17,7 +17,6 @@ namespace BookDownloader
             if ((datacontext != null))
             {
                 var browser = sender as WebBrowser;
-
                 if (browser == null || browser.Document == null)
                     return;
 

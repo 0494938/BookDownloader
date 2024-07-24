@@ -41,21 +41,17 @@ namespace WindowsFormsApp
 
         public void UpdateNextPageButton()
         {
-            //throw new NotImplementedException();
         }
 
         public void UpdateInitPageButton()
         {
-            //throw new NotImplementedException();
         }
         public void UpdateAnalysisPageButton()
         {
-            //throw new NotImplementedException();
         }
 
         public void UpdateAutoDownloadPageButton()
         {
-            //throw new NotImplementedException();
         }
 
         public void UpdateNextUrl(string url)
@@ -65,22 +61,21 @@ namespace WindowsFormsApp
             });
         }
 
-        public void UpdateInitUrl(string url)
-        {
-            this.Invoke(() => {
-                this.txtInitURL.Text = url;
-            });
-        }
-
         public void UpdateCurUrl(string url)
         {
-            //throw new NotImplementedException();
         }
 
         public void UpdateWebBodyOuterHtml(string strBody)
         {
             this.Invoke(() => { 
                 txtHtml.Text = strBody.Replace("\r","").Replace("\n","\r\n"); 
+            });
+        }
+
+        public void UpdateInitUrl(string url)
+        {
+            this.Invoke(() => {
+                this.txtInitURL.Text = url;
             });
         }
 
@@ -93,12 +88,10 @@ namespace WindowsFormsApp
 
         public void UpdateAggragatedContents(string strContents)
         {
-            //throw new NotImplementedException();
         }
 
         public void UpdateAggragatedContentsWithLimit(string strContents)
         {
-            //throw new NotImplementedException();
         }
 
         public string GetLogContents(){
@@ -149,9 +142,7 @@ namespace WindowsFormsApp
             string strMsgAreaLog = "";
             this.Invoke(() =>
             {
-                //wndMain.btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 this.UpdateInitPageButton();
-                //wndMain.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 this.UpdateAutoDownloadPageButton();
 
                 UpdateStatusMsg(datacontext, "Flush Log to file: " + sDownloadFileName + ".log", -1);

@@ -154,14 +154,9 @@ namespace BaseBookDownload
                                     if (nextObj != null)
                                     {
                                         string sQuery = GetValueByKeyFromJObject(nextObj, "contUrlSuffix")?.ToString()?.Replace("&amp;", "&");
-                              //Uri myUri = new Uri("https://www.shuqi.com/reader" + GetValueByKeyFromJObject(nextObj, "contUrlSuffix")?.ToString());
 
-                                        //String bookId = HttpUtility.ParseQueryString(sQuery).Get("bookId");
-                                        //String chapterId = HttpUtility.ParseQueryString(sQuery).Get("chapterId");
                                         String bookId = UrlUtil.ParseQueryString(sQuery)["bookId"];
                                         String chapterId = UrlUtil.ParseQueryString(sQuery)["chapterId"];
-                                        //"?bookId=8991909&amp;chapterId=2589796&amp;ut=1719899719&amp;ver=1&amp;aut=1720257026&amp;sign=072ac1f766f98a731553579ba714c7e2",
-                                        // https://www.shuqi.com/reader?bid=8991909&cid=2589797
                                         return "https://www.shuqi.com/reader?bid=" + bookId + "&cid=" + chapterId;
 
                                     }
@@ -179,7 +174,6 @@ namespace BaseBookDownload
             StringBuilder sbContent = new StringBuilder();
             foreach (HtmlNode element in content?.ChildNodes)
             {
-                //hrefTags.Add(element.GetAttribute("href"));
                 if (string.Equals("p", element.Name))
                 {
                     string? strLine = ReformLine(element.InnerText);

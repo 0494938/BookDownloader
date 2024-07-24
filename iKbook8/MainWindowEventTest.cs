@@ -8,9 +8,6 @@ using System.Windows;
 
 namespace BookDownloader
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
         public static string DumpString(byte[] bytes)
@@ -85,7 +82,6 @@ namespace BookDownloader
 
                 HtmlDocument html = new HtmlDocument();
                 html.LoadHtml(strBody);
-                //HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
                 HtmlNode? body = BaseBookNovelContent.GetHtmlBody(html);
 
                 HtmlNodeCollection? topDivs = body?.SelectNodes(".//div[@class='muye-reader-content noselect']");
@@ -132,9 +128,7 @@ namespace BookDownloader
                                 }
                             }
                     }
-
                 }
-
             }
         }
 #pragma warning restore SYSLIB0001 // 型またはメンバーが旧型式です

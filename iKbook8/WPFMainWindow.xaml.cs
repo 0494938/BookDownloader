@@ -14,7 +14,6 @@ namespace BookDownloader
     /// </summary>
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
-        //bool bWebPageLoadFinished = false;
         public WPFMainWindow()
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);

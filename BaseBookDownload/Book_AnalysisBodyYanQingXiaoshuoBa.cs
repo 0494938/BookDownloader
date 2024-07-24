@@ -22,7 +22,6 @@ namespace BaseBookDownload
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(strBody);
-            //HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
             HtmlNode? body = GetHtmlBody(html);
 
             if (body == null)
@@ -63,9 +62,7 @@ namespace BaseBookDownload
         public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode?  content)
         {
             content = top?.SelectNodes(".//div[@class='ywskythunderfont']").FirstOrDefault();
-
             header = top?.SelectNodes(".//h1[@class='j_chapterName']").FirstOrDefault();
-
             nextLink = top?.SelectNodes(".//a[@id='j_chapterNext']").FirstOrDefault();
         }
 
@@ -85,8 +82,6 @@ namespace BaseBookDownload
             }
 
             return "";
-
-            //return "https://www.xs8.cn" + sUrl;
         }
 
         public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
@@ -107,7 +102,6 @@ namespace BaseBookDownload
                 }
                 return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
             }
-
             return "";
         }
 

@@ -6,9 +6,6 @@ using System.Windows.Controls;
 namespace BookDownloader
 {
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "consistent naming")]

@@ -22,7 +22,6 @@ namespace BaseBookDownload
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(strBody);
-            //HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
             HtmlNode? body = GetHtmlBody(html);
 
             if (body == null)
@@ -73,7 +72,6 @@ namespace BaseBookDownload
                 if (nextLink==null && header==null && content==null)
                 {
                     collCont = parent?.SelectNodes(".//div[@class='chapter-content isTxt']");
-                    //content = (collCont?.Count ?? 0) > 0 ? (collCont[0]) : null;
                     content = collCont?.FirstOrDefault();
 
                     collHeader = parent?.SelectNodes(".//h1[@id='chapter-title']");

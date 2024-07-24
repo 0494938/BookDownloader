@@ -125,43 +125,9 @@ namespace BaseBookDownload
         {
             if (content != null)
             {
-                //string? strBody = CascadeGetTagP_TagBr_TagText(content);
-                //strBody = strBody?.Replace("\r", "")?.Replace("\n", "\r\n")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
-                //    .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
-                //    .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
-                //    .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″")?
-                //    .Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n");
-
-                //return strBody??"";
-
-                //StringBuilder sbContent = new StringBuilder();
-                //HtmlNodeCollection items = htmlDoc.DocumentNode.SelectNodes("//ul[@class='penci-wrapper-data penci-grid penci-shortcode-render']/li");
-                //So using SelectNodes(".//h1 | .//h2") worked for me, and it returned the nodes corresponding to both tags.
-                //foreach (HtmlNode element in content?.ChildNodes)
-                //{
-                //    string? strLine = element.InnerText?.Replace("\r", "")?.Replace("\n", "")?.Replace("&nbsp;", " ")?.Replace("&lt;", "<")?.Replace("&gt;", ">")?.Replace("&amp;", "&")?
-                //        .Replace("&ensp;", " ")?.Replace("&emsp;", " ")?.Replace("&ndash;", " ")?.Replace("&mdash;", " ")?
-                //        .Replace("&sbquo;", "“")?.Replace("&rdquo;", "”")?.Replace("&bdquo;", "„")?
-                //        .Replace("&quot;", "\"")?.Replace("&circ;", "ˆ")?.Replace("&tilde;", "˜")?.Replace("&prime;", "′")?.Replace("&Prime;", "″");
-
-                //    if (!string.IsNullOrEmpty(strLine?.Trim()))
-                //    {
-                //        sbContent.Append(strLine);
-                //        if (element.Name == "p" || element.Name == "br")
-                //        {
-                //            sbContent.AppendLine();
-                //        }
-                //    }
-                //}
-                //return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
-                
                 StringBuilder sb = new StringBuilder();
                 sb = CascadeGetTagP_TagBr_TagText(sb, content);
                 return ReformContent(sb)??"";
-                //return sb.Replace("\r",null).Replace("\n", "\r\n").Replace("&nbsp;", " ").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&amp;", "&")
-                //    .Replace("&ensp;", " ").Replace("&emsp;", " ").Replace("&ndash;", " ").Replace("&mdash;", " ")
-                //    .Replace("&sbquo;", "“").Replace("&rdquo;", "”").Replace("&bdquo;", "„")
-                //    .Replace("&quot;", "\"").Replace("&circ;", "ˆ").Replace("&tilde;", "˜").Replace("&prime;", "′").Replace("&Prime;", "″").Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n","\r\n").ToString();
             }
 
             return "";

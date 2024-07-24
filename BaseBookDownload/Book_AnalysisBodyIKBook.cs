@@ -85,7 +85,7 @@ namespace BaseBookDownload
         public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             StringBuilder sbContent = new StringBuilder();
-            //strContents = "";
+
             foreach (HtmlNode element in content?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));

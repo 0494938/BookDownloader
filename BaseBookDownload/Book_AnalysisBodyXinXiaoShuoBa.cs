@@ -64,9 +64,7 @@ namespace BaseBookDownload
         public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
         {
             content = top?.SelectNodes(".//div[@class='read-content'][@id='read-content']")?.FirstOrDefault();
-
             header = content?.SelectNodes(".//h2").FirstOrDefault();
-
             nextLink = top?.SelectNodes(".//div[@class='read-page']")?.FirstOrDefault();
         }
 
@@ -82,7 +80,6 @@ namespace BaseBookDownload
             if (nextLink != null)
             {
                 HtmlNode?  aNext = nextLink?.SelectNodes(".//a[@id='nextChapterBtn']")?.FirstOrDefault();
-
                 return aNext?.Attributes["href"]?.Value??"";
             }
             return "";

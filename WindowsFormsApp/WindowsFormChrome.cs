@@ -114,7 +114,6 @@ namespace WindowsFormsApp
         {
             if (System.Text.RegularExpressions.Regex.IsMatch(txtPages.Text, "[^0-9]"))
             {
-                //MessageBox.Show("Please enter only numbers.");
                 txtPages.Text = txtPages.Text.Remove(txtPages.Text.Length - 1);
             }
         }

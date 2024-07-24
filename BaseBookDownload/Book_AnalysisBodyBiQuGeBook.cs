@@ -177,9 +177,7 @@ namespace BaseBookDownload
 
         public string GetBookNextLink2(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? nextLink)
         {
-            //IEnumerable<HtmlNode>? idxNodes = nextLink?.Descendants().Where(n => n?.Name == "a" && n.Attributes["id"]?.Value == "link-index") as IEnumerable<HtmlNode>;
             IEnumerable<HtmlNode>? nxtNodes = nextLink?.Descendants().Where(n => n?.Name == "a" && n.Attributes["id"]?.Value == "link-next") as IEnumerable<HtmlNode>;
-            //Debug.Assert(idxNodes?.Count() == 1);
             Debug.Assert(nxtNodes?.Count() == 1);
 
             //string? sIdx = idxNodes?.First()?.Attributes["href"]?.Value;
@@ -193,7 +191,6 @@ namespace BaseBookDownload
             IEnumerable<HtmlNode>? contentNodes = content?.Descendants().Where(n => n?.Name == "div" && n.Attributes["id"]?.Value == "nr1") as IEnumerable<HtmlNode>;
             foreach (HtmlNode element in contentNodes?.First().ChildNodes)
             {
-                //hrefTags.Add(element.GetAttribute("href"));
                 if (string.Equals("#text", element.Name))
                 {
                     string? strLine = ReformLine(element.InnerText);
@@ -213,7 +210,6 @@ namespace BaseBookDownload
         public string GetBookContents2(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
             StringBuilder sbContent = new StringBuilder();
-            //IEnumerable<HtmlNode>? contentNodes = content.Descendants().Where(n => n?.Name == "div" && n.Attributes["id"]?.Value == "nr1") as IEnumerable<HtmlNode>;
             foreach (HtmlNode element in content?.ChildNodes)
             {
                 //hrefTags.Add(element.GetAttribute("href"));

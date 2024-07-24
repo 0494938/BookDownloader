@@ -9,8 +9,6 @@ namespace BookDownloader
 {
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
-        //Dictionary<string, DownloadStatus> dictDownloadStatus = new Dictionary<string, DownloadStatus>();
-
         private void btnInitURL_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("btnInitURL_Click invoked...");
@@ -66,9 +64,7 @@ namespace BookDownloader
             string strMsgAreaLog="";
             this.Dispatcher.Invoke(() =>
             {
-                //wndMain.btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 this.UpdateInitPageButton();
-                //wndMain.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 this.UpdateAutoDownloadPageButton();
 
                 UpdateStatusMsg(datacontext, "Flush Log to file: " + sDownloadFileName + ".log", -1);
