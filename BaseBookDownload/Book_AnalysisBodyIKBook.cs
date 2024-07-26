@@ -23,7 +23,6 @@ namespace BaseBookDownload
 
             if (body == null)
             {
-                //.Print("URL downloaded BODY is empty ...");
                 wndMain.UpdateStatusMsg(datacontext, "*** URL downloaded BODY is empty, skip this Page *** ", 0);
                 return true; 
             }

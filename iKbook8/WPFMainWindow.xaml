@@ -45,29 +45,41 @@
                     <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
-                <ComboBox 
-                    Grid.Column="0" 
-                    x:Name="cmbNovelType" 
-                    SelectedIndex="12" 
-                    SelectionChanged="OnBookTypeSelectChagned" 
-                    FontSize="12" FontWeight="Bold">
-                    <ComboBoxItem Content="0 爱看书吧 m.ikbook8.com"></ComboBoxItem>
-                    <ComboBoxItem Content="1 QQ电子书 book.qq.com"></ComboBoxItem>
-                    <ComboBoxItem Content="2 笔趣阁 m.xbiqugew.com"></ComboBoxItem>
-                    <ComboBoxItem Content="3 笔趣阁2 m.xbiqugew.com"></ComboBoxItem>
-                    <ComboBoxItem Content="4 无线电子书 www.wxdzs.net"></ComboBoxItem>
-                    <ComboBoxItem Content="5 苍穹小说 www.cqhhhs.com"></ComboBoxItem>
-                    <ComboBoxItem Content="6 金庸小说网 www.jinhuaja.com"></ComboBoxItem>
-                    <ComboBoxItem Content="7 书旗小说网 www.shuqi.com"></ComboBoxItem>
-                    <ComboBoxItem Content="8 番茄小说网 fanqienovel.com"></ComboBoxItem>
-                    <ComboBoxItem Content="9 番茄小说网2 fanqienovel.com"></ComboBoxItem>
-                    <ComboBoxItem Content="10 红袖添香 www.hongxiu.com"></ComboBoxItem>
-                    <ComboBoxItem Content="11 新小说吧 www.xxs8.com"></ComboBoxItem>
-                    <ComboBoxItem Content="12 言情小说吧 www.xs8.cn"></ComboBoxItem>
-                    <!--Separator/-->
-                    <ComboBoxItem Content="13 Bad 17小说网 www.17k.com"></ComboBoxItem>
-                    <ComboBoxItem Content="14 可乐小说网 www.keleshuba.net"></ComboBoxItem>
-                </ComboBox>
+                <Grid
+                    Grid.Column="0" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="60" />
+                    </Grid.ColumnDefinitions>
+                    <ComboBox 
+                        x:Name="cmbNovelType" 
+                        Grid.Column="0"
+                        SelectedIndex="16" 
+                        SelectionChanged="OnBookTypeSelectChagned" 
+                        FontSize="12" FontWeight="Bold">
+                        <ComboBoxItem Content="0 爱看书吧 m.ikbook8.com"></ComboBoxItem>
+                        <ComboBoxItem Content="1 QQ电子书 book.qq.com"></ComboBoxItem>
+                        <ComboBoxItem Content="2 笔趣阁 m.xbiqugew.com"></ComboBoxItem>
+                        <ComboBoxItem Content="3 笔趣阁2 m.xbiqugew.com"></ComboBoxItem>
+                        <ComboBoxItem Content="4 无线电子书 www.wxdzs.net"></ComboBoxItem>
+                        <ComboBoxItem Content="5 苍穹小说 www.cqhhhs.com"></ComboBoxItem>
+                        <ComboBoxItem Content="6 金庸小说网 www.jinhuaja.com"></ComboBoxItem>
+                        <ComboBoxItem Content="7 书旗小说网 www.shuqi.com"></ComboBoxItem>
+                        <ComboBoxItem Content="8 番茄小说网 fanqienovel.com"></ComboBoxItem>
+                        <ComboBoxItem Content="9 番茄小说网2 fanqienovel.com"></ComboBoxItem>
+                        <ComboBoxItem Content="10 红袖添香 www.hongxiu.com"></ComboBoxItem>
+                        <ComboBoxItem Content="11 新小说吧 www.xxs8.com"></ComboBoxItem>
+                        <ComboBoxItem Content="12 言情小说吧 www.xs8.cn"></ComboBoxItem>
+                        <!--Separator/-->
+                        <ComboBoxItem Content="13 Bad 17小说网 www.17k.com"></ComboBoxItem>
+                        <ComboBoxItem Content="14 可乐小说网 www.keleshuba.net"></ComboBoxItem>
+                        <ComboBoxItem Content="15 天天小说 m.ttshu8.com"></ComboBoxItem>
+                        <ComboBoxItem Content="16 天天小说PC www.ttshu8.com"></ComboBoxItem>
+                    </ComboBox>
+                    <Button Grid.Column="1" x:Name="btnLoadInBrowser" Content="Web Load" Click="OnLoadInBrowser">
+                        
+                    </Button>
+                </Grid>
                 <!--TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://m.ikbook8.com/book/i116399132/20431977.html"/-->
                 <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://www.wxdzs.net/wxread/94612_43816524.html" VerticalAlignment="Center" Margin="3,0,0,0"/>
                 <TextBlock Grid.Column="2" Text="Fileame" VerticalAlignment="Center"  FontSize="12" FontWeight="Bold" Margin="3,0,0,0"/>
@@ -101,7 +113,8 @@
                 </StackPanel>
                 
                 <TextBox Grid.Column="1" x:Name="txtCurURL" VerticalAlignment="Center"/>
-                <Button Grid.Column="3" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center" FontWeight="Bold" />
+                <!--Button Grid.Column="3" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center" FontWeight="Bold" /-->
+                <Button Grid.Column="3" x:Name="btnNextPageOnWeb" Content="Launch Next On Web" Click="btnLaunchNextUrlOnWeb_Click" Grid.ColumnSpan="2"  VerticalAlignment="Center" FontWeight="Bold" />
                 <Button Grid.Column="6" x:Name="btnNextPage" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Bottom" FontWeight="Bold" />
             </Grid>
         </GroupBox>

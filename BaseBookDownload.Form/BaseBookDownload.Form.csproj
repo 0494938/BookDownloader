@@ -93,6 +93,12 @@
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyShuQiBook.cs">
       <Link>Book_AnalysisBodyShuQiBook.cs</Link>
     </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyTianTian.cs">
+      <Link>Book_AnalysisBodyTianTian.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyTianTianPC.cs">
+      <Link>Book_AnalysisBodyTianTianPC.cs</Link>
+    </Compile>
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyWuXianBook.cs">
       <Link>Book_AnalysisBodyWuXianBook.cs</Link>
     </Compile>

@@ -40,7 +40,7 @@ namespace BookDownloader
             {
                 datacontext.PageLoaded = false;
                 datacontext.NextLinkAnalysized = false;
-                btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                //btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 datacontext.PgmNaviUrl = strURL;
                 webBrowser.Navigate(strURL);

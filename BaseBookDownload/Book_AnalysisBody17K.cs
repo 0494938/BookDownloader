@@ -22,7 +22,7 @@ namespace BaseBookDownload
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(strBody);
-            //HtmlNode body = html.DocumentNode.ChildNodes["BODY"];
+
             HtmlNode? body = GetHtmlBody(html);
 
             if (body == null)

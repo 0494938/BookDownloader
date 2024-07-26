@@ -34,11 +34,12 @@ namespace BookDownloader
         }
         public void UpdateAnalysisPageButton()
         {
-            //throw new NotImplementedException();
+            /*
             this.Dispatcher.Invoke(() =>
             {
                 this.btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
             });
+            */
         }
         public void UpdateAnalysizedContents(string ? strContents)
         {
@@ -171,13 +172,11 @@ namespace BookDownloader
 
         private void webBrowser1_NewWindow2(ref object ppDisp, ref bool Cancel)
         {
-            // Handle the event.  
             Cancel = true;
         }
 
         private void webBrowser1_NewWindow3(ref object ppDisp, ref bool Cancel, uint dwFlags, string bstrUrlContext, string bstrUrl)
         {
-            // Handle the event.  
             Cancel = true;
         }
 

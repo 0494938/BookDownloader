@@ -1,7 +1,9 @@
 ﻿using BaseBookDownload;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -62,6 +64,25 @@ namespace BookDownloader
         {
             Debug.WriteLine("OnSyncFromBrowser invoked...");
             txtCurURL.Text = webBrowser.Source.ToString();
+        }
+
+        public static void StartUrlOnWebBrowser(string strUrl)
+        {
+            if(!string.IsNullOrEmpty(strUrl.Trim()))
+                //Process.Start("explorer", strUrl.Trim());  
+                Process.Start(new ProcessStartInfo { FileName = strUrl.Trim(), UseShellExecute = true });
+        }
+
+        private void OnLoadInBrowser(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("OnLoadInBrowser invoked...");
+            StartUrlOnWebBrowser(txtInitURL.Text.Trim());
+        }
+
+        private void btnLaunchNextUrlOnWeb_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("btnLaunchNextUrlOnWeb_Click invoked...");
+            StartUrlOnWebBrowser(txtCurURL.Text.Trim());
         }
     }
 

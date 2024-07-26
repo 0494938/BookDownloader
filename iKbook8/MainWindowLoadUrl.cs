@@ -33,7 +33,7 @@ namespace BookDownloader
                 datacontext.DictDownloadStatus.Clear();
                 datacontext.PageLoaded = false;
                 datacontext.NextLinkAnalysized = false;
-                btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                // btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 txtWebContents.Text = "";
                 txtAnalysizedContents.Text = "";

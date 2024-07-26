@@ -69,86 +69,6 @@ namespace BaseBookDownload
         public bool UnloadPgm { get; set; } = false;
         public int RefreshCount { get; set; } = 0;
 
-        public string GetDefaultUrlByIdx(int nIdx)
-        {
-            switch (nIdx)
-            {
-                case (int)BatchQueryNovelContents.IKBOOK8:
-                    return "https://m.ikbook8.com/book/i116399132/18897986.html";
-                case (int)BatchQueryNovelContents.QQBOOK:
-                    return "https://book.qq.com/book-read/47135031/1";
-                case (int)BatchQueryNovelContents.BIQUGE:
-                    return "https://m.xbiqugew.com/book/50761/32248795.html";
-                case (int)BatchQueryNovelContents.BIQUGE2:
-                    return "https://www.xbiqugew.com/book/18927/12811470.html";
-                case (int)BatchQueryNovelContents.WXDZH:
-                    return "https://www.wxdzs.net/wxread/94612_43816524.html";
-                case (int)BatchQueryNovelContents.CANGQIONG:
-                    return "http://www.cqhhhs.com/book/85756/28421368.html";
-                case (int)BatchQueryNovelContents.JINYONG:
-                    return "http://www.jinhuaja.com/b/184315/976061.html";
-                case (int)BatchQueryNovelContents.SHUQI:
-                    return "https://www.shuqi.com/reader?bid=8991909&cid=2589796";
-                case (int)BatchQueryNovelContents.FANQIE:
-                    return "https://fanqienovel.com/reader/7100359997917397512?enter_from=page";
-                case (int)BatchQueryNovelContents.FANQIE2:
-                    return "https://fanqienovel.com/reader/7268154919981580800?source=seo_fq_juhe";
-                case (int)BatchQueryNovelContents.HXTX:
-                    return "https://www.hongxiu.com/chapter/7200532503839703/19328808342308247";
-                case (int)BatchQueryNovelContents.XXSB:
-                    return "https://book.xxs8.com/677942/94808.html";
-                case (int)BatchQueryNovelContents.YQXSB:
-                    return "https://www.xs8.cn/chapter/3738025904323901/10686192507259378";
-                case (int)BatchQueryNovelContents._17K:
-                    return "https://www.17k.com/chapter/3589602/48625472.html";
-                case (int)BatchQueryNovelContents.COLA:
-                    return "https://www.keleshuba.net/book/302396/173366895.html";
-                //case (int)BatchQueryNovelContents.TOBEDONE:
-                //    break;
-                default:
-                    Debug.Assert(false);
-                    return "";
-            }
-        }
-
-        public IFetchNovelContent? GetImplByNoveTypeIdx(BatchQueryNovelContents nIdx, ref int nMaxRetry)
-        {
-            switch (nIdx)
-            {
-                case BatchQueryNovelContents.IKBOOK8:
-                    return new IKBook8NovelContent();
-                case BatchQueryNovelContents.QQBOOK:
-                    return new OOBookNovelContent();
-                case BatchQueryNovelContents.WXDZH:
-                    return new WxdzsBookNovelContent();
-                case BatchQueryNovelContents.CANGQIONG:
-                    return new CangQiongBookNovelContent();
-                case BatchQueryNovelContents.JINYONG:
-                    return new JinYongBookNovelContent();
-                case BatchQueryNovelContents.SHUQI:
-                    nMaxRetry = 60;
-                    return new ShuQiBookNovelContent();
-                case BatchQueryNovelContents.FANQIE:
-                case BatchQueryNovelContents.FANQIE2:
-                    nMaxRetry = 60;
-                    return new FanQieBookNovelContent();
-                case BatchQueryNovelContents.BIQUGE:
-                case BatchQueryNovelContents.BIQUGE2:
-                    return new BiQuGeBookNovelContent();
-                case BatchQueryNovelContents.HXTX:
-                    return new HXTXBookNovelContent();
-                case BatchQueryNovelContents.XXSB:
-                    return new XXSBBookNovelContent();
-                case BatchQueryNovelContents.YQXSB:
-                    return new YQXSBBookNovelContent();
-                case BatchQueryNovelContents._17K:
-                    return new _17KBookNovelContent();
-                case BatchQueryNovelContents.COLA:
-                    return new CoraBookNovelContent();
-                default:
-                    return null;
-            }
-        }
 
         public void DownloadOneURLAndGetNext(IBaseMainWindow wndMain, string strURL, bool bRefresh)
         {
@@ -165,15 +85,7 @@ namespace BaseBookDownload
                     }
                     else
                         DictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished = false, URL = strURL, NextUrl = "", StartTime = DateTime.Now, PageNum = DictDownloadStatus.Count + 1 };
-                    //webBrowser.Dispatcher.Invoke(() =>
-                    //{
-                    //    datacontext.PageLoaded = false;
-                    //    datacontext.NextLinkAnalysized = false;
-                    //    btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                    //    btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                    //    datacontext.PgmNaviUrl = strURL;
-                    //    webBrowser.Navigate(strURL);
-                    //});
+
                     wndMain.LoadUiUrl(this, strURL);
                     wndMain.UpdateStatusMsg(this, strURL + " : Begin to download ...", (int)((100.0 / DownloadStatus.MaxPageToDownload * (DictDownloadStatus[strURL].PageNum - 1))));
                     WaitFinishForNext(wndMain, strURL, true);
@@ -189,10 +101,6 @@ namespace BaseBookDownload
 
                     if (!wndMain.isWebPageLoadComplete(strURL))
                         return ;
-                    //SHDocVw.WebBrowser? webBrowserPtr = GetWebBrowserPtr(webBrowser);
-                    //Debug.WriteLine(strURL + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
-                    //if (webBrowserPtr?.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
-                    //    return;
                 }
             }
             else
@@ -392,6 +300,94 @@ namespace BaseBookDownload
             }
         }
 
+        public string GetDefaultUrlByIdx(int nIdx)
+        {
+            switch (nIdx)
+            {
+                case (int)BatchQueryNovelContents.IKBOOK8:
+                    return "https://m.ikbook8.com/book/i116399132/18897986.html";
+                case (int)BatchQueryNovelContents.QQBOOK:
+                    return "https://book.qq.com/book-read/47135031/1";
+                case (int)BatchQueryNovelContents.BIQUGE:
+                    return "https://m.xbiqugew.com/book/50761/32248795.html";
+                case (int)BatchQueryNovelContents.BIQUGE2:
+                    return "https://www.xbiqugew.com/book/18927/12811470.html";
+                case (int)BatchQueryNovelContents.WXDZH:
+                    return "https://www.wxdzs.net/wxread/94612_43816524.html";
+                case (int)BatchQueryNovelContents.CANGQIONG:
+                    return "http://www.cqhhhs.com/book/85756/28421368.html";
+                case (int)BatchQueryNovelContents.JINYONG:
+                    return "http://www.jinhuaja.com/b/184315/976061.html";
+                case (int)BatchQueryNovelContents.SHUQI:
+                    return "https://www.shuqi.com/reader?bid=8991909&cid=2589796";
+                case (int)BatchQueryNovelContents.FANQIE:
+                    return "https://fanqienovel.com/reader/7100359997917397512?enter_from=page";
+                case (int)BatchQueryNovelContents.FANQIE2:
+                    return "https://fanqienovel.com/reader/7268154919981580800?source=seo_fq_juhe";
+                case (int)BatchQueryNovelContents.HXTX:
+                    return "https://www.hongxiu.com/chapter/7200532503839703/19328808342308247";
+                case (int)BatchQueryNovelContents.XXSB:
+                    return "https://book.xxs8.com/677942/94808.html";
+                case (int)BatchQueryNovelContents.YQXSB:
+                    return "https://www.xs8.cn/chapter/3738025904323901/10686192507259378";
+                case (int)BatchQueryNovelContents._17K:
+                    return "https://www.17k.com/chapter/3589602/48625472.html";
+                case (int)BatchQueryNovelContents.COLA:
+                    return "https://www.keleshuba.net/book/302396/173366895.html";
+                case (int)BatchQueryNovelContents.TIANTIAN:
+                    return "https://m.ttshu8.com/book/33693/124470410.html";
+                case (int)BatchQueryNovelContents.TIANTIAN_PC:
+                    return "https://www.ttshu8.com/book/33693/124470410.html";
+                //case (int)BatchQueryNovelContents.TOBEDONE:
+                //    break;
+                default:
+                    Debug.Assert(false);
+                    return "";
+            }
+        }
+
+        public IFetchNovelContent? GetImplByNoveTypeIdx(BatchQueryNovelContents nIdx, ref int nMaxRetry)
+        {
+            switch (nIdx)
+            {
+                case BatchQueryNovelContents.IKBOOK8:
+                    return new IKBook8NovelContent();
+                case BatchQueryNovelContents.QQBOOK:
+                    return new OOBookNovelContent();
+                case BatchQueryNovelContents.WXDZH:
+                    return new WxdzsBookNovelContent();
+                case BatchQueryNovelContents.CANGQIONG:
+                    return new CangQiongBookNovelContent();
+                case BatchQueryNovelContents.JINYONG:
+                    return new JinYongBookNovelContent();
+                case BatchQueryNovelContents.SHUQI:
+                    nMaxRetry = 60;
+                    return new ShuQiBookNovelContent();
+                case BatchQueryNovelContents.FANQIE:
+                case BatchQueryNovelContents.FANQIE2:
+                    nMaxRetry = 60;
+                    return new FanQieBookNovelContent();
+                case BatchQueryNovelContents.BIQUGE:
+                case BatchQueryNovelContents.BIQUGE2:
+                    return new BiQuGeBookNovelContent();
+                case BatchQueryNovelContents.HXTX:
+                    return new HXTXBookNovelContent();
+                case BatchQueryNovelContents.XXSB:
+                    return new XXSBBookNovelContent();
+                case BatchQueryNovelContents.YQXSB:
+                    return new YQXSBBookNovelContent();
+                case BatchQueryNovelContents._17K:
+                    return new _17KBookNovelContent();
+                case BatchQueryNovelContents.COLA:
+                    return new CoraBookNovelContent();
+                case BatchQueryNovelContents.TIANTIAN:
+                    return new TianTianBookNovelContent();
+                case BatchQueryNovelContents.TIANTIAN_PC:
+                    return new TianTianPCBookNovelContent();
+                default:
+                    return null;
+            }
+        }
     }
 
     public enum BatchQueryNovelContents
@@ -425,7 +421,11 @@ namespace BaseBookDownload
         [EnumCode("17K小说网")]
         _17K = 13, //17K，Script Over Flow
         [EnumCode("可乐小说网")]
-        COLA = 14, //17K，Script Over Flow
+        COLA = 14, 
+        [EnumCode("天天小说")]
+        TIANTIAN = 15,
+        [EnumCode("天天小说PC版")]
+        TIANTIAN_PC = 16,
 
         //TOBEDONE = 13,
     }

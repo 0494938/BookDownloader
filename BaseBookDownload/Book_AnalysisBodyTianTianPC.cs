@@ -15,7 +15,7 @@ namespace BaseBookDownload
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
 #pragma warning disable CS8632 // Null 参照代入の可能性があります。
 
-    public class CoraBookNovelContent : BaseBookNovelContent, IFetchNovelContent
+    public class TianTianPCBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
         public bool AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
@@ -35,7 +35,7 @@ namespace BaseBookDownload
             HtmlNode? nextLink = null;
             HtmlNode? content = null;
             HtmlNode? header = null;
-            //HtmlNode? topDiv = body?.SelectNodes(".//div[@class='area']")?.FirstOrDefault();
+
             if (body != null)
             {
                 FindBookNextLinkAndContents(wndMain, datacontext, body, ref nextLink, ref header, ref content);
@@ -86,12 +86,11 @@ namespace BaseBookDownload
 
         public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode?  content)
         {
-            content = top?.SelectNodes(".//div[@class='nr_nr']")?.FirstOrDefault();
+            content = top?.SelectNodes(".//div[@id='content']")?.FirstOrDefault();
 
-            header = top?.SelectNodes(".//div[@class='nr_title'][@id='nr_title']")?.FirstOrDefault();
-            //content = content?.SelectNodes(".//div[@class='p']")?.FirstOrDefault();
+            header = top?.SelectNodes(".//h1")?.FirstOrDefault();
 
-            nextLink = top?.SelectNodes(".//div[@class='nr_page']")?.FirstOrDefault();
+            nextLink = top?.SelectNodes(".//div[@class='bottem1']")?.FirstOrDefault();
         }
 
         public string GetBookHeader(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
@@ -106,18 +105,16 @@ namespace BaseBookDownload
 
             if(nextLink != null)
             {
-                HtmlNode? a = nextLink.SelectNodes(".//a[@id='pt_next']")?.Where(n=> n.InnerText.Trim() == "下一章" || n.InnerText.Trim() == "下一页" || n.InnerText.Trim() == "下一页")?.FirstOrDefault();
+                HtmlNode? a = nextLink.SelectNodes(".//a")?.Where(n=> n.InnerText.Trim() == "下一章" || n.InnerText.Trim() == "下一页" || n.InnerText.Trim() == "下一页")?.FirstOrDefault();
                 string ?sLink = a?.Attributes["href"]?.Value;
                 if (sLink?.StartsWith("http")??false)
                 {
                     return sLink;
                 }
-                return "https://www.keleshuba.net" + sLink;
+                return "https://www.ttshu8.com" + sLink;
             }
 
             return "";
-
-            //return "https://www.xs8.cn" + sUrl;
         }
 
         public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)

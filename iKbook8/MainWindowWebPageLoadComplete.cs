@@ -32,7 +32,7 @@ namespace BookDownloader
                     try
                     {
                         datacontext.PageLoaded = true;
-                        btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                        // btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                         if (datacontext.DictDownloadStatus.ContainsKey(e.Uri.ToString()))
                         {
                             DownloadStatus status = datacontext.DictDownloadStatus[e.Uri.ToString()];

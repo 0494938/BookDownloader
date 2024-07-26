@@ -26,7 +26,7 @@ namespace WindowsFormsApp
         private void WindowsForm_Load(object sender, EventArgs e)
         {
             //cmbNovelType.SelectedIndex = cmbNovelType.FindString("4 无线电子书");
-            cmbNovelType.SelectedIndex = 4;
+            cmbNovelType.SelectedIndex = 16;
 
             //browser.LoadUrl(cmbNovelType.Text.Trim());
             btnInitURL.PerformClick();  
@@ -76,7 +76,6 @@ namespace WindowsFormsApp
             browser.ControlRemoved += new ControlEventHandler(Browser_ControlRemoved);
             browser.BindingContextChanged += new EventHandler(Browser_BindingContextChanged);
         }
-
 
         private void splitContainer1_Panel2_Validated(object sender, EventArgs e)
         {
