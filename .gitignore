@@ -401,3 +401,4 @@ FodyWeavers.xsd
 *.txt
 /WindowsFormsApp/bin/Release/libcef.dll
 /WindowsFormsApp/bin/Release
+packages
