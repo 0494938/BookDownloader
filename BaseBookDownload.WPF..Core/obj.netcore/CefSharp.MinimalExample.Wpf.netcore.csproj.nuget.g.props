@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <RestoreSuccess Condition=" '$(RestoreSuccess)' == '' ">True</RestoreSuccess>
+    <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
+    <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
+    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\zdhe\.nuget\packages\</NuGetPackageFolders>
+    <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.10.1</NuGetToolVersion>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <SourceRoot Include="C:\Users\zdhe\.nuget\packages\" />
+  </ItemGroup>
+  <ImportGroup Condition=" '$(TargetFramework)' == 'net5.0-windows' AND '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x86\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x86.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x86\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x86.props')" />
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x64.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x64.props')" />
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-arm64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-arm64.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-arm64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-arm64.props')" />
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime\126.2.18\buildTransitive\chromiumembeddedframework.runtime.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime\126.2.18\buildTransitive\chromiumembeddedframework.runtime.props')" />
+  </ImportGroup>
+  <ImportGroup Condition=" '$(TargetFramework)' == 'net6.0-windows' AND '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x86\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x86.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x86\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x86.props')" />
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x64.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x64.props')" />
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-arm64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-arm64.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-arm64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-arm64.props')" />
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime\126.2.18\buildTransitive\chromiumembeddedframework.runtime.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime\126.2.18\buildTransitive\chromiumembeddedframework.runtime.props')" />
+  </ImportGroup>
+  <ImportGroup Condition=" '$(TargetFramework)' == 'net8.0-windows' AND '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x86\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x86.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x86\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x86.props')" />
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x64.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x64.props')" />
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-arm64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-arm64.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-arm64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-arm64.props')" />
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime\126.2.18\buildTransitive\chromiumembeddedframework.runtime.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime\126.2.18\buildTransitive\chromiumembeddedframework.runtime.props')" />
+  </ImportGroup>
+  <ImportGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' AND '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x86\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x86.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x86\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x86.props')" />
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x64.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-x64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-x64.props')" />
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-arm64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-arm64.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime.win-arm64\126.2.18\buildTransitive\chromiumembeddedframework.runtime.win-arm64.props')" />
+    <Import Project="$(NuGetPackageRoot)chromiumembeddedframework.runtime\126.2.18\buildTransitive\chromiumembeddedframework.runtime.props" Condition="Exists('$(NuGetPackageRoot)chromiumembeddedframework.runtime\126.2.18\buildTransitive\chromiumembeddedframework.runtime.props')" />
+  </ImportGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net5.0-windows' AND '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgMicrosoft_Xaml_Behaviors_Wpf Condition=" '$(PkgMicrosoft_Xaml_Behaviors_Wpf)' == '' ">C:\Users\zdhe\.nuget\packages\microsoft.xaml.behaviors.wpf\1.1.19</PkgMicrosoft_Xaml_Behaviors_Wpf>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0-windows' AND '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgMicrosoft_Xaml_Behaviors_Wpf Condition=" '$(PkgMicrosoft_Xaml_Behaviors_Wpf)' == '' ">C:\Users\zdhe\.nuget\packages\microsoft.xaml.behaviors.wpf\1.1.19</PkgMicrosoft_Xaml_Behaviors_Wpf>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0-windows' AND '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgMicrosoft_Xaml_Behaviors_Wpf Condition=" '$(PkgMicrosoft_Xaml_Behaviors_Wpf)' == '' ">C:\Users\zdhe\.nuget\packages\microsoft.xaml.behaviors.wpf\1.1.19</PkgMicrosoft_Xaml_Behaviors_Wpf>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' AND '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgMicrosoft_Xaml_Behaviors_Wpf Condition=" '$(PkgMicrosoft_Xaml_Behaviors_Wpf)' == '' ">C:\Users\zdhe\.nuget\packages\microsoft.xaml.behaviors.wpf\1.1.19</PkgMicrosoft_Xaml_Behaviors_Wpf>
+  </PropertyGroup>
+</Project>
