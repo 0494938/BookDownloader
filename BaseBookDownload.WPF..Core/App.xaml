@@ -1,8 +1,8 @@
-﻿<Application x:Class="CefSharp.MinimalExample.Wpf.App"
+﻿<Application x:Class="BookDownloaderWpf.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:converter="clr-namespace:CefSharp.MinimalExample.Wpf.Converter"
-             StartupUri="MainWindow.xaml">
+             xmlns:converter="clr-namespace:BookDownloaderWpf.Converter"
+             StartupUri="WindowsWPFChrome.xaml">
     <Application.Resources>
         <converter:TitleConverter x:Key="TitleConverter"/>
         <converter:EnvironmentConverter x:Key="EnvironmentConverter" />

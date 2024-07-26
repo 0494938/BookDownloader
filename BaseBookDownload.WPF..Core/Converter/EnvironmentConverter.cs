@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace CefSharp.MinimalExample.Wpf.Converter
+namespace BookDownloaderWpf.Converter
 {
     public class EnvironmentConverter : IValueConverter
     {

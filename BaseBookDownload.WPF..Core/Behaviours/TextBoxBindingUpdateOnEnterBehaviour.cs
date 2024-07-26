@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using Microsoft.Xaml.Behaviors;
 
-namespace CefSharp.MinimalExample.Wpf.Behaviours
+namespace BookDownloaderWpf.Behaviours
 {
     public class TextBoxBindingUpdateOnEnterBehaviour : Behavior<TextBox>
     {

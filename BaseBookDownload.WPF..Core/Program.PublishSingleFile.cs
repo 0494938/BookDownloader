@@ -2,11 +2,12 @@
 //
 // Use of this source code is governed by a BSD-style license that can be found in the LICENSE file.
 
+using CefSharp;
 using CefSharp.Wpf;
 using System;
 using System.IO;
 
-namespace CefSharp.MinimalExample.Wpf
+namespace BookDownloaderWpf
 {
     /// <summary>
     /// For .Net 5.0/6.0/7.0 Publishing Single File exe requires using your own applications executable to
@@ -47,7 +48,7 @@ namespace CefSharp.MinimalExample.Wpf
             //Don't perform a dependency check
             //By default this example calls Cef.Initialize in the CefSharp.MinimalExample.Wpf.App
             //constructor for purposes of providing a self contained single file example we call it here.
-            //You could remove this code and use the CefSharp.MinimalExample.Wpf.App example if you 
+            //You could remove this code and use the BookDownloaderWpf.App example if you 
             //set BrowserSubprocessPath to an absolute path to your main application exe.
             Cef.Initialize(settings, performDependencyCheck: false);
 

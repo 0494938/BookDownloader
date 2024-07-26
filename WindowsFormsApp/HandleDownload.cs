@@ -42,7 +42,7 @@ namespace WindowsFormsApp
             _DocContents doc = new _DocContents() ;
             string ?strBody = null;
             GetWebDocHtml(doc);
-            this.Invoke(() => { strBody = txtHtml.Text; });
+            this.Invoke(() => { strBody = doc.sHtml; });
             while (string.IsNullOrEmpty(doc.sHtml))
             {
                 Thread.Sleep(200);

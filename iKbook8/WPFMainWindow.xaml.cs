@@ -20,7 +20,21 @@ namespace BookDownloader
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             InitializeComponent();
+            InitBrowser();
         }
+
+        private void WebBrowser_Loaded(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("WebBrowser_Loaded invoked...");
+            throw new NotImplementedException();
+        }
+
+        private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            Debug.WriteLine("WebBrowser_LoadCompleted invoked...");
+            MainFrameWebLoadCompleted(sender, e);
+        }
+
 
         private void MainFrameWebLoaded(object sender, RoutedEventArgs e)
         {

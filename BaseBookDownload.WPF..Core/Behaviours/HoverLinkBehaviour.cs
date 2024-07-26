@@ -2,8 +2,9 @@
 using System.Windows;
 using System;
 using Microsoft.Xaml.Behaviors;
+using CefSharp;
 
-namespace CefSharp.MinimalExample.Wpf.Behaviours
+namespace BookDownloaderWpf.Behaviours
 {
     public class HoverLinkBehaviour : Behavior<ChromiumWebBrowser>
     {

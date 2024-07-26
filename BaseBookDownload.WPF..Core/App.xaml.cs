@@ -1,9 +1,10 @@
-﻿using CefSharp.Wpf;
+﻿using CefSharp;
+using CefSharp.Wpf;
 using System;
 using System.IO;
 using System.Windows;
 
-namespace CefSharp.MinimalExample.Wpf
+namespace BookDownloaderWpf
 {
     public partial class App : Application
     {

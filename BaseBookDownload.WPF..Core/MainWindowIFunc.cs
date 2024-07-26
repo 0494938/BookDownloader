@@ -1,15 +1,22 @@
 ﻿using BaseBookDownload;
+using CefSharp;
 using MSHTML;
 using System;
 using System.Diagnostics;
-using System.Runtime.ConstrainedExecution;
 using System.Security.Policy;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace BookDownloader
+namespace BookDownloaderWpf
 {
-    public partial class WPFMainWindow : Window, IBaseMainWindow
+    class _DocContents
+    {
+        public string sHtml = "";
+    }
+
+
+    public partial class WindowsWPFChrome : Window, IBaseMainWindow
     {
         public void UpdateNextPageButton() {
             this.Dispatcher.Invoke(() =>
@@ -115,46 +122,81 @@ namespace BookDownloader
         public void RefreshPage()
         {
             this.Dispatcher.Invoke(() => {
-                webBrowser.Refresh();
+                webBrowser.Reload();
             });
         }
 
+        //public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
+        //{
+
+        //    bool bFailed = false;
+        //    this.Dispatcher.Invoke(() =>
+        //    {
+        //        if (webBrowser == null || webBrowser.IsLoading == true)
+        //            bFailed = true;
+        //    });
+
+        //    string? strBody = null;
+        //    if(!bFailed)
+        //    {
+        //        this.Dispatcher.Invoke(() =>
+        //        {
+        //            /*
+        //            var serviceProvider = (IServiceProvider)webBrowser.Document;
+        //            if (serviceProvider != null)
+        //            {
+        //                Guid iid = typeof(SHDocVw.WebBrowser).GUID;
+        //                SHDocVw.WebBrowser? webBrowserPtr =
+        //                    //serviceProvider.QueryService(SID_SWebBrowserApp, ref iid) as SHDocVw.WebBrowser;
+        //                    GetWebBrowserPtr(webBrowser);
+        //                if (webBrowserPtr != null)
+        //                {
+        //                    webBrowserPtr.NewWindow2 += webBrowser1_NewWindow2;
+        //                    webBrowserPtr.NewWindow3 += webBrowser1_NewWindow3;
+        //                }
+        //            }
+
+        //            IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
+        //            IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
+        //            strBody = body?.outerHTML;
+        //            */
+        //        });
+
+        //    }
+        //    return strBody;
+        //}
+
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
         {
-
-            bool bFailed = false;
-            this.Dispatcher.Invoke(() =>
-            {
-                if (webBrowser == null || webBrowser.Document == null)
-                    bFailed = true;
-            });
-
+            _DocContents doc = new _DocContents();
             string? strBody = null;
-            if(!bFailed)
+            GetWebDocHtml(doc);
+            this.Dispatcher.Invoke(() => { strBody = doc.sHtml; });
+            while (string.IsNullOrEmpty(doc.sHtml))
+            {
+                Thread.Sleep(200);
+                GetWebDocHtml(doc);
+                this.Dispatcher.Invoke(() => {
+                    strBody = doc.sHtml;
+                    if (strBody.Length > 0 && strBody.Length < 200)
+                        Debug.Assert(false);
+                });
+            }
+            return strBody;
+        }
+
+        private void GetWebDocHtml(_DocContents doc)
+        {
+            if (webBrowser == null || webBrowser.IsLoading == true)
+                return;
+
+            webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
             {
                 this.Dispatcher.Invoke(() =>
                 {
-                    var serviceProvider = (IServiceProvider)webBrowser.Document;
-                    if (serviceProvider != null)
-                    {
-                        Guid iid = typeof(SHDocVw.WebBrowser).GUID;
-                        SHDocVw.WebBrowser? webBrowserPtr =
-                            //serviceProvider.QueryService(SID_SWebBrowserApp, ref iid) as SHDocVw.WebBrowser;
-                            GetWebBrowserPtr(webBrowser);
-                        if (webBrowserPtr != null)
-                        {
-                            webBrowserPtr.NewWindow2 += webBrowser1_NewWindow2;
-                            webBrowserPtr.NewWindow3 += webBrowser1_NewWindow3;
-                        }
-                    }
-
-                    IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
-                    IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
-                    strBody = body?.outerHTML;
+                    doc.sHtml = taskHtml.Result;
                 });
-
-            }
-            return strBody;
+            });
         }
 
         private void AnalysisURL(string strUrl, bool bWaitOptoin = true)
@@ -171,15 +213,15 @@ namespace BookDownloader
             }
         }
 
-        private void webBrowser1_NewWindow2(ref object ppDisp, ref bool Cancel)
-        {
-            Cancel = true;
-        }
+        //private void webBrowser1_NewWindow2(ref object ppDisp, ref bool Cancel)
+        //{
+        //    Cancel = true;
+        //}
 
-        private void webBrowser1_NewWindow3(ref object ppDisp, ref bool Cancel, uint dwFlags, string bstrUrlContext, string bstrUrl)
-        {
-            Cancel = true;
-        }
+        //private void webBrowser1_NewWindow3(ref object ppDisp, ref bool Cancel, uint dwFlags, string bstrUrlContext, string bstrUrl)
+        //{
+        //    Cancel = true;
+        //}
 
         public void UpdateStatusMsg(BaseWndContextData datacontext, string msg, int value)
         {
@@ -211,39 +253,5 @@ namespace BookDownloader
                 txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
             });
         }
-
-        public void InitBrowser()
-        {
-
-            //webBrowser.LoadingStateChanged += Browser_LoadingStateChanged;
-            //webBrowser.FrameLoadStart += (sender, args) =>
-            //{
-            //    //MainFrame has started to load, too early to access the DOM, you can add event listeners for DOMContentLoaded etc.
-            //    Debug.WriteLine("browser.FrameLoadStart[Frame=" + (string.IsNullOrEmpty(args.Frame.Name) ? "#NONAME" : args.Frame.Name) + "] entered with (IsLoading = " + browser.IsLoading + ")...");
-            //    UpdateStatusMsg(datacontext, "Start Frame Load : " + args.Url.ToString() + " ...", 0);
-
-            //    if (args.Frame.IsMain)
-            //    {
-            //        //const string script = "document.addEventListener('DOMContentLoaded', function(){ alert('DomLoaded'); });";
-            //        //args.Frame.ExecuteJavaScriptAsync(script);
-            //    }
-            //};
-            //webBrowser.FrameLoadEnd += new EventHandler<CefSharp.FrameLoadEndEventArgs>(Browser_FrameLoadComplete);
-            //webBrowser.AddressChanged += new EventHandler<CefSharp.AddressChangedEventArgs>(Browser_AddressChanged);
-            //webBrowser.IsBrowserInitializedChanged += new EventHandler(Browser_IsBrowserInitializedChanged);
-            //webBrowser.JavascriptMessageReceived += new EventHandler<CefSharp.JavascriptMessageReceivedEventArgs>(Browser_JavascriptMessageReceived);
-            //webBrowser.LocationChanged += new EventHandler(Browser_LocationChanged);
-            //webBrowser.RegionChanged += new EventHandler(Browser_RegionChanged);
-
-            //webBrowser.LoadError += new EventHandler<CefSharp.LoadErrorEventArgs>(Browser_LoadError);
-            //webBrowser.TitleChanged += new EventHandler<CefSharp.TitleChangedEventArgs>(Browser_TitleChanged);
-
-            //webBrowser.ControlAdded += new ControlEventHandler(Browser_ControlAdded);
-            //webBrowser.ControlRemoved += new ControlEventHandler(Browser_ControlRemoved);
-            //webBrowser.BindingContextChanged += new EventHandler(Browser_BindingContextChanged);
-            webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            webBrowser.Loaded += WebBrowser_Loaded;
-        }
-
     }
 }

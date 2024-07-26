@@ -11,7 +11,6 @@
   
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>netcoreapp3.1;net5.0-windows</TargetFrameworks>
     <TargetFrameworks Condition="'$(VisualStudioVersion)'=='17.0'">$(TargetFrameworks);net6.0-windows</TargetFrameworks>
     <TargetFrameworks Condition="'$(NETCoreAppMaximumVersion)'=='7.0'">$(TargetFrameworks);net7.0-windows</TargetFrameworks>
     <TargetFrameworks Condition="'$(NETCoreAppMaximumVersion)'=='8.0'">$(TargetFrameworks);net8.0-windows</TargetFrameworks>
@@ -26,7 +25,7 @@
         https://github.com/dotnet/docs/issues/12237
         -->
     <RollForward>Major</RollForward>
-    <StartupObject>CefSharp.MinimalExample.Wpf.App</StartupObject>
+    <StartupObject>BookDownloaderWpf.App</StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(PlatformTarget)' == 'x86'">
@@ -58,7 +57,7 @@
   For SelfContained we'll self host the BrowserSubprocess (use the applications own exe)
   Instead of the provdied CefSharp.BrowserSubprocess.exe
   -->
-  <PropertyGroup Condition="('$(TargetFramework)' == 'net5.0-windows' OR '$(TargetFramework)' == 'net6.0-windows' OR '$(TargetFramework)' == 'net7.0-windows') AND '$(SelfContained)' == 'true'">
+  <PropertyGroup Condition="('$(TargetFramework)' == 'net6.0-windows' OR '$(TargetFramework)' == 'net7.0-windows') AND '$(SelfContained)' == 'true'">
     <StartupObject>CefSharp.MinimalExample.Wpf.ProgramPublishSingleFile</StartupObject>
     <CefSharpExcludeSubProcessExe>true</CefSharpExcludeSubProcessExe>
   </PropertyGroup>
@@ -84,6 +83,23 @@
   
   <ItemGroup>
     <None Remove="App.config" />
+    <None Remove="novel_3_TZV_icon.ico" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <COMReference Include="MSHTML">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>4</VersionMajor>
+      <Guid>3050f1c5-98b5-11cf-bb82-00aa00bdce0b</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="novel_3_TZV_icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -92,8 +108,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BaseBookDownload.WPF\BaseBookDownload.WPF.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="crash_reporter.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
 

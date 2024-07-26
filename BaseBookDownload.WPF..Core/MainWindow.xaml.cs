@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace CefSharp.MinimalExample.Wpf
+namespace BookDownloaderWpf
 {
     public partial class MainWindow : Window
     {

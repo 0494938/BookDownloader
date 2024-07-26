@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace CefSharp.MinimalExample.Wpf.Converter
+namespace BookDownloaderWpf.Converter
 {
     public class TitleConverter : IValueConverter
     {
@@ -13,7 +13,7 @@ namespace CefSharp.MinimalExample.Wpf.Converter
 #endif
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return "CefSharp.MinimalExample.Wpf (" + Build + ") - " + (value ?? "No Title Specified");
+            return "BookDownloaderWpf (" + Build + ") - " + (value ?? "No Title Specified");
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
