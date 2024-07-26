@@ -1,4 +1,4 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using CefSharp;
 using CefSharp.BrowserSubprocess;
 using CefSharp.WinForms;
@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace WindowsFormsApp
+namespace BookDownloadFormApp
 {
     [ComVisible(true)]
     public partial class WindowsFormChrome : Form, IBaseMainWindow

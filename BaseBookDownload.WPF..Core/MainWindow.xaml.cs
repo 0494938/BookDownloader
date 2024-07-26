@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace BookDownloaderWpf
+namespace WpfBookDownloader
 {
     public partial class MainWindow : Window
     {

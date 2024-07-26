@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BaseBookDownload
+namespace BaseBookDownloader
 {
     public class UrlUtil
     {

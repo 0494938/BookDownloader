@@ -8,7 +8,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BaseBookDownload
+namespace BaseBookDownloader
 {
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning disable CS8604 // Null 参照代入の可能性があります。

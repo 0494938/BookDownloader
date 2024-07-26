@@ -1,4 +1,4 @@
-﻿namespace WindowsFormsApp
+﻿namespace BookDownloadFormApp
 {
     partial class WindowsForm
     {

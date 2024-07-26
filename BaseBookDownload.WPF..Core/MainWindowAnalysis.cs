@@ -1,9 +1,9 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace BookDownloaderWpf
+namespace WpfBookDownloader
 {
 #pragma warning disable CA1416 // プラットフォームの互換性を検証
 #pragma warning disable IDE0019 // パターン マッチングを使用します

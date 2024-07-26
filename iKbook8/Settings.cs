@@ -1,4 +1,4 @@
-﻿namespace BookDownloader.Properties {
+﻿namespace WpfIEBookDownloader.Properties {
     
     
     // このクラスでは設定クラスでの特定のイベントを処理することができます:

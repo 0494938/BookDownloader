@@ -1,4 +1,4 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using HtmlAgilityPack;
 using MSHTML;
 using System.Diagnostics;
@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 using System.Windows;
 
-namespace BookDownloader
+namespace WpfIEBookDownloader
 {
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {

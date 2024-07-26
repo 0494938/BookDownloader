@@ -3,7 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Windows;
 
-namespace BookDownloaderWpf
+namespace WpfBookDownloader
 {
 #pragma warning disable CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
     public partial class WindowsWPFChrome : Window
@@ -110,6 +110,16 @@ namespace BookDownloaderWpf
             webBrowser.TitleChanged += WebBrowser_TitleChanged;
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (cmbNovelType.SelectedIndex == -1) {
+                NovelTypeChangeEvent(App.Current.MainWindow.DataContext as WndContextData, 0);
+            }
+            else
+            {
+                NovelTypeChangeEvent(App.Current.MainWindow.DataContext as WndContextData, cmbNovelType.SelectedIndex);
+            }
+        }
     }
 #pragma warning restore CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
 }

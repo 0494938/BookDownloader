@@ -1,4 +1,4 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
-namespace BaseBookDownload
+namespace BaseBookDownloader
 {
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。

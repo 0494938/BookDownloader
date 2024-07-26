@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using Newtonsoft.Json;
+using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
-namespace BaseBookDownload
+namespace BaseBookDownloader
 {
     public class GID
     {

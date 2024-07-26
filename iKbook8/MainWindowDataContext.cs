@@ -1,4 +1,4 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace BookDownloader
+namespace WpfIEBookDownloader
 {
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
 

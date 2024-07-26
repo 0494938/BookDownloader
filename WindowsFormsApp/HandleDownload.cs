@@ -1,4 +1,4 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using CefSharp;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
-namespace WindowsFormsApp
+namespace BookDownloadFormApp
 {
 #pragma warning disable CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
     public partial class WndContextData: BaseWndContextData

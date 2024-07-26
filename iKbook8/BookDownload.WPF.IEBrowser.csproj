@@ -10,6 +10,7 @@
     <UseWindowsForms>False</UseWindowsForms>
     <ApplicationIcon>novel_3_TZV_icon.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64</Platforms>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

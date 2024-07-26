@@ -1,12 +1,13 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using CefSharp;
 using System;
+using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsFormsApp
+namespace BookDownloadFormApp
 {
     public partial class WndContextData : BaseWndContextData
     {
@@ -67,8 +68,17 @@ namespace WindowsFormsApp
 
         public void UpdateWebBodyOuterHtml(string strBody)
         {
-            this.Invoke(() => { 
-                txtHtml.Text = strBody.Replace("\r","").Replace("\n","\r\n"); 
+            this.Invoke(() => {
+                txtHtml.Text = strBody.Replace("\r","").Replace("\n","\r\n").Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
+                //string strHtml = strBody.Replace("\r", "").Replace("\n", "\r\n");
+                
+                /*
+                string strHtml = Regex.Replace(strBody, "[\\r\\n]+", "\\r\\n");
+                string strHtml2 = Regex.Replace(strBody, "\\r\\n[\\t \\r\\n]*\\r\\n", "\\r\\n");
+                txtHtml.Text = strHtml2;
+                */
+
+                //txtHtml.Text = PrettyPrintUtil.PrettyPrintXml( strBody);
             });
         }
 

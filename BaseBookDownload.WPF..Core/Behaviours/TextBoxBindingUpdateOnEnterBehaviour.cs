@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using Microsoft.Xaml.Behaviors;
 
-namespace BookDownloaderWpf.Behaviours
+namespace WpfBookDownloader.Behaviours
 {
     public class TextBoxBindingUpdateOnEnterBehaviour : Behavior<TextBox>
     {

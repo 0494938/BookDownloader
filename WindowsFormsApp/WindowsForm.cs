@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace WindowsFormsApp
+namespace BookDownloadFormApp
 {
     [ComVisible(true)]
     public partial class WindowsForm : Form

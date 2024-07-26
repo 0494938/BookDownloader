@@ -1,11 +1,11 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace BookDownloader
+namespace WpfIEBookDownloader
 {
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {

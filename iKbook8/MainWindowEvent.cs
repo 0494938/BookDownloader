@@ -1,11 +1,11 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace BookDownloader
+namespace WpfIEBookDownloader
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

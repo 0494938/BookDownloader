@@ -1,9 +1,9 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace BookDownloader
+namespace WpfIEBookDownloader
 {
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
     public partial class WPFMainWindow : Window, IBaseMainWindow

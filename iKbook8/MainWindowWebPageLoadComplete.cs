@@ -1,11 +1,11 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using WebBrowser = System.Windows.Controls.WebBrowser;
 
-namespace BookDownloader
+namespace WpfIEBookDownloader
 {
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {

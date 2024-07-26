@@ -1,4 +1,4 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace BookDownloaderWpf
+namespace WpfBookDownloader
 {
 #pragma warning disable CA1416 // プラットフォームの互換性を検証
 #pragma warning disable CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
@@ -41,7 +41,7 @@ namespace BookDownloaderWpf
                 btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 txtWebContents.Text = "";
                 txtAnalysizedContents.Text = "";
-
+                UpdateStatusMsg(datacontext, "Selected Site Type: " + cmbNovelType.SelectedIndex, -1 );
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
                 try
                 {
@@ -94,6 +94,7 @@ namespace BookDownloaderWpf
                 btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
                 txtAggregatedContents.Clear();
+                UpdateStatusMsg(datacontext, "Selected Site Type: " + cmbNovelType.SelectedIndex, -1);
                 int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 20 : int.Parse(txtPages.Text.Trim());
                 DownloadStatus.MaxPageToDownload = nMaxPage;
 

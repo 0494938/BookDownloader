@@ -1,4 +1,4 @@
-﻿namespace BaseBookDownload
+﻿namespace BaseBookDownloader
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

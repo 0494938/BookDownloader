@@ -1,9 +1,9 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
 using System.Text;
 
-namespace BaseBookDownload
+namespace BaseBookDownloader
 {
 #pragma warning disable CS8632 // Null 参照代入の可能性があります。
     public class BaseBookNovelContent

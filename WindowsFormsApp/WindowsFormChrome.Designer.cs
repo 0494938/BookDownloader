@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace WindowsFormsApp
+namespace BookDownloadFormApp
 {
     partial class WindowsFormChrome
     {

@@ -1,11 +1,11 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows;
 using System.Windows.Navigation;
 
-namespace BookDownloaderWpf
+namespace WpfBookDownloader
 {
 #pragma warning disable CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
 #pragma warning disable CA1416 // プラットフォームの互換性を検証

@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Windows;
 
-namespace BookDownloaderWpf
+namespace WpfBookDownloader
 {
     public partial class App : Application
     {

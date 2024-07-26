@@ -1,4 +1,4 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using HtmlAgilityPack;
 using System;
 using System.Diagnostics;
@@ -8,7 +8,7 @@ using System.Threading;
 using System.Xml.Linq;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
-namespace BaseBookDownload
+namespace BaseBookDownloader
 {
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。

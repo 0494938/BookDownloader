@@ -1,7 +1,7 @@
-﻿<Application x:Class="BookDownloaderWpf.App"
+﻿<Application x:Class="WpfBookDownloader.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:converter="clr-namespace:BookDownloaderWpf.Converter"
+             xmlns:converter="clr-namespace:WpfBookDownloader.Converter"
              StartupUri="WindowsWPFChrome.xaml">
     <Application.Resources>
         <converter:TitleConverter x:Key="TitleConverter"/>

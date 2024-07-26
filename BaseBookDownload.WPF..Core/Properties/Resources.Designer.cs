@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BookDownloaderWpf.Properties {
+namespace WpfBookDownloader.Properties {
     using System;
     
     

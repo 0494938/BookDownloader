@@ -4,7 +4,7 @@ using System;
 using Microsoft.Xaml.Behaviors;
 using CefSharp;
 
-namespace BookDownloaderWpf.Behaviours
+namespace WpfBookDownloader.Behaviours
 {
     public class HoverLinkBehaviour : Behavior<ChromiumWebBrowser>
     {

@@ -1,4 +1,4 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -10,7 +10,7 @@ using System.Threading;
 using System.Web;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
-namespace BaseBookDownload
+namespace BaseBookDownloader
 {
 #pragma warning disable IDE0019 // パターン マッチングを使用します
 #pragma warning disable IDE0090 // 'new(...)' を使用する

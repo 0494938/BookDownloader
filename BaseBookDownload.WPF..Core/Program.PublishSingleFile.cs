@@ -7,7 +7,7 @@ using CefSharp.Wpf;
 using System;
 using System.IO;
 
-namespace BookDownloaderWpf
+namespace WpfBookDownloader
 {
     /// <summary>
     /// For .Net 5.0/6.0/7.0 Publishing Single File exe requires using your own applications executable to

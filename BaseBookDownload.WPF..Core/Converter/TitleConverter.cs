@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace BookDownloaderWpf.Converter
+namespace WpfBookDownloader.Converter
 {
     public class TitleConverter : IValueConverter
     {
@@ -13,7 +13,7 @@ namespace BookDownloaderWpf.Converter
 #endif
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return "BookDownloaderWpf (" + Build + ") - " + (value ?? "No Title Specified");
+            return "WpfBookDownloader (" + Build + ") - " + (value ?? "No Title Specified");
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

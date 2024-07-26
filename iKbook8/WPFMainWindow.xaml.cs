@@ -1,4 +1,4 @@
-﻿using BaseBookDownload;
+﻿using BaseBookDownloader;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 //using HtmlElement = System.Windows.Forms.HtmlElement;
 
-namespace BookDownloader
+namespace WpfIEBookDownloader
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -26,7 +26,7 @@ namespace BookDownloader
         private void WebBrowser_Loaded(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("WebBrowser_Loaded invoked...");
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
