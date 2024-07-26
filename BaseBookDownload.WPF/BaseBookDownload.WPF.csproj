@@ -9,6 +9,14 @@
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\BaseBookDownload\AnalysisHtmlBody.cs" Link="AnalysisHtmlBody.cs" />
     <Compile Include="..\BaseBookDownload\BaseBookDownloader.cs" Link="BaseBookDownloader.cs" />

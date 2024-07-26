@@ -48,7 +48,7 @@ namespace BookDownloaderWpf
             try
             {
                 bool bEmpty = false;
-                this.Dispatcher.Invoke(() => { bEmpty = webBrowser == null || webBrowser.IsLoading == true; });
+                this.Dispatcher.Invoke(() => { bEmpty = webBrowser == null || webBrowser.IsLoading == true ; });
                 return bEmpty;
             }catch(Exception) { 
                 return false; 

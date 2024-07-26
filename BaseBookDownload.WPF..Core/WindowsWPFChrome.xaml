@@ -58,13 +58,13 @@
                         <ComboBoxItem Content="0 爱看书吧 m.ikbook8.com"></ComboBoxItem>
                         <ComboBoxItem Content="1 QQ电子书 book.qq.com"></ComboBoxItem>
                         <ComboBoxItem Content="2 笔趣阁 m.xbiqugew.com"></ComboBoxItem>
-                        <ComboBoxItem Content="3 笔趣阁2 m.xbiqugew.com"></ComboBoxItem>
+                        <ComboBoxItem Content="3 笔趣阁 www.xbiqugew.com"></ComboBoxItem>
                         <ComboBoxItem Content="4 无线电子书 www.wxdzs.net"></ComboBoxItem>
                         <ComboBoxItem Content="5 苍穹小说 www.cqhhhs.com"></ComboBoxItem>
                         <ComboBoxItem Content="6 金庸小说网 www.jinhuaja.com"></ComboBoxItem>
                         <ComboBoxItem Content="7 书旗小说网 www.shuqi.com"></ComboBoxItem>
-                        <ComboBoxItem Content="8 番茄小说网 fanqienovel.com"></ComboBoxItem>
-                        <ComboBoxItem Content="9 番茄小说网2 fanqienovel.com"></ComboBoxItem>
+                        <ComboBoxItem Content="8 番茄小说网 fanqienovel.com?enter_from=page"></ComboBoxItem>
+                        <ComboBoxItem Content="9 番茄小说网 fanqienovel.com?source=seo_fq_juhe"></ComboBoxItem>
                         <ComboBoxItem Content="10 红袖添香 www.hongxiu.com"></ComboBoxItem>
                         <ComboBoxItem Content="11 新小说吧 www.xxs8.com"></ComboBoxItem>
                         <ComboBoxItem Content="12 言情小说吧 www.xs8.cn"></ComboBoxItem>

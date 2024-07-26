@@ -149,8 +149,6 @@ namespace BaseBookDownload
             }
 
             Debug.WriteLine($"{strURL} : Download Finished, Begin Analysis ...");
-            //Debug.Assert( webBrowser != null || webBrowser?.Document != null);
-            Debug.Assert(!wndMain.isWebBrowserEmpty());
 
             if (!UnloadPgm)
             {
@@ -310,7 +308,7 @@ namespace BaseBookDownload
                     return "https://book.qq.com/book-read/47135031/1";
                 case (int)BatchQueryNovelContents.BIQUGE:
                     return "https://m.xbiqugew.com/book/50761/32248795.html";
-                case (int)BatchQueryNovelContents.BIQUGE2:
+                case (int)BatchQueryNovelContents.BIQUGE_PC:
                     return "https://www.xbiqugew.com/book/18927/12811470.html";
                 case (int)BatchQueryNovelContents.WXDZH:
                     return "https://www.wxdzs.net/wxread/94612_43816524.html";
@@ -368,7 +366,7 @@ namespace BaseBookDownload
                     nMaxRetry = 60;
                     return new FanQieBookNovelContent();
                 case BatchQueryNovelContents.BIQUGE:
-                case BatchQueryNovelContents.BIQUGE2:
+                case BatchQueryNovelContents.BIQUGE_PC:
                     return new BiQuGeBookNovelContent();
                 case BatchQueryNovelContents.HXTX:
                     return new HXTXBookNovelContent();
@@ -399,7 +397,7 @@ namespace BaseBookDownload
         [EnumCode("笔趣阁")]
         BIQUGE = 2,
         [EnumCode("笔趣阁")]
-        BIQUGE2 = 3,
+        BIQUGE_PC = 3,
         [EnumCode("无线电子书")]
         WXDZH = 4,
         [EnumCode("苍穹小说")]

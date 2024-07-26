@@ -109,7 +109,7 @@ namespace BaseBookDownload
             if (s == null)
                 return null;
 
-            return s.Replace("\r", null).Replace("\n", null).Replace("&nbsp;", " ").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&amp;", "&")
+            return s.Replace("\r", null).Replace("\n", "\r\n").Replace("&nbsp;", " ").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&amp;", "&")
                 .Replace("&ensp;", " ").Replace("&emsp;", " ").Replace("&ndash;", " ").Replace("&mdash;", " ")
                 .Replace("&sbquo;", "“").Replace("&rdquo;", "”").Replace("&bdquo;", "„")
                 .Replace("&quot;", "\"").Replace("&circ;", "ˆ").Replace("&tilde;", "˜").Replace("&prime;", "′").Replace("&Prime;", "″").Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");

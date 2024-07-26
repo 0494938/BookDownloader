@@ -10,11 +10,12 @@ using System.Windows.Controls;
 
 namespace BookDownloaderWpf
 {
+#pragma warning disable CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
+#pragma warning disable CA1416 // プラットフォームの互換性を検証
     class _DocContents
     {
         public string sHtml = "";
     }
-
 
     public partial class WindowsWPFChrome : Window, IBaseMainWindow
     {
@@ -42,12 +43,6 @@ namespace BookDownloaderWpf
         }
         public void UpdateAnalysisPageButton()
         {
-            /*
-            this.Dispatcher.Invoke(() =>
-            {
-                this.btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-            });
-            */
         }
         public void UpdateAnalysizedContents(string ? strContents)
         {
@@ -91,7 +86,7 @@ namespace BookDownloaderWpf
         {
             this.Dispatcher.Invoke(() =>
             {
-                txtWebContents.Text = strBody;
+                txtWebContents.Text = strBody.Replace("\r","").Replace("\n","\r\n").Replace("\r\n\r\n\r\n","\r\n").Replace("\r\n\r\n", "\r\n");
             });
         }
 
@@ -126,46 +121,6 @@ namespace BookDownloaderWpf
             });
         }
 
-        //public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
-        //{
-
-        //    bool bFailed = false;
-        //    this.Dispatcher.Invoke(() =>
-        //    {
-        //        if (webBrowser == null || webBrowser.IsLoading == true)
-        //            bFailed = true;
-        //    });
-
-        //    string? strBody = null;
-        //    if(!bFailed)
-        //    {
-        //        this.Dispatcher.Invoke(() =>
-        //        {
-        //            /*
-        //            var serviceProvider = (IServiceProvider)webBrowser.Document;
-        //            if (serviceProvider != null)
-        //            {
-        //                Guid iid = typeof(SHDocVw.WebBrowser).GUID;
-        //                SHDocVw.WebBrowser? webBrowserPtr =
-        //                    //serviceProvider.QueryService(SID_SWebBrowserApp, ref iid) as SHDocVw.WebBrowser;
-        //                    GetWebBrowserPtr(webBrowser);
-        //                if (webBrowserPtr != null)
-        //                {
-        //                    webBrowserPtr.NewWindow2 += webBrowser1_NewWindow2;
-        //                    webBrowserPtr.NewWindow3 += webBrowser1_NewWindow3;
-        //                }
-        //            }
-
-        //            IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
-        //            IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
-        //            strBody = body?.outerHTML;
-        //            */
-        //        });
-
-        //    }
-        //    return strBody;
-        //}
-
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
         {
             _DocContents doc = new _DocContents();
@@ -187,14 +142,20 @@ namespace BookDownloaderWpf
 
         private void GetWebDocHtml(_DocContents doc)
         {
-            if (webBrowser == null || webBrowser.IsLoading == true)
+            bool isLoading = false;
+            this.Dispatcher.Invoke(() => {
+                isLoading = webBrowser.IsLoading;
+            });
+            if (webBrowser == null || isLoading == true)
                 return;
 
-            webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
-            {
-                this.Dispatcher.Invoke(() =>
+            this.Dispatcher.Invoke(() => {
+                webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
                 {
-                    doc.sHtml = taskHtml.Result;
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        doc.sHtml = taskHtml.Result;
+                    });
                 });
             });
         }
@@ -202,7 +163,11 @@ namespace BookDownloaderWpf
         private void AnalysisURL(string strUrl, bool bWaitOptoin = true)
         {
             Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
-            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            WndContextData? datacontext = null;
+            this.Dispatcher.Invoke(() =>
+            {
+                datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            });
             Debug.Assert(datacontext != null);
 
             string? strBody = GetWebDocHtmlBody(strUrl, bWaitOptoin);
@@ -212,16 +177,6 @@ namespace BookDownloaderWpf
                 datacontext.AnalysisHtmlBody(this, bWaitOptoin, strUrl, strBody);
             }
         }
-
-        //private void webBrowser1_NewWindow2(ref object ppDisp, ref bool Cancel)
-        //{
-        //    Cancel = true;
-        //}
-
-        //private void webBrowser1_NewWindow3(ref object ppDisp, ref bool Cancel, uint dwFlags, string bstrUrlContext, string bstrUrl)
-        //{
-        //    Cancel = true;
-        //}
 
         public void UpdateStatusMsg(BaseWndContextData datacontext, string msg, int value)
         {
@@ -254,4 +209,6 @@ namespace BookDownloaderWpf
             });
         }
     }
+#pragma warning restore CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
+#pragma warning restore CA1416 // プラットフォームの互換性を検証
 }
