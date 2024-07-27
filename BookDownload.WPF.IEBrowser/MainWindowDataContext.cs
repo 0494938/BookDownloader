@@ -15,7 +15,7 @@ namespace WpfIEBookDownloader
     {
         public Visibility EnabledDbgButtons { get; set; } =
 #if DEBUG
-#if true
+#if fakse
             Visibility.Visible;
 #else
             Visibility.Hidden;

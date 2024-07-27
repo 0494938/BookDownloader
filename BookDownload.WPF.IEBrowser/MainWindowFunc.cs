@@ -141,7 +141,7 @@ namespace WpfIEBookDownloader
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
         {
             _DocContents doc = new _DocContents();
-            /*
+#if false
                    bool bFailed = false;
                    this.Dispatcher.Invoke(() =>
                    {
@@ -175,7 +175,7 @@ namespace WpfIEBookDownloader
 
                    }
                    return strBody;
-                   */
+#else
             string html = "";
             this.Dispatcher.Invoke(() =>
             {
@@ -189,7 +189,7 @@ namespace WpfIEBookDownloader
                     {
                         //this.Dispatcher.Invoke(() =>
                         //{
-                            doc.sHtml = taskHtml.Result;
+                        doc.sHtml = taskHtml.Result;
                         //});
                     });
                 }
@@ -207,8 +207,7 @@ namespace WpfIEBookDownloader
             html = html.Remove(0, 1);
             html = html.Remove(html.Length - 1, 1);
             return html;
-
-
+#endif
         }
 
         private void AnalysisURL(string strUrl, bool bWaitOptoin = true)
@@ -245,7 +244,27 @@ namespace WpfIEBookDownloader
 
         public void UpdateChapterMsg(BaseWndContextData datacontext, string msg, int value)
         {
-            
+            Debug.WriteLine(msg);
+            datacontext.StartBarMsg = msg;
+            if (value >= 0)
+                datacontext.ProcessBarValue = value;
+            txtStatus.Dispatcher.Invoke(() =>
+            {
+                txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
+                if (!string.IsNullOrEmpty(msg))
+                {
+                    txtLog.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
+                    txtLog.CaretIndex = txtLog.Text.Length;
+                    txtLog.ScrollToEnd();
+
+                    txtChapter.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
+                    txtChapter.CaretIndex = txtLog.Text.Length;
+                    txtChapter.ScrollToEnd();
+
+                }
+                if (value >= 0)
+                    txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+            });
         }
 
         public void UpdateStatusMsg(BaseWndContextData datacontext, string msg, int value)
@@ -278,7 +297,7 @@ namespace WpfIEBookDownloader
 
         public void LoadHtmlString(string strHtml, string url)
         {
-            //this.Dispatcher.Invoke(() => { webBrowser.lo(strHtml, url); });
+            //this.Dispatcher.Invoke(() => { webBrowser.CoreWebView2.load(strHtml, url); });
         }
 
         public void UpdateStatusProgress(BaseWndContextData datacontext, int value)
@@ -315,13 +334,15 @@ namespace WpfIEBookDownloader
                 {
                     this.Dispatcher.Invoke(() =>
                     {
-                        //webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
-                        //{
-                        //    this.Dispatcher.Invoke(() =>
-                        //    {
-                        //        doc.sHtml = taskHtml.Result;
-                        //    });
-                        //});
+#if false
+                        webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
+                        {
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                doc.sHtml = taskHtml.Result;
+                            });
+                        });
+#else
                         webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
                         {
                             this.Dispatcher.Invoke(() =>
@@ -329,6 +350,7 @@ namespace WpfIEBookDownloader
                                 doc.sHtml = taskHtml.Result;
                             });
                         });
+#endif
                     });
 
                     while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
@@ -371,13 +393,15 @@ namespace WpfIEBookDownloader
                 {
                     this.Dispatcher.Invoke(() =>
                     {
-                        //webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
-                        //{
-                        //    this.Dispatcher.Invoke(() =>
-                        //    {
-                        //        doc.sHtml = taskHtml.Result;
-                        //    });
-                        //});
+#if false
+                        webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
+                        {
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                doc.sHtml = taskHtml.Result;
+                            });
+                        });
+#else
                         webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
                         {
                             this.Dispatcher.Invoke(() =>
@@ -385,6 +409,7 @@ namespace WpfIEBookDownloader
                                 doc.sHtml = taskHtml.Result;
                             });
                         });
+#endif
                     });
                     Thread.Sleep(100);
 

@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "BookDownload.WPF.IEBrowser/1.0.0": {
+      "BookDownload.WPF.WebView2/1.0.0": {
         "dependencies": {
           "BaseBookDownload.WPF": "1.0.0",
           "HtmlAgilityPack": "1.11.61",
@@ -14,7 +14,7 @@
           "Newtonsoft.Json": "13.0.3"
         },
         "runtime": {
-          "BookDownload.WPF.IEBrowser.dll": {}
+          "BookDownload.WPF.WebView2.dll": {}
         }
       },
       "HtmlAgilityPack/1.11.61": {
@@ -78,7 +78,7 @@
     }
   },
   "libraries": {
-    "BookDownload.WPF.IEBrowser/1.0.0": {
+    "BookDownload.WPF.WebView2/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

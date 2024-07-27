@@ -7,14 +7,14 @@
   "targets": {
     ".NETCoreApp,Version=v6.0": {},
     ".NETCoreApp,Version=v6.0/win-x64": {
-      "BookDownload.WPF.NetCore/1.0.0": {
+      "BookDownload.WPF.Chrome/1.0.0": {
         "dependencies": {
           "BaseBookDownload.WPF": "1.0.0",
           "CefSharp.Wpf.NETCore": "126.2.180",
           "Microsoft.Xaml.Behaviors.Wpf": "1.1.19"
         },
         "runtime": {
-          "BookDownload.WPF.NetCore.dll": {}
+          "BookDownload.WPF.Chrome.dll": {}
         }
       },
       "CefSharp.Common.NETCore/126.2.180": {
@@ -159,7 +159,7 @@
     }
   },
   "libraries": {
-    "BookDownload.WPF.NetCore/1.0.0": {
+    "BookDownload.WPF.Chrome/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

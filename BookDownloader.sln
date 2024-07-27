@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookDownload.WPF.IEBrowser", "BookDownload.WPF.IEBrowser\BookDownload.WPF.IEBrowser.csproj", "{A634A389-FF23-45EA-AADA-797A23C1921C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookDownload.WPF.WebView2", "BookDownload.WPF.IEBrowser\BookDownload.WPF.WebView2.csproj", "{A634A389-FF23-45EA-AADA-797A23C1921C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookDownload.Form.App", "BookDownload.Form.App\BookDownload.Form.App.csproj", "{95958DCB-325C-4C4C-A3F0-B5BFAF36C774}"
 EndProject
@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseBookDownload.Form", "Ba
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseBookDownload.WPF", "BaseBookDownload.WPF\BaseBookDownload.WPF.csproj", "{8BB2C761-BC9F-489D-B51F-35854C27C1E4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookDownload.WPF.NetCore", "BookDownload.WPF.NetCore\BookDownload.WPF.NetCore.csproj", "{A43777F0-0E69-48F3-A5EF-E0FEE8F7BFB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookDownload.WPF.Chrome", "BookDownload.WPF.NetCore\BookDownload.WPF.Chrome.csproj", "{A43777F0-0E69-48F3-A5EF-E0FEE8F7BFB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
