@@ -22,8 +22,19 @@ namespace WpfIEBookDownloader
             if ((datacontext != null))
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
 
+            ClickBtntnInitURL(txtNextUrl.Text);
+        }
+
+        private void btnCurrURL_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("btnCurrURL_Click invoked...");
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if ((datacontext != null))
+                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
+
             ClickBtntnInitURL(txtCurURL.Text);
         }
+
 
         private void ClickBtntnInitURL(string strUrl)
         {

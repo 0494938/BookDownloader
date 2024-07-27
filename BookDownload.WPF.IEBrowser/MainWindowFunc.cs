@@ -187,11 +187,11 @@ namespace WpfIEBookDownloader
                     //html = html.Remove(html.Length - 1, 1);
                     webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
                     {
-                        this.Dispatcher.Invoke(() =>
-                        {
+                        //this.Dispatcher.Invoke(() =>
+                        //{
                             doc.sHtml = taskHtml.Result;
-                        });
-                    }); ;
+                        //});
+                    });
                 }
             });
             int nMaxRetry = 5 * 20;
@@ -289,6 +289,130 @@ namespace WpfIEBookDownloader
             {
                 txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
             });
+        }
+
+        public void GetBrowserDocAndPutToCtrl()
+        {
+            _DocContents doc = new _DocContents();
+            new Thread(() =>
+            {
+                int nMaxRetry = 10 * 60, nRetry = 0;
+                bool bLoaded = false;
+                this.Dispatcher.Invoke(() =>
+                {
+                    bLoaded = webBrowser.IsLoaded;
+                });
+                while (nRetry < nMaxRetry && bLoaded == false)
+                {
+                    nRetry++;
+                    Thread.Sleep(100);
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        bLoaded = webBrowser.IsLoaded;
+                    });
+                }
+                if (bLoaded)
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        //webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
+                        //{
+                        //    this.Dispatcher.Invoke(() =>
+                        //    {
+                        //        doc.sHtml = taskHtml.Result;
+                        //    });
+                        //});
+                        webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
+                        {
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                doc.sHtml = taskHtml.Result;
+                            });
+                        });
+                    });
+
+                    while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                    {
+                        nRetry++;
+                        Thread.Sleep(100);
+                    }
+                    if (!string.IsNullOrEmpty(doc.sHtml))
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            txtWebContents.Text = doc.sHtml?.Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n");
+                        });
+                    }
+                }
+            }).Start();
+        }
+
+        public void GetBrowserDocAndPrettyToCtrl()
+        {
+            _DocContents doc = new _DocContents();
+            new Thread(() =>
+            {
+                int nMaxRetry = 10 * 60, nRetry = 0;
+                bool bLoaded = false;
+                this.Dispatcher.Invoke(() =>
+                {
+                    bLoaded = webBrowser.IsLoaded;
+                });
+                while (nRetry < nMaxRetry && bLoaded == false)
+                {
+                    nRetry++;
+                    Thread.Sleep(100);
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        bLoaded = webBrowser.IsLoaded;
+                    });
+                }
+                if (bLoaded)
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        //webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
+                        //{
+                        //    this.Dispatcher.Invoke(() =>
+                        //    {
+                        //        doc.sHtml = taskHtml.Result;
+                        //    });
+                        //});
+                        webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
+                        {
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                doc.sHtml = taskHtml.Result;
+                            });
+                        });
+                    });
+                    Thread.Sleep(100);
+
+                    while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                    {
+                        nRetry++;
+                        Thread.Sleep(100);
+                    }
+                    if (!string.IsNullOrEmpty(doc.sHtml))
+                    {
+                        bool bIgnoreScript = false;
+                        bool bIgnoreHead = false;
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            bIgnoreScript = chkboxIgnoreScript.IsChecked ?? false;
+                            bIgnoreHead = chkboxIgnoreHeader.IsChecked ?? false;
+                        });
+
+                        string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(doc.sHtml, bIgnoreScript, bIgnoreHead);
+
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            txtWebContents.Text = strPrettyHtml;
+                        });
+                    }
+
+                }
+            }).Start();
         }
 
         public async void InitBrowser()

@@ -106,7 +106,30 @@ namespace WpfIEBookDownloader
         private void btnLaunchNextUrlOnWeb_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("btnLaunchNextUrlOnWeb_Click invoked...");
+            StartUrlOnWebBrowser(txtNextUrl.Text.Trim());
+        }
+
+        private void OnBtnRefreshPage(object sender, RoutedEventArgs e)
+        {
+            webBrowser.Reload();
+        }
+
+        private void btnLaunchCurUrlOnWeb_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("btnLaunchNextUrlOnWeb_Click invoked...");
             StartUrlOnWebBrowser(txtCurURL.Text.Trim());
+
+        }
+
+        private void OnCheckPrettyHtmlChanged(object sender, RoutedEventArgs e)
+        {
+            if (webBrowser.CoreWebView2 == null)
+                return;
+            if (chkboxPrettyHtml.IsChecked == false)
+                GetBrowserDocAndPutToCtrl();
+            else
+                GetBrowserDocAndPrettyToCtrl();
+
         }
     }
 
