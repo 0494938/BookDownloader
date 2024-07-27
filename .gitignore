@@ -401,3 +401,4 @@ FodyWeavers.xsd
 *.txt
 libcef.dll
 packages
+/bin_net6.0/BookDownload.WPF.WebView2.exe.WebView2/EBWebView
