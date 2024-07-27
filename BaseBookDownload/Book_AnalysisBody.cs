@@ -36,13 +36,14 @@ namespace BaseBookDownloader
             return html.DocumentNode.ChildNodes["BODY"];
         }
 
-        protected void ParseResultToUI(IBaseMainWindow wndMain, bool bSilenceMode, string strContents, string strNextLink, string strBookName)
+        protected void ParseResultToUI(IBaseMainWindow wndMain, BaseWndContextData datacontext, bool bSilenceMode, string strContents, string strNextLink, string strChapter, string strBookName)
         {
             //WPFMainWindow wndMain = (WPFMainWindow)IWndMain;
             wndMain.UpdateAnalysizedContents(strContents);
             wndMain.UpdateNextUrl(strNextLink);
             wndMain.UpdateCurUrl(strNextLink);
             wndMain.UpdateNovelName(strBookName);
+            wndMain.UpdateChapterMsg(datacontext, strChapter, -1);
             if (bSilenceMode)
             {
                 wndMain.UpdateAggragatedContentsWithLimit(strContents);

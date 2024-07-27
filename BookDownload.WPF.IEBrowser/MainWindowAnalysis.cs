@@ -1,4 +1,5 @@
 ﻿using BaseBookDownloader;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
@@ -47,6 +48,7 @@ namespace WpfIEBookDownloader
             });
         }
 
+        
         public void UpdateNovelName(string sNovelName)
         {
             //this.Invoke(() => {

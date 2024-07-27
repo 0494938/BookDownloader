@@ -58,10 +58,10 @@ namespace BookDownloadFormApp
 
         private void GetWebDocHtml(_DocContents doc)
         {
-            if (browser == null || browser.IsLoading == true)
+            if (webBrowser == null || webBrowser.IsLoading == true)
                 return ;
 
-            browser.GetSourceAsync().ContinueWith(taskHtml =>
+            webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
             {
                 this.Invoke(() =>
                 {
@@ -80,7 +80,7 @@ namespace BookDownloadFormApp
                 txtLog.Clear();
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
                 datacontext.PgmNaviUrl = txtInitURL.Text.Trim();
-                browser.LoadUrl(txtInitURL.Text.Trim());
+                webBrowser.LoadUrl(txtInitURL.Text.Trim());
             }
         }
 
@@ -94,7 +94,7 @@ namespace BookDownloadFormApp
                 txtLog.Clear();
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
                 datacontext.PgmNaviUrl = txtNextUrl.Text.Trim();
-                browser.LoadUrl(txtNextUrl.Text.Trim());
+                webBrowser.LoadUrl(txtNextUrl.Text.Trim());
             }
         }
 
@@ -132,9 +132,9 @@ namespace BookDownloadFormApp
         public void FreshPage()
         {
             this.Invoke(() => {
-                UpdateStatusMsg(datacontext, "### Refresh " + browser.Address + " ...", 0);
+                UpdateStatusMsg(datacontext, "### Refresh " + webBrowser.Address + " ...", 0);
                 //DownloadStatus.MaxPageToDownload++;
-                browser.Refresh();
+                webBrowser.Refresh();
             });
         }
     }

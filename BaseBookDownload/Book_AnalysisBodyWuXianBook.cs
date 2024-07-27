@@ -41,7 +41,7 @@ namespace BaseBookDownloader
                     string strChapterHeader = GetBookHeader(wndMain, datacontext, header);
                     string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(wndMain, datacontext, content);
                     string strNovelName = GetBookName(wndMain, datacontext, novelName);
-                    ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink, strNovelName);
+                    ParseResultToUI(wndMain, datacontext, bSilenceMode, strContents, strNextLink, strChapterHeader, strNovelName);
 
                     if (bSilenceMode)
                     {

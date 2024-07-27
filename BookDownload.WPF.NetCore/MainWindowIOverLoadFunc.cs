@@ -28,6 +28,20 @@ namespace WpfBookDownloader
             }
         }
 
+        public string GetNovelName()
+        {
+            try
+            {
+                string sNovelName= "";
+                this.Dispatcher.Invoke(() => { sNovelName = txtBookName.Text.Trim(); });
+                return sNovelName;
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
         public bool isWebBrowserEmpty()
         {
             try
@@ -175,18 +189,56 @@ namespace WpfBookDownloader
             _DocContents doc = new _DocContents();
             string? strBody = null;
             GetWebDocHtml(doc);
-            int nMaxRetry = 5 * 60;
+            int nMaxRetry = 5 * 20;
             int nRetry = 0;
             while (nRetry  < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
             {
                 nRetry++;
                 Thread.Sleep(200);
-                //GetWebDocHtml(doc);
             }
             strBody = doc.sHtml;
-            if (strBody.Length > 0 && strBody.Length < 200)
-                Debug.Assert(false);
+            if (strBody.Length > 0)
+            {
+                if (strBody.Length < 200)
+                    Debug.Assert(false);
+            }
+            //else
+            //{
+            //    //Debug.Assert(false);
+            //    //this reload should not happen...
+            //    //this.RefreshPage();
+            //}
             return strBody;
+        }
+
+        public void LoadHtmlString(string strHtml, string url)
+        {
+            this.Dispatcher.Invoke(() => { webBrowser.LoadHtml(strHtml, url); });
+        }
+
+        public void UpdateChapterMsg(BaseWndContextData datacontext, string msg, int value)
+        {
+            Debug.WriteLine(msg);
+            datacontext.StartBarMsg = msg;
+            if (value >= 0)
+                datacontext.ProcessBarValue = value;
+            txtStatus.Dispatcher.Invoke(() =>
+            {
+                txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
+                if (!string.IsNullOrEmpty(msg))
+                {
+                    txtLog.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
+                    txtLog.CaretIndex = txtLog.Text.Length;
+                    txtLog.ScrollToEnd();
+
+                    txtChapter.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
+                    txtChapter.CaretIndex = txtLog.Text.Length;
+                    txtChapter.ScrollToEnd();
+
+                }
+                if (value >= 0)
+                    txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+            });
         }
 
         public void UpdateStatusMsg(BaseWndContextData datacontext, string msg, int value)

@@ -1,4 +1,5 @@
 ﻿using BaseBookDownloader;
+using CefSharp;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
@@ -42,6 +43,18 @@ namespace WpfBookDownloader
                 webBrowser.LoadUrl(strURL);
             });
         }
+
+        public void Back(BaseWndContextData datacontext)
+        {
+            datacontext.PageLoaded = false;
+            datacontext.NextLinkAnalysized = false;
+            webBrowser.Dispatcher.Invoke(() =>
+            {
+                btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                webBrowser.Back();
+            });
+        }
+
     }
 #pragma warning restore CA1416 // プラットフォームの互換性を検証
 #pragma warning restore CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。

@@ -56,29 +56,6 @@ namespace WpfBookDownloader
             return !_regex.IsMatch(text);
         }
 
-        private void WebBrowser_LoadError(object sender, CefSharp.LoadErrorEventArgs e)
-        {
-            WndContextData? datacontext = null;
-            this.Dispatcher.Invoke(() =>
-            {
-                datacontext = App.Current.MainWindow.DataContext as WndContextData;
-            });
-            if(datacontext!=null)
-                UpdateStatusMsg(datacontext, "WebBrowser_LoadError invoked(" + e.ErrorText+ ")...", -1);
-        }
-
-        private void WebBrowser_LoadingStateChanged(object sender, CefSharp.LoadingStateChangedEventArgs e)
-        {
-            if (e.IsLoading == true || e.Browser.HasDocument != true) {
-                Debug.WriteLine("WebBrowser_LoadingStateChanged invoked (IsLoading:" + e.IsLoading + ", Url:" +e.Browser.MainFrame.Url +  ")...");
-            }
-            else
-            {
-                //MainFrameWebLoadCompleted(sender, e.Browser.MainFrame.Url);
-                Debug.WriteLine("WebBrowser_LoadingStateChanged invoked (IsLoading:" + e.IsLoading + ", Url:" + e.Browser.MainFrame.Url + ")...");
-            }
-        }
-        
         private void OnCheckPrettyHtmlChanged(object sender, RoutedEventArgs e)
         {
             if (chkboxPrettyHtml.IsChecked == false)

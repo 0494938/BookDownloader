@@ -43,6 +43,7 @@ namespace WpfBookDownloader
         private void btnAutoURL_Click(object sender, RoutedEventArgs e)
         {
             txtLog.Clear();
+            txtChapter.Clear();
             Debug.WriteLine("btnAutoURL_Click invoked...");
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if (datacontext != null)

@@ -16,6 +16,11 @@ namespace BookDownloadFormApp
 
     partial class WindowsFormChrome : IBaseMainWindow
     {
+        public void UpdateChapterMsg(BaseWndContextData datacontext, string msg, int value)
+        {
+
+        }
+
         public void UpdateStatusMsg(BaseWndContextData datacontext, string msg, int value)
         {
             this.Invoke(() =>
@@ -38,6 +43,11 @@ namespace BookDownloadFormApp
                 });
 
             }
+        }
+
+        public void LoadHtmlString(string strHtml, string url)
+        {
+            //this.Dispatcher.Invoke(() => { webBrowser.lo(strHtml, url); });
         }
 
         public void UpdateNextPageButton()
@@ -65,20 +75,14 @@ namespace BookDownloadFormApp
         public void UpdateCurUrl(string url)
         {
         }
-
+        public string GetNovelName()
+        {
+            return "";
+        }
         public void UpdateWebBodyOuterHtml(string strBody)
         {
             this.Invoke(() => {
                 txtHtml.Text = strBody.Replace("\r","").Replace("\n","\r\n").Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
-                //string strHtml = strBody.Replace("\r", "").Replace("\n", "\r\n");
-                
-                /*
-                string strHtml = Regex.Replace(strBody, "[\\r\\n]+", "\\r\\n");
-                string strHtml2 = Regex.Replace(strBody, "\\r\\n[\\t \\r\\n]*\\r\\n", "\\r\\n");
-                txtHtml.Text = strHtml2;
-                */
-
-                //txtHtml.Text = PrettyPrintUtil.PrettyPrintXml( strBody);
             });
         }
 
@@ -126,9 +130,18 @@ namespace BookDownloadFormApp
                 datacontext.PageLoaded = false;
                 datacontext.NextLinkAnalysized = false;
                 datacontext.PgmNaviUrl = strURL;
-                browser.LoadUrl(strURL);
+                webBrowser.LoadUrl(strURL);
             });
         }
+
+        public void Back(BaseWndContextData datacontext)
+        {
+            this.Invoke(() =>
+            {
+                webBrowser.Back();
+            });
+        }
+
 
         public bool isWebBrowserEmpty()
         {
@@ -136,7 +149,7 @@ namespace BookDownloadFormApp
             {
                 bool bRet = false;
                 this.Invoke(() => {
-                    bRet = browser == null;//|| browser.IsLoading == true; 
+                    bRet = webBrowser == null;//|| browser.IsLoading == true; 
                 });
                 return bRet;
             }
@@ -150,7 +163,7 @@ namespace BookDownloadFormApp
         {
             bool bRet = false;
             this.Invoke(() => {
-                bRet = browser == null || browser.IsLoading == true;
+                bRet = webBrowser == null || webBrowser.IsLoading == true;
             });
             return !bRet;
         }

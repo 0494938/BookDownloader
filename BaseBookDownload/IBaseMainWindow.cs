@@ -1,4 +1,6 @@
-﻿namespace BaseBookDownloader
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace BaseBookDownloader
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -7,11 +9,14 @@
     public interface IBaseMainWindow
     {
         public void UpdateStatusMsg(BaseWndContextData datacontext, string msg, int value);
+        public void UpdateChapterMsg(BaseWndContextData datacontext, string msg, int value);
         public void UpdateStatusProgress(BaseWndContextData datacontext, int value);
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true);
         public string GetLogContents();
         public void RefreshPage();
+        public void LoadHtmlString(string strHtml, string url);
         public void LoadUiUrl(BaseWndContextData datacontext, string strURL);
+        public void Back(BaseWndContextData datacontext);
 
         public void UpdateNextPageButton();
         public void UpdateInitPageButton();
@@ -31,6 +36,7 @@
         public bool isWebPageLoadComplete(string strURL);
         public void NovelTypeChangeEvent(BaseWndContextData datacontext, int nIndex);
         public string BatchDownloadNotified(BaseWndContextData datacontext, DownloadStatus status, string sDownloadFileName);  //return log area contents
+        public string GetNovelName();
     }
 #pragma warning restore CS8632 // Null 参照代入の可能性があります。
 }

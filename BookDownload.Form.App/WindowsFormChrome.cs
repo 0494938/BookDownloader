@@ -37,23 +37,23 @@ namespace BookDownloadFormApp
             MessageBox.Show(message, "client code");
         }
 
-        public ChromiumWebBrowser browser;
+        public ChromiumWebBrowser webBrowser;
 
         public void InitBrowser()
         {
             Cef.Initialize(new CefSettings());
             datacontext.PgmNaviUrl = txtInitURL.Text.Trim();
-            browser = new ChromiumWebBrowser(
+            webBrowser = new ChromiumWebBrowser(
                 //txtInitURL.Text.Trim()
             );
             //this.Controls.Add(browser);
-            this.scBottom.Panel1.Controls.Add(browser);
-            browser.Dock = DockStyle.Fill;
-            browser.LoadingStateChanged += Browser_LoadingStateChanged;
-            browser.FrameLoadStart += (sender, args) =>
+            this.scBottom.Panel1.Controls.Add(webBrowser);
+            webBrowser.Dock = DockStyle.Fill;
+            webBrowser.LoadingStateChanged += Browser_LoadingStateChanged;
+            webBrowser.FrameLoadStart += (sender, args) =>
             {
                 //MainFrame has started to load, too early to access the DOM, you can add event listeners for DOMContentLoaded etc.
-                Debug.WriteLine("browser.FrameLoadStart[Frame=" + (string.IsNullOrEmpty(args.Frame.Name)?"#NONAME": args.Frame.Name) + "] entered with (IsLoading = " + browser.IsLoading + ")...");
+                Debug.WriteLine("browser.FrameLoadStart[Frame=" + (string.IsNullOrEmpty(args.Frame.Name)?"#NONAME": args.Frame.Name) + "] entered with (IsLoading = " + webBrowser.IsLoading + ")...");
                 UpdateStatusMsg(datacontext, "Start Frame Load : " + args.Url.ToString() + " ...", 0);
 
                 if (args.Frame.IsMain)
@@ -62,19 +62,19 @@ namespace BookDownloadFormApp
                     //args.Frame.ExecuteJavaScriptAsync(script);
                 }
             };
-            browser.FrameLoadEnd += new EventHandler<CefSharp.FrameLoadEndEventArgs>(Browser_FrameLoadComplete);
-            browser.AddressChanged += new EventHandler<CefSharp.AddressChangedEventArgs>(Browser_AddressChanged);
-            browser.IsBrowserInitializedChanged += new EventHandler(Browser_IsBrowserInitializedChanged);
-            browser.JavascriptMessageReceived += new EventHandler<CefSharp.JavascriptMessageReceivedEventArgs>(Browser_JavascriptMessageReceived);
-            browser.LocationChanged += new EventHandler(Browser_LocationChanged);
-            browser.RegionChanged += new EventHandler(Browser_RegionChanged);
+            webBrowser.FrameLoadEnd += new EventHandler<CefSharp.FrameLoadEndEventArgs>(Browser_FrameLoadComplete);
+            webBrowser.AddressChanged += new EventHandler<CefSharp.AddressChangedEventArgs>(Browser_AddressChanged);
+            webBrowser.IsBrowserInitializedChanged += new EventHandler(Browser_IsBrowserInitializedChanged);
+            webBrowser.JavascriptMessageReceived += new EventHandler<CefSharp.JavascriptMessageReceivedEventArgs>(Browser_JavascriptMessageReceived);
+            webBrowser.LocationChanged += new EventHandler(Browser_LocationChanged);
+            webBrowser.RegionChanged += new EventHandler(Browser_RegionChanged);
 
-            browser.LoadError += new EventHandler<CefSharp.LoadErrorEventArgs>(Browser_LoadError);
-            browser.TitleChanged+= new EventHandler<CefSharp.TitleChangedEventArgs>(Browser_TitleChanged);
+            webBrowser.LoadError += new EventHandler<CefSharp.LoadErrorEventArgs>(Browser_LoadError);
+            webBrowser.TitleChanged+= new EventHandler<CefSharp.TitleChangedEventArgs>(Browser_TitleChanged);
 
-            browser.ControlAdded += new ControlEventHandler(Browser_ControlAdded);
-            browser.ControlRemoved += new ControlEventHandler(Browser_ControlRemoved);
-            browser.BindingContextChanged += new EventHandler(Browser_BindingContextChanged);
+            webBrowser.ControlAdded += new ControlEventHandler(Browser_ControlAdded);
+            webBrowser.ControlRemoved += new ControlEventHandler(Browser_ControlRemoved);
+            webBrowser.BindingContextChanged += new EventHandler(Browser_BindingContextChanged);
         }
 
         private void splitContainer1_Panel2_Validated(object sender, EventArgs e)

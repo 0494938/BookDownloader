@@ -16,6 +16,7 @@ namespace BaseBookDownloader
     public class DownloadStatus
     {
         public bool DownloadFinished { get; set; } = false;
+        public int DownloadRetried { get; set; } = 0;
         public string? URL { get; set; }
         public string? NextUrl { get; set; }
         public DateTime StartTime { get; set; }
@@ -156,7 +157,25 @@ namespace BaseBookDownloader
                 {
                     string? strBody = wndMain.GetWebDocHtmlBody(strURL);
                     wndMain.UpdateWebBodyOuterHtml(strBody);
-                    AnalysisHtmlBody(wndMain, true, strURL, strBody, bSilenceMode, status);
+                    if (!string.IsNullOrEmpty(strBody))
+                    {
+                        AnalysisHtmlBody(wndMain, true, strURL, strBody, bSilenceMode, status);
+                    }
+                    else if(bSilenceMode && status.DownloadRetried == 0)
+                    {
+                        status.DownloadRetried = status.DownloadRetried + 1;
+                        wndMain.LoadHtmlString("<html><body></body></html> ", "blank");
+                        wndMain.UpdateStatusMsg(this, "Faield to Get Document Contents of <" + status.URL + ">, Force Reload to Retry",-1);
+                        Thread.Sleep (200);
+                        status.DownloadFinished = false;
+                        //wndMain.LoadUiUrl(this, status.URL);
+                        wndMain.Back(this);
+                        //strBody = wndMain.GetWebDocHtmlBody(strURL);
+                        //if (!string.IsNullOrEmpty(strBody))
+                        //{
+                        //    AnalysisHtmlBody(wndMain, true, strURL, strBody, bSilenceMode, status);
+                        //}
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -262,6 +281,15 @@ namespace BaseBookDownloader
                 {
                     string sDownloadFileName = ((FileStream)DownloadStatus.ContentsWriter.BaseStream).Name;
                     DownloadStatus.ContentsWriter = null;
+
+                    string sName = Path.GetFileName(sDownloadFileName);
+                    string sPath = Path.GetDirectoryName(sDownloadFileName).ToString();
+                    if (sName.StartsWith("Novel") && !string.IsNullOrEmpty(wndMain.GetNovelName()))
+                    {
+                        sName = wndMain.GetNovelName() + sName.Substring("Novel".Length);
+                        File.Move(sDownloadFileName, sPath + Path.DirectorySeparatorChar+ sName);
+                        sDownloadFileName = sPath + Path.DirectorySeparatorChar + sName;
+                    }
 
                     const Int32 BufferSize = 2048;
                     using (FileStream fileStream = File.OpenRead(sDownloadFileName))

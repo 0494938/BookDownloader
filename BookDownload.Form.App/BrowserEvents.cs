@@ -28,7 +28,7 @@ namespace BookDownloadFormApp
         public void RefreshPage()
         {
             this.Invoke(() =>{
-                browser.LoadUrl(browser.Address);
+                webBrowser.LoadUrl(webBrowser.Address);
                 //browser.Refresh();
             });
         }

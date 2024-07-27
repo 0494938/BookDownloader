@@ -47,7 +47,7 @@ namespace BaseBookDownloader
                         .FirstOrDefault()?.Descendants()?.Where(n => n.Name == "a" && !string.IsNullOrEmpty(n.Attributes["title"]?.Value))?.FirstOrDefault();
                     string strNovelName = GetBookName(wndMain, datacontext, novelName);
 
-                    ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink, strNovelName);
+                    ParseResultToUI(wndMain, datacontext, bSilenceMode, strContents, strNextLink, strChapterHeader, strNovelName);
                     if (bSilenceMode)
                     {
                         Debug.Assert(status != null);
@@ -69,7 +69,7 @@ namespace BaseBookDownloader
                     novelName = html?.DocumentNode.Descendants().Where(n=>n.Name=="head")?.FirstOrDefault()?.Descendants()?.Where(n => n.Name == "title")?.FirstOrDefault();
                     string strNovelName = GetBookName(wndMain, datacontext, novelName);
                     strNovelName = strNovelName.Replace(strChapterHeader, "").Replace("_笔趣阁", "").Trim(new char[] { '_',','});
-                    ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink, strNovelName);
+                    ParseResultToUI(wndMain, datacontext, bSilenceMode, strContents, strNextLink, strChapterHeader, strNovelName);
 
                     if (bSilenceMode)
                     {

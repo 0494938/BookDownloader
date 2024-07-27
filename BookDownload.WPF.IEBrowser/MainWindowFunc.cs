@@ -42,6 +42,21 @@ namespace WpfIEBookDownloader
             });
             */
         }
+
+        public string GetNovelName()
+        {
+            try
+            {
+                string sNovelName = "";
+                this.Dispatcher.Invoke(() => { sNovelName = txtOutputFileName.Text.Trim(); });
+                return sNovelName;
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
         public void UpdateAnalysizedContents(string ? strContents)
         {
             this.Dispatcher.Invoke(() =>
@@ -181,6 +196,11 @@ namespace WpfIEBookDownloader
             Cancel = true;
         }
 
+        public void UpdateChapterMsg(BaseWndContextData datacontext, string msg, int value)
+        {
+            
+        }
+
         public void UpdateStatusMsg(BaseWndContextData datacontext, string msg, int value)
         {
 
@@ -200,6 +220,18 @@ namespace WpfIEBookDownloader
                 if (value >= 0)
                     txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
             });
+        }
+
+        public void Back(BaseWndContextData datacontext) {
+            this.Dispatcher.Invoke(() =>
+            {
+                webBrowser.GoBack();
+            });
+        }
+
+        public void LoadHtmlString(string strHtml, string url)
+        {
+            //this.Dispatcher.Invoke(() => { webBrowser.lo(strHtml, url); });
         }
 
         public void UpdateStatusProgress(BaseWndContextData datacontext, int value)
