@@ -51,7 +51,7 @@ namespace WpfIEBookDownloader
             try
             {
                 string sNovelName = "";
-                this.Dispatcher.Invoke(() => { sNovelName = txtOutputFileName.Text.Trim(); });
+                this.Dispatcher.Invoke(() => { sNovelName = txtBookName.Text.Trim(); });
                 return sNovelName;
             }
             catch (Exception)

@@ -284,7 +284,7 @@ namespace BaseBookDownloader
 
                     string sName = Path.GetFileName(sDownloadFileName);
                     string sPath = Path.GetDirectoryName(sDownloadFileName).ToString();
-                    if (sName.StartsWith("Novel") && !string.IsNullOrEmpty(wndMain.GetNovelName()))
+                    if (sName.StartsWith("Novel", StringComparison.CurrentCultureIgnoreCase) && !string.IsNullOrEmpty(wndMain.GetNovelName()))
                     {
                         sName = wndMain.GetNovelName() + sName.Substring("Novel".Length);
                         File.Move(sDownloadFileName, sPath + Path.DirectorySeparatorChar+ sName);

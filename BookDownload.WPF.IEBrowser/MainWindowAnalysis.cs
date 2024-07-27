@@ -52,9 +52,9 @@ namespace WpfIEBookDownloader
         
         public void UpdateNovelName(string sNovelName)
         {
-            //this.Invoke(() => {
-            //    this.txtBookName.Text = sNovelName;
-            //});
+            this.Dispatcher.Invoke(() => {
+                this.txtBookName.Text = sNovelName;
+            });
         }
 
     }
