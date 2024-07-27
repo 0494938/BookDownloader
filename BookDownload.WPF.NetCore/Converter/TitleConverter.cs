@@ -13,7 +13,7 @@ namespace WpfBookDownloader.Converter
 #endif
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return "WpfBookDownloader (" + Build + ") - " + (value ?? "No Title Specified");
+            return "Chrome based WPF BookDownloader (" + Build + ") - " + (value ?? "No Title Specified");
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

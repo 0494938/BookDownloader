@@ -44,7 +44,8 @@ namespace WpfIEBookDownloader
                 //btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 datacontext.PgmNaviUrl = strURL;
-                webBrowser.Navigate(strURL);
+                //webBrowser.Navigate(strURL);
+                webBrowser.CoreWebView2.Navigate(strURL);
             });
         }
 

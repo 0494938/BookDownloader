@@ -66,6 +66,7 @@ namespace WpfIEBookDownloader
 
         private void OnTestEncoding(object sender, RoutedEventArgs e)
         {
+            /*
             Encoding[] arrAllEncodings = new[] {
                             Encoding.GetEncoding(932), Encoding.GetEncoding(10001), Encoding.GetEncoding(20290), Encoding.GetEncoding(20932), Encoding.GetEncoding(50220), Encoding.GetEncoding(50221), Encoding.GetEncoding(50222), Encoding.GetEncoding(51932),
                             Encoding.UTF8, Encoding.UTF7, Encoding.Unicode, Encoding.ASCII, Encoding.Latin1, Encoding.Default, Encoding.BigEndianUnicode, Encoding.UTF32, Encoding.GetEncoding(1200),Encoding.GetEncoding(1201),Encoding.GetEncoding(12000),Encoding.GetEncoding(12001),Encoding.GetEncoding(20127),Encoding.GetEncoding(28591),
@@ -130,6 +131,7 @@ namespace WpfIEBookDownloader
                     }
                 }
             }
+            */
         }
 #pragma warning restore SYSLIB0001 // 型またはメンバーが旧型式です
     }

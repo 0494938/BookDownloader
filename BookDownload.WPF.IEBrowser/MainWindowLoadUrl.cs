@@ -42,19 +42,20 @@ namespace WpfIEBookDownloader
                 try
                 {
                     datacontext.PgmNaviUrl = strUrl;
-                    webBrowser.Navigate(strUrl);
+                    //webBrowser.Navigate(strUrl);
+                    webBrowser.CoreWebView2.Navigate(strUrl);
                     UpdateStatusMsg(datacontext, strUrl + " : Begin to download ...", 0);
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex);
-                    if (webBrowser == null || webBrowser.Document == null)
+                    if (webBrowser == null || webBrowser.CoreWebView2 == null || webBrowser.IsLoaded == false)
                         return;
 
-                    SHDocVw.WebBrowser? webBrowserPtr = GetWebBrowserPtr(webBrowser);
-                    Debug.WriteLine(strUrl + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
-                    if (webBrowserPtr?.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
-                        return;
+                    //SHDocVw.WebBrowser? webBrowserPtr = GetWebBrowserPtr(webBrowser);
+                    //Debug.WriteLine(strUrl + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
+                    //if (webBrowserPtr?.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
+                    //    return;
                 }
             }
         }

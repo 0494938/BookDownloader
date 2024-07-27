@@ -12,6 +12,11 @@ namespace WpfIEBookDownloader
     /// </summary>
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
+    public class _DocContents
+    {
+        public string sHtml = "";
+    }
+    
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
         public void HideScriptErrors(WebBrowser wb, bool hide)

@@ -58,9 +58,9 @@ namespace BookDownloadFormApp
                     else
                     {
                         UpdateStatusMsg(datacontext, "Finished Page download : " + e.Url.ToString() + " ...", 50);
-                        Thread thread = new Thread(() => datacontext.WaitAndLaunchAnalsysi(this, e.Url.ToString(), false, null));
-                        thread.Start();
-                        //AnalysisURL(e.Url.ToString());
+                        //Thread thread = new Thread(() => datacontext.WaitAndLaunchAnalsysi(this, e.Url.ToString(), false, null));
+                        //thread.Start();
+                        new Thread(() => datacontext.WaitAndLaunchAnalsysi(this, e.Url.ToString(), false, null)).Start();
 
                     }
                 }

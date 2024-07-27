@@ -2,8 +2,11 @@
 using MSHTML;
 using System;
 using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.ConstrainedExecution;
 using System.Security.Policy;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -130,58 +133,102 @@ namespace WpfIEBookDownloader
         public void RefreshPage()
         {
             this.Dispatcher.Invoke(() => {
-                webBrowser.Refresh();
+                //webBrowser.Refresh();
+                webBrowser.CoreWebView2.Reload();
             });
         }
 
         public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
         {
+            _DocContents doc = new _DocContents();
+            /*
+                   bool bFailed = false;
+                   this.Dispatcher.Invoke(() =>
+                   {
+                       if (webBrowser == null || webBrowser.Document == null)
+                           bFailed = true;
+                   });
 
-            bool bFailed = false;
+                   string? strBody = null;
+                   if(!bFailed)
+                   {
+                       this.Dispatcher.Invoke(() =>
+                       {
+                           var serviceProvider = (IServiceProvider)webBrowser.Document;
+                           if (serviceProvider != null)
+                           {
+                               Guid iid = typeof(SHDocVw.WebBrowser).GUID;
+                               SHDocVw.WebBrowser? webBrowserPtr =
+                                   //serviceProvider.QueryService(SID_SWebBrowserApp, ref iid) as SHDocVw.WebBrowser;
+                                   GetWebBrowserPtr(webBrowser);
+                               if (webBrowserPtr != null)
+                               {
+                                   webBrowserPtr.NewWindow2 += webBrowser1_NewWindow2;
+                                   webBrowserPtr.NewWindow3 += webBrowser1_NewWindow3;
+                               }
+                           }
+
+                           IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
+                           IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
+                           strBody = body?.outerHTML;
+                       });
+
+                   }
+                   return strBody;
+                   */
+            string html = "";
             this.Dispatcher.Invoke(() =>
             {
-                if (webBrowser == null || webBrowser.Document == null)
-                    bFailed = true;
-            });
-
-            string? strBody = null;
-            if(!bFailed)
-            {
-                this.Dispatcher.Invoke(() =>
+                if (webBrowser != null && webBrowser.CoreWebView2 != null && webBrowser.IsLoaded == true)
                 {
-                    var serviceProvider = (IServiceProvider)webBrowser.Document;
-                    if (serviceProvider != null)
+                    //html = await webView21.ExecuteScriptAsync("document.documentElement.outerHTML");
+                    //html = Regex.Unescape(html);
+                    //html = html.Remove(0, 1);
+                    //html = html.Remove(html.Length - 1, 1);
+                    webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
                     {
-                        Guid iid = typeof(SHDocVw.WebBrowser).GUID;
-                        SHDocVw.WebBrowser? webBrowserPtr =
-                            //serviceProvider.QueryService(SID_SWebBrowserApp, ref iid) as SHDocVw.WebBrowser;
-                            GetWebBrowserPtr(webBrowser);
-                        if (webBrowserPtr != null)
+                        this.Dispatcher.Invoke(() =>
                         {
-                            webBrowserPtr.NewWindow2 += webBrowser1_NewWindow2;
-                            webBrowserPtr.NewWindow3 += webBrowser1_NewWindow3;
-                        }
-                    }
-
-                    IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
-                    IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
-                    strBody = body?.outerHTML;
-                });
-
+                            doc.sHtml = taskHtml.Result;
+                        });
+                    }); ;
+                }
+            });
+            int nMaxRetry = 5 * 20;
+            int nRetry = 0;
+            while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+            {
+                nRetry++;
+                Thread.Sleep(200);
             }
-            return strBody;
+            html = doc.sHtml;
+            //html = JsonSerializer.Deserialize(html);
+            html = Regex.Unescape(html);
+            html = html.Remove(0, 1);
+            html = html.Remove(html.Length - 1, 1);
+            return html;
+
+
         }
 
         private void AnalysisURL(string strUrl, bool bWaitOptoin = true)
         {
             Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
-            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            WndContextData? datacontext = null;
+            this.Dispatcher.Invoke(() => {
+                datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            });
+
             Debug.Assert(datacontext != null);
 
             string? strBody = GetWebDocHtmlBody(strUrl, bWaitOptoin);
             if (!string.IsNullOrEmpty(strBody?.Trim()))
             {
-                txtWebContents.Text = strBody;
+                string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(strBody, true, true);
+
+                this.Dispatcher.Invoke(() => {
+                    txtWebContents.Text = strPrettyHtml;
+                });
                 datacontext.AnalysisHtmlBody(this, bWaitOptoin, strUrl, strBody);
             }
         }
@@ -244,7 +291,7 @@ namespace WpfIEBookDownloader
             });
         }
 
-        public void InitBrowser()
+        public async void InitBrowser()
         {
 
             //webBrowser.LoadingStateChanged += Browser_LoadingStateChanged;
@@ -273,8 +320,18 @@ namespace WpfIEBookDownloader
             //webBrowser.ControlAdded += new ControlEventHandler(Browser_ControlAdded);
             //webBrowser.ControlRemoved += new ControlEventHandler(Browser_ControlRemoved);
             //webBrowser.BindingContextChanged += new EventHandler(Browser_BindingContextChanged);
+
+#if false
             webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+#else
+            await webBrowser.EnsureCoreWebView2Async(null);
+            webBrowser.NavigationCompleted += WebBrowser_NavigationCompleted;
             webBrowser.Loaded += WebBrowser_Loaded;
+            webBrowser.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
+
+            await webBrowser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync("window.chrome.webview.postMessage(window.document.URL);");
+            await webBrowser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync("window.chrome.webview.addEventListener(\'message\', event => alert(event.data));");
+#endif
         }
 
     }

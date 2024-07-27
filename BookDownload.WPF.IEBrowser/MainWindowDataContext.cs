@@ -45,9 +45,10 @@ namespace WpfIEBookDownloader
         {
             try
             {
-                bool bRet = false;
-                this.Dispatcher.Invoke(() => { bRet = webBrowser == null || webBrowser.Document == null; });
-                return bRet;
+                bool bLoadUnFinish = false;
+                //this.Dispatcher.Invoke(() => { bRet = webBrowser == null || webBrowser.Document == null; });
+                this.Dispatcher.Invoke(() => { bLoadUnFinish = webBrowser == null || webBrowser.CoreWebView2 == null || webBrowser.IsLoaded == false; });
+                return bLoadUnFinish;
             }catch(Exception) { 
                 return false; 
             }
@@ -55,14 +56,25 @@ namespace WpfIEBookDownloader
 
         public bool isWebPageLoadComplete(string strURL)
         {
-            SHDocVw.WebBrowser? webBrowserPtr = GetWebBrowserPtr(webBrowser);
-            if (webBrowserPtr == null)
+            //SHDocVw.WebBrowser? webBrowserPtr = GetWebBrowserPtr(webBrowser);
+            //if (webBrowserPtr == null)
+            //    return false;
+            //    Debug.WriteLine(strURL + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
+            //if (webBrowserPtr?.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
+            //    return false;
+            //else
+            //    return true;
+            try
+            {
+                bool bLoadFinish = false;
+                //this.Dispatcher.Invoke(() => { bRet = webBrowser == null || webBrowser.Document == null; });
+                this.Dispatcher.Invoke(() => { bLoadFinish = webBrowser != null && webBrowser.CoreWebView2 != null || webBrowser.IsLoaded == true; });
+                return bLoadFinish;
+            }
+            catch (Exception)
+            {
                 return false;
-                Debug.WriteLine(strURL + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
-            if (webBrowserPtr?.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
-                return false;
-            else
-                return true;
+            }
         }
     }
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。

@@ -32,7 +32,17 @@ namespace WpfIEBookDownloader
         private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             Debug.WriteLine("WebBrowser_LoadCompleted invoked...");
-            MainFrameWebLoadCompleted(sender, e);
+            MainFrameWebLoadCompleted(sender, e.Uri.ToString());
+        }
+
+        private void WebBrowser_NavigationCompleted(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
+        {
+            Debug.WriteLine("WebBrowser_NavigationCompleted invoked...");
+            MainFrameWebLoadCompleted(sender, (sender as Microsoft.Web.WebView2.Wpf.WebView2)?.Source?.ToString()??"");
+        }
+        private void CoreWebView2_WebMessageReceived(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
+        {
+            //throw new NotImplementedException();
         }
 
 
@@ -71,7 +81,7 @@ namespace WpfIEBookDownloader
         private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("OnMainWindowLoaded invoked...");
-            HideScriptErrors(webBrowser, true);
+            //HideScriptErrors(webBrowser, true);
         }
 
         private void OnSyncFromBrowser(object sender, RoutedEventArgs e)

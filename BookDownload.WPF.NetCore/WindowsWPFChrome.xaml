@@ -6,7 +6,7 @@
         xmlns:behaviours="clr-namespace:WpfBookDownloader.Behaviours"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:WpfBookDownloader"
-        Title="{Binding Path=Title, ElementName=Browser, Converter={StaticResource TitleConverter}}"
+        Title="{Binding Path=Title, ElementName=webBrowser, Converter={StaticResource TitleConverter}}"
         FocusManager.FocusedElement="{Binding ElementName=Browser}"
         WindowState="Maximized" Loaded="Window_Loaded">
     <Window.DataContext>

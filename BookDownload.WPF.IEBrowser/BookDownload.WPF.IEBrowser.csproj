@@ -29,6 +29,10 @@
     <Optimize>True</Optimize>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Novel_2.png" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <COMReference Include="SHDocVw">
@@ -57,6 +61,7 @@
 
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2592.51" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
@@ -81,6 +86,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BaseBookDownload.WPF\BaseBookDownload.WPF.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Novel_2.png" />
   </ItemGroup>
 
 </Project>

@@ -4,12 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfIEBookDownloader"
+        xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
-        Title="Book Downloader Window" Height="1100" Width="1800" 
+        Title="Book Downloader WPF Version(IE Core)" Height="1100" Width="1800" 
         Loaded="OnMainWindowLoaded"
         Activated="OnMainWindowActivated"
         Unloaded="OnMainWindowUnloaded"
-        Closing="OnMainWindowClosing" WindowStartupLocation="CenterScreen"
+        Closing="OnMainWindowClosing" WindowStartupLocation="CenterScreen" Icon="/Novel_2.png"
         >
     <Window.DataContext>
         <local:WndContextData/>
@@ -121,12 +122,16 @@
         <GroupBox
             Grid.Row="2" 
             Grid.Column="0">
-            <WebBrowser 
+            <!--WebBrowser 
                 LoadCompleted="MainFrameWebLoadCompleted"
                 Loaded="MainFrameWebLoaded"
                 Margin="-3,-1,-3,-3"
                 x:Name="webBrowser" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" 
-            />
+            /-->
+            <Wpf:WebView2 
+                Margin="-3,-1,-3,-3"
+                x:Name="webBrowser" 
+                ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" />
             <GroupBox.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="CadetBlue"/>
