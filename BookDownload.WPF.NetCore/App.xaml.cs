@@ -1,6 +1,7 @@
 ﻿using CefSharp;
 using CefSharp.Wpf;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 
@@ -46,6 +47,10 @@ namespace WpfBookDownloader
 
                     Shutdown();
                 }
+            }
+            else
+            {
+                Debug.Assert(false);
             }
         }
     }

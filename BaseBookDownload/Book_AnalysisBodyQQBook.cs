@@ -33,21 +33,21 @@ namespace BaseBookDownloader
             HtmlNode? nextLink = null;
             HtmlNode? content = null;
             HtmlNode? header = null;
-            FindBookNextLinkAndContents(wndMain, datacontext, body, ref nextLink, ref header, ref content);
+            HtmlNode? novelName = null;
+            FindBookNextLinkAndContents(wndMain, datacontext, body, ref nextLink, ref header, ref content, ref novelName);
             if (content != null || nextLink != null)
             {
                 string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);
                 string strChapterHeader = GetBookHeader(wndMain, datacontext, header);
                 string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(wndMain, datacontext, content);
-
-                ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
+                string strNovelName = GetBookName(wndMain, datacontext, novelName);
+                ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink, strNovelName);
                 if (bSilenceMode)
                 {
                     Debug.Assert(status != null);
                     status.NextUrl = strNextLink;
 
-                    DownloadStatus.ContentsWriter?.Write(strContents);
-                    DownloadStatus.ContentsWriter?.Flush();
+                    WriteToFile(status, strChapterHeader, strContents, strNextLink, strNovelName);
                 }
                 datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
                 wndMain.UpdateNextPageButton();
@@ -55,33 +55,35 @@ namespace BaseBookDownloader
             return true;
         }
 
-        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? parent, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
+        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? parent, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content, ref HtmlNode novelName)
         {
             if(parent != null)
             {
 
-                HtmlNodeCollection? collCont = parent?.SelectNodes(".//div[@id='Lab_Contents'][@class='kong']");
-                content = (collCont?.Count ?? 0) > 0 ? (collCont[0]) : null;
+                //HtmlNodeCollection? collCont = parent?.SelectNodes(".//div[@id='Lab_Contents'][@class='kong']");
+                content = parent?.SelectNodes(".//div[@id='Lab_Contents'][@class='kong']")?.FirstOrDefault();
 
-                HtmlNodeCollection? collHeader = parent?.SelectNodes(".//h1[@id='ChapterTitle']");
-                header = (collHeader?.Count ?? 0) > 0 ? (collHeader[0]) : null;
+                //HtmlNodeCollection? collHeader = parent?.SelectNodes(".//h1[@id='ChapterTitle']");
+                header = parent?.SelectNodes(".//h1[@id='ChapterTitle']")?.FirstOrDefault();
 
-                var collNext = parent?.SelectNodes(".//div[@onclick='JumpNext();']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0);
-                nextLink = collNext?.FirstOrDefault();
+                //var collNext = parent?.SelectNodes(".//div[@onclick='JumpNext();']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0);
+                nextLink = parent?.SelectNodes(".//div[@onclick='JumpNext();']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0)?.FirstOrDefault();
 
                 if (nextLink==null && header==null && content==null)
                 {
-                    collCont = parent?.SelectNodes(".//div[@class='chapter-content isTxt']");
-                    content = collCont?.FirstOrDefault();
+                    //collCont = parent?.SelectNodes(".//div[@class='chapter-content isTxt']");
+                    content = parent?.SelectNodes(".//div[@class='chapter-content isTxt']")?.FirstOrDefault();
 
-                    collHeader = parent?.SelectNodes(".//h1[@id='chapter-title']");
+                    //collHeader = parent?.SelectNodes(".//h1[@id='chapter-title']");
                     //header = (collHeader?.Count ?? 0) > 0 ? (collHeader[0]) : null;
-                    header = collHeader?.FirstOrDefault();
+                    header = parent?.SelectNodes(".//h1[@id='chapter-title']")?.FirstOrDefault();
 
-                    collNext = parent?.SelectNodes(".//div[@class='footer']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0);
-                    nextLink = collNext?.FirstOrDefault();
+                    //collNext = parent?.SelectNodes(".//div[@class='footer']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0);
+                    nextLink = parent?.SelectNodes(".//div[@class='footer']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0)?.FirstOrDefault();
 
                 }
+
+                novelName = parent?.SelectNodes(".//h2[@class='page-breadcrumb-item']")?.FirstOrDefault();
             }
         }
 
@@ -152,7 +154,8 @@ namespace BaseBookDownloader
 
         public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return content?.InnerText??"";
         }
     }
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。

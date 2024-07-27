@@ -1,4 +1,5 @@
 ﻿using BaseBookDownloader;
+using CefSharp;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -16,7 +17,7 @@ namespace WpfBookDownloader
         private void btnInitURL_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("btnInitURL_Click invoked...");
-            ClickBtntnInitURL(txtInitURL.Text);
+            ClickBtnOpenUrl(txtInitURL.Text);
         }
 
         private void btnNextPage_Click(object sender, RoutedEventArgs e)
@@ -26,59 +27,17 @@ namespace WpfBookDownloader
             if ((datacontext != null))
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
 
-            ClickBtntnInitURL(txtCurURL.Text);
+            ClickBtnOpenUrl(txtNextUrl.Text);
         }
 
-        private void ClickBtntnInitURL(string strUrl)
+        private void OnBtnRefreshPage(object sender, RoutedEventArgs e)
         {
-            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
-            if ((datacontext != null))
-            {
-                datacontext.DictDownloadStatus.Clear();
-                datacontext.PageLoaded = false;
-                datacontext.NextLinkAnalysized = false;
-                // btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                txtWebContents.Text = "";
-                txtAnalysizedContents.Text = "";
-                UpdateStatusMsg(datacontext, "Selected Site Type: " + cmbNovelType.SelectedIndex, -1 );
-                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
-                try
-                {
-                    datacontext.PgmNaviUrl = strUrl;
-                    webBrowser.LoadUrl(strUrl);
-                    UpdateStatusMsg(datacontext, strUrl + " : Begin to download ...", 0);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                    if (webBrowser == null || webBrowser.IsLoading == true)
-                        return;
-
-                    //SHDocVw.WebBrowser? webBrowserPtr = GetWebBrowserPtr(webBrowser);
-                    //Debug.WriteLine(strUrl + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
-                    if (webBrowser.IsLoaded != true)
-                        return;
-                }
-            }
+            webBrowser.Reload();
         }
 
-        public string BatchDownloadNotified(BaseWndContextData datacontext, DownloadStatus status, string sDownloadFileName)
+        private void btnCurrURL_Click(object sender, RoutedEventArgs e)
         {
-            string strMsgAreaLog="";
-            this.Dispatcher.Invoke(() =>
-            {
-                this.UpdateInitPageButton();
-                this.UpdateAutoDownloadPageButton();
-
-                UpdateStatusMsg(datacontext, "Flush Log to file: " + sDownloadFileName + ".log", -1);
-                if (!string.IsNullOrEmpty(status?.NextUrl))
-                    txtInitURL.Text = status.NextUrl;
-
-                strMsgAreaLog = txtLog.Text;
-                MessageBox.Show(this, "Batch download finished...", "Web Novel Downloader", MessageBoxButton.OK);
-            });
-            return strMsgAreaLog;
+            ClickBtnOpenUrl(txtCurURL.Text);
         }
 
         private void btnAutoURL_Click(object sender, RoutedEventArgs e)

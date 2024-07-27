@@ -19,125 +19,37 @@ namespace WpfBookDownloader
 
     public partial class WindowsWPFChrome : Window, IBaseMainWindow
     {
-        public void UpdateNextPageButton() {
-            this.Dispatcher.Invoke(() =>
+
+        private void ClickBtnOpenUrl(string strUrl)
+        {
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if ((datacontext != null))
             {
+                datacontext.DictDownloadStatus.Clear();
+                datacontext.PageLoaded = false;
+                datacontext.NextLinkAnalysized = false;
+                // btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-            });
-        }
+                txtWebContents.Text = "";
+                txtAnalysizedContents.Text = "";
+                UpdateStatusMsg(datacontext, "Selected Site Type: " + cmbNovelType.SelectedIndex, -1);
+                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
+                try
+                {
+                    datacontext.PgmNaviUrl = strUrl;
+                    webBrowser.LoadUrl(strUrl);
+                    UpdateStatusMsg(datacontext, strUrl + " : Begin to download ...", 0);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    if (webBrowser == null || webBrowser.IsLoading == true)
+                        return;
 
-        public void UpdateInitPageButton()
-        {
-            this.Dispatcher.Invoke(() =>
-            {
-                this.btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-            });
-        }
-
-        public void UpdateAutoDownloadPageButton()
-        {
-            this.Dispatcher.Invoke(() =>
-            {
-                this.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-            });
-        }
-        public void UpdateAnalysisPageButton()
-        {
-        }
-        public void UpdateAnalysizedContents(string ? strContents)
-        {
-            this.Dispatcher.Invoke(() =>
-            {
-                txtAnalysizedContents.Text = strContents;
-            });
-        }
-
-        public string GetLogContents()
-        {
-            string strLog = "";
-            this.Dispatcher.Invoke(() => {
-                strLog = txtLog.Text.Replace("\r", "").Replace("\n", "\r\n");
-            });
-            return strLog;
-        }
-
-        public void UpdateAggragatedContents(string strContents)
-        {
-            this.Dispatcher.Invoke(() =>
-            {
-                txtAggregatedContents.Text += strContents;
-                txtAggregatedContents.ScrollToEnd();
-            });
-        }
-        
-        public void UpdateAggragatedContentsWithLimit(string strContents)
-        {
-            this.Dispatcher.Invoke(() =>
-            {
-                if (txtAggregatedContents.Text.Length > 1024 * 64)
-                    txtAggregatedContents.Text = strContents;
-                else
-                    txtAggregatedContents.Text += strContents;
-                txtAggregatedContents.ScrollToEnd();
-            });
-        }
-
-        public void UpdateWebBodyOuterHtml(string? strBody)
-        {
-            this.Dispatcher.Invoke(() =>
-            {
-                txtWebContents.Text = strBody.Replace("\r","").Replace("\n","\r\n").Replace("\r\n\r\n\r\n","\r\n").Replace("\r\n\r\n", "\r\n");
-            });
-        }
-
-        public void UpdateNextUrl(string url)
-        {
-            this.Dispatcher.Invoke(() =>
-            {
-                txtNextUrl.Text = url;
-            });
-        }
-
-        public void UpdateInitUrl(string url)
-        {
-            this.Dispatcher.Invoke(() => 
-            { 
-                this.txtInitURL.Text = url;
-            });
-        }
-
-        public void UpdateCurUrl(string url)
-        {
-            this.Dispatcher.Invoke(() =>
-            {
-                txtCurURL.Text = url;
-            });
-        }
-
-        public void RefreshPage()
-        {
-            this.Dispatcher.Invoke(() => {
-                webBrowser.Reload();
-            });
-        }
-
-        public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
-        {
-            _DocContents doc = new _DocContents();
-            string? strBody = null;
-            GetWebDocHtml(doc);
-            this.Dispatcher.Invoke(() => { strBody = doc.sHtml; });
-            while (string.IsNullOrEmpty(doc.sHtml))
-            {
-                Thread.Sleep(200);
-                GetWebDocHtml(doc);
-                this.Dispatcher.Invoke(() => {
-                    strBody = doc.sHtml;
-                    if (strBody.Length > 0 && strBody.Length < 200)
-                        Debug.Assert(false);
-                });
+                    if (webBrowser.IsLoaded != true)
+                        return;
+                }
             }
-            return strBody;
         }
 
         private void GetWebDocHtml(_DocContents doc)
@@ -146,6 +58,15 @@ namespace WpfBookDownloader
             this.Dispatcher.Invoke(() => {
                 isLoading = webBrowser.IsLoading;
             });
+            int nMaxRetry = 10 * 30, nRetry=0;
+            if (nRetry < nMaxRetry && ( webBrowser == null || isLoading == true))
+            {
+                nRetry++;
+                Thread.Sleep(100);
+                this.Dispatcher.Invoke(() => {
+                    isLoading = webBrowser.IsLoading;
+                });
+            }
             if (webBrowser == null || isLoading == true)
                 return;
 
@@ -160,53 +81,112 @@ namespace WpfBookDownloader
             });
         }
 
-        private void AnalysisURL(string strUrl, bool bWaitOptoin = true)
+        public void GetBrowserDocAndPutToCtrl()
         {
-            Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
-            WndContextData? datacontext = null;
-            this.Dispatcher.Invoke(() =>
+            _DocContents doc = new _DocContents();
+            new Thread(() =>
             {
-                datacontext = App.Current.MainWindow.DataContext as WndContextData;
-            });
-            Debug.Assert(datacontext != null);
-
-            string? strBody = GetWebDocHtmlBody(strUrl, bWaitOptoin);
-            if (!string.IsNullOrEmpty(strBody?.Trim()))
-            {
-                txtWebContents.Text = strBody;
-                datacontext.AnalysisHtmlBody(this, bWaitOptoin, strUrl, strBody);
-            }
-        }
-
-        public void UpdateStatusMsg(BaseWndContextData datacontext, string msg, int value)
-        {
-
-            Debug.WriteLine(msg);
-            datacontext.StartBarMsg = msg;
-            if (value >= 0)
-                datacontext.ProcessBarValue = value;
-            txtStatus.Dispatcher.Invoke(() =>
-            {
-                txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
-                if (!string.IsNullOrEmpty(msg))
+                int nMaxRetry = 10 * 60, nRetry = 0;
+                bool bLoaded = false;
+                this.Dispatcher.Invoke(() =>
                 {
-                    txtLog.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
-                    txtLog.CaretIndex = txtLog.Text.Length;
-                    txtLog.ScrollToEnd();
+                    bLoaded = webBrowser.IsLoaded;
+                });
+                while (nRetry < nMaxRetry && bLoaded == false) 
+                {
+                    nRetry++;
+                    Thread.Sleep(100);
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        bLoaded = webBrowser.IsLoaded;
+                    });
                 }
-                if (value >= 0)
-                    txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
-            });
+                if (bLoaded) {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
+                        {
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                doc.sHtml = taskHtml.Result;
+                            });
+                        });
+                    });
+
+                    while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                    {
+                        nRetry++;
+                        Thread.Sleep(100);
+                    }
+                    if (!string.IsNullOrEmpty(doc.sHtml))
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            txtWebContents.Text = doc.sHtml?.Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n");
+                        });
+                    }
+                }
+            }).Start();
         }
 
-        public void UpdateStatusProgress(BaseWndContextData datacontext, int value)
+        public void GetBrowserDocAndPrettyToCtrl()
         {
-            datacontext.ProcessBarValue = value;
-            //txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
-            txtProgress.Dispatcher.Invoke(() =>
+            _DocContents doc = new _DocContents();
+            new Thread(() =>
             {
-                txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
-            });
+                int nMaxRetry = 10 * 60, nRetry = 0;
+                bool bLoaded = false;
+                this.Dispatcher.Invoke(() =>
+                {
+                    bLoaded = webBrowser.IsLoaded;
+                });
+                while (nRetry < nMaxRetry && bLoaded == false) 
+                {
+                    nRetry++;
+                    Thread.Sleep(100);
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        bLoaded = webBrowser.IsLoaded;
+                    });
+                }
+                if (bLoaded) {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
+                        {
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                doc.sHtml = taskHtml.Result;
+                            });
+                        });
+                    });
+                    Thread.Sleep(100);
+
+                    while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                    {
+                        nRetry++;
+                        Thread.Sleep(100);
+                    }
+                    if (!string.IsNullOrEmpty(doc.sHtml))
+                    {
+                        bool bIgnoreScript = false;
+                        bool bIgnoreHead = false;
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            bIgnoreScript = chkboxIgnoreScript.IsChecked ?? false;
+                            bIgnoreHead = chkboxIgnoreHeader.IsChecked ?? false;
+                        });
+
+                        string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(doc.sHtml, bIgnoreScript, bIgnoreHead);
+
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            txtWebContents.Text = strPrettyHtml;
+                        });
+                    }
+
+                }
+            }).Start();
         }
     }
 #pragma warning restore CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。

@@ -30,15 +30,16 @@ namespace BaseBookDownloader
             HtmlNode? nextLink = null;
             HtmlNode? header = null;
             HtmlNode? content = null;
-            FindBookNextLinkAndContents(wndMain, datacontext, body, ref nextLink, ref header, ref content);
+            HtmlNode? novelName= null;
+            FindBookNextLinkAndContents(wndMain, datacontext, body, ref nextLink, ref header, ref content, ref novelName );
             if (content != null || nextLink != null)
             {
                 string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);
                 string strChapterHeader = GetBookHeader(wndMain, datacontext, header);
                 //string strContents = GetBookContents(wndMain, datacontext, content);
                 string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(wndMain, datacontext, content);
-
-                ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
+                string strNovelName = GetBookName(wndMain, datacontext, novelName);
+                ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink, strNovelName);
 
                 if (bSilenceMode)
                 {
@@ -53,32 +54,32 @@ namespace BaseBookDownloader
             return true;
         }
 
-        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? parent, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
+        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? parent, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content, ref HtmlNode novelName)
         {
             //Treat as chrome browser
-            HtmlNodeCollection ?collCont=  parent?.SelectNodes(".//div[@id='Lab_Contents'][@class='kong']");
-            content = (collCont?.Count?? 0) > 0 ? (collCont[0]):null;
-            
-            HtmlNodeCollection? collHeader = parent?.SelectNodes(".//h1[@id='ChapterTitle']");
-            header = (collHeader?.Count ?? 0) > 0 ? (collHeader[0]) : null;
+            //HtmlNodeCollection ?collCont=  parent?.SelectNodes(".//div[@id='Lab_Contents'][@class='kong']");
+            content = parent?.SelectNodes(".//div[@id='Lab_Contents'][@class='kong']")?.FirstOrDefault();
 
-            var collNext = parent?.SelectNodes(".//div[@onclick='JumpNext();']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0);
-            nextLink = collNext?.FirstOrDefault();
+            //HtmlNodeCollection? collHeader = parent?.SelectNodes(".//h1[@id='ChapterTitle']");
+            header = parent?.SelectNodes(".//h1[@id='ChapterTitle']")?.FirstOrDefault();
 
-            if(collCont == null && header== null && nextLink == null)
+            //var collNext = parent?.SelectNodes(".//div[@onclick='JumpNext();']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0);
+            nextLink = parent?.SelectNodes(".//div[@onclick='JumpNext();']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0)?.FirstOrDefault();
+
+            novelName = parent?.SelectNodes(".//div[@class='section-opt m-bottom-opt']")?.FirstOrDefault()?.Descendants().Where(n=>n.Name=="a" && n.InnerText.Trim()== "章节列表").FirstOrDefault();
+            if (content == null && header== null && nextLink == null)
             {
                 //Treat as IE core browser
-                collCont = parent?.SelectNodes(".//div[@class='content']");
-                content = collCont?.Where(n => n.ChildNodes.Count() >= 6).FirstOrDefault();
+                //collCont = parent?.SelectNodes(".//div[@class='content']");
+                content = parent?.SelectNodes(".//div[@class='content']")?.Where(n => n.ChildNodes.Count() >= 6).FirstOrDefault();
 
 
-                collHeader = parent?.SelectNodes(".//h1[@class='title']");
-                header = (collHeader?.Count ?? 0) > 0 ? (collHeader[0]) : null;
+                //collHeader = parent?.SelectNodes(".//h1[@class='title']");
+                header = parent?.SelectNodes(".//h1[@class='title']")?.FirstOrDefault();
 
-                collNext = parent?.SelectNodes(".//div[@class='section-opt']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0);
-                nextLink = collNext?.FirstOrDefault();
+                //collNext = parent?.SelectNodes(".//div[@class='section-opt']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0);
+                nextLink = parent?.SelectNodes(".//div[@class='section-opt']")?.ToArray()?.Where(n => n.ChildNodes.Where(sub => sub.Name == "a").Count() > 0)?.FirstOrDefault();
             }
-
         }
 
         public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
@@ -109,7 +110,7 @@ namespace BaseBookDownloader
                     }
                 }
             }
-            return sbContent.ToString().Replace("\r\n\r\n", "\r\n");
+            return sbContent.ToString().Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n");
         }
 
         public string GetBookHeader(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
@@ -119,7 +120,8 @@ namespace BaseBookDownloader
 
         public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return content?.Attributes["title"]?.Value??"";
         }
 
         public string GetBookNextLink(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? nextLink)

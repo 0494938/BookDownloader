@@ -21,6 +21,7 @@
         public void UpdateInitUrl(string url);
         public void UpdateNextUrl(string url);
         public void UpdateCurUrl(string url);
+        public void UpdateNovelName(string sNovelName);
 
         public void UpdateWebBodyOuterHtml(string? strBody);
         public void UpdateAnalysizedContents(string strContents);

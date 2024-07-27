@@ -27,9 +27,9 @@ namespace WpfBookDownloader
             StartUrlOnWebBrowser(txtInitURL.Text.Trim());
         }
 
-        private void btnLaunchNextUrlOnWeb_Click(object sender, RoutedEventArgs e)
+        private void btnLaunchCurUrlOnWeb_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("btnLaunchNextUrlOnWeb_Click invoked...");
+            Debug.WriteLine("btnLaunchCurUrlOnWeb_Click invoked...");
             StartUrlOnWebBrowser(txtCurURL.Text.Trim());
         }
 

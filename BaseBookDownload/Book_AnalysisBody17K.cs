@@ -34,25 +34,25 @@ namespace BaseBookDownloader
             HtmlNode? nextLink = null;
             HtmlNode? content = null;
             HtmlNode? header = null;
+            HtmlNode? novelName = html.DocumentNode?.ChildNodes["html"]?.ChildNodes["HEAD"];
             HtmlNode? topDiv = body?.SelectNodes(".//div[@class='area']")?.FirstOrDefault();
             if (topDiv != null)
             {
-                FindBookNextLinkAndContents(wndMain, datacontext, topDiv, ref nextLink, ref header, ref content);
+                FindBookNextLinkAndContents(wndMain, datacontext, topDiv, ref nextLink, ref header, ref content, ref novelName);
                 if (content != null || nextLink != null)
                 {
                     string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);
                     string strChapterHeader = GetBookHeader(wndMain, datacontext, header);
                     string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(wndMain, datacontext, content);
-
-                    ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
+                    string strNovelName = GetBookName(wndMain, datacontext, novelName);
+                    ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink, strNovelName);
 
                     if (bSilenceMode)
                     {
                         Debug.Assert(status != null);
                         status.NextUrl = strNextLink;
 
-                        DownloadStatus.ContentsWriter?.Write(strContents);
-                        DownloadStatus.ContentsWriter?.Flush();
+                        WriteToFile(status, strChapterHeader, strContents, strNextLink, strNovelName);
                     }
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
                     wndMain.UpdateNextPageButton();
@@ -60,13 +60,11 @@ namespace BaseBookDownloader
             }
             return true;
         }
-        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode?  content)
+        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode?  content, ref HtmlNode novelName)
         {
             content = top?.SelectNodes(".//div[@class='readAreaBox content']")?.FirstOrDefault();
-
             header = content?.SelectNodes(".//h1")?.FirstOrDefault();
             content = content?.SelectNodes(".//div[@class='p']")?.FirstOrDefault();
-
             nextLink = top?.SelectNodes(".//div[@class='read_tit']")?.FirstOrDefault();
         }
 
@@ -120,7 +118,9 @@ namespace BaseBookDownloader
 
         public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            HtmlNode? bookName = content.SelectNodes(".//meta[@property='og:title']")?.FirstOrDefault();
+            return bookName?.Attributes["content"]?.Value??"";
         }
 
         public string GetBookName2(HtmlNode content)

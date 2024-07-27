@@ -56,47 +56,6 @@ namespace WpfBookDownloader
             return !_regex.IsMatch(text);
         }
 
-        private void WebBrowser_TitleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            Debug.WriteLine("WebBrowser_TitleChanged invoked("+e.NewValue+")...");
-
-        }
-
-        private void WebBrowser_Unloaded(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("WebBrowser_Unloaded invoked...");
-        }
-
-        private void WebBrowser_LayoutUpdated(object sender, EventArgs e)
-        {
-            //Debug.WriteLine("WebBrowser_LayoutUpdated invoked...");
-        }
-
-        private void WebBrowser_JavascriptMessageReceived(object sender, CefSharp.JavascriptMessageReceivedEventArgs e)
-        {
-            Debug.WriteLine("WebBrowser_JavascriptMessageReceived("+e.ToString()+ ") invoked("+e.Message+")...");
-        }
-
-        private void WebBrowser_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
-        {
-            Debug.WriteLine("WebBrowser_RequestBringIntoView invoked("+e.ToString()+")...");
-        }
-
-        private void WebBrowser_ManipulationStarted(object sender, System.Windows.Input.ManipulationStartedEventArgs e)
-        {
-            Debug.WriteLine("WebBrowser_ManipulationStarted invoked("+e.ToString()+")...");
-        }
-
-        private void WebBrowser_ManipulationStarting(object sender, System.Windows.Input.ManipulationStartingEventArgs e)
-        {
-            Debug.WriteLine("WebBrowser_ManipulationStarting invoked("+e.ToString()+")...");
-        }
-
-        private void WebBrowser_ManipulationCompleted(object sender, System.Windows.Input.ManipulationCompletedEventArgs e)
-        {
-            Debug.WriteLine("WebBrowser_ManipulationCompleted invoked("+e.ToString()+")...");
-        }
-
         private void WebBrowser_LoadError(object sender, CefSharp.LoadErrorEventArgs e)
         {
             WndContextData? datacontext = null;
@@ -108,16 +67,6 @@ namespace WpfBookDownloader
                 UpdateStatusMsg(datacontext, "WebBrowser_LoadError invoked(" + e.ErrorText+ ")...", -1);
         }
 
-        private void WebBrowser_Loaded(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("WebBrowser_Loaded invoked...");
-        }
-
-        private void OnMainWindowUnloaded(object sender, CefSharp.LoadingStateChangedEventArgs e)
-        {
-            Debug.WriteLine("OnMainWindowUnloaded invoked(" + e.ToString() + ")...");
-        }
-
         private void WebBrowser_LoadingStateChanged(object sender, CefSharp.LoadingStateChangedEventArgs e)
         {
             if (e.IsLoading == true || e.Browser.HasDocument != true) {
@@ -127,6 +76,24 @@ namespace WpfBookDownloader
             {
                 //MainFrameWebLoadCompleted(sender, e.Browser.MainFrame.Url);
                 Debug.WriteLine("WebBrowser_LoadingStateChanged invoked (IsLoading:" + e.IsLoading + ", Url:" + e.Browser.MainFrame.Url + ")...");
+            }
+        }
+        
+        private void OnCheckPrettyHtmlChanged(object sender, RoutedEventArgs e)
+        {
+            if (chkboxPrettyHtml.IsChecked == false)
+                GetBrowserDocAndPutToCtrl();
+            else
+                GetBrowserDocAndPrettyToCtrl();
+        }
+
+        private void btnAnalysisCurURL_Click(object sender, RoutedEventArgs e)
+        {
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if ((datacontext != null))
+            {
+                datacontext.DictDownloadStatus.Clear();
+                AnalysisURL(webBrowser.Address.ToString(), false);
             }
         }
 

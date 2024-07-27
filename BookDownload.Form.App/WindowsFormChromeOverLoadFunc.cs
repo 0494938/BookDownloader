@@ -89,6 +89,13 @@ namespace BookDownloadFormApp
             });
         }
 
+        public void UpdateNovelName(string sNovelName)
+        {
+            //this.Invoke(() => {
+            //    this.txtBookName.Text = sNovelName;
+            //});
+        }
+
         public void UpdateAnalysizedContents(string strContents)
         {
             this.Invoke(() => {

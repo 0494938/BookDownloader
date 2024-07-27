@@ -17,7 +17,7 @@ namespace WpfBookDownloader
     {
         public Visibility EnabledDbgButtons { get; set; } =
 #if DEBUG
-#if true
+#if false
             Visibility.Visible;
 #else
             Visibility.Hidden;
@@ -25,50 +25,6 @@ namespace WpfBookDownloader
 #else
             Visibility.Hidden;
 #endif
-    }
-        
-    public partial class WindowsWPFChrome : Window, IBaseMainWindow
-    {
-        public void NovelTypeChangeEvent(BaseWndContextData datacontext, int nIndex)
-        {
-            if (txtInitURL != null)
-            {
-                Debug.WriteLine("Select Combox Index : " + cmbNovelType.SelectedIndex);
-                if (txtInitURL != null)
-                {
-                    Debug.WriteLine("Select Combox Index : " + cmbNovelType.SelectedIndex);
-                    txtInitURL.Text = datacontext.GetDefaultUrlByIdx(cmbNovelType.SelectedIndex);
-                }
-
-            }
-        }
-
-        public bool isWebBrowserEmpty()
-        {
-            try
-            {
-                bool bEmpty = false;
-                this.Dispatcher.Invoke(() => { bEmpty = webBrowser == null || webBrowser.IsLoading == true ; });
-                return bEmpty;
-            }catch(Exception) { 
-                return false; 
-            }
-        }
-
-        public bool isWebPageLoadComplete(string strURL)
-        {
-            try
-            {
-                bool bComplete = false;
-                this.Dispatcher.Invoke(() => { bComplete = webBrowser != null && webBrowser.IsLoaded == true; });
-                return bComplete;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-        }
     }
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning restore CA1416 // プラットフォームの互換性を検証

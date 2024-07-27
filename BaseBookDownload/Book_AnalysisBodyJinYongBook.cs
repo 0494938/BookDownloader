@@ -32,25 +32,25 @@ namespace BaseBookDownloader
             HtmlNode? nextLink = null;
             HtmlNode? content = null;
             HtmlNode? header = null;
+            HtmlNode? novelName = null;
             HtmlNode? topDiv = body.SelectNodes(".//div[@class='read_bg']")?.FirstOrDefault();
             if (topDiv != null)
             {
-                FindBookNextLinkAndContents(wndMain, datacontext, topDiv, ref nextLink, ref header, ref content);
+                FindBookNextLinkAndContents(wndMain, datacontext, topDiv, ref nextLink, ref header, ref content, ref novelName);
                 if (content != null || nextLink != null)
                 {
                     string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);
                     string strChapterHeader = GetBookHeader(wndMain, datacontext, header);
                     string strContents = " \r\n \r\n " + strChapterHeader + " \r\n" + GetBookContents(wndMain, datacontext, content);
-
-                    ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
+                    string strNovelName = GetBookName(wndMain, datacontext, novelName);
+                    ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink, strNovelName);
 
                     if (bSilenceMode)
                     {
                         Debug.Assert(status != null);
                         status.NextUrl = strNextLink;
 
-                        DownloadStatus.ContentsWriter?.Write(strContents);
-                        DownloadStatus.ContentsWriter?.Flush();
+                        WriteToFile(status, strChapterHeader, strContents, strNextLink, strNovelName);
                     }
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
                     wndMain.UpdateNextPageButton();
@@ -60,21 +60,18 @@ namespace BaseBookDownloader
         }
 
 
-        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
+        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content, ref HtmlNode novelName)
         {
-            HtmlNodeCollection ?collCont = top?.SelectNodes("//article[@class='content']");
-            content = collCont?.First()??null;
+            content = top?.SelectNodes("//article[@class='content']")?.FirstOrDefault();
 
-            HtmlNodeCollection? collHeader = top?.SelectNodes("//p[@class='style_h1']");
-            header = collHeader?.First();
+            header = top?.SelectNodes("//p[@class='style_h1']")?.FirstOrDefault();
 
-            HtmlNodeCollection? collNextDiv = top?.SelectNodes(".//div[@class='read_nav']");
-            HtmlNode? nextLinkDiv = collNextDiv?.First();
+            HtmlNode? nextLinkDiv = top?.SelectNodes(".//div[@class='read_nav']")?.FirstOrDefault();
 
             //<a id="next_url" href="/b/184315/976061_2.html"><i class="fa fa-forward"></i> 下一页</a>
-            HtmlNodeCollection? collNext= nextLinkDiv?.SelectNodes(".//a[@id='next_url']");
             //HtmlNodeCollection? collNextARef = collNext.First()?.SelectNodes(".//a");
-            nextLink = collNext?.First();
+            nextLink = nextLinkDiv?.SelectNodes(".//a[@id='next_url']")?.FirstOrDefault();
+            novelName = top?.SelectNodes("//head/meta[@property='og:title']")?.FirstOrDefault();
         }
 
         public string GetBookHeader(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
@@ -106,7 +103,8 @@ namespace BaseBookDownloader
 
         public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return content?.Attributes["content"]?.Value??"";
         }
 
         public string GetBookName2(HtmlNode content)

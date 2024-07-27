@@ -119,7 +119,10 @@
   
   <ItemGroup>
     <None Remove="App.config" />
+    <None Remove="chrome4.png" />
+    <None Remove="Load5.png" />
     <None Remove="novel_3_TZV_icon.ico" />
+    <None Remove="refresh4.jpg" />
   </ItemGroup>
   
   <ItemGroup>
@@ -145,6 +148,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BaseBookDownload.WPF\BaseBookDownload.WPF.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="chrome4.png" />
+    <Resource Include="Load5.png" />
+    <Resource Include="refresh4.jpg" />
   </ItemGroup>
 
   <ItemGroup>

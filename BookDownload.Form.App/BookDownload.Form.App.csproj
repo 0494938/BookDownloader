@@ -81,7 +81,7 @@
     <Compile Include="BrowserEvents.cs" />
     <Compile Include="HandleDownloadFix.cs" />
     <Compile Include="HandleDownloadComplete.cs" />
-    <Compile Include="OverLoadFunc.cs" />
+    <Compile Include="WindowsFormChromeOverLoadFunc.cs" />
     <Compile Include="HandleDownload.cs" />
     <Compile Include="WindowsFormChrome.cs">
       <SubType>Form</SubType>

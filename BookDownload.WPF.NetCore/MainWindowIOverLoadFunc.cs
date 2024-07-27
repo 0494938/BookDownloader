@@ -1,0 +1,242 @@
+﻿using BaseBookDownloader;
+using CefSharp;
+using MSHTML;
+using System;
+using System.Diagnostics;
+using System.Security.Policy;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+
+namespace WpfBookDownloader
+{
+#pragma warning disable CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
+#pragma warning disable CA1416 // プラットフォームの互換性を検証
+    public partial class WindowsWPFChrome : Window, IBaseMainWindow
+    {
+        public void NovelTypeChangeEvent(BaseWndContextData datacontext, int nIndex)
+        {
+            if (txtInitURL != null)
+            {
+                Debug.WriteLine("Select Combox Index : " + cmbNovelType.SelectedIndex);
+                if (txtInitURL != null)
+                {
+                    Debug.WriteLine("Select Combox Index : " + cmbNovelType.SelectedIndex);
+                    txtInitURL.Text = datacontext.GetDefaultUrlByIdx(cmbNovelType.SelectedIndex);
+                }
+
+            }
+        }
+
+        public bool isWebBrowserEmpty()
+        {
+            try
+            {
+                bool bEmpty = false;
+                this.Dispatcher.Invoke(() => { bEmpty = webBrowser == null || webBrowser.IsLoading == true; });
+                return bEmpty;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool isWebPageLoadComplete(string strURL)
+        {
+            try
+            {
+                bool bComplete = false;
+                this.Dispatcher.Invoke(() => { bComplete = webBrowser != null && webBrowser.IsLoaded == true; });
+                return bComplete;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public void UpdateNextPageButton()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+            });
+        }
+
+        public void UpdateInitPageButton()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                this.btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+            });
+        }
+
+        public void UpdateAutoDownloadPageButton()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                this.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+            });
+        }
+        public void UpdateAnalysisPageButton()
+        {
+        }
+        public void UpdateAnalysizedContents(string? strContents)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                txtAnalysizedContents.Text = strContents;
+            });
+        }
+
+        public string GetLogContents()
+        {
+            string strLog = "";
+            this.Dispatcher.Invoke(() => {
+                strLog = txtLog.Text.Replace("\r", "").Replace("\n", "\r\n");
+            });
+            return strLog;
+        }
+
+        public void UpdateNovelName(string sNovelName)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                this.txtBookName.Text = sNovelName;
+            });
+        }
+
+        public void UpdateAggragatedContents(string strContents)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                txtAggregatedContents.Text += strContents;
+                txtAggregatedContents.ScrollToEnd();
+            });
+        }
+
+        public void UpdateAggragatedContentsWithLimit(string strContents)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                if (txtAggregatedContents.Text.Length > 1024 * 64)
+                    txtAggregatedContents.Text = strContents;
+                else
+                    txtAggregatedContents.Text += strContents;
+                txtAggregatedContents.ScrollToEnd();
+            });
+        }
+
+        public void UpdateWebBodyOuterHtml(string? strBody)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                if (chkboxPrettyHtml.IsChecked == false)
+                    txtWebContents.Text = strBody?.Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n");
+                else
+                    GetBrowserDocAndPrettyToCtrl();
+            });
+        }
+
+        public void UpdateNextUrl(string url)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                txtNextUrl.Text = url;
+            });
+        }
+
+        public void UpdateInitUrl(string url)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                this.txtInitURL.Text = url;
+            });
+        }
+
+        public void UpdateCurUrl(string url)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                txtCurURL.Text = url;
+            });
+        }
+
+        public void RefreshPage()
+        {
+            this.Dispatcher.Invoke(() => {
+                webBrowser.Reload();
+            });
+        }
+
+        public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
+        {
+            _DocContents doc = new _DocContents();
+            string? strBody = null;
+            GetWebDocHtml(doc);
+            int nMaxRetry = 5 * 60;
+            int nRetry = 0;
+            while (nRetry  < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+            {
+                nRetry++;
+                Thread.Sleep(200);
+                //GetWebDocHtml(doc);
+            }
+            strBody = doc.sHtml;
+            if (strBody.Length > 0 && strBody.Length < 200)
+                Debug.Assert(false);
+            return strBody;
+        }
+
+        public void UpdateStatusMsg(BaseWndContextData datacontext, string msg, int value)
+        {
+            Debug.WriteLine(msg);
+            datacontext.StartBarMsg = msg;
+            if (value >= 0)
+                datacontext.ProcessBarValue = value;
+            txtStatus.Dispatcher.Invoke(() =>
+            {
+                txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
+                if (!string.IsNullOrEmpty(msg))
+                {
+                    txtLog.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
+                    txtLog.CaretIndex = txtLog.Text.Length;
+                    txtLog.ScrollToEnd();
+                }
+                if (value >= 0)
+                    txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+            });
+        }
+
+        public void UpdateStatusProgress(BaseWndContextData datacontext, int value)
+        {
+            datacontext.ProcessBarValue = value;
+            //txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+            txtProgress.Dispatcher.Invoke(() =>
+            {
+                txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+            });
+        }
+
+        public string BatchDownloadNotified(BaseWndContextData datacontext, DownloadStatus status, string sDownloadFileName)
+        {
+            string strMsgAreaLog = "";
+            this.Dispatcher.Invoke(() =>
+            {
+                this.UpdateInitPageButton();
+                this.UpdateAutoDownloadPageButton();
+
+                UpdateStatusMsg(datacontext, "Flush Log to file: " + sDownloadFileName + ".log", -1);
+                if (!string.IsNullOrEmpty(status?.NextUrl))
+                    txtInitURL.Text = status.NextUrl;
+
+                strMsgAreaLog = txtLog.Text;
+                MessageBox.Show(this, "Batch download finished...", "Web Novel Downloader", MessageBoxButton.OK);
+            });
+            return strMsgAreaLog;
+        }
+    }
+#pragma warning restore CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
+#pragma warning restore CA1416 // プラットフォームの互換性を検証
+}

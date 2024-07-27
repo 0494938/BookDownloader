@@ -36,12 +36,13 @@ namespace BaseBookDownloader
             return html.DocumentNode.ChildNodes["BODY"];
         }
 
-        protected void ParseResultToUI(IBaseMainWindow wndMain, bool bSilenceMode, string strContents, string strNextLink)
+        protected void ParseResultToUI(IBaseMainWindow wndMain, bool bSilenceMode, string strContents, string strNextLink, string strBookName)
         {
             //WPFMainWindow wndMain = (WPFMainWindow)IWndMain;
             wndMain.UpdateAnalysizedContents(strContents);
             wndMain.UpdateNextUrl(strNextLink);
             wndMain.UpdateCurUrl(strNextLink);
+            wndMain.UpdateNovelName(strBookName);
             if (bSilenceMode)
             {
                 wndMain.UpdateAggragatedContentsWithLimit(strContents);
@@ -124,6 +125,11 @@ namespace BaseBookDownloader
                 .Replace("&ensp;", " ").Replace("&emsp;", " ").Replace("&ndash;", " ").Replace("&mdash;", " ")
                 .Replace("&sbquo;", "“").Replace("&rdquo;", "”").Replace("&bdquo;", "„")
                 .Replace("&quot;", "\"").Replace("&circ;", "ˆ").Replace("&tilde;", "˜").Replace("&prime;", "′").Replace("&Prime;", "″").Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n").ToString();
+        }
+
+        public static void WriteToFile(DownloadStatus? status, string strHeader, string strContents, string strNextLink, string strNovelName) {
+            DownloadStatus.ContentsWriter?.Write(strContents);
+            DownloadStatus.ContentsWriter?.Flush();
         }
     }
 #pragma warning restore CS8632 // Null 参照代入の可能性があります。

@@ -46,6 +46,14 @@ namespace WpfIEBookDownloader
                 webBrowser.Navigate(strURL);
             });
         }
+
+        public void UpdateNovelName(string sNovelName)
+        {
+            //this.Invoke(() => {
+            //    this.txtBookName.Text = sNovelName;
+            //});
+        }
+
     }
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 }

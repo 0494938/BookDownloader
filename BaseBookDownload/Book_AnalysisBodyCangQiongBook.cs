@@ -34,25 +34,25 @@ namespace BaseBookDownloader
             HtmlNode? nextLink = null;
             HtmlNode? content = null;
             HtmlNode? header = null;
+            HtmlNode? novelName = null;
             HtmlNodeCollection? topDiv = body.SelectNodes(".//div[@class='reader-main']");
             if ((topDiv?.Count ?? 0) > 0)
             {
-                FindBookNextLinkAndContents( wndMain, datacontext, topDiv.First(), ref nextLink, ref header, ref content);
+                FindBookNextLinkAndContents( wndMain, datacontext, topDiv.First(), ref nextLink, ref header, ref content, ref novelName);
                 if (content != null || nextLink != null)
                 {
                     string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);
-                    //string strChapterHeader = GetBookHeader(header);
+                    string strChapterHeader = GetBookHeader(wndMain, datacontext, header);
                     string strContents = " \r\n \r\n " + GetBookContents(wndMain, datacontext, content);
-
-                    ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink);
+                    string strNovelName = GetBookName(wndMain, datacontext, novelName);
+                    ParseResultToUI(wndMain, bSilenceMode, strContents, strNextLink, strNovelName);
 
                     if (bSilenceMode)
                     {
                         Debug.Assert(status != null);
                         status.NextUrl = strNextLink;
 
-                        DownloadStatus.ContentsWriter?.Write(strContents);
-                        DownloadStatus.ContentsWriter?.Flush();
+                        WriteToFile(status, strChapterHeader, strContents, strNextLink, strNovelName);
                     }
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
                     wndMain.UpdateNextPageButton();
@@ -61,20 +61,16 @@ namespace BaseBookDownloader
             return true;
         }
 
-        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content)
+        public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode? content, ref HtmlNode novelName)
         {
-            HtmlNodeCollection? collCont = top?.SelectNodes(".//div[@class='content']");
-            content = collCont?.First();
-
-            HtmlNodeCollection? collHeader = top?.SelectNodes("//div[@class='layout-tit xs-hidden']");
-            header = collHeader?.First();
-
-            HtmlNodeCollection? collNextDiv = top?.SelectNodes("//div[@class='section-opt']");
-            HtmlNode? nextLinkDiv = collNextDiv?.First();
+            content = top?.SelectNodes(".//div[@class='content']")?.FirstOrDefault();
+            header = top?.SelectNodes("//div[@class='layout-tit xs-hidden']")?.FirstOrDefault();
+            HtmlNode? nextLinkDiv = top?.SelectNodes("//div[@class='section-opt']")?.FirstOrDefault();
 
             //<div onclick="JumpNext();" class="erzitop_"><a title="第002章 抓捕  我的谍战岁月" href="/wxread/94612_43816525.html">下一章</a> </div>
-            IEnumerable<HtmlNode>? collNext= nextLinkDiv?.Descendants().Where(n => n?.Name == "a" && (n.InnerText == "下一页" || n.InnerText == "下一章")) as IEnumerable<HtmlNode>;
-            nextLink = collNext?.First();
+            //IEnumerable<HtmlNode>? collNext= nextLinkDiv?.Descendants().Where(n => n?.Name == "a" && (n.InnerText == "下一页" || n.InnerText == "下一章")) as IEnumerable<HtmlNode>;
+            nextLink = nextLinkDiv?.Descendants().Where(n => n?.Name == "a" && (n.InnerText == "下一页" || n.InnerText == "下一章"))?.FirstOrDefault();
+            novelName = top?.SelectNodes("//div[@class='layout-tit xs-hidden']")?.FirstOrDefault();
         }
 
         public string GetBookHeader(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
@@ -118,7 +114,8 @@ namespace BaseBookDownloader
 
         public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return content?.SelectNodes("//a").Where(n => !string.IsNullOrEmpty(n.Attributes["title"]?.Value))?.FirstOrDefault()?.Attributes["title"]?.Value??"";
         }
 
         public string GetBookName2(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode content)

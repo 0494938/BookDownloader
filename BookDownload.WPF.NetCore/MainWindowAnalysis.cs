@@ -1,4 +1,5 @@
 ﻿using BaseBookDownloader;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,13 +12,21 @@ namespace WpfBookDownloader
 #pragma warning disable CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
     public partial class WindowsWPFChrome : Window, IBaseMainWindow
     {
-        private void btnAnalysisCurURL_Click(object sender, RoutedEventArgs e)
+        private void AnalysisURL(string strUrl, bool bWaitOptoin = true)
         {
-            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
-            if ((datacontext != null))
+            Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
+            WndContextData? datacontext = null;
+            this.Dispatcher.Invoke(() =>
             {
-                datacontext.DictDownloadStatus.Clear();
-                AnalysisURL(webBrowser.Address.ToString(), false);
+                datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            });
+            Debug.Assert(datacontext != null);
+
+            string? strBody = GetWebDocHtmlBody(strUrl, bWaitOptoin);
+            if (!string.IsNullOrEmpty(strBody?.Trim()))
+            {
+                txtWebContents.Text = strBody;
+                datacontext.AnalysisHtmlBody(this, bWaitOptoin, strUrl, strBody);
             }
         }
 
