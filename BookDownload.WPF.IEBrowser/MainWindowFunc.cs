@@ -145,7 +145,7 @@ namespace WpfIEBookDownloader
             });
         }
 
-        public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
+        public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true)
         {
             _DocContents doc = new _DocContents();
 #if false
@@ -227,7 +227,7 @@ namespace WpfIEBookDownloader
 
             Debug.Assert(datacontext != null);
 
-            string? strBody = GetWebDocHtmlBody(strUrl, bWaitOptoin);
+            string? strBody = GetWebDocHtmlSource(strUrl, bWaitOptoin);
             if (!string.IsNullOrEmpty(strBody?.Trim()))
             {
                 string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(strBody, true, true);
@@ -235,7 +235,7 @@ namespace WpfIEBookDownloader
                 this.Dispatcher.Invoke(() => {
                     txtWebContents.Text = strPrettyHtml;
                 });
-                datacontext.AnalysisHtmlBody(this, bWaitOptoin, strUrl, strBody);
+                datacontext.AnalysisHtml4Nolvel(this, bWaitOptoin, strUrl, strBody);
             }
         }
 
@@ -249,53 +249,57 @@ namespace WpfIEBookDownloader
             Cancel = true;
         }
 
-        public void UpdateChapterMsg(BaseWndContextData datacontext, string msg, int value)
+        public void UpdateChapterMsg(BaseWndContextData? datacontext, string msg, int value)
         {
             Debug.WriteLine(msg);
-            datacontext.StartBarMsg = msg;
-            if (value >= 0)
-                datacontext.ProcessBarValue = value;
-            txtStatus.Dispatcher.Invoke(() =>
-            {
-                txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
-                if (!string.IsNullOrEmpty(msg))
-                {
-                    txtLog.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
-                    txtLog.CaretIndex = txtLog.Text.Length;
-                    txtLog.ScrollToEnd();
-
-                    txtChapter.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
-                    txtChapter.CaretIndex = txtLog.Text.Length;
-                    txtChapter.ScrollToEnd();
-
-                }
+            if (datacontext != null) {
+                datacontext.StartBarMsg = msg;
                 if (value >= 0)
-                    txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
-            });
+                    datacontext.ProcessBarValue = value;
+                txtStatus.Dispatcher.Invoke(() =>
+                {
+                    txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
+                    if (!string.IsNullOrEmpty(msg))
+                    {
+                        txtLog.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
+                        txtLog.CaretIndex = txtLog.Text.Length;
+                        txtLog.ScrollToEnd();
+
+                        txtChapter.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
+                        txtChapter.CaretIndex = txtLog.Text.Length;
+                        txtChapter.ScrollToEnd();
+
+                    }
+                    if (value >= 0)
+                        txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+                });
+            }
+            
         }
 
-        public void UpdateStatusMsg(BaseWndContextData datacontext, string msg, int value)
+        public void UpdateStatusMsg(BaseWndContextData? datacontext, string msg, int value)
         {
-
-            Debug.WriteLine(msg);
-            datacontext.StartBarMsg = msg;
-            if (value >= 0)
-                datacontext.ProcessBarValue = value;
-            txtStatus.Dispatcher.Invoke(() =>
+            Debug.WriteLine(msg); if (datacontext != null)
             {
-                txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
-                if (!string.IsNullOrEmpty(msg))
-                {
-                    txtLog.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
-                    txtLog.CaretIndex = txtLog.Text.Length;
-                    txtLog.ScrollToEnd();
-                }
+                datacontext.StartBarMsg = msg;
                 if (value >= 0)
-                    txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
-            });
+                    datacontext.ProcessBarValue = value;
+                txtStatus.Dispatcher.Invoke(() =>
+                {
+                    txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
+                    if (!string.IsNullOrEmpty(msg))
+                    {
+                        txtLog.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
+                        txtLog.CaretIndex = txtLog.Text.Length;
+                        txtLog.ScrollToEnd();
+                    }
+                    if (value >= 0)
+                        txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+                });
+            }
         }
 
-        public void Back(BaseWndContextData datacontext) {
+        public void Back(BaseWndContextData? datacontext) {
             this.Dispatcher.Invoke(() =>
             {
                 webBrowser.GoBack();
@@ -307,14 +311,16 @@ namespace WpfIEBookDownloader
             //this.Dispatcher.Invoke(() => { webBrowser.CoreWebView2.load(strHtml, url); });
         }
 
-        public void UpdateStatusProgress(BaseWndContextData datacontext, int value)
+        public void UpdateStatusProgress(BaseWndContextData? datacontext, int value)
         {
-            datacontext.ProcessBarValue = value;
-            //txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
-            txtProgress.Dispatcher.Invoke(() =>
-            {
-                txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
-            });
+            if (datacontext != null) {
+                datacontext.ProcessBarValue = value;
+                //txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+                txtProgress.Dispatcher.Invoke(() =>
+                {
+                    txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+                });
+            }
         }
 
         public void GetBrowserDocAndPutToCtrl()

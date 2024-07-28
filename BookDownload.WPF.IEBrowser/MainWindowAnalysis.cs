@@ -35,18 +35,20 @@ namespace WpfIEBookDownloader
             }
         }
 
-        public void LoadUiUrl(BaseWndContextData datacontext, string strURL)
-        {
-            webBrowser.Dispatcher.Invoke(() =>
+        public void LoadUiUrl(BaseWndContextData? datacontext, string strURL)
+        {if (datacontext != null)
             {
-                datacontext.PageLoaded = false;
-                datacontext.NextLinkAnalysized = false;
-                //btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                datacontext.PgmNaviUrl = strURL;
-                //webBrowser.Navigate(strURL);
-                webBrowser.CoreWebView2.Navigate(strURL);
-            });
+                webBrowser.Dispatcher.Invoke(() =>
+                {
+                    datacontext.PageLoaded = false;
+                    datacontext.NextLinkAnalysized = false;
+                    //btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                    btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                    datacontext.PgmNaviUrl = strURL;
+                    //webBrowser.Navigate(strURL);
+                    webBrowser.CoreWebView2.Navigate(strURL);
+                });
+            }
         }
 
         

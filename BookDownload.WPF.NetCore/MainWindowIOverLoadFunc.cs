@@ -24,7 +24,6 @@ namespace WpfBookDownloader
                     Debug.WriteLine("Select Combox Index : " + cmbNovelType.SelectedIndex);
                     txtInitURL.Text = datacontext.GetDefaultUrlByIdx(cmbNovelType.SelectedIndex);
                 }
-
             }
         }
 
@@ -184,7 +183,7 @@ namespace WpfBookDownloader
             });
         }
 
-        public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
+        public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true)
         {
             _DocContents doc = new _DocContents();
             string? strBody = null;

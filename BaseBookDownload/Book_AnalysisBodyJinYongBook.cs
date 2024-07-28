@@ -14,7 +14,7 @@ namespace BaseBookDownloader
 #pragma warning disable CS8632 // Null 参照代入の可能性があります。
     public class JinYongBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
-        public bool AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public bool AnalysisHtmlBook(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
             this.URL = strUrl;
 
@@ -111,6 +111,12 @@ namespace BaseBookDownloader
         {
             throw new NotImplementedException();
         }
+
+        public bool AnalysisHtmlStream(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning restore CS8604 // Null 参照引数の可能性があります。

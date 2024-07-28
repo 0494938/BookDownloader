@@ -24,11 +24,11 @@ namespace BookDownloadFormApp
         private void AnalysisURL(string strUrl, bool bWaitOptoin = true)
         {
             Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
-            string? strBody = GetWebDocHtmlBody(strUrl, bWaitOptoin);
+            string? strBody = GetWebDocHtmlSource(strUrl, bWaitOptoin);
             
             if (!string.IsNullOrEmpty(strBody.Trim()))
             {
-               datacontext.AnalysisHtmlBody(this,bWaitOptoin, strUrl, strBody);
+               datacontext.AnalysisHtml4Nolvel(this,bWaitOptoin, strUrl, strBody);
             }
         }
 
@@ -37,7 +37,7 @@ namespace BookDownloadFormApp
             public string sHtml="";
         }
 
-        public string? GetWebDocHtmlBody(string strUrl, bool bWaitOptoin = true)
+        public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true)
         {
             _DocContents doc = new _DocContents() ;
             string ?strBody = null;

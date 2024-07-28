@@ -14,7 +14,7 @@ namespace BaseBookDownloader
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
     public class BiQuGeBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
-        public bool AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public bool AnalysisHtmlBook(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
             this.URL = strUrl;
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
@@ -239,6 +239,11 @@ namespace BaseBookDownloader
         }
 
         public string GetBookName2(HtmlNode content)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AnalysisHtmlStream(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
             throw new NotImplementedException();
         }

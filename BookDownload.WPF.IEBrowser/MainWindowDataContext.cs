@@ -15,7 +15,7 @@ namespace WpfIEBookDownloader
     {
         public Visibility EnabledDbgButtons { get; set; } =
 #if DEBUG
-#if fakse
+#if false
             Visibility.Visible;
 #else
             Visibility.Hidden;
@@ -27,9 +27,9 @@ namespace WpfIEBookDownloader
         
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
-        public void NovelTypeChangeEvent(BaseWndContextData datacontext, int nIndex)
+        public void NovelTypeChangeEvent(BaseWndContextData? datacontext, int nIndex)
         {
-            if (txtInitURL != null)
+            if (txtInitURL != null && datacontext!=null)
             {
                 Debug.WriteLine("Select Combox Index : " + cmbNovelType.SelectedIndex);
                 if (txtInitURL != null)

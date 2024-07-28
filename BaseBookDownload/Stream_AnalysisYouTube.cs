@@ -15,7 +15,7 @@ namespace BaseBookDownloader
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
 #pragma warning disable CS8632 // Null 参照代入の可能性があります。
 
-    public class TianTianPCBookNovelContent : BaseBookNovelContent, IFetchNovelContent
+    public class YouTubeStreamPageContent : BaseBookNovelContent, IFetchNovelContent
     {
         public bool AnalysisHtmlBook(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
@@ -41,7 +41,6 @@ namespace BaseBookDownloader
                 FindBookNextLinkAndContents(wndMain, datacontext, body, ref nextLink, ref header, ref content, ref novelName);
                 if (content != null || nextLink != null)
                 {
-                    novelName = body;
                     FinishDocAnalyis(wndMain, datacontext, nextLink, header, content, novelName, bSilenceMode, status);
                     return true;
                 }
@@ -86,15 +85,12 @@ namespace BaseBookDownloader
 
         public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode?  content, ref HtmlNode novelName)
         {
-            content = top?.SelectNodes(".//div[@id='content']")?.FirstOrDefault();
-            if (content == null)
-                content = top?.SelectNodes(".//div[@id='Lab_Contents']")?.FirstOrDefault();
+            content = top?.SelectNodes(".//div[@class='content']")?.FirstOrDefault();
 
-            header = top?.SelectNodes(".//h1")?.FirstOrDefault();
+            header = top?.SelectNodes(".//h1[@class='headline']")?.FirstOrDefault();
 
-            nextLink = top?.SelectNodes(".//div[@class='bottem1']")?.FirstOrDefault();
-            if (nextLink == null)
-                nextLink = top?.SelectNodes(".//div[@class='erzitop_']")?.Where(n => n.Attributes["onclick"]?.Value == "JumpNext();")?.FirstOrDefault();
+            nextLink = top?.SelectNodes(".//div[@class='pager']")?.FirstOrDefault();
+            novelName = top?.SelectNodes(".//p[@id='bookname']")?.FirstOrDefault();
         }
 
         public string GetBookHeader(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
@@ -115,7 +111,7 @@ namespace BaseBookDownloader
                 {
                     return sLink;
                 }
-                return "https://www.ttshu8.com" + sLink;
+                return "https://m.ttshu8.com" + sLink;
             }
 
             return "";
@@ -133,9 +129,10 @@ namespace BaseBookDownloader
             return "";
         }
 
-        public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? novelName)
+        public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? bookName)
         {
-            return novelName?.Attributes["article-name"]?.Value ?? "";
+            //throw new NotImplementedException();
+            return bookName?.InnerText??"" ;
         }
 
         public string GetBookName2(HtmlNode content)

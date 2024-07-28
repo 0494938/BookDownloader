@@ -23,11 +23,11 @@ namespace WpfBookDownloader
             });
             Debug.Assert(datacontext != null);
 
-            string? strBody = GetWebDocHtmlBody(strUrl, bWaitOptoin);
+            string? strBody = GetWebDocHtmlSource(strUrl, bWaitOptoin);
             if (!string.IsNullOrEmpty(strBody?.Trim()))
             {
                 txtWebContents.Text = strBody;
-                datacontext.AnalysisHtmlBody(this, bWaitOptoin, strUrl, strBody);
+                datacontext.AnalysisHtml4Nolvel(this, bWaitOptoin, strUrl, strBody);
             }
         }
 

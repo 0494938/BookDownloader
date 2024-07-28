@@ -71,21 +71,24 @@ namespace WpfIEBookDownloader
             }
         }
 
-        public string BatchDownloadNotified(BaseWndContextData datacontext, DownloadStatus status, string sDownloadFileName)
+        public string BatchDownloadNotified(BaseWndContextData? datacontext, DownloadStatus status, string sDownloadFileName)
         {
             string strMsgAreaLog="";
-            this.Dispatcher.Invoke(() =>
-            {
-                this.UpdateInitPageButton();
-                this.UpdateAutoDownloadPageButton();
+            if (datacontext != null) {
+                this.Dispatcher.Invoke(() =>
+                {
+                    this.UpdateInitPageButton();
+                    this.UpdateAutoDownloadPageButton();
 
-                UpdateStatusMsg(datacontext, "Flush Log to file: " + sDownloadFileName + ".log", -1);
-                if (!string.IsNullOrEmpty(status?.NextUrl))
-                    txtInitURL.Text = status.NextUrl;
+                    UpdateStatusMsg(datacontext, "Flush Log to file: " + sDownloadFileName + ".log", -1);
+                    if (!string.IsNullOrEmpty(status?.NextUrl))
+                        txtInitURL.Text = status.NextUrl;
 
-                strMsgAreaLog = txtLog.Text;
-                MessageBox.Show(this, "Batch download finished...", "Web Novel Downloader", MessageBoxButton.OK);
-            });
+                    strMsgAreaLog = txtLog.Text;
+                    MessageBox.Show(this, "Batch download finished...", "Web Novel Downloader", MessageBoxButton.OK);
+                });
+            }
+            
             return strMsgAreaLog;
         }
 

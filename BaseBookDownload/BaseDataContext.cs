@@ -116,8 +116,7 @@ namespace BaseBookDownloader
 
             try
             {
-                Thread thread = new Thread(() => WaitAndLaunchAnalsysi(wndMain, strURL, bSilenceMode, status));
-                thread.Start();
+                new Thread(() => WaitAndLaunchAnalsys(wndMain, strURL, bSilenceMode, status)).Start();
             }
             catch (TaskCanceledException)
             {
@@ -127,7 +126,7 @@ namespace BaseBookDownloader
 
 #pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
-        public void WaitAndLaunchAnalsysi(IBaseMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status)
+        public void WaitAndLaunchAnalsys(IBaseMainWindow wndMain, string strURL, bool bSilenceMode, DownloadStatus status)
         {
             const int MAX_RETRY = 60 * 5 * 2; //wait loading up to 2 minutes.
             int nWaitRetry = 0;
@@ -155,11 +154,11 @@ namespace BaseBookDownloader
             {
                 try
                 {
-                    string? strBody = wndMain.GetWebDocHtmlBody(strURL);
+                    string? strBody = wndMain.GetWebDocHtmlSource(strURL);
                     wndMain.UpdateWebBodyOuterHtml(strBody);
                     if (!string.IsNullOrEmpty(strBody))
                     {
-                        AnalysisHtmlBody(wndMain, true, strURL, strBody, bSilenceMode, status);
+                        AnalysisHtml4Nolvel(wndMain, true, strURL, strBody, bSilenceMode, status);
                     }
                     else if(bSilenceMode && status.DownloadRetried == 0)
                     {
@@ -184,12 +183,11 @@ namespace BaseBookDownloader
             }
         }
 
-        public void AnalysisHtmlBody(IBaseMainWindow wndMain, bool bWaitOption, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        public void AnalysisHtml4Nolvel(IBaseMainWindow wndMain, bool bWaitOption, string strURL, string strHtml, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             try
             {
-                Thread thread = new Thread(() => AnalysisHtmlBodyThreadFunc(wndMain, strURL, strBody, bSilenceMode, status));
-                thread.Start();
+                new Thread(() => AnalysisHtmlThreadFunc4Novel(wndMain, strURL, strHtml, bSilenceMode, status)).Start();
             }
             catch (TaskCanceledException)
             {
@@ -198,7 +196,7 @@ namespace BaseBookDownloader
             //AnalysisHtmlBodyThreadFunc(datacontext, this, strURL, strBody, bSilenceMode, status);
         }
 
-        public void AnalysisHtmlBodyThreadFunc(IBaseMainWindow wndMain, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null)
+        public void AnalysisHtmlThreadFunc4Novel(IBaseMainWindow wndMain, string strURL, string strHtml, bool bSilenceMode = false, DownloadStatus? status = null)
         {
             Debug.Assert(!bSilenceMode || (bSilenceMode && status != null));
 
@@ -226,7 +224,7 @@ namespace BaseBookDownloader
             bool bNoNeedFresh = true;
             if (fetchNovelContent != null)
             {
-                bNoNeedFresh = fetchNovelContent.AnalysisHtmlBookBody(wndMain, this, strURL, strBody, bSilenceMode, status, nMaxRetry);
+                bNoNeedFresh = fetchNovelContent.AnalysisHtmlBook(wndMain, this, strURL, strHtml, bSilenceMode, status, nMaxRetry);
             }
             if (bSilenceMode)
             {
@@ -325,6 +323,57 @@ namespace BaseBookDownloader
                 }
             }
         }
+        public void AnalysisHtmlThreadFunc4YouTube(IBaseMainWindow wndMain, string strURL, string strHtml, bool bSilenceMode = false)
+        {
+            int nMaxRetry = 60; //span is 3s.
+            IFetchNovelContent? fetchNovelContent = GetImplByNoveTypeIdx(SiteType, ref nMaxRetry);
+            while (!UnloadPgm)
+            {
+                Thread.Sleep(200);
+            }
+            wndMain.UpdateStatusMsg(this, strURL + " : Begin to Analysize downloaded Contents Body using " + SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", 50);
+
+            bool bNoNeedFresh = true;
+            if (fetchNovelContent != null)
+            {
+                bNoNeedFresh = fetchNovelContent.AnalysisHtmlStream(wndMain, this, strURL, strHtml, bSilenceMode, null, nMaxRetry);
+            }
+
+            wndMain.UpdateStatusMsg(this, strURL + " : Finished Analysing of downloaded Uri Contents Body ...", 100);
+
+            //if (bSilenceMode)
+            {
+                if (!bNoNeedFresh)
+                {
+                    if (this.RefreshCount > 0)
+                    {
+                        Debug.Assert(true);
+                        this.RefreshCount--;
+                        if (this.RefreshCount == 0)
+                        {
+                            wndMain.UpdateStatusMsg(this, "Failed as over access reqencey by website, After Retry Max to 60 seconds ...", 100 / 20 * this.RefreshCount);
+                            return;
+                        }
+                        wndMain.UpdateStatusMsg(this, "Failed as over access reqencey by website, Retry No." + this.RefreshCount + " to 60 seconds ...", 100 / this.MAX_REFRESH_CNT * this.RefreshCount);
+                        Thread.Sleep(this.SLEEP_BETWEEN_RFRESH_MILI_SECONDS);
+
+                        DownloadOneURLAndGetNext(wndMain, strURL, true);
+                        return;
+                    }
+                    else
+                    {
+                        this.RefreshCount = this.MAX_REFRESH_CNT;
+                        Debug.Assert(true);
+                        wndMain.UpdateStatusMsg(this, "Failed as over access reqencey by website, Retry No." + this.RefreshCount + " to 60 seconds ...", 100 / this.MAX_REFRESH_CNT * this.RefreshCount);
+                        Thread.Sleep(this.SLEEP_BETWEEN_RFRESH_MILI_SECONDS);
+                        //if (status != null)
+                        //    status.DownloadFinished = false;
+                        //wndMain.RefreshPage();
+                        DownloadOneURLAndGetNext(wndMain, strURL, true);
+                    }
+                }
+            }
+        }
 
         public string GetDefaultUrlByIdx(int nIdx)
         {
@@ -364,6 +413,10 @@ namespace BaseBookDownloader
                     return "https://m.ttshu8.com/book/33693/124470410.html";
                 case (int)BatchQueryNovelContents.TIANTIAN_PC:
                     return "https://www.ttshu8.com/book/33693/124470410.html";
+                case (int)BatchQueryNovelContents.YOUTUBE:
+                    return "https://www.youtube.com/watch?v=0pPPXeXKdfg";
+                case (int)BatchQueryNovelContents.PORNHUB:
+                    return "https://jp.pornhub.com/view_video.php?viewkey=6617c17b03771";
                 //case (int)BatchQueryNovelContents.TOBEDONE:
                 //    break;
                 default:
@@ -410,6 +463,10 @@ namespace BaseBookDownloader
                     return new TianTianBookNovelContent();
                 case BatchQueryNovelContents.TIANTIAN_PC:
                     return new TianTianPCBookNovelContent();
+                case BatchQueryNovelContents.YOUTUBE:
+                    return new YouTubeStreamPageContent();
+                case BatchQueryNovelContents.PORNHUB:
+                    return new PornHubStreamPageContent();
                 default:
                     return null;
             }
@@ -452,6 +509,10 @@ namespace BaseBookDownloader
         TIANTIAN = 15,
         [EnumCode("天天小说PC版")]
         TIANTIAN_PC = 16,
+        [EnumCode("YouTube")]
+        YOUTUBE = 17,
+        [EnumCode("PornHub")]
+        PORNHUB = 18,
 
         //TOBEDONE = 13,
     }

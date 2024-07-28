@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Auto2.png" />
+    <None Remove="chrome3.png" />
+    <None Remove="html7.png" />
+    <None Remove="Novel9.ico" />
+    <None Remove="pornhub.png" />
+    <None Remove="pornhub4.png" />
+    <None Remove="pornhub5.png" />
+    <None Remove="pornhub6.png" />
+    <None Remove="refresh1.png" />
+    <None Remove="url12.png" />
+    <None Remove="url6.png" />
+    <None Remove="youtube10.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2592.51" />
+    <PackageReference Include="VideoLibrary" Version="3.2.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BaseBookDownload.WPF\BaseBookDownload.WPF.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Auto2.png" />
+    <Resource Include="chrome3.png" />
+    <Resource Include="html7.png" />
+    <Resource Include="Novel9.ico" />
+    <Resource Include="pornhub.png" />
+    <Resource Include="pornhub4.png" />
+    <Resource Include="pornhub5.png" />
+    <Resource Include="pornhub6.png" />
+    <Resource Include="refresh1.png" />
+    <Resource Include="url12.png" />
+    <Resource Include="url6.png" />
+    <Resource Include="youtube10.png" />
+  </ItemGroup>
+
+</Project>

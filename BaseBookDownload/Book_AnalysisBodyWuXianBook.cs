@@ -12,7 +12,7 @@ namespace BaseBookDownloader
 #pragma warning disable CS8632 // Null 参照代入の可能性があります。
     public class WxdzsBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
-        public bool AnalysisHtmlBookBody(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public bool AnalysisHtmlBook(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
             this.URL = strUrl;
 
@@ -103,6 +103,11 @@ namespace BaseBookDownloader
         }
 
         public string GetBookName2(HtmlNode content)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AnalysisHtmlStream(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
             throw new NotImplementedException();
         }

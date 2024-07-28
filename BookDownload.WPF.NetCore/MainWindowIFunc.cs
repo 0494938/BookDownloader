@@ -71,13 +71,7 @@ namespace WpfBookDownloader
                 return;
 
             this.Dispatcher.Invoke(() => {
-                //webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
-                //{
-                //    this.Dispatcher.Invoke(() =>
-                //    {
-                //        doc.sHtml = taskHtml.Result;
-                //    });
-                //});
+    
                 webBrowser.GetMainFrame().GetSourceAsync().ContinueWith(taskHtml =>
                 {
                     this.Dispatcher.Invoke(() =>
