@@ -402,3 +402,6 @@ FodyWeavers.xsd
 libcef.dll
 packages
 /bin_net6.0/BookDownload.WPF.WebView2.exe.WebView2/EBWebView
+ChromeCache.*
+bin_form4.8.1
+bin_net6.0

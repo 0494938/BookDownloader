@@ -112,6 +112,7 @@ namespace WpfIEBookDownloader
         private void OnBtnRefreshPage(object sender, RoutedEventArgs e)
         {
             webBrowser.Reload();
+            txtCurURL.Text = webBrowser.Source.ToString();
         }
 
         private void btnLaunchCurUrlOnWeb_Click(object sender, RoutedEventArgs e)

@@ -100,10 +100,17 @@ namespace WpfIEBookDownloader
 
         public void UpdateWebBodyOuterHtml(string? strBody)
         {
+            bool bIsPrettyChecked = false;
             this.Dispatcher.Invoke(() =>
             {
-                txtWebContents.Text = strBody;
+                bIsPrettyChecked = chkboxPrettyHtml.IsChecked == true; ;
             });
+
+            if (bIsPrettyChecked == false)
+                txtWebContents.Text = strBody?.Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n");
+            else
+                GetBrowserDocAndPrettyToCtrl();
+
         }
 
         public void UpdateNextUrl(string url)
@@ -360,6 +367,10 @@ namespace WpfIEBookDownloader
                     }
                     if (!string.IsNullOrEmpty(doc.sHtml))
                     {
+                        doc.sHtml = Regex.Unescape(doc.sHtml);
+                        doc.sHtml = doc.sHtml.Remove(0, 1);
+                        doc.sHtml = doc.sHtml.Remove(doc.sHtml.Length - 1, 1);
+
                         this.Dispatcher.Invoke(() =>
                         {
                             txtWebContents.Text = doc.sHtml?.Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n");
@@ -427,6 +438,9 @@ namespace WpfIEBookDownloader
                             bIgnoreScript = chkboxIgnoreScript.IsChecked ?? false;
                             bIgnoreHead = chkboxIgnoreHeader.IsChecked ?? false;
                         });
+                        doc.sHtml = Regex.Unescape(doc.sHtml);
+                        doc.sHtml = doc.sHtml.Remove(0, 1);
+                        doc.sHtml = doc.sHtml.Remove(doc.sHtml.Length - 1, 1);
 
                         string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(doc.sHtml, bIgnoreScript, bIgnoreHead);
 
