@@ -1,5 +1,6 @@
 ﻿using BaseBookDownloader;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -39,8 +40,10 @@ namespace WpfStreamDownloader
         {
             Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
             WndContextData? datacontext = null;
+            string strFileNameBase = "";
             this.Dispatcher.Invoke(() => {
                 datacontext = App.Current.MainWindow.DataContext as WndContextData;
+                strFileNameBase = AppDomain.CurrentDomain.BaseDirectory + "HtmlDownload_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
             });
 
             Debug.Assert(datacontext != null);
@@ -48,7 +51,29 @@ namespace WpfStreamDownloader
             string? strHtml = GetWebDocHtmlSource(strUrl, bWaitOptoin);
             if (!string.IsNullOrEmpty(strHtml?.Trim()))
             {
+                StreamWriter html = new StreamWriter(
+                   File.Open(strFileNameBase + ".html",
+                   FileMode.Create,
+                   FileAccess.ReadWrite,
+                   FileShare.Read),
+                   Encoding.UTF8
+                );
+                html.Write(strHtml);
+                html.Flush();
+                html.Close();
+
                 string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(strHtml, false, false, false);
+
+                StreamWriter htmlPretty = new StreamWriter(
+                    File.Open(strFileNameBase + "_pretty.html",
+                    FileMode.Create,
+                    FileAccess.ReadWrite,
+                    FileShare.Read),
+                    Encoding.UTF8
+                 );
+                htmlPretty.Write(strPrettyHtml);
+                htmlPretty.Flush();
+                htmlPretty.Close();
 
                 this.Dispatcher.Invoke(() => {
                     txtWebContents.Text = strPrettyHtml;

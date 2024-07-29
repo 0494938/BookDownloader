@@ -6,6 +6,7 @@ using System.Windows;
 
 namespace WpfBookDownloader
 {
+#pragma warning disable CS8604 // Null 参照引数の可能性があります。
 #pragma warning disable CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
     public partial class WindowsWPFChrome : Window
     {
@@ -121,6 +122,15 @@ namespace WpfBookDownloader
                 NovelTypeChangeEvent(App.Current.MainWindow.DataContext as WndContextData, cmbNovelType.SelectedIndex);
             }
         }
+
+        private void Window_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("OnMainWindowUnloaded invoked...");
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if (datacontext != null) { datacontext.UnloadPgm = true; }
+            webBrowser.Dispose();
+        }
     }
+#pragma warning restore CS8604 // Null 参照引数の可能性があります。
 #pragma warning restore CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
 }

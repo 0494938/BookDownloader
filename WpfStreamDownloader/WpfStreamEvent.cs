@@ -28,8 +28,18 @@ namespace WpfStreamDownloader
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            cmbNovelType.SelectedIndex = 17;
+            if(cmbNovelType.SelectedIndex <0)
+                cmbNovelType.SelectedIndex = 17;
             NovelTypeChangeEvent(App.Current.MainWindow.DataContext as WndContextData, cmbNovelType.SelectedIndex);
+            //BtnClickActions(txtInitURL.Text);
+
+            Task.Run(async delegate
+            {
+                await Task.Delay(1000);
+                this.Dispatcher.Invoke(() => { BtnClickActions(txtInitURL.Text); });
+                
+            });
+
         }
 
         private void OnLoadInBrowser(object sender, RoutedEventArgs e)

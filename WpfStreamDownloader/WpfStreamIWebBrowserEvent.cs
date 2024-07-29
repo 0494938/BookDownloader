@@ -1,4 +1,5 @@
-﻿using Microsoft.Web.WebView2.WinForms;
+﻿using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.WinForms;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -23,13 +24,35 @@ namespace WpfStreamDownloader
         private void WebBrowser_Loaded(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("WebBrowser_Loaded invoked...");
-            //throw new NotImplementedException();
+        }
+
+        private void WebBrowser_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("WebBrowser_Unloaded invoked...");
         }
 
         private void CoreWebView2_WebMessageReceived(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
         {
-            //throw new NotImplementedException();
+            Debug.WriteLine("CoreWebView2_WebMessageReceived invoked..." +  e.ToString());
         }
+
+        private void CoreWebView2_FrameNavigationCompleted(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_FrameNavigationCompleted invoked... Success:" + e.IsSuccess + ", " + e.ToString());
+        }
+
+        private void CoreWebView2_FrameNavigationStarting(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_FrameNavigationStarting invoked... IsRedirected:" + e.IsRedirected + ", Uri:" + e.Uri.ToString());
+        }
+
+        CoreWebView2Frame? frame=null;
+        private void CoreWebView2_FrameCreated(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2FrameCreatedEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_FrameCreated invoked... " + e.ToString());
+            frame = e.Frame;
+        }
+
 
         private void CoreWebView2_WebResourceResponseReceived(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2WebResourceResponseReceivedEventArgs e)
         {
@@ -60,7 +83,18 @@ namespace WpfStreamDownloader
                             //datacontext.WaitAndLaunchAnalsys
                         }
                     });
+                }else if (e.Request.Uri.ToString().Contains(".phncdn.com/hls/videos"))
+                {
+                    UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + e.Response.Headers.GetHeader("content-length")  +" : " + e.Request.Uri , -1);
                 }
+                else if (e.Request.Uri.ToString().StartsWith("https://etahub.com/events"))
+                {
+                    UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + e.Response.Headers.GetHeader("content-length") + " : " + e.Request.Uri, -1);
+                }
+            }
+            else
+            {
+                Debug.Assert(false);
             }
         }
 
@@ -90,6 +124,98 @@ namespace WpfStreamDownloader
             {
                 Debug.Assert(true);
             }
+        }
+
+        private void CoreWebView2_WindowCloseRequested(object? sender, object e)
+        {
+            Debug.WriteLine("CoreWebView2_WindowCloseRequested invoked... " + e.ToString());
+        }
+
+        private void CoreWebView2_SourceChanged(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2SourceChangedEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_SourceChanged invoked... IsNewDocument:" + e.IsNewDocument + ", " + e.ToString());
+        }
+
+        private void CoreWebView2_ServerCertificateErrorDetected(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2ServerCertificateErrorDetectedEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_ServerCertificateErrorDetected invoked... RequestUri:" + e.RequestUri + ", ErrorStatus:" + e.ErrorStatus + ", Action:" + e.Action + ", " + e.ToString());
+        }
+
+        private void CoreWebView2_ScriptDialogOpening(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2ScriptDialogOpeningEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_ScriptDialogOpening invoked... Message:" + e.Message + ", Uri:" + e.Uri.ToString() + ", ResultText:" + e.ResultText + ", DefaultText:" + e.DefaultText + ", " + e.ToString());
+        }
+
+        private void CoreWebView2_ProcessFailed(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2ProcessFailedEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_ProcessFailed invoked... ProcessFailedKind:" + e.ProcessFailedKind + ", FailureSourceModulePath" + e.FailureSourceModulePath + ", ProcessDescription" + e.ProcessDescription + ", " + e.ToString());
+        }
+
+        private void CoreWebView2_PermissionRequested(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2PermissionRequestedEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_PermissionRequested invoked... State:" + e.State + ", Uri:" + e.Uri + ", PermissionKind:" + e.PermissionKind + ", IsUserInitiated:" + e.IsUserInitiated + ", " + e.ToString());
+        }
+
+        private void CoreWebView2_NewWindowRequested(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2NewWindowRequestedEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_NewWindowRequested invoked... Name:" + e.Name + ", Uri:" + e.Uri + ", NewWindow:" + e.NewWindow + ", WindowFeatures:" + e.WindowFeatures + ", " + e.ToString());
+            e.Handled = true;
+        }
+
+        private void CoreWebView2_NavigationStarting(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_NavigationStarting invoked... NavigationKind:" + e.NavigationKind + ", Uri:" + e.Uri + ", NavigationId:" + e.NavigationId + ", Cancel:" + e.Cancel + ", AdditionalAllowedFrameAncestors:" + e.AdditionalAllowedFrameAncestors + ", " + e.ToString());
+        }
+
+        private void CoreWebView2_LaunchingExternalUriScheme(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2LaunchingExternalUriSchemeEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_LaunchingExternalUriScheme invoked... InitiatingOrigin:" + e.InitiatingOrigin + ", Uri:" + e.Uri + ", IsUserInitiated:" + e.IsUserInitiated + ", " + e.ToString());
+        }
+
+        private void CoreWebView2_IsMutedChanged(object? sender, object e)
+        {
+            Debug.WriteLine("CoreWebView2_IsMutedChanged invoked... " + e.ToString());
+        }
+
+        private void CoreWebView2_IsDocumentPlayingAudioChanged(object? sender, object e)
+        {
+            Debug.WriteLine("CoreWebView2_IsDocumentPlayingAudioChanged invoked... Success:" + e.ToString());
+        }
+
+        private void CoreWebView2_FaviconChanged(object? sender, object e)
+        {
+            Debug.WriteLine("CoreWebView2_FaviconChanged invoked... Success:" + e.ToString());
+        }
+
+        private void CoreWebView2_DownloadStarting(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2DownloadStartingEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_DownloadStarting invoked... Cancel:" + e.Cancel + ", Handled:" + e.Handled + ", GetDeferral:" + e.GetDeferral() + ", " + e.ToString());
+        }
+
+        private void CoreWebView2_DOMContentLoaded(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2DOMContentLoadedEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_DOMContentLoaded invoked... NavigationId:" + e.NavigationId + ", " + e.ToString());
+        }
+
+        private void CoreWebView2_ContextMenuRequested(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2ContextMenuRequestedEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_ContextMenuRequested invoked... MenuItems:" + e.MenuItems + ", Handled:" + e.Handled + ", ContextMenuTarget:" + e.ContextMenuTarget + ", " + e.ToString());
+        }
+
+        private void CoreWebView2_ContentLoading(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2ContentLoadingEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_ContentLoading invoked... IsErrorPage:" + e.IsErrorPage + ", NavigationId:" + e.NavigationId + ", " + e.ToString());
+            Debug.Assert(!e.IsErrorPage);
+        }
+
+        private void CoreWebView2_ClientCertificateRequested(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2ClientCertificateRequestedEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_ClientCertificateRequested invoked... AllowedCertificateAuthorities:" + e.AllowedCertificateAuthorities + ", MutuallyTrustedCertificates:" + e.MutuallyTrustedCertificates + ", Cancel:" + e.Cancel + ", Handled:" + e.Handled + ", " + e.ToString());
+        }
+
+        private void CoreWebView2_BasicAuthenticationRequested(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2BasicAuthenticationRequestedEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_BasicAuthenticationRequested invoked... Challenge:" + e.Challenge + ", Uri:" + e.Uri + ", Cancel:" + e.Cancel + ", " + e.ToString());
         }
     }
 }

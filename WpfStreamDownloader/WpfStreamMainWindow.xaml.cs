@@ -16,5 +16,10 @@ namespace WpfStreamDownloader
             InitializeComponent();
             InitBrowser();
         }
+
+        private void Window_Unloaded(object sender, RoutedEventArgs e)
+        {
+            webBrowser.Dispose();
+        }
     }
 }

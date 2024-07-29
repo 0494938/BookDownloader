@@ -61,6 +61,7 @@ namespace WpfIEBookDownloader
             Debug.WriteLine("OnMainWindowUnloaded invoked...");
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             datacontext.UnloadPgm = true;
+            webBrowser.Dispose();
         }
     }
 #pragma warning restore CS8604 // Null 参照引数の可能性があります。

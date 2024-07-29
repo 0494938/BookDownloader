@@ -1,5 +1,8 @@
 ﻿using BaseBookDownloader;
 using System.Diagnostics;
+using System.IO;
+using System.Security.Policy;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -24,6 +27,29 @@ namespace WpfStreamDownloader
                         txtLog.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
                         txtLog.CaretIndex = txtLog.Text.Length;
                         txtLog.ScrollToEnd();
+                    }
+                    if (value >= 0)
+                        txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+                });
+            }
+        }
+
+        public void UpdateStreamMsg(BaseWndContextData? datacontext, string msg, int value)
+        {
+            Debug.WriteLine(msg);
+            if (datacontext != null)
+            {
+                datacontext.StartBarMsg = msg;
+                if (value >= 0)
+                    datacontext.ProcessBarValue = value;
+                txtStatus.Dispatcher.Invoke(() =>
+                {
+                    txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
+                    if (!string.IsNullOrEmpty(msg))
+                    {
+                        txtStreamLog.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
+                        txtStreamLog.CaretIndex = txtLog.Text.Length;
+                        txtStreamLog.ScrollToEnd();
                     }
                     if (value >= 0)
                         txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
@@ -89,17 +115,31 @@ namespace WpfStreamDownloader
         {
             bool bIsPrettyChecked = true;
 
-            if (bIsPrettyChecked == false)
-                txtWebContents.Text = strHtml?.Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n");
-            else
-                GetBrowserDocAndPrettyToCtrl();
+
+            if (bIsPrettyChecked == false) { 
+                txtWebContents.Text = strHtml?.Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n"); 
+            }else { 
+                GetBrowserDocAndPrettyToCtrl(strHtml); 
+            }
+                
+
         }
 
-        public void GetBrowserDocAndPrettyToCtrl()
+        public void GetBrowserDocAndPrettyToCtrl(string ? strHtml=null, string ? strPrettyFileName=null)
         {
             _DocContents doc = new _DocContents();
             new Thread(() =>
             {
+                if (string.IsNullOrEmpty(strHtml)){
+                    string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(doc.sHtml, false, false, false);
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        txtWebContents.Text = strPrettyHtml;
+                    });
+                    return;
+                }
+                
+                //Need get Contents from Browser.
                 int nMaxRetry = 10 * 60, nRetry = 0;
                 bool bLoaded = false;
                 this.Dispatcher.Invoke(() =>
@@ -138,14 +178,7 @@ namespace WpfStreamDownloader
                     {
                         bool bIgnoreScript = false;
                         bool bIgnoreHead = false;
-                        //this.Dispatcher.Invoke(() =>
-                        //{
-                        //    bIgnoreScript = false;
-                        //    bIgnoreHead = false;
-                        //});
-
                         string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(doc.sHtml, bIgnoreScript, bIgnoreHead);
-
                         this.Dispatcher.Invoke(() =>
                         {
                             txtWebContents.Text = strPrettyHtml;
@@ -233,6 +266,11 @@ namespace WpfStreamDownloader
                 {
                     Debug.WriteLine("Select Combox Index : " + cmbNovelType.SelectedIndex);
                     txtInitURL.Text = datacontext.GetDefaultUrlByIdx(cmbNovelType.SelectedIndex);
+
+                    if (string.IsNullOrEmpty(txtCurURL.Text.Trim()))
+                    {
+                        txtCurURL.Text = txtInitURL.Text;
+                    }
                 }
             }
         }
