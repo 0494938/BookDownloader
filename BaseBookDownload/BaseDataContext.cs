@@ -413,6 +413,9 @@ namespace BaseBookDownloader
                     return "https://m.ttshu8.com/book/33693/124470410.html";
                 case (int)BatchQueryNovelContents.TIANTIAN_PC:
                     return "https://www.ttshu8.com/book/33693/124470410.html";
+                case (int)BatchQueryNovelContents.NOVEL69:
+                    return "https://69shuba.cx/txt/38164/26461664";
+                    
                 case (int)BatchQueryNovelContents.YOUTUBE:
                     return "https://www.youtube.com/watch?v=0pPPXeXKdfg";
                 case (int)BatchQueryNovelContents.PORNHUB:
@@ -463,6 +466,8 @@ namespace BaseBookDownloader
                     return new TianTianBookNovelContent();
                 case BatchQueryNovelContents.TIANTIAN_PC:
                     return new TianTianPCBookNovelContent();
+                case BatchQueryNovelContents.NOVEL69:
+                    return new Novel69PCBookNovelContent();
                 case BatchQueryNovelContents.YOUTUBE:
                     return new YouTubeStreamPageContent();
                 case BatchQueryNovelContents.PORNHUB:
@@ -509,10 +514,12 @@ namespace BaseBookDownloader
         TIANTIAN = 15,
         [EnumCode("天天小说PC版")]
         TIANTIAN_PC = 16,
+        [EnumCode("69电子书")]
+        NOVEL69 = 17,
         [EnumCode("YouTube")]
-        YOUTUBE = 17,
+        YOUTUBE = 18,
         [EnumCode("PornHub")]
-        PORNHUB = 18,
+        PORNHUB = 19,
 
         //TOBEDONE = 13,
     }

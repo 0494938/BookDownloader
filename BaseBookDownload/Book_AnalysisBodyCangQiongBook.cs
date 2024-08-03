@@ -69,7 +69,7 @@ namespace BaseBookDownloader
 
             //<div onclick="JumpNext();" class="erzitop_"><a title="第002章 抓捕  我的谍战岁月" href="/wxread/94612_43816525.html">下一章</a> </div>
             //IEnumerable<HtmlNode>? collNext= nextLinkDiv?.Descendants().Where(n => n?.Name == "a" && (n.InnerText == "下一页" || n.InnerText == "下一章")) as IEnumerable<HtmlNode>;
-            nextLink = nextLinkDiv?.Descendants().Where(n => n?.Name == "a" && (n.InnerText == "下一页" || n.InnerText == "下一章"))?.FirstOrDefault();
+            nextLink = nextLinkDiv?.Descendants().Where(n => n?.Name == "a" && (n.InnerText == "下一章" || n.InnerText.Trim() == "下一页" || n.InnerText.Trim() == "下一节"))?.FirstOrDefault();
             novelName = top?.SelectNodes("//div[@class='layout-tit xs-hidden']")?.FirstOrDefault();
         }
 

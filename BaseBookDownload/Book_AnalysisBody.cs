@@ -95,6 +95,26 @@ namespace BaseBookDownloader
                 return sb;
             }
         }
+        public StringBuilder CascadeGetTagP_TagBrPOnly(StringBuilder sb, HtmlNode? node)
+        {
+            if (node == null)
+                return sb;
+
+            if (node.Name == "p")
+                return sb.Append(node.InnerText.Trim()).AppendLine();
+            else if (node.Name == "br")
+                return sb.AppendLine();
+            else
+            {
+                foreach (HtmlNode node2 in node.ChildNodes)
+                {
+                    if (node2.Name == "p")
+                        sb.Append(CascadeGetTagP_TagBr_TagText(node2));
+                }
+                return sb;
+            }
+        }
+        
         public string? ReformContent(string s)
         {
             if (s == null)

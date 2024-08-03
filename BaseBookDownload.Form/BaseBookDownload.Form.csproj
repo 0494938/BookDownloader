@@ -86,6 +86,9 @@
     <Compile Include="..\BaseBookDownload\Book_AnalysisBody17K.cs">
       <Link>Book_AnalysisBody17K.cs</Link>
     </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBody69Novel.cs">
+      <Link>Book_AnalysisBody69Novel.cs</Link>
+    </Compile>
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyBiQuGeBook.cs">
       <Link>Book_AnalysisBodyBiQuGeBook.cs</Link>
     </Compile>

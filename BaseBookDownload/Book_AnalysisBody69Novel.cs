@@ -15,7 +15,7 @@ namespace BaseBookDownloader
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
 #pragma warning disable CS8632 // Null 参照代入の可能性があります。
 
-    public class PornHubStreamPageContent : BaseBookNovelContent, IFetchNovelContent
+    public class Novel69PCBookNovelContent : BaseBookNovelContent, IFetchNovelContent
     {
         public bool AnalysisHtmlBook(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
@@ -41,6 +41,7 @@ namespace BaseBookDownloader
                 FindBookNextLinkAndContents(wndMain, datacontext, body, ref nextLink, ref header, ref content, ref novelName);
                 if (content != null || nextLink != null)
                 {
+                    //novelName = body;
                     FinishDocAnalyis(wndMain, datacontext, nextLink, header, content, novelName, bSilenceMode, status);
                     return true;
                 }
@@ -85,12 +86,16 @@ namespace BaseBookDownloader
 
         public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? nextLink, ref HtmlNode? header, ref HtmlNode?  content, ref HtmlNode novelName)
         {
-            content = top?.SelectNodes(".//div[@class='content']")?.FirstOrDefault();
+            content = top?.SelectNodes(".//div[@class='txtnav']")?.FirstOrDefault();
+            //if (content == null)
+            //    content = top?.SelectNodes(".//div[@id='Lab_Contents']")?.FirstOrDefault();
 
-            header = top?.SelectNodes(".//h1[@class='headline']")?.FirstOrDefault();
+            header = top?.SelectNodes(".//h1[@class='hide720']")?.FirstOrDefault();
 
-            nextLink = top?.SelectNodes(".//div[@class='pager']")?.FirstOrDefault();
-            novelName = top?.SelectNodes(".//p[@id='bookname']")?.FirstOrDefault();
+            nextLink = top?.SelectNodes(".//div[@class='page1']")?.Descendants().Where(n => n.InnerText == "下一章" || n.InnerText.Trim() == "下一页" || n.InnerText.Trim() == "下一节")?.FirstOrDefault();
+            novelName = top?.ParentNode.ChildNodes["head"].SelectNodes(".//title").FirstOrDefault();
+            //if (nextLink == null)
+            //    nextLink = top?.SelectNodes(".//div[@class='page1']")?.Where(n => n.InnerText == "下一章")?.FirstOrDefault();
         }
 
         public string GetBookHeader(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? header)
@@ -105,13 +110,19 @@ namespace BaseBookDownloader
 
             if(nextLink != null)
             {
-                HtmlNode? a = nextLink.SelectNodes(".//a")?.Where(n=> n.InnerText == "下一章" || n.InnerText.Trim() == "下一页" || n.InnerText.Trim() == "下一节")?.FirstOrDefault();
-                string ?sLink = a?.Attributes["href"]?.Value;
-                if (sLink?.StartsWith("http")??false)
-                {
+                //HtmlNode? a = nextLink.SelectNodes(".//a")?.Where(n=> n.InnerText == "下一章" || n.InnerText.Trim() == "下一页" || n.InnerText.Trim() == "下一节")?.FirstOrDefault();
+                //string ?sLink = a?.Attributes["href"]?.Value;
+                //if (sLink?.StartsWith("http")??false)
+                //{
+                //    return sLink;
+                //}
+                string? sLink = nextLink?.Attributes["href"]?.Value;
+                if (sLink.StartsWith("http"))
                     return sLink;
+                else
+                {
+                    return "https://69shuba.cx" + nextLink?.Attributes["href"]?.Value;
                 }
-                return "https://m.ttshu8.com" + sLink;
             }
 
             return "";
@@ -122,17 +133,23 @@ namespace BaseBookDownloader
             if (content != null)
             {
                 StringBuilder sb = new StringBuilder();
-                sb = CascadeGetTagP_TagBr_TagText(sb, content);
+                sb = CascadeGetTagP_TagBrPOnly(sb, content);
                 return ReformContent(sb)??"";
             }
 
             return "";
         }
 
-        public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? bookName)
+        public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? novelName)
         {
-            //throw new NotImplementedException();
-            return bookName?.InnerText??"" ;
+            string sNovelName = novelName?.InnerText??"";
+            int nPos= -1;
+            if ((nPos = sNovelName.IndexOf('-')) > 0)
+            {
+                return sNovelName?.Substring(0, nPos)?.Trim()??"";
+            }
+            else
+                return sNovelName;
         }
 
         public string GetBookName2(HtmlNode content)

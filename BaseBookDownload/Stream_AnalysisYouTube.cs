@@ -105,7 +105,7 @@ namespace BaseBookDownloader
 
             if(nextLink != null)
             {
-                HtmlNode? a = nextLink.SelectNodes(".//a")?.Where(n=> n.InnerText.Trim() == "下一章" || n.InnerText.Trim() == "下一页" || n.InnerText.Trim() == "下一页")?.FirstOrDefault();
+                HtmlNode? a = nextLink.SelectNodes(".//a")?.Where(n=> n.InnerText == "下一章" || n.InnerText.Trim() == "下一页" || n.InnerText.Trim() == "下一节")?.FirstOrDefault();
                 string ?sLink = a?.Attributes["href"]?.Value;
                 if (sLink?.StartsWith("http")??false)
                 {
