@@ -306,9 +306,18 @@
                             Height="40" 
                             Margin="0,0,3,0"
                             x:Name="btnSpeech"
-                            Click="btnSpeechText">
+                            Click="OnClickSpeechText">
                             <Button.Content>
                                 <TextBlock Text="Speech Play" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"/>
+                            </Button.Content>
+                        </Button>
+                        <Button 
+                            Height="40" 
+                            Margin="0,0,3,0"
+                            x:Name="btnConvertToMp3"
+                            Click="OnConvertToMp3">
+                            <Button.Content>
+                                <TextBlock Text="Convert to Mp3" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"/>
                             </Button.Content>
                         </Button>
                     </StackPanel>
