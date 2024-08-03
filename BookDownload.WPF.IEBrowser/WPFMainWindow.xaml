@@ -291,22 +291,24 @@
                         <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center"/>
                     </StackPanel>
                     <TextBlock Grid.Row="1"
-                    Text="Text Content(From Html):" 
-                    TextWrapping="WrapWithOverflow"
-                    HorizontalAlignment="Left"
-                    FontWeight="Bold" 
-                    FontSize="12" 
-                    VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="15,0,0,0"/>
+                        Text="Text Content(From Html):" 
+                        TextWrapping="WrapWithOverflow"
+                        HorizontalAlignment="Left"
+                        FontWeight="Bold" 
+                        FontSize="12" 
+                        VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="15,0,0,0"/>
                     <StackPanel 
-                Grid.Row="2"
-                Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" Grid.ColumnSpan="2">
-                        <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center"/>
+                        Grid.Row="2"
+                        Grid.ColumnSpan="2">
+                        <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center" Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" />
+                        <ComboBox x:Name="cmbInstalledVoice"></ComboBox>
                         <Button 
-                    Height="40" 
-                    Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" 
-                    Margin="0,0,3,0">
+                            Height="40" 
+                            Margin="0,0,3,0"
+                            x:Name="btnSpeech"
+                            Click="btnSpeechText">
                             <Button.Content>
-                                <TextBlock Text="Test Encoding(from test.txt)" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"/>
+                                <TextBlock Text="Speech Play" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"/>
                             </Button.Content>
                         </Button>
                     </StackPanel>
@@ -365,6 +367,7 @@
                     Grid.Column="1"
                     x:Name="txtWebContents" 
                     BorderThickness="1" 
+                    AcceptsReturn="True"
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Auto"
                     FontSize="12" FontWeight="Thin">
@@ -382,6 +385,7 @@
                     BorderThickness="1" 
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Auto"
+                    AcceptsReturn="True"
                     FontSize="12" FontWeight="Thin">
                     <TextBox.Background>
                         <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">
@@ -397,6 +401,7 @@
                     BorderThickness="1" 
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Auto"
+                    AcceptsReturn="True"
                     FontSize="12" FontWeight="Thin">
                     <TextBox.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">

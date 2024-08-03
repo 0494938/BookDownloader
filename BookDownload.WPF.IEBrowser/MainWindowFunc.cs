@@ -148,41 +148,6 @@ namespace WpfIEBookDownloader
         public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true)
         {
             _DocContents doc = new _DocContents();
-#if false
-                   bool bFailed = false;
-                   this.Dispatcher.Invoke(() =>
-                   {
-                       if (webBrowser == null || webBrowser.Document == null)
-                           bFailed = true;
-                   });
-
-                   string? strBody = null;
-                   if(!bFailed)
-                   {
-                       this.Dispatcher.Invoke(() =>
-                       {
-                           var serviceProvider = (IServiceProvider)webBrowser.Document;
-                           if (serviceProvider != null)
-                           {
-                               Guid iid = typeof(SHDocVw.WebBrowser).GUID;
-                               SHDocVw.WebBrowser? webBrowserPtr =
-                                   //serviceProvider.QueryService(SID_SWebBrowserApp, ref iid) as SHDocVw.WebBrowser;
-                                   GetWebBrowserPtr(webBrowser);
-                               if (webBrowserPtr != null)
-                               {
-                                   webBrowserPtr.NewWindow2 += webBrowser1_NewWindow2;
-                                   webBrowserPtr.NewWindow3 += webBrowser1_NewWindow3;
-                               }
-                           }
-
-                           IHTMLDocument2? hTMLDocument2 = webBrowser.Document as IHTMLDocument2;
-                           IHTMLElement? body = hTMLDocument2?.body as IHTMLElement;
-                           strBody = body?.outerHTML;
-                       });
-
-                   }
-                   return strBody;
-#else
             string html = "";
             this.Dispatcher.Invoke(() =>
             {
@@ -214,7 +179,6 @@ namespace WpfIEBookDownloader
             html = html.Remove(0, 1);
             html = html.Remove(html.Length - 1, 1);
             return html;
-#endif
         }
 
         private void AnalysisURL(string strUrl, bool bWaitOptoin = true)
@@ -347,15 +311,6 @@ namespace WpfIEBookDownloader
                 {
                     this.Dispatcher.Invoke(() =>
                     {
-#if false
-                        webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
-                        {
-                            this.Dispatcher.Invoke(() =>
-                            {
-                                doc.sHtml = taskHtml.Result;
-                            });
-                        });
-#else
                         webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
                         {
                             this.Dispatcher.Invoke(() =>
@@ -363,7 +318,6 @@ namespace WpfIEBookDownloader
                                 doc.sHtml = taskHtml.Result;
                             });
                         });
-#endif
                     });
 
                     while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
@@ -410,15 +364,6 @@ namespace WpfIEBookDownloader
                 {
                     this.Dispatcher.Invoke(() =>
                     {
-#if false
-                        webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
-                        {
-                            this.Dispatcher.Invoke(() =>
-                            {
-                                doc.sHtml = taskHtml.Result;
-                            });
-                        });
-#else
                         webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
                         {
                             this.Dispatcher.Invoke(() =>
@@ -426,7 +371,6 @@ namespace WpfIEBookDownloader
                                 doc.sHtml = taskHtml.Result;
                             });
                         });
-#endif
                     });
                     Thread.Sleep(100);
 

@@ -78,12 +78,6 @@ namespace WpfIEBookDownloader
             e.Handled = !IsTextAllowed(e.Text);
         }
 
-        private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("OnMainWindowLoaded invoked...");
-            //HideScriptErrors(webBrowser, true);
-        }
-
         private void OnSyncFromBrowser(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("OnSyncFromBrowser invoked...");

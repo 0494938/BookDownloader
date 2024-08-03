@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
+using System.Speech.Synthesis;
 using System.Windows;
 using System.Windows.Controls;
 

@@ -56,14 +56,6 @@ namespace WpfIEBookDownloader
 
         public bool isWebPageLoadComplete(string strURL)
         {
-            //SHDocVw.WebBrowser? webBrowserPtr = GetWebBrowserPtr(webBrowser);
-            //if (webBrowserPtr == null)
-            //    return false;
-            //    Debug.WriteLine(strURL + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
-            //if (webBrowserPtr?.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
-            //    return false;
-            //else
-            //    return true;
             try
             {
                 bool bLoadFinish = false;
