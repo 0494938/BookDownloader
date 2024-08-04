@@ -187,16 +187,16 @@
                 <TabItem x:Name="tblItemOcr" Header="OCR">
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <ComboBox x:Name="cmbOcrLanguage" SelectedIndex="0">
+                            <ComboBox x:Name="cmbOcrLanguage" SelectedIndex="0" Margin="0,0,3,0">
                                 <ComboBoxItem Content="Simplified Chinese"/>
                                 <ComboBoxItem Content="Traditional Chinese"/>
                                 <ComboBoxItem Content="Japanese"/>
                                 <ComboBoxItem Content="Japanese Vertial"/>
                                 <ComboBoxItem Content="English"/>
                             </ComboBox>
-                            <Button x:Name="btnOCR" Click="ClickOCR" Visibility="Visible" Content="Begin OCR Scan" FontSize="16" FontWeight="Bold"/>
+                            <Button x:Name="btnOCR" Click="ClickOCR" Visibility="Visible" Margin="2,0,3,0" Content="Begin OCR Scan"/>
                         </StackPanel>
-                        <Image x:Name="imgOCR" Source="/gcMangager.png" AllowDrop="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Drop="imgOCR_Drop" DragOver="imgOCR_DragOver"></Image>
+                        <Image x:Name="imgOCR" Source="/gcMangager.png" AllowDrop="True" Stretch="UniformToFill" Drop="imgOCR_Drop" DragOver="imgOCR_DragOver"></Image>
                     </StackPanel>
                 </TabItem>
             </TabControl>
@@ -322,10 +322,10 @@
                         Grid.Row="2"
                         Grid.ColumnSpan="2">
                         <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center" Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" />
-                        <ComboBox x:Name="cmbInstalledVoice"></ComboBox>
+                        <ComboBox x:Name="cmbInstalledVoice" Margin="3,3,3,0"></ComboBox>
                         <Button 
                             Height="40" 
-                            Margin="0,0,3,0"
+                            Margin="3,3,3,0"
                             x:Name="btnSpeech"
                             Click="OnClickSpeechText">
                             <Button.Content>
@@ -334,7 +334,7 @@
                         </Button>
                         <Button 
                             Height="40" 
-                            Margin="0,0,3,0"
+                            Margin="3,3,3,0"
                             x:Name="btnConvertToMp3"
                             Click="OnConvertToMp3">
                             <Button.Content>
