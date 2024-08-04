@@ -7,6 +7,7 @@ using System.Windows;
 namespace WpfBookDownloader
 {
 #pragma warning disable CS8604 // Null 参照引数の可能性があります。
+#pragma warning disable CA1416 // プラットフォームの互換性を検証
 #pragma warning disable CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
     public partial class WindowsWPFChrome : Window
     {
@@ -132,5 +133,6 @@ namespace WpfBookDownloader
         }
     }
 #pragma warning restore CS8604 // Null 参照引数の可能性があります。
+#pragma warning restore CA1416 // プラットフォームの互換性を検証
 #pragma warning restore CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
 }

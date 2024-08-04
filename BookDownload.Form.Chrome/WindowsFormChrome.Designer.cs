@@ -179,7 +179,11 @@ namespace BookDownloadFormApp
             "14 可乐小说网 www.keleshuba.net",
             "15 天天小说 m.ttshu8.com",
             "16 天天小说PC版 www.ttshu8.com",
-            "17 69电子书 69shuba.cx"});
+            "17 69电子书 69shuba.cx",
+            "18 UU小说 www.uuxs.com",
+            "19 UU小说网 www.uuxs8.cc",
+            "20 全本小说网 www.qbxsw.com"
+            });
             this.cmbNovelType.Location = new System.Drawing.Point(13, 14);
             this.cmbNovelType.Name = "cmbNovelType";
             this.cmbNovelType.Size = new System.Drawing.Size(315, 28);
