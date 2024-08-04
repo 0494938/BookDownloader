@@ -122,6 +122,12 @@
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyTianTianPC.cs">
       <Link>Book_AnalysisBodyTianTianPC.cs</Link>
     </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyUuCCNovel.cs">
+      <Link>Book_AnalysisBodyUuCCNovel.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyUuNovel.cs">
+      <Link>Book_AnalysisBodyUuNovel.cs</Link>
+    </Compile>
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyWuXianBook.cs">
       <Link>Book_AnalysisBodyWuXianBook.cs</Link>
     </Compile>

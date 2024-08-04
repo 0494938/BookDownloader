@@ -148,6 +148,9 @@
     <PackageReference Include="CefSharp.WinForms">
       <Version>126.2.180</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Web.WebView2">
+      <Version>1.0.2592.51</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp">

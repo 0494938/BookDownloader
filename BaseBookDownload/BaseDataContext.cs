@@ -415,7 +415,11 @@ namespace BaseBookDownloader
                     return "https://www.ttshu8.com/book/33693/124470410.html";
                 case (int)BatchQueryNovelContents.NOVEL69:
                     return "https://69shuba.cx/txt/38164/26461664";
-                    
+                case (int)BatchQueryNovelContents.UUNOVEL_COM:
+                    return "https://www.uuxs.com/chapter/72206/46164826.html";
+                case (int)BatchQueryNovelContents.UUNOVEL_CC:
+                    return "http://www.uuxs8.cc/r46844/29229950.html";
+
                 case (int)BatchQueryNovelContents.YOUTUBE:
                     return "https://www.youtube.com/watch?v=0pPPXeXKdfg";
                 case (int)BatchQueryNovelContents.PORNHUB:
@@ -468,6 +472,13 @@ namespace BaseBookDownloader
                     return new TianTianPCBookNovelContent();
                 case BatchQueryNovelContents.NOVEL69:
                     return new Novel69PCBookNovelContent();
+                case BatchQueryNovelContents.UUNOVEL_COM:
+                    return new NovelUuComBookNovelContent();
+                case BatchQueryNovelContents.UUNOVEL_CC:
+                    return new NovelUuCCBookNovelContent();
+                //case BatchQueryNovelContents.UUNOVEL_NET:
+                //    return new NovelUuNetPCBookNovelContent();
+
                 case BatchQueryNovelContents.YOUTUBE:
                     return new YouTubeStreamPageContent();
                 case BatchQueryNovelContents.PORNHUB:
@@ -516,11 +527,16 @@ namespace BaseBookDownloader
         TIANTIAN_PC = 16,
         [EnumCode("69电子书")]
         NOVEL69 = 17,
+        //[EnumCode("UU电子书")]
+        //UUNOVEL_NET = 18,
+        [EnumCode("UU电子书")]
+        UUNOVEL_COM = 18,
+        [EnumCode("UU小说网")]
+        UUNOVEL_CC = 19,
         [EnumCode("YouTube")]
-        YOUTUBE = 18,
+        YOUTUBE = UUNOVEL_CC + 1,
         [EnumCode("PornHub")]
-        PORNHUB = 19,
-
+        PORNHUB = YOUTUBE + 1,
         //TOBEDONE = 13,
     }
 

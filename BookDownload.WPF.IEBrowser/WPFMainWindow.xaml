@@ -54,7 +54,7 @@
                     x:Name="cmbNovelType" 
                     Margin="0,1,1,1" 
                     Grid.Column="0"
-                    SelectedIndex="17" 
+                    SelectedIndex="19" 
                     SelectionChanged="OnBookTypeSelectChagned" 
                     HorizontalAlignment="Stretch"
                     VerticalContentAlignment="Center"
@@ -78,6 +78,8 @@
                         <ComboBoxItem Content="15 天天小说 m.ttshu8.com"></ComboBoxItem>
                         <ComboBoxItem Content="16 天天小说PC www.ttshu8.com"></ComboBoxItem>
                         <ComboBoxItem Content="17 69电子书 69shuba.cx"></ComboBoxItem>
+                        <ComboBoxItem Content="18 UU小说 www.uuxs.com"></ComboBoxItem>
+                        <ComboBoxItem Content="19 UU小说网 www.uuxs8.cc"></ComboBoxItem>
                     </ComboBox>
                     <!--Button Grid.Column="1" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Content="Web Load" Click="OnLoadInBrowser"/-->
                     <Button Grid.Column="1" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Click="OnLoadInBrowser">
