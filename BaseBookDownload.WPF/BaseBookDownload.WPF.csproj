@@ -29,6 +29,7 @@
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyCangQiongBook.cs" Link="Book_AnalysisBodyCangQiongBook.cs" />
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyCola.cs" Link="Book_AnalysisBodyCola.cs" />
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBook.cs" Link="Book_AnalysisBodyFanQieBook.cs" />
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFinishNovel.cs" Link="Book_AnalysisBodyFinishNovel.cs" />
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyHongXiuTianXiang.cs" Link="Book_AnalysisBodyHongXiuTianXiang.cs" />
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyIKBook.cs" Link="Book_AnalysisBodyIKBook.cs" />
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyJinYongBook.cs" Link="Book_AnalysisBodyJinYongBook.cs" />

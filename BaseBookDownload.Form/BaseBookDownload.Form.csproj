@@ -101,6 +101,9 @@
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFanQieBook.cs">
       <Link>Book_AnalysisBodyFanQieBook.cs</Link>
     </Compile>
+    <Compile Include="..\BaseBookDownload\Book_AnalysisBodyFinishNovel.cs">
+      <Link>Book_AnalysisBodyFinishNovel.cs</Link>
+    </Compile>
     <Compile Include="..\BaseBookDownload\Book_AnalysisBodyHongXiuTianXiang.cs">
       <Link>Book_AnalysisBodyHongXiuTianXiang.cs</Link>
     </Compile>

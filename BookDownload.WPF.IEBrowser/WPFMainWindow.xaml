@@ -54,7 +54,7 @@
                     x:Name="cmbNovelType" 
                     Margin="0,1,1,1" 
                     Grid.Column="0"
-                    SelectedIndex="19" 
+                    SelectedIndex="20" 
                     SelectionChanged="OnBookTypeSelectChagned" 
                     HorizontalAlignment="Stretch"
                     VerticalContentAlignment="Center"
@@ -80,6 +80,7 @@
                         <ComboBoxItem Content="17 69电子书 69shuba.cx"></ComboBoxItem>
                         <ComboBoxItem Content="18 UU小说 www.uuxs.com"></ComboBoxItem>
                         <ComboBoxItem Content="19 UU小说网 www.uuxs8.cc"></ComboBoxItem>
+                        <ComboBoxItem Content="20 全本小说网 www.qbxsw.com"></ComboBoxItem>
                     </ComboBox>
                     <!--Button Grid.Column="1" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Content="Web Load" Click="OnLoadInBrowser"/-->
                     <Button Grid.Column="1" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Click="OnLoadInBrowser">
@@ -177,10 +178,19 @@
                 <ColumnDefinition Width="2"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Wpf:WebView2 
-                Margin="-3,-1,0,-3"
-                x:Name="webBrowser" 
-                ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" />
+            <TabControl Grid.Column="0" Margin="-3,-1,0,-3" SelectedIndex="0">
+                <TabItem x:Name="tblItemBrowser" Header="Browser">
+                    <Wpf:WebView2 
+                        x:Name="webBrowser" 
+                        ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" />
+                </TabItem>
+                <TabItem x:Name="tblItemOcr" Header="OCR">
+                    <StackPanel Orientation="Vertical">
+                        <Button x:Name="btnOCR" Click="ClickOCR" Visibility="Visible" Content="Begin OCR Scan" FontSize="16" FontWeight="Bold"/>
+                        <Image x:Name="imgOCR" Source="/gcMangager.png"></Image>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
             <GridSplitter 
                 Grid.Column="1" Width="2"
                 HorizontalAlignment="Stretch"
@@ -395,8 +405,9 @@
                     x:Name="txtAnalysizedContents" 
                     BorderThickness="1" 
                     VerticalScrollBarVisibility="Auto"
-                    HorizontalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Disabled"
                     AcceptsReturn="True"
+                    TextWrapping="WrapWithOverflow"
                     FontSize="12" FontWeight="Thin">
                     <TextBox.Background>
                         <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">

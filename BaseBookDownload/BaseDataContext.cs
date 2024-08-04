@@ -419,6 +419,8 @@ namespace BaseBookDownloader
                     return "https://www.uuxs.com/chapter/72206/46164826.html";
                 case (int)BatchQueryNovelContents.UUNOVEL_CC:
                     return "http://www.uuxs8.cc/r46844/29229950.html";
+                case (int)BatchQueryNovelContents.FINISHEDNOVEL:
+                    return "https://www.qbxsw.com/du_134667/49689977.html";
 
                 case (int)BatchQueryNovelContents.YOUTUBE:
                     return "https://www.youtube.com/watch?v=0pPPXeXKdfg";
@@ -476,6 +478,8 @@ namespace BaseBookDownloader
                     return new NovelUuComBookNovelContent();
                 case BatchQueryNovelContents.UUNOVEL_CC:
                     return new NovelUuCCBookNovelContent();
+                case BatchQueryNovelContents.FINISHEDNOVEL:
+                    return new NovelFinishBookNovelContent();
                 //case BatchQueryNovelContents.UUNOVEL_NET:
                 //    return new NovelUuNetPCBookNovelContent();
 
@@ -533,8 +537,11 @@ namespace BaseBookDownloader
         UUNOVEL_COM = 18,
         [EnumCode("UU小说网")]
         UUNOVEL_CC = 19,
+        [EnumCode("UU小说网")]
+        FINISHEDNOVEL = 20,
+        
         [EnumCode("YouTube")]
-        YOUTUBE = UUNOVEL_CC + 1,
+        YOUTUBE = FINISHEDNOVEL + 1,
         [EnumCode("PornHub")]
         PORNHUB = YOUTUBE + 1,
         //TOBEDONE = 13,

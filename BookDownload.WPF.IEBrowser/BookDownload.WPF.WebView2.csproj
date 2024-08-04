@@ -33,6 +33,7 @@
     <None Remove="Auto1.png" />
     <None Remove="Auto2.png" />
     <None Remove="chrome3.png" />
+    <None Remove="gcMangager.png" />
     <None Remove="html4.png" />
     <None Remove="html5.png" />
     <None Remove="html6.jpg" />
@@ -86,9 +87,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="IronOcr" Version="2024.8.21" />
+    <PackageReference Include="IronOcr.Languages.Chinese" Version="2024.6.1" />
+    <PackageReference Include="IronOcr.Languages.Japanese" Version="2024.6.1" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2592.51" />
     <PackageReference Include="NAudio.Lame" Version="2.1.0" />
     <PackageReference Include="System.Speech" Version="8.0.0" />
+    <PackageReference Include="TesseractOCR" Version="5.3.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -118,6 +123,7 @@
     <Resource Include="Auto1.png" />
     <Resource Include="Auto2.png" />
     <Resource Include="chrome3.png" />
+    <Resource Include="gcMangager.png" />
     <Resource Include="html4.png" />
     <Resource Include="html5.png" />
     <Resource Include="html6.jpg" />
