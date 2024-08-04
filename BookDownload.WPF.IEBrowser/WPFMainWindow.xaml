@@ -186,8 +186,17 @@
                 </TabItem>
                 <TabItem x:Name="tblItemOcr" Header="OCR">
                     <StackPanel Orientation="Vertical">
-                        <Button x:Name="btnOCR" Click="ClickOCR" Visibility="Visible" Content="Begin OCR Scan" FontSize="16" FontWeight="Bold"/>
-                        <Image x:Name="imgOCR" Source="/gcMangager.png"></Image>
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox x:Name="cmbOcrLanguage" SelectedIndex="0">
+                                <ComboBoxItem Content="Simplified Chinese"/>
+                                <ComboBoxItem Content="Traditional Chinese"/>
+                                <ComboBoxItem Content="Japanese"/>
+                                <ComboBoxItem Content="Japanese Vertial"/>
+                                <ComboBoxItem Content="English"/>
+                            </ComboBox>
+                            <Button x:Name="btnOCR" Click="ClickOCR" Visibility="Visible" Content="Begin OCR Scan" FontSize="16" FontWeight="Bold"/>
+                        </StackPanel>
+                        <Image x:Name="imgOCR" Source="/gcMangager.png" AllowDrop="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Drop="imgOCR_Drop" DragOver="imgOCR_DragOver"></Image>
                     </StackPanel>
                 </TabItem>
             </TabControl>

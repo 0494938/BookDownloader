@@ -64,6 +64,7 @@ namespace BaseBookDownloader
             }
             return true;
         }
+
         private void FinishDocAnalyis(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? nextLink, HtmlNode? header, HtmlNode? content, HtmlNode? novelName, bool bSilenceMode, DownloadStatus? status = null)
         {
             string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);

@@ -87,9 +87,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IronOcr" Version="2024.8.21" />
-    <PackageReference Include="IronOcr.Languages.Chinese" Version="2024.6.1" />
-    <PackageReference Include="IronOcr.Languages.Japanese" Version="2024.6.1" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2592.51" />
     <PackageReference Include="NAudio.Lame" Version="2.1.0" />
     <PackageReference Include="System.Speech" Version="8.0.0" />
@@ -109,6 +106,27 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Update="tessdata\chi_sim.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tessdata\chi_sim_vert.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tessdata\chi_tra.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tessdata\chi_tra_vert.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tessdata\eng.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tessdata\jpn.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tessdata\jpn_vert.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -123,7 +141,9 @@
     <Resource Include="Auto1.png" />
     <Resource Include="Auto2.png" />
     <Resource Include="chrome3.png" />
-    <Resource Include="gcMangager.png" />
+    <Resource Include="gcMangager.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="html4.png" />
     <Resource Include="html5.png" />
     <Resource Include="html6.jpg" />
