@@ -40,11 +40,11 @@ namespace WpfIEBookDownloader
             Debug.WriteLine("WebBrowser_NavigationCompleted invoked...");
             MainFrameWebLoadCompleted(sender, (sender as Microsoft.Web.WebView2.Wpf.WebView2)?.Source?.ToString()??"");
         }
+        
         private void CoreWebView2_WebMessageReceived(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
         {
             //throw new NotImplementedException();
         }
-
 
         private void MainFrameWebLoaded(object sender, RoutedEventArgs e)
         {

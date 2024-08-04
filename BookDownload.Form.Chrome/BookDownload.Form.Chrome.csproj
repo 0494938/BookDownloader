@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{95958DCB-325C-4C4C-A3F0-B5BFAF36C774}</ProjectGuid>
+    <ProjectGuid>{63A2943D-3696-46ED-86E3-CDBBF7B10B53}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>WindowsFormsApp</RootNamespace>
-    <AssemblyName>BookDownload.Form.App</AssemblyName>
+    <RootNamespace>BookDownloadFormApp</RootNamespace>
+    <AssemblyName>BookDownload.Form.Chrome</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <LangVersion>10.0</LangVersion>
     <FileAlignment>512</FileAlignment>
@@ -81,6 +81,11 @@
     <Compile Include="BrowserEvents.cs" />
     <Compile Include="HandleDownloadFix.cs" />
     <Compile Include="HandleDownloadComplete.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="WindowsFormChromeOverLoadFunc.cs" />
     <Compile Include="HandleDownload.cs" />
     <Compile Include="WindowsFormChrome.cs">
@@ -88,12 +93,6 @@
     </Compile>
     <Compile Include="WindowsFormChrome.Designer.cs">
       <DependentUpon>WindowsFormChrome.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WindowsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WindowsForm.Designer.cs">
-      <DependentUpon>WindowsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -110,11 +109,9 @@
     <EmbeddedResource Include="WindowsFormChrome.resx">
       <DependentUpon>WindowsFormChrome.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WindowsForm.resx">
-      <DependentUpon>WindowsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -147,9 +144,6 @@
     </PackageReference>
     <PackageReference Include="CefSharp.WinForms">
       <Version>126.2.180</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Web.WebView2">
-      <Version>1.0.2592.51</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

@@ -16,24 +16,8 @@ namespace WpfIEBookDownloader
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if ((datacontext != null))
             {
-#if false
-                var browser = sender as WebBrowser;
-                if (browser == null || browser.Document == null)
-                    return;
-
-                dynamic document = browser.Document;
-
-                SHDocVw.WebBrowser? webBrowserPtr = GetWebBrowserPtr(webBrowser);
-                Debug.WriteLine(strUri.ToString() + " : Status <" + webBrowserPtr?.ReadyState.ToString() + ">");
-                if (webBrowserPtr?.ReadyState != SHDocVw.tagREADYSTATE.READYSTATE_COMPLETE)
-                    return;
-                
-                    if(webBrowser.IsLoaded == false)
-                    return;
-#else
                 if (webBrowser == null || webBrowser.CoreWebView2 == null || webBrowser.IsLoaded != true)
                     return;
-#endif
 
                 if (strUri.ToString() == datacontext.PgmNaviUrl)
                 {

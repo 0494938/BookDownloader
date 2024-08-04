@@ -153,16 +153,9 @@ namespace WpfIEBookDownloader
             {
                 if (webBrowser != null && webBrowser.CoreWebView2 != null && webBrowser.IsLoaded == true)
                 {
-                    //html = await webView21.ExecuteScriptAsync("document.documentElement.outerHTML");
-                    //html = Regex.Unescape(html);
-                    //html = html.Remove(0, 1);
-                    //html = html.Remove(html.Length - 1, 1);
                     webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
                     {
-                        //this.Dispatcher.Invoke(() =>
-                        //{
                         doc.sHtml = taskHtml.Result;
-                        //});
                     });
                 }
             });
@@ -174,7 +167,6 @@ namespace WpfIEBookDownloader
                 Thread.Sleep(200);
             }
             html = doc.sHtml;
-            //html = JsonSerializer.Deserialize(html);
             html = Regex.Unescape(html);
             html = html.Remove(0, 1);
             html = html.Remove(html.Length - 1, 1);
