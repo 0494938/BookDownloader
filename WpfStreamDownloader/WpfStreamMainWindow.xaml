@@ -18,7 +18,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="25" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <GroupBox 
         VerticalAlignment="Center" 
@@ -90,7 +90,7 @@
                     <Button Grid.Column="2" Margin="1,1,1,1" x:Name="btnInitURL" ToolTip="Load Initial URL in Embeded Browser Control" Click="btnInitURL_Click" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal" Margin="2,0,2,0" >
-                                <TextBlock  VerticalAlignment="Center" Margin="2,0,4,0">Init...</TextBlock>
+                                <TextBlock  VerticalAlignment="Center" Margin="2,0,4,0" FontSize="14" FontWeight="Bold">Init...</TextBlock>
                                 <Image Source="/url6.png"  />
                             </StackPanel>
                         </Button.Content>
@@ -104,7 +104,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="File Name" VerticalAlignment="Center"  FontSize="12" Margin="1,1,1,1" />
+                    <TextBlock Grid.Column="0" Text="File Name" VerticalAlignment="Center"  FontSize="14" FontWeight="Bold" Margin="1,1,1,1" />
                     <TextBox Grid.Column="1" x:Name="txtOutputFileName" Text="Novel" Margin="1,1,1,1"  VerticalAlignment="Stretch" VerticalContentAlignment="Center"/>
                     <!--Button Grid.Column="2" x:Name="btnAutoDownload" Content="Auto From" Click="btnAutoURL_Click"  Margin="1,1,1,1"  FontWeight="Bold" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" /-->
                     <Button Grid.Column="2" x:Name="btnAutoDownload" ToolTip="Batch Download From Init Url With Analysis of Nexgt Link" Click="btnAutoURL_Click"  Margin="1,1,1,1"  FontWeight="Bold" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" >
@@ -173,7 +173,7 @@
                     <Button Margin="1,1,1,1" x:Name="btnCurURL" ToolTip="Load Current URL in Embeded Browser Control" Click="btnCurrURL_Click" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal" Margin="2,0,2,0" >
-                                <TextBlock  VerticalAlignment="Center" Margin="2,0,4,0">Curr...</TextBlock>
+                                <TextBlock  VerticalAlignment="Center" Margin="2,0,4,0" FontSize="14" FontWeight="Bold">Curr...</TextBlock>
                                 <Image Source="/url6.png"  />
                             </StackPanel>
                         </Button.Content>
@@ -187,7 +187,7 @@
                         <ColumnDefinition Width="65"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Margin="1,1,1,1" VerticalAlignment="Center" TextAlignment="Center">Book Name</TextBlock>
+                    <TextBlock Grid.Column="0" Margin="1,1,1,1" VerticalAlignment="Center" TextAlignment="Center" FontSize="14" FontWeight="Bold">Book Name</TextBlock>
                     <TextBox Grid.Column="1" x:Name="txtBookName" Text=" " Margin="1,1,1,1" VerticalAlignment="Stretch" VerticalContentAlignment="Center"/>
                 </Grid>
             </Grid>
@@ -195,15 +195,15 @@
 
         <Grid Grid.Row="1" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="65*"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="80*"/>
+                <ColumnDefinition Width="33*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="70*"/>
                     <RowDefinition Height="2"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="30*"/>
                 </Grid.RowDefinitions>
                 <Wpf:WebView2 Grid.Row="0"
                     Margin="-1,-1,0,-1"
@@ -218,25 +218,27 @@
                     VerticalAlignment="Center"
                     ShowsPreview="True" Cursor="SizeNS">
                 </GridSplitter>
-                <TextBox Grid.Row="2" 
-                    x:Name="txtStreamLog"
+                <RichTextBox 
+                    Grid.Row="2" 
+                    x:Name="txtYouTubLinks" 
                     BorderThickness="1" 
-                    FontSize="14" 
-                    FontWeight="Normal" 
-                    Foreground="LightGoldenrodYellow"
-                    VerticalScrollBarVisibility="Auto" 
-                    HorizontalScrollBarVisibility="Auto"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    ToolTip="View Messages">
-                    <TextBox.Background>
-                        <LinearGradientBrush Opacity="0.5" EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="LightGray"/>
-                            <GradientStop Color="LightSlateGray" Offset="0.7"/>
+                    IsReadOnly="True" 
+                    IsDocumentEnabled="True"
+                    VerticalScrollBarVisibility="Auto"
+                    FontSize="14" FontWeight="Normal" ToolTip="Other Links in current Page" >
+                    <RichTextBox.Resources>
+                        <Style TargetType="Hyperlink">
+                            <Setter Property="Cursor" Value="Hand" />
+                            <EventSetter Event="MouseLeftButtonDown" Handler="Hyperlink_MouseLeftButtonDown" />
+                        </Style>
+                    </RichTextBox.Resources>
+                    <RichTextBox.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">
+                            <GradientStop Color="LightGreen"/>
+                            <GradientStop Color="LightPink" Offset="0.7"/>
                         </LinearGradientBrush>
-                    </TextBox.Background>
-
-                </TextBox>
+                    </RichTextBox.Background>
+                </RichTextBox>
             </Grid>
             <GridSplitter 
                 Grid.Column="1" Width="2"
@@ -244,16 +246,17 @@
                 ResizeBehavior="BasedOnAlignment"
                 ResizeDirection="Auto" Cursor="SizeWE">
             </GridSplitter>
-            <Grid  Grid.Column="2">
+            <Grid  Grid.Column="2" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="38"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="60*"/>
                     <RowDefinition Height="3"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="30*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBox 
@@ -271,17 +274,19 @@
                             VerticalAlignment="Center" Margin="1,1,1,1" >
                         <Button.Content>
                             <StackPanel Orientation="Horizontal" Margin="2,0,2,0" >
-                                <TextBlock VerticalAlignment="Center" Margin="2,0,4,0">Next...</TextBlock>
+                                <TextBlock VerticalAlignment="Center" Margin="2,0,4,0" FontSize="14" FontWeight="Bold">Next...</TextBlock>
                                 <Image Source="/url6.png" />
                             </StackPanel>
                         </Button.Content>
                     </Button>
-
+                    <CheckBox IsChecked="True" x:Name="chkShowHtml" Content="Show Html" Grid.Column="2" VerticalAlignment="Center"  VerticalContentAlignment="Center" Foreground="White" FontSize="14" FontWeight="Bold">
+                    </CheckBox>
                 </Grid>
                 <TextBox
                     Grid.Row="1"
                     x:Name="txtLog" 
                     Text="Log"
+                    ToolTip="Log Area"
                     BorderThickness="1" 
                     FontSize="14" 
                     FontWeight="Normal" 
@@ -306,6 +311,7 @@
                 <TextBox
                     Grid.Row="3" 
                     x:Name="txtWebContents" 
+                    ToolTip="Page Html"
                     BorderThickness="1" 
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Auto"

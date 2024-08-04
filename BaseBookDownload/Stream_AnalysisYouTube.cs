@@ -37,7 +37,7 @@ namespace BaseBookDownloader
 
         public void FindBookNextLinkAndContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? top, ref HtmlNode? curIdentifier, ref HtmlNode? header, ref HtmlNode?  content, ref HtmlNode novelName)
         {
-            content = null;
+            content = top?.SelectNodes(".//script")?.Descendants().Where(n => n.InnerText.StartsWith("var ytInitialData =")).FirstOrDefault();
 
             curIdentifier = top?.SelectNodes(".//div[@class='watch-main-col']")?.Descendants().Where(n => n.Name == "meta" && n.Attributes["itemprop"]?.Value == "identifier").FirstOrDefault();
 
@@ -72,7 +72,10 @@ namespace BaseBookDownloader
 
         public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
         {
-            return "";
+            string? strJsonScript = content?.InnerText?.Substring("var ytInitialData =".Length);
+            strJsonScript = strJsonScript?.TrimEnd();
+            strJsonScript = strJsonScript?.TrimEnd(';');
+            return strJsonScript??"";
         }
 
         public string GetBookName(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? bookName)

@@ -5,7 +5,11 @@ using System.Security.Policy;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
 using VideoLibrary;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace WpfStreamDownloader
 {
@@ -48,9 +52,9 @@ namespace WpfStreamDownloader
                     txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
                     if (!string.IsNullOrEmpty(msg))
                     {
-                        txtStreamLog.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
-                        txtStreamLog.CaretIndex = txtLog.Text.Length;
-                        txtStreamLog.ScrollToEnd();
+                        txtLog.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
+                        txtLog.CaretIndex = txtLog.Text.Length;
+                        txtLog.ScrollToEnd();
                     }
                     if (value >= 0)
                         txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
@@ -234,7 +238,60 @@ namespace WpfStreamDownloader
        
         public void UpdateAnalysizedContents(string strContents)
         {
-            //throw new NotImplementedException();
+            JObject? data = JsonConvert.DeserializeObject(strContents) as JObject;
+            JObject? nextContents = data?["contents"] as JObject;
+            if (nextContents != null)
+            {
+                JObject? twoColumnWatchNextResults = nextContents["twoColumnWatchNextResults"] as JObject;
+                if (twoColumnWatchNextResults != null)
+                {
+                    JObject? secondaryResults = twoColumnWatchNextResults["secondaryResults"] as JObject;
+                    secondaryResults = secondaryResults?["secondaryResults"] as JObject;
+                    JArray? results = secondaryResults?["results"] as JArray;
+                    if (results != null)
+                    {
+
+                        txtYouTubLinks.Dispatcher.Invoke(()=>{
+                            FlowDocument doc = new FlowDocument();
+                            txtYouTubLinks.Document = doc;
+                            txtYouTubLinks.IsReadOnly = true;
+                            Paragraph para = new Paragraph();
+                            doc.Blocks.Add(para);
+                            foreach (JObject jLink in results)
+                            {
+                                JObject? compactVideoRenderer = jLink["compactVideoRenderer"] as JObject;
+                                string strTitle = ((compactVideoRenderer?["title"] as JObject)?["simpleText"])?.ToString() ?? "";
+                                string strLen = ((compactVideoRenderer?["lengthText"] as JObject)?["simpleText"])?.ToString() ?? "";
+                                string strIdentify = compactVideoRenderer?["videoId"]?.ToString() ?? "";
+
+                                //para.Inlines.Add(new Bold(new Run(strTitle + "\r\n")));
+                                //para.Inlines.Add(new Bold(new Run("Length : ")));
+                                //para.Inlines.Add(new Run(strLen + "\r\n"));
+                                Hyperlink link = new Hyperlink();
+                                link.IsEnabled = true;
+                                link.Inlines.Add(strTitle);
+                                link.NavigateUri = new Uri("https://www.youtube.com/watch?v=" + strIdentify);
+                                link.Click += new RoutedEventHandler(this.link_Click);
+                                para.Inlines.Add(link);
+                                para.Inlines.Add(new Run("  "));
+                                para.Inlines.Add(new Bold(new Run(strLen)));
+                                para.Inlines.Add(new Run("\r\n"));
+                            }
+                        });
+                        
+                    }
+                }
+            }
+        }
+
+        protected void link_Click(object sender, RoutedEventArgs e)
+        {
+            string? sRef= (sender as Hyperlink)?.NavigateUri.ToString();
+            if(!string.IsNullOrEmpty(sRef))
+            {
+                webBrowser.CoreWebView2.Navigate(sRef);
+            }
+            //MessageBox.Show("Clicked link!");
         }
 
         public void UpdateAggragatedContents(string strContents)
@@ -316,7 +373,14 @@ namespace WpfStreamDownloader
 
         public bool DownloadFile(BaseWndContextData? datacontext, System.Collections.Generic.List<string> listUrls)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return true;
+        }
+
+        private void Hyperlink_MouseLeftButtonDown(object sender, MouseEventArgs e)
+        {
+            var hyperlink = (Hyperlink)sender;
+            Process.Start(hyperlink.NavigateUri.ToString());
         }
     }
 }
