@@ -439,5 +439,14 @@ namespace WpfIEBookDownloader
 #endif
         }
 
+        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DownloadFile(BaseWndContextData? datacontext, List<string> listUrls)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

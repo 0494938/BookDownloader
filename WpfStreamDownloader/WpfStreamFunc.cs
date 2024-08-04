@@ -79,7 +79,7 @@ namespace WpfStreamDownloader
                     txtWebContents.Text = strPrettyHtml;
                 });
                 //analysis of youtube
-                if(strUrl.StartsWith("https://www.youtube.com", StringComparison.InvariantCultureIgnoreCase))
+                if(strUrl.StartsWith("https://www.youtube.com/", StringComparison.InvariantCultureIgnoreCase))
                     new Thread(() => datacontext.AnalysisHtmlThreadFunc4YouTube(this, strUrl, strHtml)).Start();
                 else  //analysis as Novel by default
                     datacontext.AnalysisHtml4Nolvel(this, bWaitOptoin, strUrl, strHtml);

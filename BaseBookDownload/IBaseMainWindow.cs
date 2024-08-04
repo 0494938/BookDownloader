@@ -37,6 +37,8 @@ namespace BaseBookDownloader
         public void NovelTypeChangeEvent(BaseWndContextData? datacontext, int nIndex);
         public string BatchDownloadNotified(BaseWndContextData? datacontext, DownloadStatus status, string sDownloadFileName);  //return log area contents
         public string GetNovelName();
+        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL);  //return log area contents
+        public bool DownloadFile(BaseWndContextData? datacontext, System.Collections.Generic.List<string> listUrls);  //return log area contents
     }
 #pragma warning restore CS8632 // Null 参照代入の可能性があります。
 }

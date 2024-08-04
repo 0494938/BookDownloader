@@ -327,7 +327,7 @@ namespace BaseBookDownloader
         {
             int nMaxRetry = 60; //span is 3s.
             IFetchNovelContent? fetchNovelContent = GetImplByNoveTypeIdx(SiteType, ref nMaxRetry);
-            while (!UnloadPgm)
+            while (this.PageLoaded == false && !UnloadPgm)
             {
                 Thread.Sleep(200);
             }
@@ -339,40 +339,38 @@ namespace BaseBookDownloader
                 bNoNeedFresh = fetchNovelContent.AnalysisHtmlStream(wndMain, this, strURL, strHtml, bSilenceMode, null, nMaxRetry);
             }
 
-            wndMain.UpdateStatusMsg(this, strURL + " : Finished Analysing of downloaded Uri Contents Body ...", 100);
+            ////if (bSilenceMode)
+            //{
+            //    if (!bNoNeedFresh)
+            //    {
+            //        if (this.RefreshCount > 0)
+            //        {
+            //            Debug.Assert(true);
+            //            this.RefreshCount--;
+            //            if (this.RefreshCount == 0)
+            //            {
+            //                wndMain.UpdateStatusMsg(this, "Failed as over access reqencey by website, After Retry Max to 60 seconds ...", 100 / 20 * this.RefreshCount);
+            //                return;
+            //            }
+            //            wndMain.UpdateStatusMsg(this, "Failed as over access reqencey by website, Retry No." + this.RefreshCount + " to 60 seconds ...", 100 / this.MAX_REFRESH_CNT * this.RefreshCount);
+            //            Thread.Sleep(this.SLEEP_BETWEEN_RFRESH_MILI_SECONDS);
 
-            //if (bSilenceMode)
-            {
-                if (!bNoNeedFresh)
-                {
-                    if (this.RefreshCount > 0)
-                    {
-                        Debug.Assert(true);
-                        this.RefreshCount--;
-                        if (this.RefreshCount == 0)
-                        {
-                            wndMain.UpdateStatusMsg(this, "Failed as over access reqencey by website, After Retry Max to 60 seconds ...", 100 / 20 * this.RefreshCount);
-                            return;
-                        }
-                        wndMain.UpdateStatusMsg(this, "Failed as over access reqencey by website, Retry No." + this.RefreshCount + " to 60 seconds ...", 100 / this.MAX_REFRESH_CNT * this.RefreshCount);
-                        Thread.Sleep(this.SLEEP_BETWEEN_RFRESH_MILI_SECONDS);
-
-                        DownloadOneURLAndGetNext(wndMain, strURL, true);
-                        return;
-                    }
-                    else
-                    {
-                        this.RefreshCount = this.MAX_REFRESH_CNT;
-                        Debug.Assert(true);
-                        wndMain.UpdateStatusMsg(this, "Failed as over access reqencey by website, Retry No." + this.RefreshCount + " to 60 seconds ...", 100 / this.MAX_REFRESH_CNT * this.RefreshCount);
-                        Thread.Sleep(this.SLEEP_BETWEEN_RFRESH_MILI_SECONDS);
-                        //if (status != null)
-                        //    status.DownloadFinished = false;
-                        //wndMain.RefreshPage();
-                        DownloadOneURLAndGetNext(wndMain, strURL, true);
-                    }
-                }
-            }
+            //            DownloadOneURLAndGetNext(wndMain, strURL, true);
+            //            return;
+            //        }
+            //        else
+            //        {
+            //            this.RefreshCount = this.MAX_REFRESH_CNT;
+            //            Debug.Assert(true);
+            //            wndMain.UpdateStatusMsg(this, "Failed as over access reqencey by website, Retry No." + this.RefreshCount + " to 60 seconds ...", 100 / this.MAX_REFRESH_CNT * this.RefreshCount);
+            //            Thread.Sleep(this.SLEEP_BETWEEN_RFRESH_MILI_SECONDS);
+            //            //if (status != null)
+            //            //    status.DownloadFinished = false;
+            //            //wndMain.RefreshPage();
+            //            DownloadOneURLAndGetNext(wndMain, strURL, true);
+            //        }
+            //    }
+            //}
         }
 
         public string GetDefaultUrlByIdx(int nIdx)

@@ -5,6 +5,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using VideoLibrary;
 
 namespace WpfStreamDownloader
 {
@@ -281,6 +282,39 @@ namespace WpfStreamDownloader
         }
 
         public string GetNovelName()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DownloadFile(BaseWndContextData? datacontext, string sVedioUrl)
+        {
+            //WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if (datacontext != null)
+            {
+                try
+                {
+                    //var VedioUrl = "https://www.youtube.com/embed/" + "0pPPXeXKdfg" + ".mp4";
+                    YouTube youTube = YouTube.Default;
+                    var video = youTube.GetVideo(sVedioUrl);
+                    string strFileName = AppDomain.CurrentDomain.BaseDirectory + video.FullName;
+
+                    DateTime start = DateTime.Now;
+                    UpdateStatusMsg(datacontext, "Download Start: " + sVedioUrl.ToString() + " ...", 0);
+                    System.IO.File.WriteAllBytes(strFileName, video.GetBytes());
+                    TimeSpan span = DateTime.Now - start;
+                    UpdateStatusMsg(datacontext, "Download Finished and save to " + strFileName + " in " + span.TotalSeconds + "seconds. ", 100);
+                    return true;
+                }
+                catch (Exception e) {
+                    UpdateStatusMsg(datacontext, "Download Finished with Error " + e.ToString(), 100);
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        public bool DownloadFile(BaseWndContextData? datacontext, System.Collections.Generic.List<string> listUrls)
         {
             throw new NotImplementedException();
         }

@@ -50,7 +50,7 @@
                     x:Name="cmbNovelType" 
                     Margin="0,1,1,1" 
                     Grid.Column="0"
-                    SelectedIndex="18" 
+                    SelectedIndex="21" 
                     SelectionChanged="OnBookTypeSelectChagned" 
                     HorizontalAlignment="Stretch"
                     VerticalContentAlignment="Center"
@@ -73,8 +73,12 @@
                         <ComboBoxItem Content="14 可乐小说网 www.keleshuba.net"></ComboBoxItem>
                         <ComboBoxItem Content="15 天天小说 m.ttshu8.com"></ComboBoxItem>
                         <ComboBoxItem Content="16 天天小说PC www.ttshu8.com"></ComboBoxItem>
-                        <ComboBoxItem Content="17 YouTube"></ComboBoxItem>
-                        <ComboBoxItem Content="18 PornHub"></ComboBoxItem>
+                        <ComboBoxItem Content="17 69电子书 69shuba.cx"></ComboBoxItem>
+                        <ComboBoxItem Content="18 UU小说 www.uuxs.com"></ComboBoxItem>
+                        <ComboBoxItem Content="19 UU小说网 www.uuxs8.cc"></ComboBoxItem>
+                        <ComboBoxItem Content="20 全本小说网 www.qbxsw.com"></ComboBoxItem>
+                        <ComboBoxItem Content="21 YouTube"></ComboBoxItem>
+                        <ComboBoxItem Content="22 PornHub"></ComboBoxItem>
                     </ComboBox>
                     <!--Button Grid.Column="1" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Content="Web Load" Click="OnLoadInBrowser"/-->
                     <Button Grid.Column="1" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Click="OnLoadInBrowser">
@@ -281,9 +285,11 @@
                     BorderThickness="1" 
                     FontSize="14" 
                     FontWeight="Normal" 
+                    TextWrapping="WrapWithOverflow"
+                    AcceptsReturn="True"
                     Foreground="LightGoldenrodYellow"
                     VerticalScrollBarVisibility="Auto" 
-                    HorizontalScrollBarVisibility="Auto">
+                    HorizontalScrollBarVisibility="Hidden">
                     <TextBox.Background>
                         <LinearGradientBrush Opacity="0.5" EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="LightGray"/>

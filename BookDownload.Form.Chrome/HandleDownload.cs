@@ -137,6 +137,16 @@ namespace BookDownloadFormApp
                 webBrowser.Refresh();
             });
         }
+
+        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DownloadFile(BaseWndContextData? datacontext, List<string> listUrls)
+        {
+            throw new NotImplementedException();
+        }
     }
 #pragma warning restore CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
 }
