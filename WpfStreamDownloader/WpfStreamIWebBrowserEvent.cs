@@ -64,7 +64,7 @@ namespace WpfStreamDownloader
                 Debug.WriteLine("CoreWebView2.WebResourceResponseReceived triggered. status code: " + statusCode + ", Request Url: " + e.Request.Uri.ToString());
                 if(statusCode >= 300 && statusCode < 400)
                 {
-                    Debug.WriteLine("CoreWebView2.WebResourceResponseReceived -- response to redirect. status code: " + statusCode + ", Request Url: " + e.Response.Headers.GetHeader("Location"));
+                    Debug.WriteLine("CoreWebView2.WebResourceResponseReceived -- response to redirect. status code: " + statusCode + ", Request Url: " + (e.Response.Headers.ToList().Where(n => n.Key == "Location")?.FirstOrDefault().Value ?? "0"));
                 }
                 if (e.Request.Uri.ToString().StartsWith("https://www.youtube.com/"))
                 {

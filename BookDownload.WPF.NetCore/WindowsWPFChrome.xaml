@@ -92,7 +92,7 @@
                         </Button.Content>
                     </Button>
                 </Grid>
-                <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://www.wxdzs.net/wxread/94612_43816524.html" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Margin="1,1,1,1" />
+                <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://www.wxdzs.net/wxread/94612_43816524.html" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Margin="1,1,1,1" PreviewKeyDown="txtInitURL_PreviewKeyDown" />
                 <Grid Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="65"/>
@@ -138,7 +138,7 @@
                     </Button>
                     <TextBlock Text="Curr URL:" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="1,1,1,1" TextAlignment="Right" />
                 </StackPanel>
-                <TextBox Grid.Column="1" Grid.Row="2" x:Name="txtCurURL" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Margin="1,1,1,1" />
+                <TextBox Grid.Column="1" Grid.Row="2" x:Name="txtCurURL" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Margin="1,1,1,1" PreviewKeyDown="txtCurURL_PreviewKeyDown" />
                 <!--Button Grid.Column="3" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center" FontWeight="Bold" /-->
                 <Grid Grid.Column="3" Grid.Row="2" VerticalAlignment="Stretch" >
                     <Grid.ColumnDefinitions>
@@ -204,7 +204,7 @@
                         BorderThickness="1"  
                         VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center"
-                        FontSize="12" FontWeight="Thin">
+                        FontSize="12" FontWeight="Thin" PreviewKeyDown="txtNextUrl_PreviewKeyDown">
                     </TextBox>
                     <!--Button x:Name="btnNextPage" Grid.Column="1" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center" FontWeight="Bold"  Margin="1,1,1,1" /-->
                     <Button x:Name="btnNextPage" Grid.Column="1" ToolTip="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center" Margin="1,1,1,1" >

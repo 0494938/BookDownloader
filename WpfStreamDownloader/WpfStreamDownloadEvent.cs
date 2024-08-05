@@ -48,7 +48,7 @@ namespace WpfStreamDownloader
             if ((datacontext != null))
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
 
-            BtnClickActions(txtNextUrl.Text);
+            BtnClickActions(txtCurURL.Text);
         }
 
         private void btnNextPage_Click(object sender, RoutedEventArgs e)

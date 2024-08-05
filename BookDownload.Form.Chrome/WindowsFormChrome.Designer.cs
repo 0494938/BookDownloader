@@ -155,6 +155,7 @@ namespace BookDownloadFormApp
             this.txtNextUrl.Name = "txtNextUrl";
             this.txtNextUrl.Size = new System.Drawing.Size(982, 27);
             this.txtNextUrl.TabIndex = 6;
+            this.txtNextUrl.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtNextUrl_PreviewKeyDown);
             // 
             // cmbNovelType
             // 
@@ -182,8 +183,7 @@ namespace BookDownloadFormApp
             "17 69电子书 69shuba.cx",
             "18 UU小说 www.uuxs.com",
             "19 UU小说网 www.uuxs8.cc",
-            "20 全本小说网 www.qbxsw.com"
-            });
+            "20 全本小说网 www.qbxsw.com"});
             this.cmbNovelType.Location = new System.Drawing.Point(13, 14);
             this.cmbNovelType.Name = "cmbNovelType";
             this.cmbNovelType.Size = new System.Drawing.Size(315, 28);
@@ -209,6 +209,7 @@ namespace BookDownloadFormApp
             this.txtInitURL.Size = new System.Drawing.Size(982, 27);
             this.txtInitURL.TabIndex = 3;
             this.txtInitURL.Text = "https://www.wxdzs.net/wxread/94612_43816524.html";
+            this.txtInitURL.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtInitURL_PreviewKeyDown);
             // 
             // scBottom
             // 

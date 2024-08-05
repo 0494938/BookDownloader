@@ -50,6 +50,11 @@ namespace WpfStreamDownloader
                     datacontext.PageLoaded = true; UpdateStatusMsg(datacontext, strUri + " : Finished Page download ...", 50);
                     new Thread(() => AnalysisURL(strUri)).Start();
                 }
+
+                if (!string.IsNullOrEmpty(webBrowser.CoreWebView2.Source.ToString()))
+                {
+                    this.UpdateCurUrl(webBrowser.Source.ToString());
+                }
             }
         }
     }

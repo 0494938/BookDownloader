@@ -168,10 +168,13 @@ namespace WpfBookDownloader
 
         public void UpdateCurUrl(string url, BaseWndContextData? datacontext = null)
         {
-            this.Dispatcher.Invoke(() =>
+            if (!string.IsNullOrEmpty(url))
             {
-                txtCurURL.Text = url;
-            });
+                this.Dispatcher.Invoke(() =>
+                {
+                    txtCurURL.Text = url;
+                });
+            }
         }
 
         public void RefreshPage(BaseWndContextData? datacontext = null)

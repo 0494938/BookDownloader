@@ -155,6 +155,9 @@ namespace BookDownloadFormApp
             this.txtNextUrl.Name = "txtNextUrl";
             this.txtNextUrl.Size = new System.Drawing.Size(982, 27);
             this.txtNextUrl.TabIndex = 6;
+            this.txtNextUrl.TextChanged += new System.EventHandler(this.txtNextUrl_TextChanged);
+            this.txtNextUrl.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.txtNextUrl_MouseDoubleClick);
+            this.txtNextUrl.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtNextUrl_PreviewKeyDown);
             // 
             // cmbNovelType
             // 
@@ -182,8 +185,7 @@ namespace BookDownloadFormApp
             "17 69电子书 69shuba.cx",
             "18 UU小说 www.uuxs.com",
             "19 UU小说网 www.uuxs8.cc",
-            "20 全本小说网 www.qbxsw.com"
-            });
+            "20 全本小说网 www.qbxsw.com"});
             this.cmbNovelType.Location = new System.Drawing.Point(13, 14);
             this.cmbNovelType.Name = "cmbNovelType";
             this.cmbNovelType.Size = new System.Drawing.Size(315, 28);
@@ -209,6 +211,7 @@ namespace BookDownloadFormApp
             this.txtInitURL.Size = new System.Drawing.Size(982, 27);
             this.txtInitURL.TabIndex = 3;
             this.txtInitURL.Text = "https://www.wxdzs.net/wxread/94612_43816524.html";
+            this.txtInitURL.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtInitURL_PreviewKeyDown);
             // 
             // scBottom
             // 
@@ -309,14 +312,14 @@ namespace BookDownloadFormApp
             this.txtProgress.Size = new System.Drawing.Size(147, 23);
             this.txtProgress.TabIndex = 1;
             // 
-            // WindowsFormChrome
+            // WindowsFormWebView2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1601, 1012);
             this.Controls.Add(this.gridPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "WindowsFormChrome";
+            this.Name = "WindowsFormWebView2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Windows Web Form ";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

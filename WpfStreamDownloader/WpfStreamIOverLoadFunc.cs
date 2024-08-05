@@ -225,10 +225,14 @@ namespace WpfStreamDownloader
 
         public void UpdateCurUrl(string url, BaseWndContextData? datacontext = null)
         {
-            this.Dispatcher.Invoke(() =>
+            if (!string.IsNullOrEmpty(url))
             {
-                txtCurURL.Text = url;
-            });
+                Debug.WriteLine("UpdateCurUrl : " + url);
+                this.Dispatcher.Invoke(() =>
+                {
+                    txtCurURL.Text = url;
+                });
+            }
         }
         public void UpdateInitPageButton(BaseWndContextData? datacontext = null)
         {

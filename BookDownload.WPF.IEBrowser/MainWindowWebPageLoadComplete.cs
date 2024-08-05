@@ -40,6 +40,7 @@ namespace WpfIEBookDownloader
                         Debug.WriteLine(ex);
                     }
                 }
+                txtCurURL.Text = webBrowser.Source.ToString();
             }
         }
     }

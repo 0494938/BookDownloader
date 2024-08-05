@@ -20,7 +20,8 @@ namespace BaseBookDownloader
     {
         public bool AnalysisHtmlBook(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return true;
         }
 
         private static readonly Regex _regexHttpGet = new Regex(@"[?&](\w[\w.]*)=([^?&]+)");

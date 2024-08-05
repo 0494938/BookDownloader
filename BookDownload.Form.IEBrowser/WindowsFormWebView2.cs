@@ -104,5 +104,26 @@ namespace BookDownloadFormApp
             txtProgress.Left = statusPanel.Width - (txtProgress.Top + txtProgress.Width) - 5;
             txtStatus.Width  = statusPanel.Width - txtStatus.Left - 5;
         }
+
+        private void txtInitURL_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if(e.KeyValue == '\r') { btnInitURL.PerformClick(); }
+            
+        }
+
+        private void txtNextUrl_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            
+        }
+
+        private void txtNextUrl_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtNextUrl_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyValue == '\r') btnNextPage.PerformClick();
+        }
     }
 }

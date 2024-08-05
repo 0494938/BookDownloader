@@ -40,7 +40,7 @@ namespace BaseBookDownloader
             //WPFMainWindow wndMain = (WPFMainWindow)IWndMain;
             wndMain.UpdateAnalysizedContents(strContents);
             wndMain.UpdateNextUrl(strNextLink);
-            wndMain.UpdateCurUrl(strNextLink);
+            wndMain.UpdateCurUrl("");
             wndMain.UpdateNovelName(strBookName);
             wndMain.UpdateChapterMsg(datacontext, strChapter, -1);
             if (bSilenceMode)
