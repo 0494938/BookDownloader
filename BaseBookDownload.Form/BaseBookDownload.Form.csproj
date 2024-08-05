@@ -155,6 +155,9 @@
     <Compile Include="..\BaseBookDownload\Stream_AnalysisPornHub.cs">
       <Link>Stream_AnalysisPornHub.cs</Link>
     </Compile>
+    <Compile Include="..\BaseBookDownload\Stream_AnalysisRedPorn.cs">
+      <Link>Stream_AnalysisRedPorn.cs</Link>
+    </Compile>
     <Compile Include="..\BaseBookDownload\Stream_AnalysisYouTube.cs">
       <Link>Stream_AnalysisYouTube.cs</Link>
     </Compile>

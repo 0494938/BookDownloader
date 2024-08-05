@@ -97,12 +97,16 @@ namespace WpfStreamDownloader
                     this.Dispatcher.Invoke(() => { strUrl= webBrowser.Source.ToString(); });
                     
                     string? sHtml = GetWebDocHtmlSource(strUrl);
-                    if (!string.IsNullOrEmpty(sHtml))
+                    if (!string.IsNullOrEmpty(sHtml) && IsPornHubSite(strUrl))
                     {
                         PornHubStreamPageContent analysizer = new PornHubStreamPageContent();
                         analysizer.AnalysisHtmlStream(this, datacontext, strUrl, sHtml, false, null, 0, true);
+                    }else if (!string.IsNullOrEmpty(sHtml) && IsRedPornSite(strUrl))
+                    {
+                        RedPornStreamPageContent analysizer = new RedPornStreamPageContent();
+                        analysizer.AnalysisHtmlStream(this, datacontext, strUrl, sHtml, false, null, 0, true);
                     }else
-                        UpdateStatusMsg(datacontext, "Download Failed as Html is empty...", 100);
+                    UpdateStatusMsg(datacontext, "Download Failed as Html is empty...", 100);
                 }).Start();
                 
             }

@@ -363,6 +363,22 @@ namespace BaseBookDownloader
             }
         }
 
+        public void AnalysisHtmlThreadFunc4RedPorn(IBaseMainWindow wndMain, string strURL, string strHtml, bool bSilenceMode = false)
+        {
+            int nMaxRetry = 60; //span is 3s.
+            IFetchNovelContent? fetchNovelContent = GetImplByNoveTypeIdx(SiteType, ref nMaxRetry);
+            while (this.PageLoaded == false && !UnloadPgm)
+            {
+                Thread.Sleep(200);
+            }
+            wndMain.UpdateStatusMsg(this, strURL + " : Begin to Analysize downloaded Contents Body using " + SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", 50);
+
+            bool bNoNeedFresh = true;
+            if (fetchNovelContent != null)
+            {
+                bNoNeedFresh = fetchNovelContent.AnalysisHtmlStream(wndMain, this, strURL, strHtml, bSilenceMode, null, nMaxRetry, bSilenceMode);
+            }
+        }
         public string GetDefaultUrlByIdx(int nIdx)
         {
             switch (nIdx)
@@ -414,6 +430,8 @@ namespace BaseBookDownloader
                     return "https://www.youtube.com/watch?v=0pPPXeXKdfg";
                 case (int)BatchQueryNovelContents.PORNHUB:
                     return "https://jp.pornhub.com/view_video.php?viewkey=6617c17b03771";
+                case (int)BatchQueryNovelContents.REDPORN:
+                    return "https://redporn.porn/15960451?title=bellesa-films-riley-reyes-romantic-missionary-sex-porn";
                 //case (int)BatchQueryNovelContents.TOBEDONE:
                 //    break;
                 default:
@@ -475,6 +493,8 @@ namespace BaseBookDownloader
                     return new YouTubeStreamPageContent();
                 case BatchQueryNovelContents.PORNHUB:
                     return new PornHubStreamPageContent();
+                case BatchQueryNovelContents.REDPORN:
+                    return new RedPornStreamPageContent();
                 default:
                     return null;
             }
@@ -532,6 +552,8 @@ namespace BaseBookDownloader
         YOUTUBE = FINISHEDNOVEL + 1,
         [EnumCode("PornHub")]
         PORNHUB = YOUTUBE + 1,
+        [EnumCode("RedPorn")]
+        REDPORN = PORNHUB + 1,
         //TOBEDONE = 13,
     }
 

@@ -15,7 +15,7 @@ namespace BaseBookDownloader
     {
         public bool AnalysisHtmlBook(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
         {
-            throw new NotImplementedException();
+            return true;
         }
         
         private void FinishDocAnalyis(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strURL, HtmlNode? nextLink, HtmlNode? header, HtmlNode? content, HtmlNode? novelName, bool bSilenceMode, DownloadStatus? status = null)

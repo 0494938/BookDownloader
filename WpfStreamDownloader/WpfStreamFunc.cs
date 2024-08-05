@@ -78,6 +78,8 @@ namespace WpfStreamDownloader
                     new Thread(() => datacontext.AnalysisHtmlThreadFunc4YouTube(this, strUrl, strHtml)).Start();
                 else if (IsPornHubSite(strUrl))
                     new Thread(() => datacontext.AnalysisHtmlThreadFunc4PornHub(this, strUrl, strHtml)).Start();
+                else if (strUrl.StartsWith("https://redporn.porn/", StringComparison.InvariantCultureIgnoreCase))
+                    new Thread(() => datacontext.AnalysisHtmlThreadFunc4RedPorn(this, strUrl, strHtml)).Start();
                 else  //analysis as Novel by default
                     datacontext.AnalysisHtml4Nolvel(this, bWaitOptoin, strUrl, strHtml);
             }
@@ -88,6 +90,13 @@ namespace WpfStreamDownloader
         {
             //Match match = ex.Match(strUrl);
             return Regex.IsMatch(strUrl, pornHubMatch);
+        }
+
+        static string redPornMatch = "https://([a-zA-Z0-9]+\\.)?redporn\\.porn/";
+        static bool IsRedPornSite(string strUrl)
+        {
+            //Match match = ex.Match(strUrl);
+            return Regex.IsMatch(strUrl, redPornMatch);
         }
 
         public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true, BaseWndContextData? datacontext = null)

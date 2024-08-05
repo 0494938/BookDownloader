@@ -9,7 +9,6 @@
         Title="Stream Downloader WPF Version(WebView2 based)" Height="1100" Width="1800" 
         WindowStartupLocation="CenterScreen" 
         WindowState="Normal" Icon="/download12.jpg" Loaded="Window_Loaded" Unloaded="Window_Unloaded"
-        
         >
     <Window.DataContext>
         <local:WndContextData/>
@@ -50,7 +49,7 @@
                     x:Name="cmbNovelType" 
                     Margin="0,1,1,1" 
                     Grid.Column="0"
-                    SelectedIndex="22" 
+                    SelectedIndex="21" 
                     SelectionChanged="OnBookTypeSelectChagned" 
                     HorizontalAlignment="Stretch"
                     VerticalContentAlignment="Center"
@@ -79,6 +78,7 @@
                         <ComboBoxItem Content="20 全本小说网 www.qbxsw.com"></ComboBoxItem>
                         <ComboBoxItem Content="21 YouTube"></ComboBoxItem>
                         <ComboBoxItem Content="22 PornHub"></ComboBoxItem>
+                        <ComboBoxItem Content="23 redporn.porn"></ComboBoxItem>
                     </ComboBox>
                     <!--Button Grid.Column="1" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Content="Web Load" Click="OnLoadInBrowser"/-->
                     <Button Grid.Column="1" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Click="OnLoadInBrowser">

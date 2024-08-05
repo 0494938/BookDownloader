@@ -47,6 +47,7 @@
     <Compile Include="..\BaseBookDownload\IBaseBookDownloader.cs" Link="IBaseBookDownloader.cs" />
     <Compile Include="..\BaseBookDownload\IBaseMainWindow.cs" Link="IBaseMainWindow.cs" />
     <Compile Include="..\BaseBookDownload\Stream_AnalysisPornHub.cs" Link="Stream_AnalysisPornHub.cs" />
+    <Compile Include="..\BaseBookDownload\Stream_AnalysisRedPorn.cs" Link="Stream_AnalysisRedPorn.cs" />
     <Compile Include="..\BaseBookDownload\Stream_AnalysisYouTube.cs" Link="Stream_AnalysisYouTube.cs" />
   </ItemGroup>
 

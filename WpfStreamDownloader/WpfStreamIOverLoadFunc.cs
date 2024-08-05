@@ -364,7 +364,7 @@ namespace WpfStreamDownloader
                     datacontext.IsYouTube = true;
                 else
                     datacontext.IsYouTube = false;
-                if (cmbNovelType.SelectedIndex == (int)BatchQueryNovelContents.PORNHUB)
+                if (cmbNovelType.SelectedIndex == (int)BatchQueryNovelContents.PORNHUB || cmbNovelType.SelectedIndex == (int)BatchQueryNovelContents.REDPORN)
                     datacontext.IsPornTube = true;
                 else
                     datacontext.IsPornTube = false;
@@ -414,7 +414,7 @@ namespace WpfStreamDownloader
             return false;
         }
 
-        bool DownloadTsFileAndMergeByCmdLine(BaseWndContextData? datacontext, System.Collections.Generic.List<string> lstVideoSpices)
+        static bool DownloadTsFileAndMergeByCmdLine(IBaseMainWindow wndMain, BaseWndContextData? datacontext, System.Collections.Generic.List<string> lstVideoSpices, string sVideoName)
         {
             WebClient webClient = new WebClient();
             int nFileIdx = 0;
@@ -428,12 +428,12 @@ namespace WpfStreamDownloader
                 byte[] fileContent = webClient.DownloadData(sFileUrl);
                 System.IO.File.WriteAllBytes(strTsFileName, fileContent);
                 TimeSpan span = DateTime.Now - start;
-                UpdateStatusMsg(datacontext, "Download Finished and save to " + strTsFileName + " in " + string.Format("{0:#.##}", span.TotalSeconds) + " seconds. ", (int)(100.0 * nFileIdx / lstVideoSpices.Count));
+                wndMain.UpdateStatusMsg(datacontext, "Download Finished and save to " + strTsFileName + " in " + string.Format("{0:#.##}", span.TotalSeconds) + " seconds. ", (int)(100.0 * nFileIdx / lstVideoSpices.Count));
             }
 
             // ffmpeg -i "concat:0001.ts|0002.ts|0003.ts|0004.ts|0005.ts" -bsf:a aac_adtstoasc -y full.mp4
-            string sVideoName = "";
-            this.Dispatcher.Invoke(() => { sVideoName = txtBookName.Text; });
+            //string sVideoName = "";
+            //this.Dispatcher.Invoke(() => { sVideoName = txtBookName.Text; });
             if (string.IsNullOrEmpty(sVideoName))
                 sVideoName = "Video_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
             else
@@ -481,13 +481,13 @@ namespace WpfStreamDownloader
                 }
             };
 
-            UpdateStatusMsg(datacontext, "Begin Merge TS files to <" + sVideoName + ".mp4> ... ", 0);
+            wndMain.UpdateStatusMsg(datacontext, "Begin Merge TS files to <" + sVideoName + ".mp4> ... ", 0);
             bool bRet = proc.Start();
             while (!proc.StandardError.EndOfStream)
             {
                 string? sOutput = proc.StandardError.ReadLine() ?? "";
 
-                UpdateStatusMsg(datacontext, sOutput, -1);
+                wndMain.UpdateStatusMsg(datacontext, sOutput, -1);
                 // do something with line
             }
 
@@ -500,7 +500,7 @@ namespace WpfStreamDownloader
             }
 
             TimeSpan spanMerge = DateTime.Now - startMerge;
-            UpdateStatusMsg(datacontext, "Finished Merge TS files to " + sVideoName + ".mp4 in " + string.Format("{0:#.##}", spanMerge.TotalSeconds) + " seconds. ", 100);
+            wndMain.UpdateStatusMsg(datacontext, "Finished Merge TS files to " + sVideoName + ".mp4 in " + string.Format("{0:#.##}", spanMerge.TotalSeconds) + " seconds. ", 100);
             return true;
         }
 
@@ -569,39 +569,60 @@ namespace WpfStreamDownloader
                 if (!string.IsNullOrEmpty(strDownloadUrl))
                 {
                     WebClient webClient = new WebClient();
-                    byte[] fileContent = webClient.DownloadData(strDownloadUrl);
-                    string sContent = Encoding.UTF8.GetString(fileContent);
-                    string sUrl = strDownloadUrl.Substring(0, strDownloadUrl.IndexOf(".mp4/") + ".mp4/".Length);
-
-                    StringReader sr = new StringReader(sContent);
-                    string strAlt = "";
-                    string? line = null;
-                    while ((line = sr.ReadLine()) != null)
+                    byte[] fileContent = null;
+                    if (IsPornHubSite(strDownloadUrl))
                     {
-                        line = line.Trim();
-                        if (!string.IsNullOrEmpty(line) && !line.StartsWith("#"))
-                        {
-                            strAlt = line;
-                            break;
-                        }
-                    }
-                    fileContent = webClient.DownloadData(sUrl + strAlt);
-                    sContent = Encoding.UTF8.GetString(fileContent);
+                        string sVideoName = "";
+                        this.Dispatcher.Invoke(() => { sVideoName = txtBookName.Text; });
 
-                    System.Collections.Generic.List<string> lstVideoSpices = new System.Collections.Generic.List<string>();
-                    sr = new StringReader(sContent);
-                    line = null;
-                    while ((line = sr.ReadLine()) != null)
+                        fileContent = webClient.DownloadData(strDownloadUrl);
+                        string sContent = Encoding.UTF8.GetString(fileContent);
+                        string sUrl = strDownloadUrl.Substring(0, strDownloadUrl.IndexOf(".mp4/") + ".mp4/".Length);
+
+                        StringReader sr = new StringReader(sContent);
+                        string strAlt = "";
+                        string? line = null;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            line = line.Trim();
+                            if (!string.IsNullOrEmpty(line) && !line.StartsWith("#"))
+                            {
+                                strAlt = line;
+                                break;
+                            }
+                        }
+                        fileContent = webClient.DownloadData(sUrl + strAlt);
+                        sContent = Encoding.UTF8.GetString(fileContent);
+
+                        System.Collections.Generic.List<string> lstVideoSpices = new System.Collections.Generic.List<string>();
+                        sr = new StringReader(sContent);
+                        line = null;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            line = line.Trim();
+                            if (!string.IsNullOrEmpty(line) && !line.StartsWith("#"))
+                            {
+                                lstVideoSpices.Add(sUrl + line);
+                            }
+                        }
+
+                        //DownloadTsFileAndMergeInAir(datacontext, lstVideoSpices);
+                        DownloadTsFileAndMergeByCmdLine(this, datacontext, lstVideoSpices, sVideoName);
+                    }
+                    else if (IsRedPornSite(strDownloadUrl))
                     {
-                        line = line.Trim();
-                        if (!string.IsNullOrEmpty(line) && !line.StartsWith("#"))
-                        {
-                            lstVideoSpices.Add(sUrl + line);
-                        }
+                        string sVideoName = "";
+                        this.Dispatcher.Invoke(() => { sVideoName = txtBookName.Text; });
+                        DateTime start = DateTime.Now;
+
+                        UpdateStatusMsg(datacontext, "Begin download " + strDownloadUrl + " ... ", 0);
+
+                        webClient.DownloadFile(strDownloadUrl, sVideoName + ".mp4");
+                        TimeSpan span = DateTime.Now - start;
+                        UpdateStatusMsg(datacontext, "Download Finished and save to " + sVideoName + ".mp4" + " in " + string.Format("{0:#.##}", span.TotalSeconds) + " seconds. ",100);
+                        //Task task = webClient.DownloadFileTaskAsync(strDownloadUrl, sVideoName + ".mp4");
                     }
 
-                    //DownloadTsFileAndMergeInAir(datacontext, lstVideoSpices);
-                    DownloadTsFileAndMergeByCmdLine(datacontext, lstVideoSpices);
                 }
             }
             return true;
