@@ -13,7 +13,7 @@ namespace BookDownloadFormApp
     partial class WindowsFormWebView2 : IBaseMainWindow
     {
 
-        public void RefreshPage()
+        public void RefreshPage(BaseWndContextData? datacontext = null)
         {
             this.Invoke(() =>{
                 //webBrowser.CoreWebView2.Navigate(webBrowser.Source.ToString());

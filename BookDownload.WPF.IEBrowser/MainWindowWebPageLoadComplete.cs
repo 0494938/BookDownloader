@@ -1,9 +1,6 @@
 ﻿using BaseBookDownloader;
 using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
-using WebBrowser = System.Windows.Controls.WebBrowser;
 
 namespace WpfIEBookDownloader
 {

@@ -37,7 +37,7 @@ namespace BookDownloadFormApp
             public string sHtml="";
         }
 
-        public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true)
+        public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true, BaseWndContextData? datacontext = null)
         {
             _DocContents doc = new _DocContents() ;
             string ?strBody = null;
@@ -138,12 +138,12 @@ namespace BookDownloadFormApp
             });
         }
 
-        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL)
+        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL, bool bForceDownload = false)
         {
             throw new NotImplementedException();
         }
 
-        public bool DownloadFile(BaseWndContextData? datacontext, List<string> listUrls)
+        public bool DownloadFile(BaseWndContextData? datacontext, System.Collections.Generic.Dictionary<string, string> dictUrls, bool bForceDownload = false)
         {
             throw new NotImplementedException();
         }

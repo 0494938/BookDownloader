@@ -1,12 +1,5 @@
 ﻿using BaseBookDownloader;
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace WpfBookDownloader
 {

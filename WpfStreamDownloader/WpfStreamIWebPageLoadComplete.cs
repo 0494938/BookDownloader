@@ -1,15 +1,6 @@
 ﻿using BaseBookDownloader;
 using System.Diagnostics;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WpfStreamDownloader
 {
@@ -48,6 +39,16 @@ namespace WpfStreamDownloader
                     {
                         Debug.WriteLine(ex);
                     }
+                }
+                else if (strUri.StartsWith("https://www.youtube.com/"))
+                {
+                    datacontext.PageLoaded = true; UpdateStatusMsg(datacontext, strUri + " : Finished Page download ...", 50);
+                    new Thread(() => AnalysisURL(strUri)).Start();
+                }
+                else if (IsPornHubSite(strUri))
+                {
+                    datacontext.PageLoaded = true; UpdateStatusMsg(datacontext, strUri + " : Finished Page download ...", 50);
+                    new Thread(() => AnalysisURL(strUri)).Start();
                 }
             }
         }

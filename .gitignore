@@ -406,3 +406,8 @@ ChromeCache.*
 bin_form4.8.1
 bin_net6.0
 /bin_webview2/BookDownload.Form.WebView2.exe.WebView2/EBWebView
+*.mp4
+*.mp3
+*.ts
+*.html
+*.txt

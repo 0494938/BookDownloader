@@ -227,7 +227,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel 
                         Grid.Row="0"
-                        Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" >
+                        Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}">
                         <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center">

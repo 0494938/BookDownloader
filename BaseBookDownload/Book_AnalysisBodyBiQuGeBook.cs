@@ -1,5 +1,4 @@
-﻿using BaseBookDownloader;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -188,7 +187,7 @@ namespace BaseBookDownloader
             return sNxt??"";
         }
 
-        public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
+        public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content, string? key = null)
         {
             StringBuilder sbContent = new StringBuilder();
             IEnumerable<HtmlNode>? contentNodes = content?.Descendants().Where(n => n?.Name == "div" && n.Attributes["id"]?.Value == "nr1") as IEnumerable<HtmlNode>;
@@ -243,7 +242,7 @@ namespace BaseBookDownloader
             throw new NotImplementedException();
         }
 
-        public bool AnalysisHtmlStream(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public bool AnalysisHtmlStream(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0, bool bForceDownload = false)
         {
             throw new NotImplementedException();
         }

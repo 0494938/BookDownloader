@@ -1,9 +1,5 @@
-﻿using System.IO;
-using System.Text;
+﻿using System.Text;
 using System.Windows;
-using System.Windows.Shapes;
-using VideoLibrary;
-
 
 namespace WpfStreamDownloader
 {
@@ -13,6 +9,9 @@ namespace WpfStreamDownloader
         public WpfStreamMainWindow()
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            //FFmpegBinariesHelper.RegisterFFmpegBinaries();
+            //DynamicallyLoadedBindings.Initialize();
+
             InitializeComponent();
             InitBrowser();
         }
@@ -21,5 +20,6 @@ namespace WpfStreamDownloader
         {
             webBrowser.Dispose();
         }
+
     }
 }

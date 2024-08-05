@@ -32,7 +32,7 @@ namespace BookDownloadFormApp
             public string sHtml="";
         }
 
-        public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true)
+        public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true, BaseWndContextData? datacontext = null)
         {
             _DocContents doc = new _DocContents() ;
             string html = "";

@@ -1,10 +1,7 @@
 ﻿using BaseBookDownloader;
 using CefSharp;
-using MSHTML;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Security.Policy;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,7 +25,7 @@ namespace WpfBookDownloader
             }
         }
 
-        public string GetNovelName()
+        public string GetNovelName(BaseWndContextData? datacontext = null)
         {
             try
             {
@@ -42,7 +39,7 @@ namespace WpfBookDownloader
             }
         }
 
-        public bool isWebBrowserEmpty()
+        public bool isWebBrowserEmpty(BaseWndContextData? datacontext = null)
         {
             try
             {
@@ -56,7 +53,7 @@ namespace WpfBookDownloader
             }
         }
 
-        public bool isWebPageLoadComplete(string strURL)
+        public bool isWebPageLoadComplete(string strURL, BaseWndContextData? datacontext = null)
         {
             try
             {
@@ -70,7 +67,7 @@ namespace WpfBookDownloader
             }
         }
 
-        public void UpdateNextPageButton()
+        public void UpdateNextPageButton(BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -78,7 +75,7 @@ namespace WpfBookDownloader
             });
         }
 
-        public void UpdateInitPageButton()
+        public void UpdateInitPageButton(BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -86,17 +83,17 @@ namespace WpfBookDownloader
             });
         }
 
-        public void UpdateAutoDownloadPageButton()
+        public void UpdateAutoDownloadPageButton(BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
                 this.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
             });
         }
-        public void UpdateAnalysisPageButton()
+        public void UpdateAnalysisPageButton(BaseWndContextData? datacontext = null)
         {
         }
-        public void UpdateAnalysizedContents(string? strContents)
+        public void UpdateAnalysizedContents(string? strContents, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -104,7 +101,7 @@ namespace WpfBookDownloader
             });
         }
 
-        public string GetLogContents()
+        public string GetLogContents(BaseWndContextData? datacontext = null)
         {
             string strLog = "";
             this.Dispatcher.Invoke(() => {
@@ -113,7 +110,7 @@ namespace WpfBookDownloader
             return strLog;
         }
 
-        public void UpdateNovelName(string sNovelName)
+        public void UpdateNovelName(string sNovelName, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -121,7 +118,7 @@ namespace WpfBookDownloader
             });
         }
 
-        public void UpdateAggragatedContents(string strContents)
+        public void UpdateAggragatedContents(string strContents, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -130,7 +127,7 @@ namespace WpfBookDownloader
             });
         }
 
-        public void UpdateAggragatedContentsWithLimit(string strContents)
+        public void UpdateAggragatedContentsWithLimit(string strContents, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -142,7 +139,7 @@ namespace WpfBookDownloader
             });
         }
 
-        public void UpdateWebBodyOuterHtml(string? strBody)
+        public void UpdateWebBodyOuterHtml(string? strBody, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -153,7 +150,7 @@ namespace WpfBookDownloader
             });
         }
 
-        public void UpdateNextUrl(string url)
+        public void UpdateNextUrl(string url, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -161,7 +158,7 @@ namespace WpfBookDownloader
             });
         }
 
-        public void UpdateInitUrl(string url)
+        public void UpdateInitUrl(string url, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -169,7 +166,7 @@ namespace WpfBookDownloader
             });
         }
 
-        public void UpdateCurUrl(string url)
+        public void UpdateCurUrl(string url, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -177,14 +174,14 @@ namespace WpfBookDownloader
             });
         }
 
-        public void RefreshPage()
+        public void RefreshPage(BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() => {
                 webBrowser.Reload();
             });
         }
 
-        public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true)
+        public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true, BaseWndContextData? datacontext = null)
         {
             _DocContents doc = new _DocContents();
             string? strBody = null;
@@ -211,7 +208,7 @@ namespace WpfBookDownloader
             return strBody;
         }
 
-        public void LoadHtmlString(string strHtml, string url)
+        public void LoadHtmlString(string strHtml, string url, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() => { webBrowser.LoadHtml(strHtml, url); });
         }
@@ -289,12 +286,12 @@ namespace WpfBookDownloader
             return strMsgAreaLog;
         }
 
-        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL)
+        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL, bool bForceDownload = false)
         {
             throw new NotImplementedException();
         }
 
-        public bool DownloadFile(BaseWndContextData? datacontext, List<string> listUrls)
+        public bool DownloadFile(BaseWndContextData? datacontext, System.Collections.Generic.Dictionary<string, string> dictUrls, bool bForceDownload = false)
         {
             throw new NotImplementedException();
         }

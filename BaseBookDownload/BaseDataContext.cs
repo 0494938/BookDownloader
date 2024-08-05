@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BaseBookDownloader
@@ -69,6 +69,12 @@ namespace BaseBookDownloader
         public string? PgmNaviUrl { get; set; }
         public bool UnloadPgm { get; set; } = false;
         public int RefreshCount { get; set; } = 0;
+
+        bool _bYouHub = false;
+        public bool IsYouTube { get { return _bYouHub; } set { _bYouHub = value; } }
+
+        bool _bPornHub = false;
+        public bool IsPornTube { get { return _bPornHub; } set { _bPornHub = value; } }
 
 
         public void DownloadOneURLAndGetNext(IBaseMainWindow wndMain, string strURL, bool bRefresh)
@@ -338,39 +344,23 @@ namespace BaseBookDownloader
             {
                 bNoNeedFresh = fetchNovelContent.AnalysisHtmlStream(wndMain, this, strURL, strHtml, bSilenceMode, null, nMaxRetry);
             }
+        }
 
-            ////if (bSilenceMode)
-            //{
-            //    if (!bNoNeedFresh)
-            //    {
-            //        if (this.RefreshCount > 0)
-            //        {
-            //            Debug.Assert(true);
-            //            this.RefreshCount--;
-            //            if (this.RefreshCount == 0)
-            //            {
-            //                wndMain.UpdateStatusMsg(this, "Failed as over access reqencey by website, After Retry Max to 60 seconds ...", 100 / 20 * this.RefreshCount);
-            //                return;
-            //            }
-            //            wndMain.UpdateStatusMsg(this, "Failed as over access reqencey by website, Retry No." + this.RefreshCount + " to 60 seconds ...", 100 / this.MAX_REFRESH_CNT * this.RefreshCount);
-            //            Thread.Sleep(this.SLEEP_BETWEEN_RFRESH_MILI_SECONDS);
+        public void AnalysisHtmlThreadFunc4PornHub(IBaseMainWindow wndMain, string strURL, string strHtml, bool bSilenceMode = false)
+        {
+            int nMaxRetry = 60; //span is 3s.
+            IFetchNovelContent? fetchNovelContent = GetImplByNoveTypeIdx(SiteType, ref nMaxRetry);
+            while (this.PageLoaded == false && !UnloadPgm)
+            {
+                Thread.Sleep(200);
+            }
+            wndMain.UpdateStatusMsg(this, strURL + " : Begin to Analysize downloaded Contents Body using " + SiteType.ToCode() + "<" + fetchNovelContent?.GetType()?.Name + "> ...", 50);
 
-            //            DownloadOneURLAndGetNext(wndMain, strURL, true);
-            //            return;
-            //        }
-            //        else
-            //        {
-            //            this.RefreshCount = this.MAX_REFRESH_CNT;
-            //            Debug.Assert(true);
-            //            wndMain.UpdateStatusMsg(this, "Failed as over access reqencey by website, Retry No." + this.RefreshCount + " to 60 seconds ...", 100 / this.MAX_REFRESH_CNT * this.RefreshCount);
-            //            Thread.Sleep(this.SLEEP_BETWEEN_RFRESH_MILI_SECONDS);
-            //            //if (status != null)
-            //            //    status.DownloadFinished = false;
-            //            //wndMain.RefreshPage();
-            //            DownloadOneURLAndGetNext(wndMain, strURL, true);
-            //        }
-            //    }
-            //}
+            bool bNoNeedFresh = true;
+            if (fetchNovelContent != null)
+            {
+                bNoNeedFresh = fetchNovelContent.AnalysisHtmlStream(wndMain, this, strURL, strHtml, bSilenceMode, null, nMaxRetry, bSilenceMode);
+            }
         }
 
         public string GetDefaultUrlByIdx(int nIdx)

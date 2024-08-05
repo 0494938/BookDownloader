@@ -1,11 +1,8 @@
-﻿using BaseBookDownloader;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Xml.Linq;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BaseBookDownloader
@@ -124,7 +121,7 @@ namespace BaseBookDownloader
             return "";
         }
 
-        public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
+        public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content, string? key = null)
         {
             if (content != null)
             {
@@ -147,7 +144,7 @@ namespace BaseBookDownloader
             throw new NotImplementedException();
         }
 
-        public bool AnalysisHtmlStream(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public bool AnalysisHtmlStream(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0, bool bForceDownload = false)
         {
             throw new NotImplementedException();
         }

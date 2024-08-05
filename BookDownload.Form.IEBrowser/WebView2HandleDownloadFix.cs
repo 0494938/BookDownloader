@@ -22,12 +22,12 @@ namespace BookDownloadFormApp
             }
         }
 
-        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL)
+        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL, bool bForceDownload = false)
         {
             throw new NotImplementedException();
         }
 
-        public bool DownloadFile(BaseWndContextData? datacontext, List<string> listUrls)
+        public bool DownloadFile(BaseWndContextData? datacontext, Dictionary<string, string> dictUrls, bool bForceDownload = false)
         {
             throw new NotImplementedException();
         }

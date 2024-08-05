@@ -1,9 +1,7 @@
 ﻿using BaseBookDownloader;
 using CefSharp;
-using MSHTML;
 using System;
 using System.Diagnostics;
-using System.Security.Policy;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;

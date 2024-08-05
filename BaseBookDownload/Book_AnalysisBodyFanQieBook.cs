@@ -1,5 +1,4 @@
-﻿using BaseBookDownloader;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -96,7 +95,7 @@ namespace BaseBookDownloader
                 return "https://fanqienovel.com/reader/" + nextItemId.ToString() + "?enter_from=page";
         }
 
-        public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content)
+        public string GetBookContents(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? content, string? key = null)
         {
             if (content != null)
             {
@@ -139,7 +138,7 @@ namespace BaseBookDownloader
             throw new NotImplementedException();
         }
 
-        public bool AnalysisHtmlStream(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0)
+        public bool AnalysisHtmlStream(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strURL, string strBody, bool bSilenceMode = false, DownloadStatus? status = null, int nMaxRetry = 0, bool bForceDownload = false)
         {
             throw new NotImplementedException();
         }

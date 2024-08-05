@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BaseBookDownloader
+﻿namespace BaseBookDownloader
 {
     public class BaseBookDownloader
     {

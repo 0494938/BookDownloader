@@ -25,7 +25,7 @@ namespace BookDownloadFormApp
             UpdateStatusMsg(datacontext, "Browser_AddressChanged : " + e.Address + " ...", 0);
         }
 
-        public void RefreshPage()
+        public void RefreshPage(BaseWndContextData? datacontext = null)
         {
             this.Invoke(() =>{
                 webBrowser.LoadUrl(webBrowser.Address);

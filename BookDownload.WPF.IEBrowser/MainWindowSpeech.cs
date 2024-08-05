@@ -4,7 +4,6 @@ using NAudio.Wave;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Runtime.Intrinsics.Arm;
 using System.Speech.Synthesis;
 using System.Windows;
 

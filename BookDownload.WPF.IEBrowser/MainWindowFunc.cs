@@ -1,11 +1,5 @@
 ﻿using BaseBookDownloader;
-using MSHTML;
-using System;
 using System.Diagnostics;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.ConstrainedExecution;
-using System.Security.Policy;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,14 +8,14 @@ namespace WpfIEBookDownloader
 {
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
-        public void UpdateNextPageButton() {
+        public void UpdateNextPageButton(BaseWndContextData? datacontext = null) {
             this.Dispatcher.Invoke(() =>
             {
                 btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
             });
         }
 
-        public void UpdateInitPageButton()
+        public void UpdateInitPageButton(BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -29,14 +23,14 @@ namespace WpfIEBookDownloader
             });
         }
 
-        public void UpdateAutoDownloadPageButton()
+        public void UpdateAutoDownloadPageButton(BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
                 this.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
             });
         }
-        public void UpdateAnalysisPageButton()
+        public void UpdateAnalysisPageButton(BaseWndContextData? datacontext = null)
         {
             /*
             this.Dispatcher.Invoke(() =>
@@ -46,7 +40,7 @@ namespace WpfIEBookDownloader
             */
         }
 
-        public string GetNovelName()
+        public string GetNovelName(BaseWndContextData? datacontext = null)
         {
             try
             {
@@ -60,7 +54,7 @@ namespace WpfIEBookDownloader
             }
         }
 
-        public void UpdateAnalysizedContents(string ? strContents)
+        public void UpdateAnalysizedContents(string ? strContents, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -68,7 +62,7 @@ namespace WpfIEBookDownloader
             });
         }
 
-        public string GetLogContents()
+        public string GetLogContents(BaseWndContextData? datacontext = null)
         {
             string strLog = "";
             this.Dispatcher.Invoke(() => {
@@ -77,7 +71,7 @@ namespace WpfIEBookDownloader
             return strLog;
         }
 
-        public void UpdateAggragatedContents(string strContents)
+        public void UpdateAggragatedContents(string strContents, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -86,7 +80,7 @@ namespace WpfIEBookDownloader
             });
         }
         
-        public void UpdateAggragatedContentsWithLimit(string strContents)
+        public void UpdateAggragatedContentsWithLimit(string strContents, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -98,7 +92,7 @@ namespace WpfIEBookDownloader
             });
         }
 
-        public void UpdateWebBodyOuterHtml(string? strBody)
+        public void UpdateWebBodyOuterHtml(string? strBody, BaseWndContextData? datacontext = null)
         {
             bool bIsPrettyChecked = false;
             this.Dispatcher.Invoke(() =>
@@ -113,7 +107,7 @@ namespace WpfIEBookDownloader
 
         }
 
-        public void UpdateNextUrl(string url)
+        public void UpdateNextUrl(string url, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -121,7 +115,7 @@ namespace WpfIEBookDownloader
             });
         }
 
-        public void UpdateInitUrl(string url)
+        public void UpdateInitUrl(string url, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() => 
             { 
@@ -129,7 +123,7 @@ namespace WpfIEBookDownloader
             });
         }
 
-        public void UpdateCurUrl(string url)
+        public void UpdateCurUrl(string url, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -137,7 +131,7 @@ namespace WpfIEBookDownloader
             });
         }
 
-        public void RefreshPage()
+        public void RefreshPage(BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() => {
                 //webBrowser.Refresh();
@@ -145,7 +139,7 @@ namespace WpfIEBookDownloader
             });
         }
 
-        public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true)
+        public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true, BaseWndContextData? datacontext = null)
         {
             _DocContents doc = new _DocContents();
             string html = "";
@@ -262,7 +256,7 @@ namespace WpfIEBookDownloader
             });
         }
 
-        public void LoadHtmlString(string strHtml, string url)
+        public void LoadHtmlString(string strHtml, string url, BaseWndContextData? datacontext = null)
         {
             //this.Dispatcher.Invoke(() => { webBrowser.CoreWebView2.load(strHtml, url); });
         }
@@ -439,12 +433,12 @@ namespace WpfIEBookDownloader
 #endif
         }
 
-        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL)
+        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL, bool bForceDownload = false)
         {
             throw new NotImplementedException();
         }
 
-        public bool DownloadFile(BaseWndContextData? datacontext, List<string> listUrls)
+        public bool DownloadFile(BaseWndContextData? datacontext, Dictionary<string, string> dictUrls, bool bForceDownload = false)
         {
             throw new NotImplementedException();
         }

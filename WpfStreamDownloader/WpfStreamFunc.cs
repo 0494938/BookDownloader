@@ -4,14 +4,6 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WpfStreamDownloader
 {
@@ -47,7 +39,8 @@ namespace WpfStreamDownloader
             });
 
             Debug.Assert(datacontext != null);
-
+            bool bOutputHtml = false;
+            this.Dispatcher.Invoke(() => { return bOutputHtml = chkShowHtml.IsChecked ?? false; });
             string? strHtml = GetWebDocHtmlSource(strUrl, bWaitOptoin);
             if (!string.IsNullOrEmpty(strHtml?.Trim()))
             {
@@ -74,19 +67,30 @@ namespace WpfStreamDownloader
                 htmlPretty.Write(strPrettyHtml);
                 htmlPretty.Flush();
                 htmlPretty.Close();
-
-                this.Dispatcher.Invoke(() => {
-                    txtWebContents.Text = strPrettyHtml;
-                });
+                if (bOutputHtml)
+                {
+                    this.Dispatcher.Invoke(() => {
+                        txtWebContents.Text = strPrettyHtml;
+                    });
+                }
                 //analysis of youtube
-                if(strUrl.StartsWith("https://www.youtube.com/", StringComparison.InvariantCultureIgnoreCase))
+                if (strUrl.StartsWith("https://www.youtube.com/", StringComparison.InvariantCultureIgnoreCase))
                     new Thread(() => datacontext.AnalysisHtmlThreadFunc4YouTube(this, strUrl, strHtml)).Start();
+                else if (IsPornHubSite(strUrl))
+                    new Thread(() => datacontext.AnalysisHtmlThreadFunc4PornHub(this, strUrl, strHtml)).Start();
                 else  //analysis as Novel by default
                     datacontext.AnalysisHtml4Nolvel(this, bWaitOptoin, strUrl, strHtml);
             }
         }
 
-        public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true)
+        static string pornHubMatch = "https://[a-zA-Z0-9]+\\.pornhub\\.com/";
+        static bool IsPornHubSite(string strUrl)
+        {
+            //Match match = ex.Match(strUrl);
+            return Regex.IsMatch(strUrl, pornHubMatch);
+        }
+
+        public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true, BaseWndContextData? datacontext = null)
         {
             _DocContents doc = new _DocContents();
 

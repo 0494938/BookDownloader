@@ -1,11 +1,6 @@
 ﻿using BaseBookDownloader;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace WpfIEBookDownloader
 {
@@ -41,7 +36,7 @@ namespace WpfIEBookDownloader
             }
         }
 
-        public bool isWebBrowserEmpty()
+        public bool isWebBrowserEmpty(BaseWndContextData? datacontext = null)
         {
             try
             {
@@ -54,7 +49,7 @@ namespace WpfIEBookDownloader
             }
         }
 
-        public bool isWebPageLoadComplete(string strURL)
+        public bool isWebPageLoadComplete(string strURL, BaseWndContextData? datacontext = null)
         {
             try
             {

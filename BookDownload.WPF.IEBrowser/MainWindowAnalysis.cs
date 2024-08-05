@@ -1,5 +1,4 @@
 ﻿using BaseBookDownloader;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
@@ -52,7 +51,7 @@ namespace WpfIEBookDownloader
         }
 
         
-        public void UpdateNovelName(string sNovelName)
+        public void UpdateNovelName(string sNovelName, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() => {
                 this.txtBookName.Text = sNovelName;

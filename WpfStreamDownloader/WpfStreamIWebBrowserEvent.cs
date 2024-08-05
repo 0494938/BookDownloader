@@ -2,7 +2,6 @@
 using Microsoft.Web.WebView2.WinForms;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Windows;
 
 namespace WpfStreamDownloader
@@ -67,29 +66,30 @@ namespace WpfStreamDownloader
                 {
                     Debug.WriteLine("CoreWebView2.WebResourceResponseReceived -- response to redirect. status code: " + statusCode + ", Request Url: " + e.Response.Headers.GetHeader("Location"));
                 }
-                if (e.Request.Uri.ToString() == "https://www.youtube.com/watch?v=0pPPXeXKdfg")
+                if (e.Request.Uri.ToString().StartsWith("https://www.youtube.com/"))
                 {
+                    UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value??"0") + " : " + e.Request.Uri, -1);
                     Debug.Assert(true);
-                    string strUrl = e.Request.Uri.ToString();
-                    e.Response.GetContentAsync().ContinueWith(t => {
-                        StreamReader reader = new StreamReader(t.Result);
-                        string html = reader.ReadToEnd();
-                        //html = html.Replace("<html", "<HTML");
-                        //byte[] byteArray = Encoding.UTF8.GetBytes(html);
-                        //e.Request.Content = new MemoryStream(byteArray);
-                        if (strUrl == "https://www.youtube.com/watch?v=0pPPXeXKdfg")
-                        {
-                            Debug.Assert(true);
-                            //datacontext.WaitAndLaunchAnalsys
-                        }
-                    });
+                    //string strUrl = e.Request.Uri.ToString();
+                    //e.Response.GetContentAsync().ContinueWith(t => {
+                    //    StreamReader reader = new StreamReader(t.Result);
+                    //    string html = reader.ReadToEnd();
+                    //    //html = html.Replace("<html", "<HTML");
+                    //    //byte[] byteArray = Encoding.UTF8.GetBytes(html);
+                    //    //e.Request.Content = new MemoryStream(byteArray);
+                    //    if (strUrl.StartsWith("https://www.youtube.com/"))
+                    //    {
+                    //        Debug.Assert(true);
+                    //        //datacontext.WaitAndLaunchAnalsys
+                    //    }
+                    //});
                 }else if (e.Request.Uri.ToString().Contains(".phncdn.com/hls/videos"))
                 {
-                    UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + e.Response.Headers.GetHeader("content-length")  +" : " + e.Request.Uri , -1);
+                    UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value ?? "0") + " : " + e.Request.Uri , -1);
                 }
                 else if (e.Request.Uri.ToString().StartsWith("https://etahub.com/events"))
                 {
-                    UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + e.Response.Headers.GetHeader("content-length") + " : " + e.Request.Uri, -1);
+                    UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value ?? "0") + " : " + e.Request.Uri, -1);
                 }
             }
             else
@@ -120,7 +120,7 @@ namespace WpfStreamDownloader
             //html = html.Replace("<html", "<HTML");
             //byte[] byteArray = Encoding.UTF8.GetBytes(html);
             //e.Request.Content = new MemoryStream(byteArray);
-            if (e.Request.Uri.ToString() == "https://www.youtube.com/watch?v=0pPPXeXKdfg")
+            if (e.Request.Uri.ToString().StartsWith("https://www.youtube.com/"))
             {
                 Debug.Assert(true);
             }
@@ -216,6 +216,19 @@ namespace WpfStreamDownloader
         private void CoreWebView2_BasicAuthenticationRequested(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2BasicAuthenticationRequestedEventArgs e)
         {
             Debug.WriteLine("CoreWebView2_BasicAuthenticationRequested invoked... Challenge:" + e.Challenge + ", Uri:" + e.Uri + ", Cancel:" + e.Cancel + ", " + e.ToString());
+        }
+
+        private void chkMuteWeb_Checked(object sender, RoutedEventArgs e)
+        {
+            if (webBrowser.CoreWebView2 != null)
+            {
+                webBrowser.CoreWebView2.IsMuted = true;
+            }
+        }
+
+        private void chkMuteWeb_Unchecked(object sender, RoutedEventArgs e)
+        {
+            webBrowser.CoreWebView2.IsMuted = false;
         }
     }
 }

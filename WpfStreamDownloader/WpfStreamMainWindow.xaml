@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Stream Downloader WPF Version(WebView2 based)" Height="1100" Width="1800" 
         WindowStartupLocation="CenterScreen" 
-        WindowState="Normal" Icon="/Novel9.ico" Loaded="Window_Loaded" Unloaded="Window_Unloaded"
+        WindowState="Normal" Icon="/download12.jpg" Loaded="Window_Loaded" Unloaded="Window_Unloaded"
         
         >
     <Window.DataContext>
@@ -50,7 +50,7 @@
                     x:Name="cmbNovelType" 
                     Margin="0,1,1,1" 
                     Grid.Column="0"
-                    SelectedIndex="21" 
+                    SelectedIndex="22" 
                     SelectionChanged="OnBookTypeSelectChagned" 
                     HorizontalAlignment="Stretch"
                     VerticalContentAlignment="Center"
@@ -143,26 +143,9 @@
                             </StackPanel>
                         </Button.Content>
                     </Button>
-                    <!--Button x:Name="btnReloadWebPage" Click="OnBtnRefreshPage" Content="Refresh" Margin="1,1,1,1" /-->
                     <Button x:Name="btnReloadWebPage" ToolTip="Refresh Web Page" Click="OnBtnRefreshPage" Margin="1,1,1,1">
                         <Button.Content>
                             <Image Source="/refresh1.png" />
-                        </Button.Content>
-                    </Button>
-                    <Button x:Name="btnDownloadYouTube" Click="OnYoutubeDownload" ToolTip="Download YourTube Video" Margin="1,1,1,1" >
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal" Margin="2,0,2,0" >
-                                <!--TextBlock  VerticalAlignment="Center" Margin="2,0,4,0">Source...</TextBlock-->
-                                <Image Source="/youtube10.png" />
-                            </StackPanel>
-                        </Button.Content>
-                    </Button>
-                    <Button x:Name="btnDownloadPornHub" Click="OnPornHubDownload" ToolTip="Download PornHub Video" Margin="1,1,1,1" >
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal" Margin="2,0,2,0" >
-                                <!--TextBlock  VerticalAlignment="Center" Margin="2,0,4,0">Source...</TextBlock-->
-                                <Image Source="/pornhub4.png"  />
-                            </StackPanel>
                         </Button.Content>
                     </Button>
                     <Button x:Name="btnCurPageOnWeb" Click="btnLaunchCurUrlOnWeb_Click" VerticalAlignment="Center"  Margin="1,1,1,1" >
@@ -195,65 +178,118 @@
 
         <Grid Grid.Row="1" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="65*"/>
+                <ColumnDefinition Width="55*"/>
                 <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="33*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="70*"/>
-                    <RowDefinition Height="2"/>
-                    <RowDefinition Height="30*"/>
-                </Grid.RowDefinitions>
-                <Wpf:WebView2 Grid.Row="0"
-                    Margin="-1,-1,0,-1"
-                    x:Name="webBrowser" 
-                    ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-                    ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                    ScrollViewer.CanContentScroll="True" 
-                />
-                <GridSplitter 
-                    Grid.Row="1" Height="3"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    ShowsPreview="True" Cursor="SizeNS">
-                </GridSplitter>
-                <RichTextBox 
-                    Grid.Row="2" 
-                    x:Name="txtYouTubLinks" 
-                    BorderThickness="1" 
-                    IsReadOnly="True" 
-                    IsDocumentEnabled="True"
-                    VerticalScrollBarVisibility="Auto"
-                    FontSize="14" FontWeight="Normal" ToolTip="Other Links in current Page" >
-                    <RichTextBox.Resources>
-                        <Style TargetType="Hyperlink">
-                            <Setter Property="Cursor" Value="Hand" />
-                            <EventSetter Event="MouseLeftButtonDown" Handler="Hyperlink_MouseLeftButtonDown" />
-                        </Style>
-                    </RichTextBox.Resources>
-                    <RichTextBox.Background>
-                        <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">
-                            <GradientStop Color="LightGreen"/>
-                            <GradientStop Color="LightPink" Offset="0.7"/>
-                        </LinearGradientBrush>
-                    </RichTextBox.Background>
-                </RichTextBox>
-            </Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="30*"/>
+            </Grid.RowDefinitions>
+            <Wpf:WebView2 Grid.Row="0" Grid.Column="0"
+                Margin="-1,-1,0,-1"
+                x:Name="webBrowser" 
+                ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                ScrollViewer.CanContentScroll="True" 
+            />
             <GridSplitter 
-                Grid.Column="1" Width="2"
+                Grid.Row="1" Grid.Column="0" Height="3" Grid.ColumnSpan="3"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                ShowsPreview="True" Cursor="SizeNS">
+            </GridSplitter>
+            <RichTextBox 
+                Grid.Row="2" 
+                Grid.Column="0"
+                x:Name="txtYouTubLinks" 
+                ToolTip="Other Links in current Page" 
+                BorderThickness="1" 
+                IsReadOnly="True" 
+                IsDocumentEnabled="True"
+                VerticalScrollBarVisibility="Auto"
+                FontSize="14" FontWeight="Normal" >
+                <RichTextBox.Resources>
+                    <Style TargetType="Hyperlink">
+                        <Setter Property="Cursor" Value="Hand" />
+                        <EventSetter Event="MouseLeftButtonDown" Handler="Hyperlink_MouseLeftButtonDown" />
+                    </Style>
+                </RichTextBox.Resources>
+                <RichTextBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">
+                        <GradientStop Color="LightGreen"/>
+                        <GradientStop Color="LightPink" Offset="0.7"/>
+                    </LinearGradientBrush>
+                </RichTextBox.Background>
+                <FlowDocument/>
+            </RichTextBox>
+            <GridSplitter 
+                Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"
+                Width="5"
                 HorizontalAlignment="Stretch"
                 ResizeBehavior="BasedOnAlignment"
                 ResizeDirection="Auto" Cursor="SizeWE">
             </GridSplitter>
-            <Grid  Grid.Column="2" >
+            <Grid Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="38"/>
-                    <RowDefinition Height="60*"/>
-                    <RowDefinition Height="3"/>
-                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Row="2" Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="2"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="2"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <CheckBox Grid.Row="0" IsChecked="True" x:Name="chkMuteWeb" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" HorizontalAlignment="Right" Width="100" Checked="chkMuteWeb_Checked" Unchecked="chkMuteWeb_Unchecked">
+                        <CheckBox.Content>
+                            <StackPanel Orientation="Vertical" Margin="2,2,2,2" >
+                                <TextBlock TextWrapping="WrapWithOverflow">Mute Web Control</TextBlock>
+                                <Image Width="40" Source="/Mute1.png"  />
+                            </StackPanel>
+                        </CheckBox.Content>
+                    </CheckBox>
+                    <CheckBox Grid.Row="2" IsChecked="False" x:Name="chkAutoDownload" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" HorizontalAlignment="Right" Width="100">
+                        <CheckBox.Content>
+                            <TextBlock TextWrapping="WrapWithOverflow">Auto Download As Mp4</TextBlock>
+                        </CheckBox.Content>
+                    </CheckBox>
+                    <Button Grid.Row="4" Grid.Column="0" 
+                        x:Name="btnDownloadYouTube" 
+                        Click="OnYoutubeDownload" 
+                        Visibility="{Binding Path=IsYouTube,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"
+                        ToolTip="Download YourTube Video" Margin="1,1,1,1">
+                        <Button.Content>
+                            <StackPanel Orientation="Vertical" Margin="2,2,2,2" >
+                                <TextBlock  VerticalAlignment="Center" Margin="2,2,2,2" FontSize="14" FontWeight="Bold">Download</TextBlock>
+                                <Image Width="40" Source="/youtube9.png" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Button 
+                        Grid.Row="4"
+                        Visibility="{Binding Path=IsPornTube,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter} }"
+                        x:Name="btnDownloadPornHub" Click="OnPornHubDownload" ToolTip="Download PornHub Video" Margin="1,1,1,1" >
+                        <Button.Content>
+                            <StackPanel Orientation="Vertical" Margin="2,0,2,0" >
+                                <TextBlock  VerticalAlignment="Center" Margin="2,2,2,2" FontSize="14" FontWeight="Bold">Download</TextBlock>
+                                <Image Width="40" Source="/pornhub4.png"  />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -279,11 +315,17 @@
                             </StackPanel>
                         </Button.Content>
                     </Button>
-                    <CheckBox IsChecked="True" x:Name="chkShowHtml" Content="Show Html" Grid.Column="2" VerticalAlignment="Center"  VerticalContentAlignment="Center" Foreground="White" FontSize="14" FontWeight="Bold">
-                    </CheckBox>
+                <Grid.Background>
+                    <LinearGradientBrush Opacity="0.5" EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="LightGray"/>
+                        <GradientStop Color="LightSlateGray" Offset="0.7"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
                 </Grid>
                 <TextBox
                     Grid.Row="1"
+                    Grid.Column="1"
+                    Grid.RowSpan="5"
                     x:Name="txtLog" 
                     Text="Log"
                     ToolTip="Log Area"
@@ -292,48 +334,50 @@
                     FontWeight="Normal" 
                     TextWrapping="WrapWithOverflow"
                     AcceptsReturn="True"
-                    Foreground="LightGoldenrodYellow"
                     VerticalScrollBarVisibility="Auto" 
-                    HorizontalScrollBarVisibility="Hidden">
-                    <TextBox.Background>
-                        <LinearGradientBrush Opacity="0.5" EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="LightGray"/>
-                            <GradientStop Color="LightSlateGray" Offset="0.7"/>
-                        </LinearGradientBrush>
-                    </TextBox.Background>
+                    HorizontalScrollBarVisibility="Hidden"
+                    Background="Transparent">
                 </TextBox>
-                <GridSplitter 
-                    Grid.Row="2" Height="3"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    ShowsPreview="True" Cursor="SizeNS">
-                </GridSplitter>
-                <TextBox
-                    Grid.Row="3" 
-                    x:Name="txtWebContents" 
-                    ToolTip="Page Html"
-                    BorderThickness="1" 
-                    VerticalScrollBarVisibility="Auto"
-                    HorizontalScrollBarVisibility="Auto"
-                    FontSize="14" FontWeight="Normal" Text="Html">
-                    <TextBox.Background>
-                        <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">
-                            <GradientStop Color="LightGreen"/>
-                            <GradientStop Color="LightPink" Offset="0.7"/>
-                        </LinearGradientBrush>
-                    </TextBox.Background>
-                </TextBox>
-
+                <Grid.Background>
+                    <LinearGradientBrush Opacity="0.5" EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="LightGray"/>
+                        <GradientStop Color="LightSlateGray" Offset="0.7"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+            </Grid>
+            <Grid Grid.Row="2" Grid.Column="2" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <CheckBox Grid.Row="1" IsChecked="False" x:Name="chkShowHtml" HorizontalContentAlignment="Center" Content="Show Html" FontSize="14" FontWeight="Bold"/>
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">
+                        <GradientStop Color="LightGreen"/>
+                        <GradientStop Color="LightPink" Offset="0.7"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
             </Grid>
 
-            <Grid.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="CadetBlue"/>
-                    <GradientStop Color="LightBlue" Offset="0.7"/>
-                </LinearGradientBrush>
-            </Grid.Background>
+            <TextBox
+                Grid.Row="2"  Grid.Column="3"
+                x:Name="txtWebContents" 
+                ToolTip="Page Html"
+                BorderThickness="1" 
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Auto"
+                FontSize="14" FontWeight="Normal" Text="Html">
+                <TextBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">
+                        <GradientStop Color="LightGreen"/>
+                        <GradientStop Color="LightPink" Offset="0.7"/>
+                    </LinearGradientBrush>
+                </TextBox.Background>
+            </TextBox>
+
         </Grid>
-        <Grid  Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Stretch" AutomationProperties.HelpText="" Background="LightGray" >
+        <Grid  Grid.Row="2" VerticalAlignment="Stretch" AutomationProperties.HelpText="" Background="LightGray" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="5" />

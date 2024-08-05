@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:WpfStreamDownloader"
              StartupUri="WpfStreamMainWindow.xaml">
     <Application.Resources>
-         
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
     </Application.Resources>
 </Application>

@@ -1,7 +1,6 @@
 ﻿using BaseBookDownloader;
 using CefSharp;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
 
