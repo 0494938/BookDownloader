@@ -1,9 +1,12 @@
 ﻿using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace BaseBookDownloader
 {
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning disable CS8632 // Null 参照代入の可能性があります。
     public class BaseBookNovelContent
     {
@@ -147,10 +150,29 @@ namespace BaseBookDownloader
                 .Replace("&quot;", "\"").Replace("&circ;", "ˆ").Replace("&tilde;", "˜").Replace("&prime;", "′").Replace("&Prime;", "″").Replace("\r\n\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n").ToString();
         }
 
-        public static void WriteToFile(DownloadStatus? status, string strHeader, string strContents, string strNextLink, string strNovelName) {
-            DownloadStatus.ContentsWriter?.Write(strContents);
-            DownloadStatus.ContentsWriter?.Flush();
+        public static void WriteToFile(BaseWndContextData datacontext,  DownloadStatus? status, string strUrl, string strHeader, string strContents, string strNextLink, string strNovelName) {
+            if (status.FlushedToFiles == false)
+            {
+                status.FlushedToFiles = true;
+
+                string strLeadChars = strContents.Substring(0, 200);
+                if (datacontext.DictHandledContentsForDupCheck.ContainsKey(strLeadChars))
+                {
+                    Debug.WriteLine(strUrl  + " has duplicat contents, so skip... Dup Url: " + strUrl  + " <-> " + datacontext.DictHandledContentsForDupCheck[strLeadChars]);
+                    Debug.Assert(false);
+                }
+                else
+                {
+                    datacontext.DictHandledContentsForDupCheck[strLeadChars] = strUrl;
+#if DEBUG
+                    //DownloadStatus.ContentsWriter?.WriteLine(strUrl);
+#endif
+                    DownloadStatus.ContentsWriter?.Write(strContents);
+                    DownloadStatus.ContentsWriter?.Flush();
+                }
+            }
         }
     }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning restore CS8632 // Null 参照代入の可能性があります。
 }

@@ -42,6 +42,7 @@ namespace WpfIEBookDownloader
             if ((datacontext != null))
             {
                 datacontext.DictDownloadStatus.Clear();
+                datacontext.DictHandledContentsForDupCheck.Clear();
                 datacontext.PageLoaded = false;
                 datacontext.NextLinkAnalysized = false;
                 // btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
@@ -56,7 +57,8 @@ namespace WpfIEBookDownloader
                 {
                     datacontext.PgmNaviUrl = strUrl;
                     //webBrowser.Navigate(strUrl);
-                    webBrowser.CoreWebView2.Navigate(strUrl);
+                    //webBrowser.CoreWebView2.Navigate(strUrl);
+                    LoadUiUrl(datacontext, strUrl);
                     UpdateStatusMsg(datacontext, strUrl + " : Begin to download ...", 0);
                 }
                 catch (Exception ex)
@@ -102,6 +104,7 @@ namespace WpfIEBookDownloader
             if (datacontext != null)
             {
                 datacontext.DictDownloadStatus.Clear();
+                datacontext.DictHandledContentsForDupCheck.Clear();
                 datacontext.BackGroundNotRunning = false;
                 
                 //btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();

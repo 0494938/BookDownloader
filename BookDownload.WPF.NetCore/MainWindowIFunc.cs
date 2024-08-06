@@ -24,6 +24,7 @@ namespace WpfBookDownloader
             if ((datacontext != null))
             {
                 datacontext.DictDownloadStatus.Clear();
+                datacontext.DictHandledContentsForDupCheck.Clear();
                 datacontext.PageLoaded = false;
                 datacontext.NextLinkAnalysized = false;
                 UpdateAutoDownloadPageButton();

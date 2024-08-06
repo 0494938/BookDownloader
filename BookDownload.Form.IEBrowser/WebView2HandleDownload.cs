@@ -96,7 +96,6 @@ namespace BookDownloadFormApp
             txtLog.Clear();
             datacontext.RefreshCount = 0;
 
-            datacontext.DictDownloadStatus.Clear();
             Debug.WriteLine("btnAutoDownload_Click invoked...");
 
             if (datacontext != null)
@@ -104,6 +103,7 @@ namespace BookDownloadFormApp
                 datacontext.BackGroundNotRunning = false;
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
                 datacontext.DictDownloadStatus.Clear();
+                datacontext.DictHandledContentsForDupCheck.Clear();
 
                 int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 20 : int.Parse(txtPages.Text.Trim());
                 DownloadStatus.MaxPageToDownload = nMaxPage;

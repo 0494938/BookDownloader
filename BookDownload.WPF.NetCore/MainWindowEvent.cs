@@ -68,6 +68,7 @@ namespace WpfBookDownloader
             if ((datacontext != null))
             {
                 datacontext.DictDownloadStatus.Clear();
+                datacontext.DictHandledContentsForDupCheck.Clear();
                 AnalysisURL(webBrowser.Address.ToString(), false);
             }
         }

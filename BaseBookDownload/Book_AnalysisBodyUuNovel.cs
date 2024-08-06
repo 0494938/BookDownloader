@@ -39,7 +39,7 @@ namespace BaseBookDownloader
                 if (content != null || nextLink != null)
                 {
                     //novelName = body;
-                    FinishDocAnalyis(wndMain, datacontext, nextLink, header, content, novelName, bSilenceMode, status);
+                    FinishDocAnalyis(wndMain, datacontext, strUrl, nextLink, header, content, novelName, bSilenceMode, status);
                     return true;
                 }
                 else
@@ -61,7 +61,7 @@ namespace BaseBookDownloader
             }
             return true;
         }
-        private void FinishDocAnalyis(IBaseMainWindow wndMain, BaseWndContextData datacontext, HtmlNode? nextLink, HtmlNode? header, HtmlNode? content, HtmlNode? novelName, bool bSilenceMode, DownloadStatus? status = null)
+        private void FinishDocAnalyis(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strUrl, HtmlNode? nextLink, HtmlNode? header, HtmlNode? content, HtmlNode? novelName, bool bSilenceMode, DownloadStatus? status = null)
         {
             string strNextLink = GetBookNextLink(wndMain, datacontext, nextLink);
             string strChapterHeader = GetBookHeader(wndMain, datacontext, header);
@@ -74,7 +74,7 @@ namespace BaseBookDownloader
                 Debug.Assert(status != null);
                 status.NextUrl = strNextLink;
 
-                WriteToFile(status, strChapterHeader, strContents, strNextLink, strNovelName);
+                WriteToFile(datacontext, status, strUrl, strChapterHeader, strContents, strNextLink, strNovelName);
             }
             datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
             wndMain.UpdateNextPageButton();

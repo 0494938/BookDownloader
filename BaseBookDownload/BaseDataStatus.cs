@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace BaseBookDownloader
 {
@@ -15,6 +10,7 @@ namespace BaseBookDownloader
 #pragma warning disable CS8632 // Null 参照代入の可能性があります。
     public class DownloadStatus
     {
+        public bool FlushedToFiles { get; set; } = false;
         public bool DownloadFinished { get; set; } = false;
         public int DownloadRetried { get; set; } = 0;
         public string? URL { get; set; }
@@ -55,8 +51,9 @@ namespace BaseBookDownloader
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
         public Dictionary<string, DownloadStatus> DictDownloadStatus { get; } = new Dictionary<string, DownloadStatus>();
-
-        public bool BackGroundNotRunning { get; set; } = true;
+        public Dictionary<string, string> DictHandledContentsForDupCheck { get; } = new Dictionary<string, string>();
+        bool _backGroundNotRunning = true;
+        public bool BackGroundNotRunning { get { return _backGroundNotRunning && SelectedIdx <(int)BatchQueryNovelContents.YOUTUBE;  } set { _backGroundNotRunning = value; } } 
         bool _pageLoaded = false;
         public bool PageLoaded { get { return _pageLoaded && BackGroundNotRunning; } set { _pageLoaded = value; } }
         bool _contentsAnalysised = false;
@@ -70,20 +67,33 @@ namespace BaseBookDownloader
         public bool UnloadPgm { get; set; } = false;
         public int RefreshCount { get; set; } = 0;
 
-        bool _bYouHub = false;
-        public bool IsYouTube { get { return _bYouHub; } set { _bYouHub = value; } }
+        //bool _bYouHub = false;
+        public bool IsYouTube { get {
+                if (SelectedIdx == (int)BatchQueryNovelContents.YOUTUBE)
+                    return true;
+                else
+                    return false;
+            } }
 
-        bool _bPornHub = false;
-        public bool IsPornTube { get { return _bPornHub; } set { _bPornHub = value; } }
+        //bool _bPornHub = false;
+        public bool IsPornTube { get
+            {
+                if (SelectedIdx == (int)BatchQueryNovelContents.PORNHUB || SelectedIdx == (int)BatchQueryNovelContents.REDPORN)
+                    return true;
+                else
+                    return false;
+            }
+        }
         public string FileSavePath { get; set; } = "";
         public string FileTempPath { get; set; } = "";
+        public int SelectedIdx { get; set; } = -1;
         
         #endregion Variable_and_Properties
         class _SITE_Behavior_
         {
             public BatchQueryNovelContents idx;
-            public string leadUrl;
-            public string dftUrl;
+            public string leadUrl="";
+            public string dftUrl="";
             public bool bSkipHandleSourceChangedEvent;
         }
 

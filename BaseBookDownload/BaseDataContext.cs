@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -31,7 +32,20 @@ namespace BaseBookDownloader
                         status.NextUrl = "";
                     }
                     else
-                        DictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished = false, URL = strURL, NextUrl = "", StartTime = DateTime.Now, PageNum = DictDownloadStatus.Count + 1 };
+                    {
+                        
+                        if (DictDownloadStatus.ContainsKey("strURL")) {
+                            DownloadStatus status = DictDownloadStatus[strURL];
+                            status.DownloadFinished = true;
+                            status.DownloadFinished = false;
+                            status.URL = strURL;
+                            status.NextUrl = "";
+                            status.StartTime = DateTime.Now;
+                        }
+                        else
+                            DictDownloadStatus[strURL] = new DownloadStatus { DownloadFinished = false, URL = strURL, NextUrl = "", StartTime = DateTime.Now, PageNum = DictDownloadStatus.Count + 1 };
+
+                    }
 
                     wndMain.LoadUiUrl(this, strURL);
                     wndMain.UpdateStatusMsg(this, strURL + " : Begin to download ...", (int)((100.0 / DownloadStatus.MaxPageToDownload * (DictDownloadStatus[strURL].PageNum - 1))));

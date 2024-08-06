@@ -31,6 +31,7 @@ namespace WpfIEBookDownloader
             if ((datacontext != null))
             {
                 datacontext.DictDownloadStatus.Clear();
+                datacontext.DictHandledContentsForDupCheck.Clear();
                 AnalysisURL(webBrowser.Source.ToString(), false);
             }
         }

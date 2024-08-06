@@ -47,7 +47,7 @@ namespace BaseBookDownloader
                         Debug.Assert(status != null);
                         status.NextUrl = strNextLink;
 
-                        WriteToFile(status, strChapterHeader, strContents, strNextLink, strNovelName);
+                        WriteToFile(datacontext, status, strUrl, strChapterHeader, strContents, strNextLink, strNovelName);
                     }
                     datacontext.NextLinkAnalysized = !string.IsNullOrEmpty(strNextLink);
                     wndMain.UpdateNextPageButton();

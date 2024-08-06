@@ -22,12 +22,15 @@ namespace WpfStreamDownloader
                     {
                         datacontext.PageLoaded = true;
                         // btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                        if (datacontext.DictDownloadStatus.ContainsKey(strUri))
+                        if (datacontext.DictDownloadStatus.ContainsKey(strUri) )
                         {
                             DownloadStatus status = datacontext.DictDownloadStatus[strUri];
-                            UpdateStatusMsg(datacontext, strUri + " : Finished Page download ...", (int)((100.0 / DownloadStatus.MaxPageToDownload * (status.PageNum - 1 + 0.5))));
-                            status.DownloadFinished = true;
-                            status.FinishTime = DateTime.Now;
+                            if (status.DownloadFinished == false)
+                            {
+                                UpdateStatusMsg(datacontext, strUri + " : Finished Page download ...", (int)((100.0 / DownloadStatus.MaxPageToDownload * (status.PageNum - 1 + 0.5))));
+                                status.DownloadFinished = true;
+                                status.FinishTime = DateTime.Now;
+                            }
                         }
                         else
                         {

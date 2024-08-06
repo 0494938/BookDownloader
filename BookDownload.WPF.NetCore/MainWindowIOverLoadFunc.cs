@@ -14,15 +14,31 @@ namespace WpfBookDownloader
     {
         public void NovelTypeChangeEvent(BaseWndContextData datacontext, int nIndex)
         {
-            if (txtInitURL != null)
+            if (txtInitURL != null && datacontext != null)
             {
-                Debug.WriteLine("Select Combox Index : " + cmbNovelType.SelectedIndex);
+                //Debug.WriteLine("Select Combox Index : " + cmbNovelType.SelectedIndex);
+                UpdateStatusMsg(App.Current.MainWindow.DataContext as WndContextData, "Select Combox Index : " + cmbNovelType.SelectedIndex + " " + ((BatchQueryNovelContents)cmbNovelType.SelectedIndex).ToCode(), -1);
                 if (txtInitURL != null)
                 {
                     Debug.WriteLine("Select Combox Index : " + cmbNovelType.SelectedIndex);
                     txtInitURL.Text = BaseWndContextData.GetDefaultUrlByIdx(cmbNovelType.SelectedIndex);
+
+                    if (string.IsNullOrEmpty(txtCurURL.Text.Trim()))
+                    {
+                        txtCurURL.Text = txtInitURL.Text;
+                    }
                 }
             }
+            if ((datacontext != null))
+            {
+                datacontext.SelectedIdx = nIndex;
+
+                //btnDownloadYouTube.GetBindingExpression(Button.VisibilityProperty).UpdateTarget();
+                //btnDownloadPornHub.GetBindingExpression(Button.VisibilityProperty).UpdateTarget();
+            }
+            UpdateInitPageButton();
+            UpdateNextPageButton();
+            UpdateAutoDownloadPageButton();
         }
 
         public string GetNovelName(BaseWndContextData? datacontext = null)

@@ -398,18 +398,14 @@ namespace WpfStreamDownloader
             }
             if ((datacontext != null))
             {
-                if (cmbNovelType.SelectedIndex == (int)BatchQueryNovelContents.YOUTUBE)
-                    datacontext.IsYouTube = true;
-                else
-                    datacontext.IsYouTube = false;
-                if (cmbNovelType.SelectedIndex == (int)BatchQueryNovelContents.PORNHUB || cmbNovelType.SelectedIndex == (int)BatchQueryNovelContents.REDPORN)
-                    datacontext.IsPornTube = true;
-                else
-                    datacontext.IsPornTube = false;
+                datacontext.SelectedIdx = nIndex;
 
                 btnDownloadYouTube.GetBindingExpression(Button.VisibilityProperty).UpdateTarget();
                 btnDownloadPornHub.GetBindingExpression(Button.VisibilityProperty).UpdateTarget();
             }
+            UpdateInitPageButton();
+            UpdateNextPageButton();
+            UpdateAutoDownloadPageButton();
         }
 
         public string BatchDownloadNotified(BaseWndContextData? datacontext, DownloadStatus status, string sDownloadFileName)

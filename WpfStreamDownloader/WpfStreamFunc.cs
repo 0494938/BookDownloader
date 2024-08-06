@@ -104,32 +104,40 @@ namespace WpfStreamDownloader
 
         public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true, BaseWndContextData? datacontext = null)
         {
-            _DocContents doc = new _DocContents();
-
-            string html = "";
-            this.Dispatcher.Invoke(() =>
+            try
             {
-                if (webBrowser != null && webBrowser.CoreWebView2 != null && webBrowser.IsLoaded == true)
+                _DocContents doc = new _DocContents();
+
+                string html = "";
+                this.Dispatcher.Invoke(() =>
                 {
-                    webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
+                    if (webBrowser != null && webBrowser.CoreWebView2 != null && webBrowser.IsLoaded == true)
                     {
-                        doc.sHtml = taskHtml.Result;
-                    });
+                        webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
+                        {
+                            doc.sHtml = taskHtml.Result;
+                        });
+                    }
+                });
+                int nMaxRetry = 5 * 20;
+                int nRetry = 0;
+                while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                {
+                    nRetry++;
+                    Thread.Sleep(200);
                 }
-            });
-            int nMaxRetry = 5 * 20;
-            int nRetry = 0;
-            while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
-            {
-                nRetry++;
-                Thread.Sleep(200);
-            }
-            html = doc.sHtml;
+                html = doc.sHtml;
 
-            html = Regex.Unescape(html);
-            html = html.Remove(0, 1);
-            html = html.Remove(html.Length - 1, 1);
-            return html;
+                html = Regex.Unescape(html);
+                html = html.Remove(0, 1);
+                html = html.Remove(html.Length - 1, 1);
+                return html;
+            }
+            catch (TaskCanceledException ex){ }
+
+            return "";
+
+  
         }
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
     }

@@ -37,7 +37,7 @@ namespace WpfStreamDownloader
             CoreWebView2? wv2 = sender as CoreWebView2;
             if (wv2 != null)
             {
-                if (!BaseWndContextData.NeedSkipHandleSourceChanged(wv2.Source.ToString()) && datacontext?.PgmNaviUrl != wv2.Source.ToString())
+                if (!BaseWndContextData.NeedSkipHandleSourceChanged(wv2.Source.ToString()) && datacontext?.PgmNaviUrl != wv2.Source.ToString() && (datacontext?.BackGroundNotRunning==true || (datacontext.SelectedIdx >= (int)BatchQueryNovelContents.YOUTUBE)))
                 {
                     MainFrameWebLoadCompleted(sender, wv2.Source.ToString());
                 }

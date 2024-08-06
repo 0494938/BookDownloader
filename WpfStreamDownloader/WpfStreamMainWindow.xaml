@@ -115,7 +115,10 @@
                     <TextBlock Grid.Column="0" Text="File Name" VerticalAlignment="Center"  FontSize="12" Margin="1,1,1,1" />
                     <TextBox Grid.Column="1" x:Name="txtOutputFileName" Text="Novel" Margin="1,1,1,1"  VerticalAlignment="Stretch" VerticalContentAlignment="Center"/>
                     <!--Button Grid.Column="2" x:Name="btnAutoDownload" Content="Auto From" Click="btnAutoURL_Click"  Margin="1,1,1,1"  FontWeight="Bold" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" /-->
-                    <Button Grid.Column="2" x:Name="btnAutoDownload" ToolTip="Batch Download From Init Url With Analysis of Nexgt Link" Click="btnAutoURL_Click"  Margin="1,1,1,1"  FontWeight="Bold" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" >
+                    <Button 
+                        Grid.Column="2" x:Name="btnAutoDownload" 
+                        ToolTip="Batch Download From Init Url With Analysis of Nexgt Link" Click="btnAutoURL_Click"  Margin="1,1,1,1"  FontWeight="Bold" 
+                        IsEnabled="{Binding Path=BackGroundNotRunning,Mode=OneWay}" >
                         <Button.Content>
                             <StackPanel Orientation="Horizontal" Margin="2,0,2,0">
                                 <TextBlock Foreground="Red" VerticalAlignment="Center" Margin="2,0,4,0">Batch...</TextBlock>

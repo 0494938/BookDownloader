@@ -49,6 +49,7 @@ namespace WpfBookDownloader
             if (datacontext != null)
             {
                 datacontext.DictDownloadStatus.Clear();
+                datacontext.DictHandledContentsForDupCheck.Clear();
                 datacontext.BackGroundNotRunning = false;
                 //btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 //btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();

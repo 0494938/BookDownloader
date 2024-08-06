@@ -16,6 +16,7 @@ namespace WpfStreamDownloader
             if (datacontext != null && !string.IsNullOrEmpty(strUrl.Trim()))
             {
                 datacontext.DictDownloadStatus.Clear();
+                datacontext.DictHandledContentsForDupCheck.Clear();
                 datacontext.PageLoaded = false;
                 datacontext.NextLinkAnalysized = false;
 
@@ -28,7 +29,8 @@ namespace WpfStreamDownloader
                 try
                 {
                     datacontext.PgmNaviUrl = strUrl;
-                    webBrowser.CoreWebView2.Navigate(strUrl);
+                    //webBrowser.CoreWebView2.Navigate(strUrl);
+                    LoadUiUrl(datacontext, strUrl);
                     UpdateStatusMsg(datacontext, strUrl + " : Begin to download ...", 0);
                 }
                 catch (Exception ex)
@@ -73,17 +75,14 @@ namespace WpfStreamDownloader
             if (datacontext != null)
             {
                 datacontext.DictDownloadStatus.Clear();
+                datacontext.DictHandledContentsForDupCheck.Clear();
                 datacontext.BackGroundNotRunning = false;
-                /*
-                btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                */
+            
                 UpdateAutoDownloadPageButton();
                 UpdateNextPageButton();
                 UpdateInitPageButton();
 
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
-                //txtAggregatedContents.Clear();
                 int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 20 : int.Parse(txtPages.Text.Trim());
                 DownloadStatus.MaxPageToDownload = nMaxPage;
 
