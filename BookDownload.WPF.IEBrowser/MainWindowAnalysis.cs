@@ -44,7 +44,9 @@ namespace WpfIEBookDownloader
                     datacontext.PageLoaded = false;
                     datacontext.NextLinkAnalysized = false;
                     //btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                    btnNextPage.GetBindingExpression(Button.IsEnabledProperty)?.UpdateTarget();
+                    UpdateAutoDownloadPageButton();
+                    UpdateNextPageButton();
+                    UpdateInitPageButton();
                     datacontext.PgmNaviUrl = strURL;
                     //webBrowser.Navigate(strURL);
                     webBrowser.CoreWebView2.Navigate(strURL);

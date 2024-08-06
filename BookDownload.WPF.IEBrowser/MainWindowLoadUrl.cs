@@ -45,7 +45,9 @@ namespace WpfIEBookDownloader
                 datacontext.PageLoaded = false;
                 datacontext.NextLinkAnalysized = false;
                 // btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                btnNextPage.GetBindingExpression(Button.IsEnabledProperty)?.UpdateTarget();
+                UpdateAutoDownloadPageButton();
+                UpdateNextPageButton();
+                UpdateInitPageButton();
                 txtWebContents.Text = "";
                 txtAnalysizedContents.Text = "";
 
@@ -101,8 +103,13 @@ namespace WpfIEBookDownloader
             {
                 datacontext.DictDownloadStatus.Clear();
                 datacontext.BackGroundNotRunning = false;
-                btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                
+                //btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                //btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                UpdateAutoDownloadPageButton();
+                UpdateNextPageButton();
+                UpdateInitPageButton();
+                
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
                 txtAggregatedContents.Clear();
                 int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 20 : int.Parse(txtPages.Text.Trim());

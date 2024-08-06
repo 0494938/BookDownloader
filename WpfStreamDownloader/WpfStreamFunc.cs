@@ -14,6 +14,7 @@ namespace WpfStreamDownloader
 
     public partial class WpfStreamMainWindow : Window
     {
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
         private void AnalysisURL(string strUrl, bool bWaitOptoin = true)
         {
             Debug.WriteLine("btnAnalysisCurURL_Click invoked...");
@@ -23,6 +24,19 @@ namespace WpfStreamDownloader
                 datacontext = App.Current.MainWindow.DataContext as WndContextData;
                 strFileNameBase = "HtmlDownload_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
             });
+            StreamWriter? html = null;
+            try {
+                html = new StreamWriter(
+                       File.Open(datacontext.FileTempPath + strFileNameBase + ".html",
+                       FileMode.Create,
+                       FileAccess.ReadWrite,
+                       FileShare.Read),
+                       Encoding.UTF8
+                    );
+            }
+            catch (Exception ) {
+                return;
+            }
 
             Debug.Assert(datacontext != null);
             bool bOutputHtml = false;
@@ -30,13 +44,7 @@ namespace WpfStreamDownloader
             string? strHtml = GetWebDocHtmlSource(strUrl, bWaitOptoin);
             if (!string.IsNullOrEmpty(strHtml?.Trim()))
             {
-                StreamWriter html = new StreamWriter(
-                   File.Open(datacontext.FileTempPath + strFileNameBase + ".html",
-                   FileMode.Create,
-                   FileAccess.ReadWrite,
-                   FileShare.Read),
-                   Encoding.UTF8
-                );
+                ;
                 html.Write(strHtml);
                 html.Flush();
                 html.Close();
@@ -123,5 +131,6 @@ namespace WpfStreamDownloader
             html = html.Remove(html.Length - 1, 1);
             return html;
         }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
     }
 }

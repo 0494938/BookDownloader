@@ -26,7 +26,7 @@ namespace BookDownloadFormApp
             if (txtInitURL != null)
             {
                 Debug.WriteLine("Select Combox Index : " + cmbNovelType.SelectedIndex);
-                txtInitURL.Text = datacontext.GetDefaultUrlByIdx(cmbNovelType.SelectedIndex);
+                txtInitURL.Text = BaseWndContextData.GetDefaultUrlByIdx(cmbNovelType.SelectedIndex);
             }
         }
     }

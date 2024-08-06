@@ -79,8 +79,54 @@ namespace BaseBookDownloader
         public string FileTempPath { get; set; } = "";
         
         #endregion Variable_and_Properties
-        public string GetDefaultUrlByIdx(int nIdx)
+        class _SITE_Behavior_
         {
+            public BatchQueryNovelContents idx;
+            public string leadUrl;
+            public string dftUrl;
+            public bool bSkipHandleSourceChangedEvent;
+        }
+
+        static _SITE_Behavior_[] Site_Behavior_Defs = new _SITE_Behavior_[] {
+            new _SITE_Behavior_() { idx = BatchQueryNovelContents.IKBOOK8, leadUrl="https://m.ikbook8.com/", dftUrl="https://m.ikbook8.com/book/i116399132/18897986.html", bSkipHandleSourceChangedEvent=true,},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.QQBOOK, leadUrl="https://book.qq.com/", dftUrl = "https://book.qq.com/book-read/47135031/1",bSkipHandleSourceChangedEvent=true},
+            
+            //follow two has not been confirmed.
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.BIQUGE,leadUrl="https://m.xbiqugew.com/", dftUrl = "https://m.xbiqugew.com/book/50761/32248795.html",bSkipHandleSourceChangedEvent=true},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.BIQUGE_PC,leadUrl="https://www.xbiqugew.com/", dftUrl = "https://www.xbiqugew.com/book/18927/12811470.html",bSkipHandleSourceChangedEvent=true},
+            
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.WXDZH,leadUrl = "https://www.wxdzs.net/", dftUrl = "https://www.wxdzs.net/wxread/94612_43816524.html",bSkipHandleSourceChangedEvent=true},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.CANGQIONG,leadUrl="http://www.cqhhhs.com/", dftUrl = "http://www.cqhhhs.com/book/85756/28421368.html",bSkipHandleSourceChangedEvent=true},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.JINYONG,leadUrl="http://www.jinhuaja.com/", dftUrl = "http://www.jinhuaja.com/b/184315/976061.html",bSkipHandleSourceChangedEvent=true},
+            
+            //following three should be set to false
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.SHUQI,leadUrl="https://www.shuqi.com/", dftUrl = "https://www.shuqi.com/reader?bid=8991909&cid=2589796",bSkipHandleSourceChangedEvent=false},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.FANQIE,leadUrl="https://fanqienovel.com/", dftUrl = "https://fanqienovel.com/reader/7100359997917397512?enter_from=page",bSkipHandleSourceChangedEvent=false},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.FANQIE2,leadUrl="https://fanqienovel.com/", dftUrl = "https://fanqienovel.com/reader/7268154919981580800?source=seo_fq_juhe",bSkipHandleSourceChangedEvent=false},
+
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.HXTX,leadUrl="https://www.hongxiu.com/", dftUrl = "https://www.hongxiu.com/chapter/7200532503839703/19328808342308247",bSkipHandleSourceChangedEvent=true},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.XXSB,leadUrl="https://book.xxs8.com/", dftUrl = "https://book.xxs8.com/677942/94808.html",bSkipHandleSourceChangedEvent=true},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.YQXSB,leadUrl="https://www.xs8.cn/", dftUrl = "https://www.xs8.cn/chapter/3738025904323901/10686192507259378",bSkipHandleSourceChangedEvent=true},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents._17K,leadUrl="https://www.17k.com/", dftUrl = "https://www.17k.com/chapter/3589602/48625472.html",bSkipHandleSourceChangedEvent=true},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.COLA,leadUrl="https://www.keleshuba.net/", dftUrl = "https://www.keleshuba.net/book/302396/173366895.html",bSkipHandleSourceChangedEvent=true},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.TIANTIAN,leadUrl="https://m.ttshu8.com/", dftUrl = "https://m.ttshu8.com/book/33693/124470410.html",bSkipHandleSourceChangedEvent=true},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.TIANTIAN_PC,leadUrl="https://www.ttshu8.com/", dftUrl = "https://www.ttshu8.com/book/33693/124470410.html",bSkipHandleSourceChangedEvent=true},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.NOVEL69,leadUrl="https://69shuba.cx/", dftUrl = "https://69shuba.cx/txt/38164/26461664",bSkipHandleSourceChangedEvent=true},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.UUNOVEL_COM,leadUrl="https://www.uuxs.com/", dftUrl = "https://www.uuxs.com/chapter/72206/46164826.html",bSkipHandleSourceChangedEvent=true},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.UUNOVEL_CC,leadUrl="http://www.uuxs8.cc/", dftUrl = "http://www.uuxs8.cc/r46844/29229950.html",bSkipHandleSourceChangedEvent=true},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.FINISHEDNOVEL,leadUrl="https://www.qbxsw.com/", dftUrl = "https://www.qbxsw.com/du_134667/49689977.html",bSkipHandleSourceChangedEvent=true},
+
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.YOUTUBE,leadUrl="https://www.youtube.com/", dftUrl = "https://www.youtube.com/watch?v=0pPPXeXKdfg",bSkipHandleSourceChangedEvent=false},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.PORNHUB,leadUrl="https://jp.pornhub.com/", dftUrl = "https://jp.pornhub.com/view_video.php?viewkey=6617c17b03771",bSkipHandleSourceChangedEvent=false,},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.REDPORN,leadUrl="https://redporn.porn/", dftUrl = "https://redporn.porn/15960451?title=bellesa-films-riley-reyes-romantic-missionary-sex-porn",bSkipHandleSourceChangedEvent=false},
+        };
+        public static string GetDefaultUrlByIdx(int nIdx)
+        {
+            if (nIdx < Site_Behavior_Defs.Length) {
+                return Site_Behavior_Defs[nIdx].dftUrl;
+            }
+            return "";
+            /*
             switch (nIdx)
             {
                 case (int)BatchQueryNovelContents.IKBOOK8:
@@ -137,9 +183,29 @@ namespace BaseBookDownloader
                 default:
                     Debug.Assert(false);
                     return "";
-            }
+                }
+                */
         }
 
+        public static bool NeedSkipHandleSourceChanged(string strUrl)
+        {
+            /*
+            if(strUrl.StartsWith("https://m.ikbook8.com/"))
+                return true;
+            if (strUrl.StartsWith("https://book.qq.com/"))
+                return true;
+            if (strUrl.StartsWith("https://www.wxdzs.net"))
+                return true;
+            */
+
+            foreach (_SITE_Behavior_ sitedef in Site_Behavior_Defs)
+            {
+                if (strUrl.StartsWith(sitedef.leadUrl))
+                    return sitedef.bSkipHandleSourceChangedEvent;
+            }
+            return true;
+        }
+        
         public IFetchNovelContent? GetImplByNoveTypeIdx(BatchQueryNovelContents nIdx, ref int nMaxRetry)
         {
             switch (nIdx)

@@ -119,16 +119,14 @@ namespace WpfStreamDownloader
                     datacontext.PageLoaded = false;
                     datacontext.NextLinkAnalysized = false;
                     //btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                    btnNextPage.GetBindingExpression(Button.IsEnabledProperty)?.UpdateTarget();
+                    UpdateNextPageButton();
+                    UpdateInitPageButton();
+                    UpdateAutoDownloadPageButton();
+
                     datacontext.PgmNaviUrl = strURL;
                     webBrowser.CoreWebView2.Navigate(strURL);
                 });
             }
-        }
-
-        public void UpdateNextPageButton(BaseWndContextData? datacontext = null)
-        {
-            //throw new NotImplementedException();
         }
 
         public void UpdateWebBodyOuterHtml(string? strHtml, BaseWndContextData? datacontext = null)
@@ -246,10 +244,26 @@ namespace WpfStreamDownloader
         }
         public void UpdateInitPageButton(BaseWndContextData? datacontext = null)
         {
+            this.Dispatcher.Invoke(() =>
+            {
+                btnInitURL.GetBindingExpression(Button.IsEnabledProperty)?.UpdateTarget();
+            });
+        }
+
+        public void UpdateNextPageButton(BaseWndContextData? datacontext = null)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                btnNextPage.GetBindingExpression(Button.IsEnabledProperty)?.UpdateTarget();
+            });
         }
 
         public void UpdateAutoDownloadPageButton(BaseWndContextData? datacontext = null)
         {
+            this.Dispatcher.Invoke(() =>
+            {
+                btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty)?.UpdateTarget();
+            });
         }
 
         public void UpdateAnalysisPageButton(BaseWndContextData? datacontext = null)
@@ -374,7 +388,7 @@ namespace WpfStreamDownloader
                 if (txtInitURL != null)
                 {
                     Debug.WriteLine("Select Combox Index : " + cmbNovelType.SelectedIndex);
-                    txtInitURL.Text = datacontext.GetDefaultUrlByIdx(cmbNovelType.SelectedIndex);
+                    txtInitURL.Text = BaseWndContextData.GetDefaultUrlByIdx(cmbNovelType.SelectedIndex);
 
                     if (string.IsNullOrEmpty(txtCurURL.Text.Trim()))
                     {

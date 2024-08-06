@@ -50,9 +50,12 @@ namespace WpfBookDownloader
             {
                 datacontext.DictDownloadStatus.Clear();
                 datacontext.BackGroundNotRunning = false;
-                btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
+                //btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                //btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex; UpdateAutoDownloadPageButton();
+                UpdateNextPageButton();
+                UpdateInitPageButton();
+                UpdateAutoDownloadPageButton();
                 txtAggregatedContents.Clear();
                 UpdateStatusMsg(datacontext, "Selected Site Type: " + cmbNovelType.SelectedIndex, -1);
                 int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 20 : int.Parse(txtPages.Text.Trim());

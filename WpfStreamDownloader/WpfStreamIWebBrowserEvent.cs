@@ -1,4 +1,5 @@
-﻿using Microsoft.Web.WebView2.Core;
+﻿using BaseBookDownloader;
+using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
 using System.Diagnostics;
 using System.IO;
@@ -12,27 +13,35 @@ namespace WpfStreamDownloader
         private void WebBrowser_NavigationCompleted(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
         {
             Debug.WriteLine("WebBrowser_NavigationCompleted invoked...");
-            MainFrameWebLoadCompleted(sender, (sender as Microsoft.Web.WebView2.Wpf.WebView2)?.Source?.ToString() ?? "");
+            //if (e.WebErrorStatus  != Microsoft.Web.WebView2.Core.CoreWebView2WebErrorStatus.ConnectionAborted)
+            if (e.HttpStatusCode.ToString()?.StartsWith("2") ?? false)
+            {
+                MainFrameWebLoadCompleted(sender, (sender as Microsoft.Web.WebView2.Wpf.WebView2)?.Source?.ToString() ?? "");
 
-            if (sender is WebView2 webView2) {
-                //webView2.CoreWebView2
-                Debug.Assert(true);
+                if (sender is Microsoft.Web.WebView2.Wpf.WebView2 webView2)
+                {
+                    //webView2.CoreWebView2
+                    Debug.Assert(true);
+                }
+            }
+            else {
+                WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+                UpdateStatusMsg(datacontext, "Url Navigation Failed. ErrorCode: " + e.HttpStatusCode + ", Url: " + (sender as Microsoft.Web.WebView2.Wpf.WebView2)?.Source?.ToString(), -1);
             }
         }
 
-        private void WebBrowser_Loaded(object sender, RoutedEventArgs e)
+        private void CoreWebView2_SourceChanged(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2SourceChangedEventArgs e)
         {
-            Debug.WriteLine("WebBrowser_Loaded invoked...");
-        }
-
-        private void WebBrowser_Unloaded(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("WebBrowser_Unloaded invoked...");
-        }
-
-        private void CoreWebView2_WebMessageReceived(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
-        {
-            Debug.WriteLine("CoreWebView2_WebMessageReceived invoked..." +  e.ToString());
+            Debug.WriteLine("CoreWebView2_SourceChanged invoked... IsNewDocument:" + e.IsNewDocument + ", " + e.ToString());
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            CoreWebView2? wv2 = sender as CoreWebView2;
+            if (wv2 != null)
+            {
+                if (!BaseWndContextData.NeedSkipHandleSourceChanged(wv2.Source.ToString()) && datacontext?.PgmNaviUrl != wv2.Source.ToString())
+                {
+                    MainFrameWebLoadCompleted(sender, wv2.Source.ToString());
+                }
+            }
         }
 
         private void CoreWebView2_FrameNavigationCompleted(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
@@ -42,14 +51,10 @@ namespace WpfStreamDownloader
             {
                 WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
                 UpdateStatusMsg(datacontext, "FrameNavigationCompleted invoked... Success:" + e.IsSuccess + ", " + wv2.Source.ToString(), -1);
+                //MainFrameWebLoadCompleted(sender, wv2.Source.ToString());
             }
             else
                 Debug.WriteLine("CoreWebView2_FrameNavigationCompleted invoked... Success:" + e.IsSuccess + ", " + e.ToString());
-        }
-
-        private void CoreWebView2_FrameNavigationStarting(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs e)
-        {
-            //Debug.WriteLine("CoreWebView2_FrameNavigationStarting invoked... IsRedirected:" + e.IsRedirected + ", Uri:" + e.Uri.ToString());
         }
 
         CoreWebView2Frame? frame=null;
@@ -62,38 +67,44 @@ namespace WpfStreamDownloader
 
         private void CoreWebView2_WebResourceResponseReceived(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2WebResourceResponseReceivedEventArgs e)
         {
-            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
-            if (e.Response != null && datacontext !=null)
+            try
             {
-                if (false)
+                WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+                if (e.Response != null && datacontext != null)
                 {
-                    int statusCode = e.Response.StatusCode;
+                    if (false)
+                    {
+                        int statusCode = e.Response.StatusCode;
 
-                    Debug.WriteLine("CoreWebView2.WebResourceResponseReceived triggered. status code: " + statusCode + ", Request Url: " + e.Request.Uri.ToString());
-                    if (statusCode >= 300 && statusCode < 400)
-                    {
-                        Debug.WriteLine("CoreWebView2.WebResourceResponseReceived -- response to redirect. status code: " + statusCode + ", Request Url: " + (e.Response.Headers.ToList().Where(n => n.Key == "Location")?.FirstOrDefault().Value ?? "0"));
-                    }
-                    if (IsYouTubeSite(e.Request.Uri.ToString()))
-                    {
-                        UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value ?? "0") + " : " + e.Request.Uri, -1);
-                        Debug.Assert(true);
+                        Debug.WriteLine("CoreWebView2.WebResourceResponseReceived triggered. status code: " + statusCode + ", Request Url: " + e.Request.Uri.ToString());
+                        if (statusCode >= 300 && statusCode < 400)
+                        {
+                            Debug.WriteLine("CoreWebView2.WebResourceResponseReceived -- response to redirect. status code: " + statusCode + ", Request Url: " + (e.Response.Headers.ToList().Where(n => n.Key == "Location")?.FirstOrDefault().Value ?? "0"));
+                        }
+                        if (IsYouTubeSite(e.Request.Uri.ToString()))
+                        {
+                            UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value ?? "0") + " : " + e.Request.Uri, -1);
+                            Debug.Assert(true);
 
-                    }
-                    else if (IsPornHubSite(e.Request.Uri.ToString())/*e.Request.Uri.ToString().Contains(".phncdn.com/hls/videos")*/)
-                    {
-                        UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value ?? "0") + " : " + e.Request.Uri, -1);
-                    }
-                    else if (IsRedPornSite(e.Request.Uri.ToString())/*e.Request.Uri.ToString().StartsWith("https://etahub.com/events")*/)
-                    {
-                        UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value ?? "0") + " : " + e.Request.Uri, -1);
+                        }
+                        else if (IsPornHubSite(e.Request.Uri.ToString())/*e.Request.Uri.ToString().Contains(".phncdn.com/hls/videos")*/)
+                        {
+                            UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value ?? "0") + " : " + e.Request.Uri, -1);
+                        }
+                        else if (IsRedPornSite(e.Request.Uri.ToString())/*e.Request.Uri.ToString().StartsWith("https://etahub.com/events")*/)
+                        {
+                            UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value ?? "0") + " : " + e.Request.Uri, -1);
+                        }
                     }
                 }
+                else
+                {
+                    Debug.Assert(true);
+                }
             }
-            else
-            {
-                Debug.Assert(true);
+            catch(Exception) { 
             }
+
         }
 
         private void CoreWebView2_WebResourceRequested(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2WebResourceRequestedEventArgs e)
@@ -112,12 +123,9 @@ namespace WpfStreamDownloader
                 return;
             }
 
-            //System.Diagnostics.Trace.WriteLine("GO REPLACE");
             StreamReader reader = new StreamReader(e.Request.Content);
             string html = reader.ReadToEnd();
-            //html = html.Replace("<html", "<HTML");
-            //byte[] byteArray = Encoding.UTF8.GetBytes(html);
-            //e.Request.Content = new MemoryStream(byteArray);
+
             if (IsYouTubeSite( e.Request.Uri.ToString()))
             {
                 Debug.Assert(true);
@@ -129,9 +137,17 @@ namespace WpfStreamDownloader
             Debug.WriteLine("CoreWebView2_WindowCloseRequested invoked... " + e.ToString());
         }
 
-        private void CoreWebView2_SourceChanged(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2SourceChangedEventArgs e)
+        private void chkMuteWeb_Checked(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("CoreWebView2_SourceChanged invoked... IsNewDocument:" + e.IsNewDocument + ", " + e.ToString());
+            if (webBrowser.CoreWebView2 != null)
+            {
+                webBrowser.CoreWebView2.IsMuted = true;
+            }
+        }
+
+        private void chkMuteWeb_Unchecked(object sender, RoutedEventArgs e)
+        {
+            webBrowser.CoreWebView2.IsMuted = false;
         }
 
         private void CoreWebView2_ServerCertificateErrorDetected(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2ServerCertificateErrorDetectedEventArgs e)
@@ -216,17 +232,24 @@ namespace WpfStreamDownloader
             Debug.WriteLine("CoreWebView2_BasicAuthenticationRequested invoked... Challenge:" + e.Challenge + ", Uri:" + e.Uri + ", Cancel:" + e.Cancel + ", " + e.ToString());
         }
 
-        private void chkMuteWeb_Checked(object sender, RoutedEventArgs e)
+        private void WebBrowser_Loaded(object sender, RoutedEventArgs e)
         {
-            if (webBrowser.CoreWebView2 != null)
-            {
-                webBrowser.CoreWebView2.IsMuted = true;
-            }
+            Debug.WriteLine("WebBrowser_Loaded invoked...");
         }
 
-        private void chkMuteWeb_Unchecked(object sender, RoutedEventArgs e)
+        private void WebBrowser_Unloaded(object sender, RoutedEventArgs e)
         {
-            webBrowser.CoreWebView2.IsMuted = false;
+            Debug.WriteLine("WebBrowser_Unloaded invoked...");
+        }
+
+        private void CoreWebView2_WebMessageReceived(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
+        {
+            Debug.WriteLine("CoreWebView2_WebMessageReceived invoked..." + e.ToString());
+        }
+
+        private void CoreWebView2_FrameNavigationStarting(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs e)
+        {
+            //Debug.WriteLine("CoreWebView2_FrameNavigationStarting invoked... IsRedirected:" + e.IsRedirected + ", Uri:" + e.Uri.ToString());
         }
     }
 }

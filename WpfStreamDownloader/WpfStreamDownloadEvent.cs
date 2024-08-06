@@ -19,7 +19,9 @@ namespace WpfStreamDownloader
                 datacontext.PageLoaded = false;
                 datacontext.NextLinkAnalysized = false;
 
-                btnNextPage.GetBindingExpression(Button.IsEnabledProperty)?.UpdateTarget();
+                UpdateAutoDownloadPageButton();
+                UpdateNextPageButton();
+                UpdateInitPageButton();
                 txtWebContents.Text = "";
 
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
@@ -72,8 +74,14 @@ namespace WpfStreamDownloader
             {
                 datacontext.DictDownloadStatus.Clear();
                 datacontext.BackGroundNotRunning = false;
+                /*
                 btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                 btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                */
+                UpdateAutoDownloadPageButton();
+                UpdateNextPageButton();
+                UpdateInitPageButton();
+
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
                 //txtAggregatedContents.Clear();
                 int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 20 : int.Parse(txtPages.Text.Trim());

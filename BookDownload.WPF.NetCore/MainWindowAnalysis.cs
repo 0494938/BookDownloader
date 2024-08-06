@@ -37,7 +37,9 @@ namespace WpfBookDownloader
                 datacontext.PageLoaded = false;
                 datacontext.NextLinkAnalysized = false;
                 //btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                btnNextPage.GetBindingExpression(Button.IsEnabledProperty)?.UpdateTarget();
+                UpdateAutoDownloadPageButton();
+                UpdateNextPageButton();
+                UpdateInitPageButton();
                 datacontext.PgmNaviUrl = strURL;
                 webBrowser.LoadUrl(strURL);
             });
@@ -49,7 +51,9 @@ namespace WpfBookDownloader
             datacontext.NextLinkAnalysized = false;
             webBrowser.Dispatcher.Invoke(() =>
             {
-                btnNextPage.GetBindingExpression(Button.IsEnabledProperty)?.UpdateTarget();
+                UpdateAutoDownloadPageButton();
+                UpdateNextPageButton();
+                UpdateInitPageButton();
                 webBrowser.Back();
             });
         }

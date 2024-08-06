@@ -256,6 +256,7 @@ namespace BaseBookDownloader
                     }
 
                     this.BackGroundNotRunning = true;
+                    wndMain.UpdateInitPageButton();
 
                     wndMain.UpdateStatusMsg(this, "Finished batch download(Total " + status?.PageNum + " Downloaded) ...", 100);
                     String strMsgAreaLog = wndMain.BatchDownloadNotified(this, status, sDownloadFileName);

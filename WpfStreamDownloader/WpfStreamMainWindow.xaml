@@ -372,6 +372,7 @@
                         x:Name="btnNextPage" 
                         ToolTip="Load Next URL in Embeded Browser Control" 
                         Click="btnNextPage_Click" 
+                        IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}"
                         VerticalAlignment="Center" Margin="1,1,1,1" >
                         <!--Button.IsEnabled IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}">
                         </Button.IsEnabled-->
