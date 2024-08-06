@@ -37,12 +37,19 @@ namespace WpfStreamDownloader
 
         private void CoreWebView2_FrameNavigationCompleted(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
         {
-            Debug.WriteLine("CoreWebView2_FrameNavigationCompleted invoked... Success:" + e.IsSuccess + ", " + e.ToString());
+            CoreWebView2? wv2 = sender as CoreWebView2;
+            if (wv2 != null)
+            {
+                WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+                UpdateStatusMsg(datacontext, "FrameNavigationCompleted invoked... Success:" + e.IsSuccess + ", " + wv2.Source.ToString(), -1);
+            }
+            else
+                Debug.WriteLine("CoreWebView2_FrameNavigationCompleted invoked... Success:" + e.IsSuccess + ", " + e.ToString());
         }
 
         private void CoreWebView2_FrameNavigationStarting(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs e)
         {
-            Debug.WriteLine("CoreWebView2_FrameNavigationStarting invoked... IsRedirected:" + e.IsRedirected + ", Uri:" + e.Uri.ToString());
+            //Debug.WriteLine("CoreWebView2_FrameNavigationStarting invoked... IsRedirected:" + e.IsRedirected + ", Uri:" + e.Uri.ToString());
         }
 
         CoreWebView2Frame? frame=null;
@@ -58,43 +65,34 @@ namespace WpfStreamDownloader
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if (e.Response != null && datacontext !=null)
             {
-                int statusCode = e.Response.StatusCode;
-                //string date = e.Response.Headers.GetHeader("date");
-                //if(e.Request.Uri.ToString().StartsWith("https://www.youtube.com/"))
-                Debug.WriteLine("CoreWebView2.WebResourceResponseReceived triggered. status code: " + statusCode + ", Request Url: " + e.Request.Uri.ToString());
-                if(statusCode >= 300 && statusCode < 400)
+                if (false)
                 {
-                    Debug.WriteLine("CoreWebView2.WebResourceResponseReceived -- response to redirect. status code: " + statusCode + ", Request Url: " + (e.Response.Headers.ToList().Where(n => n.Key == "Location")?.FirstOrDefault().Value ?? "0"));
-                }
-                if (e.Request.Uri.ToString().StartsWith("https://www.youtube.com/"))
-                {
-                    UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value??"0") + " : " + e.Request.Uri, -1);
-                    Debug.Assert(true);
-                    //string strUrl = e.Request.Uri.ToString();
-                    //e.Response.GetContentAsync().ContinueWith(t => {
-                    //    StreamReader reader = new StreamReader(t.Result);
-                    //    string html = reader.ReadToEnd();
-                    //    //html = html.Replace("<html", "<HTML");
-                    //    //byte[] byteArray = Encoding.UTF8.GetBytes(html);
-                    //    //e.Request.Content = new MemoryStream(byteArray);
-                    //    if (strUrl.StartsWith("https://www.youtube.com/"))
-                    //    {
-                    //        Debug.Assert(true);
-                    //        //datacontext.WaitAndLaunchAnalsys
-                    //    }
-                    //});
-                }else if (e.Request.Uri.ToString().Contains(".phncdn.com/hls/videos"))
-                {
-                    UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value ?? "0") + " : " + e.Request.Uri , -1);
-                }
-                else if (e.Request.Uri.ToString().StartsWith("https://etahub.com/events"))
-                {
-                    UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value ?? "0") + " : " + e.Request.Uri, -1);
+                    int statusCode = e.Response.StatusCode;
+
+                    Debug.WriteLine("CoreWebView2.WebResourceResponseReceived triggered. status code: " + statusCode + ", Request Url: " + e.Request.Uri.ToString());
+                    if (statusCode >= 300 && statusCode < 400)
+                    {
+                        Debug.WriteLine("CoreWebView2.WebResourceResponseReceived -- response to redirect. status code: " + statusCode + ", Request Url: " + (e.Response.Headers.ToList().Where(n => n.Key == "Location")?.FirstOrDefault().Value ?? "0"));
+                    }
+                    if (IsYouTubeSite(e.Request.Uri.ToString()))
+                    {
+                        UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value ?? "0") + " : " + e.Request.Uri, -1);
+                        Debug.Assert(true);
+
+                    }
+                    else if (IsPornHubSite(e.Request.Uri.ToString())/*e.Request.Uri.ToString().Contains(".phncdn.com/hls/videos")*/)
+                    {
+                        UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value ?? "0") + " : " + e.Request.Uri, -1);
+                    }
+                    else if (IsRedPornSite(e.Request.Uri.ToString())/*e.Request.Uri.ToString().StartsWith("https://etahub.com/events")*/)
+                    {
+                        UpdateStreamMsg(datacontext, e.Request.Method + ", " + e.Response.StatusCode + ", " + (e.Response.Headers.ToList().Where(n => n.Key == "content-length")?.FirstOrDefault().Value ?? "0") + " : " + e.Request.Uri, -1);
+                    }
                 }
             }
             else
             {
-                Debug.Assert(false);
+                Debug.Assert(true);
             }
         }
 
@@ -120,7 +118,7 @@ namespace WpfStreamDownloader
             //html = html.Replace("<html", "<HTML");
             //byte[] byteArray = Encoding.UTF8.GetBytes(html);
             //e.Request.Content = new MemoryStream(byteArray);
-            if (e.Request.Uri.ToString().StartsWith("https://www.youtube.com/"))
+            if (IsYouTubeSite( e.Request.Uri.ToString()))
             {
                 Debug.Assert(true);
             }

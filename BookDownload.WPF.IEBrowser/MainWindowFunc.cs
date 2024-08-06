@@ -436,12 +436,12 @@ namespace WpfIEBookDownloader
 #endif
         }
 
-        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL, bool bForceDownload = false)
+        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL, string sTitle, bool bForceDownload = false)
         {
             throw new NotImplementedException();
         }
 
-        public bool DownloadFile(BaseWndContextData? datacontext, Dictionary<string, string> dictUrls, bool bForceDownload = false)
+        public bool DownloadFile(BaseWndContextData? datacontext, Dictionary<string, string> dictUrls, string sTitle, bool bForceDownload = false)
         {
             throw new NotImplementedException();
         }

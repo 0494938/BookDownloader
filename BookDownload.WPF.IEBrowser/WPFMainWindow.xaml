@@ -208,12 +208,24 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TabControl Grid.Column="0" Margin="-3,-1,0,-3" SelectedIndex="0">
-                <TabItem x:Name="tblItemBrowser" Header="Browser">
+                <TabItem x:Name="tblItemBrowser" >
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock VerticalAlignment="Center">Browser</TextBlock>
+                            <Image  Height="28" Source="/embedwebctrl4.png"/>
+                        </StackPanel>
+                    </TabItem.Header>
                     <Wpf:WebView2 
                         x:Name="webBrowser" 
                         ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" />
                 </TabItem>
-                <TabItem x:Name="tblItemOcr" Header="OCR">
+                <TabItem x:Name="tblItemOcr">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock VerticalAlignment="Center">OCR</TextBlock>
+                            <Image Source="/ocr1.png" Height="28"/>
+                        </StackPanel>
+                    </TabItem.Header>
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <ComboBox x:Name="cmbOcrLanguage" SelectedIndex="0" Margin="0,0,3,0">

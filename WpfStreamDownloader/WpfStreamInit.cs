@@ -13,9 +13,6 @@ namespace WpfStreamDownloader
             webBrowser.Loaded += WebBrowser_Loaded;
             webBrowser.Unloaded += WebBrowser_Unloaded;
 
-            //webBrowser.CoreWebView2.AddWebResourceRequestedFilter("https://www.youtube.com/*",
-            //    Microsoft.Web.WebView2.Core.CoreWebView2WebResourceContext.All);
-
             webBrowser.CoreWebView2.FrameCreated += CoreWebView2_FrameCreated;
             webBrowser.CoreWebView2.FrameNavigationStarting += CoreWebView2_FrameNavigationStarting;
             webBrowser.CoreWebView2.FrameNavigationCompleted += CoreWebView2_FrameNavigationCompleted;

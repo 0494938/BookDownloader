@@ -50,7 +50,7 @@
                         x:Name="cmbNovelType" 
                         Margin="0,1,1,1" 
                         Grid.Column="0" 
-                        SelectedIndex="20" 
+                        SelectedIndex="21" 
                         SelectionChanged="OnBookTypeSelectChagned" 
                         HorizontalAlignment="Stretch"
                         VerticalContentAlignment="Center"
@@ -77,6 +77,9 @@
                         <ComboBoxItem Content="18 UU小说 www.uuxs.com"></ComboBoxItem>
                         <ComboBoxItem Content="19 UU小说网 www.uuxs8.cc"></ComboBoxItem>
                         <ComboBoxItem Content="20 全本小说网 www.qbxsw.com"></ComboBoxItem>
+                        <ComboBoxItem Content="21 YouTube"></ComboBoxItem>
+                        <ComboBoxItem Content="22 PornHub"></ComboBoxItem>
+                        <ComboBoxItem Content="23 redporn.porn"></ComboBoxItem>
                     </ComboBox>
                     <!--Button Grid.Column="1" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Content="Web Load" Click="OnLoadInBrowser"/-->
                     <!--Button Grid.Column="2" Margin="1,1,1,1" x:Name="btnInitURL" Content="Load URL" Click="btnInitURL_Click" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" /-->
@@ -221,30 +224,64 @@
                 VerticalAlignment="Center"
                 ShowsPreview="True" Cursor="SizeNS">
             </GridSplitter>
-            <RichTextBox 
-                Grid.Row="2" 
-                Grid.Column="0"
-                x:Name="txtYouTubLinks" 
-                ToolTip="Other Links in current Page" 
-                BorderThickness="1" 
-                IsReadOnly="True" 
-                IsDocumentEnabled="True"
-                VerticalScrollBarVisibility="Auto"
-                FontSize="14" FontWeight="Normal" >
-                <RichTextBox.Resources>
-                    <Style TargetType="Hyperlink">
-                        <Setter Property="Cursor" Value="Hand" />
-                        <EventSetter Event="MouseLeftButtonDown" Handler="Hyperlink_MouseLeftButtonDown" />
-                    </Style>
-                </RichTextBox.Resources>
-                <RichTextBox.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">
-                        <GradientStop Color="LightGreen"/>
-                        <GradientStop Color="LightPink" Offset="0.7"/>
-                    </LinearGradientBrush>
-                </RichTextBox.Background>
-                <FlowDocument/>
-            </RichTextBox>
+            <Grid 
+                Grid.Column="0" Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="65*"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="35*"/>
+                </Grid.ColumnDefinitions>
+                <RichTextBox 
+                    x:Name="txtYouTubLinks" 
+                    ToolTip="Other Links in current Page" 
+                    BorderThickness="1" 
+                    IsReadOnly="True" 
+                    IsDocumentEnabled="True"
+                    VerticalScrollBarVisibility="Auto"
+                    FontSize="14" FontWeight="Normal" >
+                    <RichTextBox.Resources>
+                        <Style TargetType="Hyperlink">
+                            <Setter Property="Cursor" Value="Hand" />
+                            <EventSetter Event="MouseLeftButtonDown" Handler="Hyperlink_MouseLeftButtonDown" />
+                        </Style>
+                    </RichTextBox.Resources>
+                    <RichTextBox.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">
+                            <GradientStop Color="LightGreen"/>
+                            <GradientStop Color="LightPink" Offset="0.7"/>
+                        </LinearGradientBrush>
+                    </RichTextBox.Background>
+                    <FlowDocument/>
+                </RichTextBox>
+                <GridSplitter 
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    ResizeBehavior="BasedOnAlignment"
+                    ResizeDirection="Auto" Cursor="SizeWE">
+                </GridSplitter>
+                <ListView Grid.Column="2" 
+                    ToolTip="Downloading Tasks"
+                          SelectionMode="Single"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                    ItemsSource="{Binding TaskList,Mode=OneWay}"
+                    x:Name="lstTasks">
+                    <ListView.View>
+                        <GridView >
+                            <GridView.Columns>
+                                <GridViewColumn Header="Progress" Width="60" DisplayMemberBinding="{Binding Progress}"/>
+                                <GridViewColumn Header="Title" Width="200" DisplayMemberBinding="{Binding FileName}"/>
+                                <GridViewColumn Header="URL" Width="600" DisplayMemberBinding="{Binding Uri}"/>
+                            </GridView.Columns>
+                        </GridView>
+                    </ListView.View>
+                    <ListView.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">
+                            <GradientStop Color="LightGreen"/>
+                            <GradientStop Color="LightPink" Offset="0.7"/>
+                        </LinearGradientBrush>
+                    </ListView.Background>
+                </ListView>
+            </Grid>
             <GridSplitter 
                 Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"
                 HorizontalAlignment="Stretch"
@@ -296,7 +333,8 @@
                     <Button Grid.Row="4" 
                         x:Name="btnDownloadYouTube" 
                         Click="OnYoutubeDownload" 
-                        Visibility="{Binding Path=IsYouTube,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Visibility="{Binding Path=IsYouTube,Mode=OneWay,
+                        Converter={StaticResource BooleanToVisibilityConverter}}"
                         ToolTip="Download YourTube Video" Margin="1,3,1,5">
                         <Button.Content>
                             <StackPanel Orientation="Vertical" Margin="2,2,2,2" >

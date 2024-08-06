@@ -68,7 +68,7 @@ namespace BaseBookDownloader
                 {
                     dictQuality[slice.Attributes["size"]?.Value?.ToString()??"Unknow"] = slice.Attributes?["src"]?.Value?.ToString();
                 }
-                wndMain.DownloadFile(datacontext, dictQuality, bForceDownload);
+                wndMain.DownloadFile(datacontext, dictQuality, strNovelName, bForceDownload);
 
                 datacontext.NextLinkAnalysized = true;
                 wndMain.UpdateNextPageButton();

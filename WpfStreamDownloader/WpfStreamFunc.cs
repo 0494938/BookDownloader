@@ -7,20 +7,6 @@ using System.Windows;
 
 namespace WpfStreamDownloader
 {
-    public class WndContextData : BaseWndContextData
-    {
-        public Visibility EnabledDbgButtons { get; set; } =
-#if DEBUG
-#if false
-            Visibility.Visible;
-#else
-            Visibility.Hidden;
-#endif
-#else
-            Visibility.Hidden;
-#endif
-    }
-
     public class _DocContents
     {
         public string sHtml = "";
@@ -74,11 +60,11 @@ namespace WpfStreamDownloader
                     });
                 }
                 //analysis of youtube
-                if (strUrl.StartsWith("https://www.youtube.com/", StringComparison.InvariantCultureIgnoreCase))
+                if (IsYouTubeSite(strUrl))
                     new Thread(() => datacontext.AnalysisHtmlThreadFunc4YouTube(this, strUrl, strHtml)).Start();
                 else if (IsPornHubSite(strUrl))
                     new Thread(() => datacontext.AnalysisHtmlThreadFunc4PornHub(this, strUrl, strHtml)).Start();
-                else if (strUrl.StartsWith("https://redporn.porn/", StringComparison.InvariantCultureIgnoreCase))
+                else if (IsRedPornSite(strUrl))
                     new Thread(() => datacontext.AnalysisHtmlThreadFunc4RedPorn(this, strUrl, strHtml)).Start();
                 else  //analysis as Novel by default
                     datacontext.AnalysisHtml4Nolvel(this, bWaitOptoin, strUrl, strHtml);
@@ -100,6 +86,12 @@ namespace WpfStreamDownloader
         {
             //Match match = ex.Match(strUrl);
             return Regex.IsMatch(strUrl, redPornMatch);
+        }
+
+        static bool IsYouTubeSite(string strUrl)
+        {
+            //return Regex.IsMatch(strUrl, redPornMatch);
+            return strUrl.StartsWith("https://www.youtube.com/");
         }
 
         public string? GetWebDocHtmlSource(string strUrl, bool bWaitOptoin = true, BaseWndContextData? datacontext = null)

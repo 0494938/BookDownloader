@@ -7,7 +7,6 @@ using System.Windows.Input;
 
 namespace WpfStreamDownloader
 {
-
     public partial class WpfStreamMainWindow : Window
     {
         private void OnBookTypeSelectChagned(object sender, SelectionChangedEventArgs e)
@@ -35,7 +34,6 @@ namespace WpfStreamDownloader
             if (cmbNovelType.SelectedIndex <0)
                 cmbNovelType.SelectedIndex = 17;
             NovelTypeChangeEvent(App.Current.MainWindow.DataContext as WndContextData, cmbNovelType.SelectedIndex);
-            //BtnClickActions(txtInitURL.Text);
 
             Task.Run(async delegate
             {
@@ -43,7 +41,6 @@ namespace WpfStreamDownloader
                 this.Dispatcher.Invoke(() => { BtnClickActions(txtInitURL.Text); });
                 
             });
-
         }
 
         private void OnLoadInBrowser(object sender, RoutedEventArgs e)

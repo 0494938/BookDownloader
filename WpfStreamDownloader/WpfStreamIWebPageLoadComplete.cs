@@ -40,7 +40,7 @@ namespace WpfStreamDownloader
                         Debug.WriteLine(ex);
                     }
                 }
-                else if (strUri.StartsWith("https://www.youtube.com/"))
+                else if (IsYouTubeSite(strUri))
                 {
                     datacontext.PageLoaded = true; UpdateStatusMsg(datacontext, strUri + " : Finished Page download ...", 50);
                     new Thread(() => AnalysisURL(strUri)).Start();

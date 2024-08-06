@@ -74,7 +74,7 @@ namespace BaseBookDownloader
                         JObject? oOutputQuality = slice as JObject;
                         dictQuality[oOutputQuality["quality"].ToString()] = oOutputQuality["videoUrl"].ToString();
                     }
-                    wndMain.DownloadFile(datacontext, dictQuality, bForceDownload);
+                    wndMain.DownloadFile(datacontext, dictQuality, strNovelName, bForceDownload);
                 }
 
                 datacontext.NextLinkAnalysized = true;

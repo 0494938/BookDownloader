@@ -95,21 +95,38 @@ namespace WpfStreamDownloader
         {
             Debug.WriteLine("OnYoutubeDownload invoked...");
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            string sTitle = txtBookName.Text.Trim(); 
             if (datacontext != null)
             {
-                //var VedioUrl = "https://www.youtube.com/embed/" + "0pPPXeXKdfg" + ".mp4";
                 string VedioUrl = webBrowser.Source.ToString().Trim();
                 YouTube youTube = YouTube.Default;
-                var video = youTube.GetVideo(VedioUrl);
-                string strFileName = datacontext.FileSavePath + video.FullName;
+                try
+                {
+                    var video = youTube.GetVideo(VedioUrl);
+                    string strFileName = datacontext.FileSavePath + video.FullName;
 
-                new Thread(() => {
-                    DateTime start = DateTime.Now;
-                    UpdateStatusMsg(datacontext, "Download Start: " + VedioUrl.ToString() + " ...", 0);
-                    System.IO.File.WriteAllBytes(strFileName, video.GetBytes());
-                    TimeSpan span = DateTime.Now - start;
-                    UpdateStatusMsg(datacontext, "Download Finished and save to " + strFileName + " in " + string.Format("{0:#.##}", span.TotalSeconds) + " seconds. ", 100);
-                }).Start();
+                    new Thread(() => {
+                        DateTime start = DateTime.Now;
+                        UpdateStatusMsg(datacontext, "Download Start: " + VedioUrl.ToString() + " ...", 0);
+
+                        DownloadTask task = new DownloadTask() { Uri = VedioUrl, Progress = "0%", FullPathName = strFileName, FileName= sTitle, StartTime = DateTime.Now, };
+                        datacontext.TaskList.Add(task);
+
+                        this.Dispatcher.Invoke(() => { lstTasks.Items.Refresh(); });
+
+                        System.IO.File.WriteAllBytes(strFileName, video.GetBytes());
+                        //video.GetBytesAsync().
+
+                        TimeSpan span = DateTime.Now - start;
+                        UpdateStatusMsg(datacontext, "Download Finished and save to " + strFileName + " in " + string.Format("{0:#.##}", span.TotalSeconds) + " seconds. ", 100);
+                        task.Progress = "100%";
+                        this.Dispatcher.Invoke(() => { lstTasks.Items.Refresh(); });
+                        //this.Dispatcher.Invoke(() => { lstTasks.ItemsSource = null; lstTasks.ItemsSource = datacontext.TaskList; });
+                    }).Start();
+                }
+                catch (Exception ex) {
+                    UpdateStatusMsg(datacontext, "Failed to download " + VedioUrl + " . " + ex.Message, -1);
+                }
             }
         }
 

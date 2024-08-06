@@ -35,8 +35,8 @@
         public void NovelTypeChangeEvent(BaseWndContextData? datacontext, int nIndex);
         public string BatchDownloadNotified(BaseWndContextData? datacontext, DownloadStatus status, string sDownloadFileName);  //return log area contents
         public string GetNovelName(BaseWndContextData? datacontext = null);
-        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL, bool bForceDownload = false);  //return log area contents
-        public bool DownloadFile(BaseWndContextData? datacontext, System.Collections.Generic.Dictionary<string, string> dictUrls, bool bForceDownload = false);  //return log area contents
+        public bool DownloadFile(BaseWndContextData? datacontext, string sDownloadURL, string sTitle, bool bForceDownload = false);  //return log area contents
+        public bool DownloadFile(BaseWndContextData? datacontext, System.Collections.Generic.Dictionary<string, string> dictUrls, string sTitle, bool bForceDownload = false);  //return log area contents
     }
 #pragma warning restore CS8632 // Null 参照代入の可能性があります。
 }

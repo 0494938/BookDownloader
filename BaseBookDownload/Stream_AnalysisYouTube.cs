@@ -26,7 +26,7 @@ namespace BaseBookDownloader
             string strNovelName = strChapterHeader;
             ParseResultToUI(wndMain, datacontext, bSilenceMode, strContents, strCurMp4FileLink, strChapterHeader, strNovelName);
             wndMain.UpdateStatusMsg(datacontext, strURL + " : Finished Analysing of downloaded Uri Contents Body ...", 100);
-            wndMain.DownloadFile(datacontext, strCurMp4FileLink);
+            wndMain.DownloadFile(datacontext, strCurMp4FileLink, strChapterHeader);
 
             return;
         }

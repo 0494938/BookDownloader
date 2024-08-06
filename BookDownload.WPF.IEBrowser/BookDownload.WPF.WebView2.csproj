@@ -44,6 +44,7 @@
     <None Remove="Novel8.png" />
     <None Remove="Novel9.ico" />
     <None Remove="Novel_2.png" />
+    <None Remove="ocr1.png" />
     <None Remove="refresh1.png" />
     <None Remove="sync3.png" />
     <None Remove="url12.png" />
@@ -156,6 +157,7 @@
     <Resource Include="Novel8.png" />
     <Resource Include="Novel9.ico" />
     <Resource Include="Novel_2.png" />
+    <Resource Include="ocr1.png" />
     <Resource Include="refresh1.png" />
     <Resource Include="sync3.png" />
     <Resource Include="url12.png" />
