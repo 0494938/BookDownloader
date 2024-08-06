@@ -33,12 +33,14 @@
     <None Remove="Auto1.png" />
     <None Remove="Auto2.png" />
     <None Remove="chrome3.png" />
+    <None Remove="embedwebctrl4.png" />
     <None Remove="gcMangager.png" />
     <None Remove="html4.png" />
     <None Remove="html5.png" />
     <None Remove="html6.jpg" />
     <None Remove="html7.png" />
     <None Remove="Load5.png" />
+    <None Remove="loadexternalbrowser6.png" />
     <None Remove="Novel8.png" />
     <None Remove="Novel9.ico" />
     <None Remove="Novel_2.png" />
@@ -141,6 +143,7 @@
     <Resource Include="Auto1.png" />
     <Resource Include="Auto2.png" />
     <Resource Include="chrome3.png" />
+    <Resource Include="embedwebctrl4.png" />
     <Resource Include="gcMangager.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -149,6 +152,7 @@
     <Resource Include="html6.jpg" />
     <Resource Include="html7.png" />
     <Resource Include="Load5.png" />
+    <Resource Include="loadexternalbrowser6.png" />
     <Resource Include="Novel8.png" />
     <Resource Include="Novel9.ico" />
     <Resource Include="Novel_2.png" />

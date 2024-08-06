@@ -27,7 +27,7 @@ namespace WpfBookDownloader
                 datacontext.PageLoaded = false;
                 datacontext.NextLinkAnalysized = false;
                 // btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
-                btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                btnNextPage.GetBindingExpression(Button.IsEnabledProperty)?.UpdateTarget();
                 txtWebContents.Text = "";
                 txtAnalysizedContents.Text = "";
                 UpdateStatusMsg(datacontext, "Selected Site Type: " + cmbNovelType.SelectedIndex, -1);

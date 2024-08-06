@@ -49,6 +49,7 @@ namespace BookDownloadFormApp
             this.statusPanel = new System.Windows.Forms.Panel();
             this.txtStatus = new System.Windows.Forms.Label();
             this.txtProgress = new System.Windows.Forms.ProgressBar();
+            this.btnSetting = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.scTop)).BeginInit();
             this.scTop.Panel1.SuspendLayout();
             this.scTop.Panel2.SuspendLayout();
@@ -87,6 +88,7 @@ namespace BookDownloadFormApp
             // panelTop
             // 
             this.panelTop.AutoSize = true;
+            this.panelTop.Controls.Add(this.btnSetting);
             this.panelTop.Controls.Add(this.txtPages);
             this.panelTop.Controls.Add(this.btnAutoDownload);
             this.panelTop.Controls.Add(this.txtLog);
@@ -106,9 +108,9 @@ namespace BookDownloadFormApp
             // 
             this.txtPages.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPages.Font = new System.Drawing.Font("MS UI Gothic", 12F);
-            this.txtPages.Location = new System.Drawing.Point(1457, 46);
+            this.txtPages.Location = new System.Drawing.Point(1518, 15);
             this.txtPages.Name = "txtPages";
-            this.txtPages.Size = new System.Drawing.Size(132, 27);
+            this.txtPages.Size = new System.Drawing.Size(71, 27);
             this.txtPages.TabIndex = 7;
             this.txtPages.Text = "20";
             this.txtPages.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -118,7 +120,7 @@ namespace BookDownloadFormApp
             // btnAutoDownload
             // 
             this.btnAutoDownload.Font = new System.Drawing.Font("MS UI Gothic", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnAutoDownload.Location = new System.Drawing.Point(1457, 13);
+            this.btnAutoDownload.Location = new System.Drawing.Point(1380, 13);
             this.btnAutoDownload.Name = "btnAutoDownload";
             this.btnAutoDownload.Size = new System.Drawing.Size(132, 30);
             this.btnAutoDownload.TabIndex = 4;
@@ -140,7 +142,7 @@ namespace BookDownloadFormApp
             // btnNextPage
             // 
             this.btnNextPage.Font = new System.Drawing.Font("MS UI Gothic", 11F, System.Drawing.FontStyle.Bold);
-            this.btnNextPage.Location = new System.Drawing.Point(334, 44);
+            this.btnNextPage.Location = new System.Drawing.Point(334, 43);
             this.btnNextPage.Name = "btnNextPage";
             this.btnNextPage.Size = new System.Drawing.Size(129, 30);
             this.btnNextPage.TabIndex = 5;
@@ -151,9 +153,9 @@ namespace BookDownloadFormApp
             // txtNextUrl
             // 
             this.txtNextUrl.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.txtNextUrl.Location = new System.Drawing.Point(469, 46);
+            this.txtNextUrl.Location = new System.Drawing.Point(469, 45);
             this.txtNextUrl.Name = "txtNextUrl";
-            this.txtNextUrl.Size = new System.Drawing.Size(982, 27);
+            this.txtNextUrl.Size = new System.Drawing.Size(902, 27);
             this.txtNextUrl.TabIndex = 6;
             this.txtNextUrl.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtNextUrl_PreviewKeyDown);
             // 
@@ -206,7 +208,7 @@ namespace BookDownloadFormApp
             this.txtInitURL.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.txtInitURL.Location = new System.Drawing.Point(469, 15);
             this.txtInitURL.Name = "txtInitURL";
-            this.txtInitURL.Size = new System.Drawing.Size(982, 27);
+            this.txtInitURL.Size = new System.Drawing.Size(902, 27);
             this.txtInitURL.TabIndex = 3;
             this.txtInitURL.Text = "https://www.wxdzs.net/wxread/94612_43816524.html";
             this.txtInitURL.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtInitURL_PreviewKeyDown);
@@ -310,6 +312,17 @@ namespace BookDownloadFormApp
             this.txtProgress.Size = new System.Drawing.Size(147, 23);
             this.txtProgress.TabIndex = 1;
             // 
+            // btnSetting
+            // 
+            this.btnSetting.Font = new System.Drawing.Font("MS UI Gothic", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.btnSetting.Location = new System.Drawing.Point(1380, 43);
+            this.btnSetting.Name = "btnSetting";
+            this.btnSetting.Size = new System.Drawing.Size(97, 30);
+            this.btnSetting.TabIndex = 9;
+            this.btnSetting.Text = "Setting...";
+            this.btnSetting.UseVisualStyleBackColor = true;
+            this.btnSetting.Click += new System.EventHandler(this.btnSetting_Click);
+            // 
             // WindowsFormChrome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -365,6 +378,7 @@ namespace BookDownloadFormApp
         private Panel statusPanel;
         private Label txtStatus;
         private ProgressBar txtProgress;
+        private Button btnSetting;
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using BaseBookDownloader;
+﻿using BaseBookDownload.Frm;
+using BaseBookDownloader;
 using Microsoft.Web.WebView2.WinForms;
 using System;
 using System.Runtime.InteropServices;
@@ -22,7 +23,7 @@ namespace BookDownloadFormApp
         {
             if (datacontext != null)
             {
-                Microsoft.Win32.RegistryKey? registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\zdhe\\batchdownload\\1.0", false);
+                Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\zdhe\\batchdownload\\1.0", false);
                 if (registryKey != null)
                 {
                     datacontext.FileTempPath = (registryKey.GetValue("FileTempPath") as string) ?? "";
@@ -78,10 +79,11 @@ namespace BookDownloadFormApp
         {
             txtLog.Height = panelTop.Height - txtLog.Top - 5;
             txtLog.Width = panelTop.Width - txtLog.Left * 2;
-            txtInitURL.Width = panelTop.Width - txtInitURL.Left - 20 - 122;
-            txtNextUrl.Width = panelTop.Width - txtNextUrl.Left - 20 - 122;
+            txtInitURL.Width = panelTop.Width - txtInitURL.Left - 20 - 162;
+            txtNextUrl.Width = panelTop.Width - txtNextUrl.Left - 20 - 162;
             btnAutoDownload.Left = txtInitURL.Left + txtInitURL.Width + 12;
-            txtPages.Left = txtInitURL.Left + txtInitURL.Width + 12;
+            btnSetting.Left = txtInitURL.Left + txtInitURL.Width + 12;
+            txtPages.Left = txtInitURL.Left + txtInitURL.Width + btnAutoDownload.Width + 12 + 12;
         }
 
         private void scResult_Panel1_Resize(object sender, EventArgs e)
@@ -134,6 +136,14 @@ namespace BookDownloadFormApp
         private void txtNextUrl_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyValue == '\r') btnNextPage.PerformClick();
+        }
+
+
+
+        private void btnSetting_Click(object sender, EventArgs e)
+        {
+            WndSettingcs settings = new WndSettingcs(datacontext) { Owner = this };
+            DialogResult res = settings.ShowDialog();
         }
     }
 }

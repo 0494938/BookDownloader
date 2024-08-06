@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookDownload.WPF.WebView2", "BookDownload.WPF.IEBrowser\BookDownload.WPF.WebView2.csproj", "{A634A389-FF23-45EA-AADA-797A23C1921C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseBookDownload.Form", "BaseBookDownload.Form\BaseBookDownload.Form.csproj", "{5D92C6CF-CA00-4D3A-BE4A-6866BC68A8AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseBookDownload.Frm", "BaseBookDownload.Form\BaseBookDownload.Frm.csproj", "{5D92C6CF-CA00-4D3A-BE4A-6866BC68A8AE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseBookDownload.WPF", "BaseBookDownload.WPF\BaseBookDownload.WPF.csproj", "{8BB2C761-BC9F-489D-B51F-35854C27C1E4}"
 EndProject

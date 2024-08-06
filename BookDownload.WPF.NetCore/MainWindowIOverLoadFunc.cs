@@ -71,7 +71,7 @@ namespace WpfBookDownloader
         {
             this.Dispatcher.Invoke(() =>
             {
-                btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                btnNextPage.GetBindingExpression(Button.IsEnabledProperty)?.UpdateTarget();
             });
         }
 

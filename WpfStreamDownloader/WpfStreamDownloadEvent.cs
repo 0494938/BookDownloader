@@ -1,5 +1,7 @@
 ﻿using BaseBookDownloader;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using VideoLibrary;
@@ -11,13 +13,13 @@ namespace WpfStreamDownloader
         private void BtnClickActions(string strUrl)
         {
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
-            if ((datacontext != null))
+            if (datacontext != null && !string.IsNullOrEmpty(strUrl.Trim()))
             {
                 datacontext.DictDownloadStatus.Clear();
                 datacontext.PageLoaded = false;
                 datacontext.NextLinkAnalysized = false;
 
-                btnNextPage.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                btnNextPage.GetBindingExpression(Button.IsEnabledProperty)?.UpdateTarget();
                 txtWebContents.Text = "";
 
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
@@ -43,7 +45,7 @@ namespace WpfStreamDownloader
 
         private void btnCurrURL_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("btnNextPage_Click invoked...");
+            Debug.WriteLine("btnCurrURL_Click invoked...");
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if ((datacontext != null))
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
@@ -53,16 +55,40 @@ namespace WpfStreamDownloader
 
         private void btnNextPage_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("btnCurrURL_Click invoked...");
+            Debug.WriteLine("btnNextPage_Click invoked...");
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if ((datacontext != null))
                 datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
 
-            BtnClickActions(txtCurURL.Text);
+            BtnClickActions(txtNextUrl.Text);
         }
 
         private void btnAutoURL_Click(object sender, RoutedEventArgs e)
         {
+            txtLog.Clear();
+            Debug.WriteLine("btnAutoURL_Click invoked...");
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if (datacontext != null)
+            {
+                datacontext.DictDownloadStatus.Clear();
+                datacontext.BackGroundNotRunning = false;
+                btnInitURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                datacontext.SiteType = (BatchQueryNovelContents)cmbNovelType.SelectedIndex;
+                //txtAggregatedContents.Clear();
+                int nMaxPage = string.IsNullOrEmpty(txtPages.Text.Trim()) ? 20 : int.Parse(txtPages.Text.Trim());
+                DownloadStatus.MaxPageToDownload = nMaxPage;
+
+                DownloadStatus.ContentsWriter = new StreamWriter(
+                    File.Open(datacontext.FileSavePath + (string.IsNullOrEmpty(txtOutputFileName.Text.Trim()) ? @"Content" : txtOutputFileName.Text.Trim()) + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + ".txt",
+                    FileMode.CreateNew,
+                    FileAccess.ReadWrite,
+                    FileShare.Read),
+                    Encoding.UTF8
+                );
+
+                datacontext.DownloadOneURLAndGetNext(this, txtInitURL.Text, false);
+            }
         }
 
         private void OnYoutubeDownload(object sender, RoutedEventArgs e)

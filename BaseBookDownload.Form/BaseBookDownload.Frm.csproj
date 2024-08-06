@@ -7,8 +7,8 @@
     <ProjectGuid>{5D92C6CF-CA00-4D3A-BE4A-6866BC68A8AE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BaseBookDownload.Form</RootNamespace>
-    <AssemblyName>BaseBookDownload.Form</AssemblyName>
+    <RootNamespace>BaseBookDownload.Frm</RootNamespace>
+    <AssemblyName>BaseBookDownload.Frm</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <LangVersion>10.0</LangVersion>
     <FileAlignment>512</FileAlignment>
@@ -51,6 +51,12 @@
     <LangVersion>10.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>dolwnload3.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.11.61.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.11.61\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -60,6 +66,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -165,6 +173,12 @@
       <Link>Stream_AnalysisYouTube.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WndSettingcs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WndSettingcs.Designer.cs">
+      <DependentUpon>WndSettingcs.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -179,6 +193,14 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="dolwnload3.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WndSettingcs.resx">
+      <DependentUpon>WndSettingcs.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

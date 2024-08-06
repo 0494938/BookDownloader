@@ -15,6 +15,7 @@
     <None Remove="chrome3.png" />
     <None Remove="dolwnload6.png" />
     <None Remove="download12.jpg" />
+    <None Remove="embedwebctrl4.png" />
     <None Remove="html7.png" />
     <None Remove="Mute1.png" />
     <None Remove="Novel9.ico" />
@@ -47,6 +48,7 @@
     <Resource Include="chrome3.png" />
     <Resource Include="dolwnload6.png" />
     <Resource Include="download12.jpg" />
+    <Resource Include="embedwebctrl4.png" />
     <Resource Include="html7.png" />
     <Resource Include="Mute1.png" />
     <Resource Include="Novel9.ico" />

@@ -27,9 +27,10 @@
                 Margin="0,6,0,0"
                 VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="290"/>
+                    <ColumnDefinition Width="250"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2"/>
+                    <ColumnDefinition Width="34"/>
                     <ColumnDefinition Width="300"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -37,18 +38,18 @@
                     <RowDefinition Height="3"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Grid HorizontalAlignment="Center"
+                <Grid HorizontalAlignment="Stretch"
                     Grid.Column="0" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="2" />
+                        <ColumnDefinition Width="70" />
                     </Grid.ColumnDefinitions>
                     <ComboBox 
                         x:Name="cmbNovelType" 
                         Margin="0,1,1,1" 
-                        Grid.Column="0"
-                        SelectedIndex="17" 
+                        Grid.Column="0" 
+                        SelectedIndex="20" 
                         SelectionChanged="OnBookTypeSelectChagned" 
                         HorizontalAlignment="Stretch"
                         VerticalContentAlignment="Center"
@@ -56,7 +57,7 @@
                         <ComboBoxItem Content="0 爱看书吧 m.ikbook8.com"></ComboBoxItem>
                         <ComboBoxItem Content="1 QQ电子书 book.qq.com"></ComboBoxItem>
                         <ComboBoxItem Content="2 笔趣阁 m.xbiqugew.com"></ComboBoxItem>
-                        <ComboBoxItem Content="3 笔趣阁 www.xbiqugew.com"></ComboBoxItem>
+                        <ComboBoxItem Content="3 笔趣阁PC www.xbiqugew.com"></ComboBoxItem>
                         <ComboBoxItem Content="4 无线电子书 www.wxdzs.net"></ComboBoxItem>
                         <ComboBoxItem Content="5 苍穹小说 www.cqhhhs.com"></ComboBoxItem>
                         <ComboBoxItem Content="6 金庸小说网 www.jinhuaja.com"></ComboBoxItem>
@@ -77,23 +78,30 @@
                         <ComboBoxItem Content="20 全本小说网 www.qbxsw.com"></ComboBoxItem>
                     </ComboBox>
                     <!--Button Grid.Column="1" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Content="Web Load" Click="OnLoadInBrowser"/-->
-                    <Button Grid.Column="1" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Click="OnLoadInBrowser">
-                        <Button.Content>
-                            <Image Source="/chrome3.png" />
-                        </Button.Content>
-                    </Button>
                     <!--Button Grid.Column="2" Margin="1,1,1,1" x:Name="btnInitURL" Content="Load URL" Click="btnInitURL_Click" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" /-->
-                    <Button Grid.Column="2" Margin="1,1,1,1" x:Name="btnInitURL" ToolTip="Load URL" Click="btnInitURL_Click" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}">
+                    <Button Grid.Column="2" 
+                            Margin="1,1,1,1" x:Name="btnInitURL" HorizontalAlignment="Stretch"
+                            ToolTip="Load Initial URL in Embeded Browser Control" 
+                            Click="btnInitURL_Click" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}">
                         <Button.Content>
-                            <StackPanel Orientation="Horizontal" Margin="2,0,2,0" >
+                            <StackPanel Orientation="Horizontal" Margin="2,0,2,0" HorizontalAlignment="Stretch">
                                 <TextBlock  VerticalAlignment="Center" Margin="2,0,4,0">Init...</TextBlock>
-                                <Image Source="/Load5.png" />
+                                <Image Height="30" Source="/embedwebctrl4.png" />
                             </StackPanel>
                         </Button.Content>
                     </Button>
                 </Grid>
-                <TextBox Grid.Column="1" x:Name="txtInitURL" Text="https://www.wxdzs.net/wxread/94612_43816524.html" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Margin="1,1,1,1" PreviewKeyDown="txtInitURL_PreviewKeyDown" />
-                <Grid Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" >
+                <TextBox Grid.Column="1" 
+                         x:Name="txtInitURL" 
+                         Text="https://www.wxdzs.net/wxread/94612_43816524.html" 
+                         VerticalAlignment="Stretch" VerticalContentAlignment="Center" 
+                         Margin="5,1,1,1" PreviewKeyDown="txtInitURL_PreviewKeyDown" />
+                <Button Grid.Column="3" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Click="OnLoadInBrowser">
+                    <Button.Content>
+                        <Image Source="/chrome3.png" ToolTip="Open Init URL in default brwoser" />
+                    </Button.Content>
+                </Button>
+                <Grid Grid.Column="4" Grid.Row="0" VerticalAlignment="Center" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="65"/>
                         <ColumnDefinition Width="*"/>
@@ -103,7 +111,7 @@
                     <TextBlock Grid.Column="0" Text="File Name" VerticalAlignment="Center"  FontSize="12" Margin="1,1,1,1" />
                     <TextBox Grid.Column="1" x:Name="txtOutputFileName" Text="Novel" Margin="1,1,1,1"  VerticalAlignment="Stretch" VerticalContentAlignment="Center"/>
                     <!--Button Grid.Column="2" x:Name="btnAutoDownload" Content="Auto From" Click="btnAutoURL_Click"  Margin="1,1,1,1"  FontWeight="Bold" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" /-->
-                    <Button Grid.Column="2" x:Name="btnAutoDownload" ToolTip="Batch Download From Init Url" Click="btnAutoURL_Click"  Margin="1,1,1,1"  FontWeight="Bold" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" >
+                    <Button Grid.Column="2" x:Name="btnAutoDownload" ToolTip="Batch Download From Init Url With Analysis of Nexgt Link" Click="btnAutoURL_Click"  Margin="1,1,1,1"  FontWeight="Bold" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" >
                         <Button.Content>
                             <StackPanel Orientation="Horizontal" Margin="2,0,2,0">
                                 <TextBlock Foreground="Red" VerticalAlignment="Center" Margin="2,0,4,0">Batch...</TextBlock>
@@ -114,33 +122,69 @@
                     <TextBox Grid.Column="3" x:Name="txtPages" Text="20" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput"  VerticalAlignment="Stretch" VerticalContentAlignment="Center" DataObject.Pasting="PagesPaste"   Margin="1,1,1,1" />
                 </Grid>
 
-                <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Stretch">
-                    <Button x:Name="btnSyncFromBrowser" Click="OnSyncFromBrowser" Content="Url From Browser" Margin="0,1,1,1" />
-                    <!--Button x:Name="btnReloadWebPage" Click="OnBtnRefreshPage" Content="Refresh" Margin="1,1,1,1" /-->
-                    <Button x:Name="btnReloadWebPage" Click="OnBtnRefreshPage" Margin="1,1,1,1">
+                <Grid Grid.Column="0" Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="2" />
+                        <ColumnDefinition Width="70" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0"
+                        Orientation="Horizontal" HorizontalAlignment="Stretch">
+                        <Button x:Name="btnSyncFromBrowser" Click="OnSyncFromBrowser" ToolTip="Qujery URL/Source from Embeded Browser Control" Margin="0,1,1,1" >
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal" Margin="2,0,2,0" >
+                                    <!--TextBlock  VerticalAlignment="Center" Margin="2,0,4,0">Source...</TextBlock-->
+                                    <Image Source="/url12.png" />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <Button x:Name="btnAnalsys" Click="OnSyncFromBrowser" ToolTip="Query and Show Current WebControl Html Source" Margin="1,1,1,1" >
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal" Margin="2,0,2,0" >
+                                    <!--TextBlock  VerticalAlignment="Center" Margin="2,0,4,0">Source...</TextBlock-->
+                                    <Image Source="/html7.png"  />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <!--Button x:Name="btnReloadWebPage" Click="OnBtnRefreshPage" Content="Refresh" Margin="1,1,1,1" /-->
+                        <Button x:Name="btnReloadWebPage" ToolTip="Refresh Web Page" Click="OnBtnRefreshPage" Margin="1,1,1,1">
+                            <Button.Content>
+                                <Image Source="/refresh1.png"/>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1"
+                            Text="Curr URL:" TextAlignment="Right" 
+                            FontSize="12" FontWeight="Bold" 
+                            
+                            VerticalAlignment="Center" HorizontalAlignment="Right"  
+                            Margin="1,1,1,1"/>
+                    <Button Grid.Column="3"
+                            Margin="1,1,1,1" HorizontalAlignment="Right"
+                            x:Name="btnCurURL" ToolTip="Load Current URL in Embeded Browser Control" 
+                            Click="btnCurrURL_Click" 
+                            IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}">
                         <Button.Content>
-                            <Image Source="/refresh1.png"/>
-                        </Button.Content>
-                    </Button>
-                    <!--Button x:Name="btnCurPageOnWeb" Grid.Column="0" Content="Web Load" Click="btnLaunchCurUrlOnWeb_Click" VerticalAlignment="Center"  Margin="1,1,1,1" /-->
-                    <Button x:Name="btnCurPageOnWeb" Grid.Column="0" Click="btnLaunchCurUrlOnWeb_Click" VerticalAlignment="Center"  Margin="1,1,1,1" >
-                        <Button.Content>
-                            <Image Source="/chrome3.png" />
-                        </Button.Content>
-                    </Button>
-                    <Button Margin="1,1,1,1" x:Name="btnCurURL" ToolTip="Load Current URL" Click="btnCurrURL_Click" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}">
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal" Margin="2,0,2,0" >
+                            <StackPanel Orientation="Horizontal" Margin="2,0,2,0" HorizontalAlignment="Stretch">
                                 <TextBlock  VerticalAlignment="Center" Margin="2,0,4,0">Curr...</TextBlock>
-                                <Image Source="/Load5.png" />
+                                <Image Height="30" Source="/embedwebctrl4.png" />
                             </StackPanel>
                         </Button.Content>
                     </Button>
-                    <TextBlock Text="Curr URL:" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="1,1,1,1" TextAlignment="Right" />
-                </StackPanel>
-                <TextBox Grid.Column="1" Grid.Row="2" x:Name="txtCurURL" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Margin="1,1,1,1" PreviewKeyDown="txtCurURL_PreviewKeyDown" />
+                </Grid>
+                <TextBox Grid.Column="1" Grid.Row="2" 
+                         x:Name="txtCurURL" 
+                         VerticalAlignment="Stretch" VerticalContentAlignment="Center" 
+                         Margin="5,1,1,1" PreviewKeyDown="txtCurURL_PreviewKeyDown" />
                 <!--Button Grid.Column="3" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center" FontWeight="Bold" /-->
-                <Grid Grid.Column="3" Grid.Row="2" VerticalAlignment="Stretch" >
+                <Button Grid.Column="3" Grid.Row="2" 
+                    x:Name="btnCurPageOnWeb" Click="btnLaunchCurUrlOnWeb_Click" VerticalAlignment="Center"  Margin="1,1,1,1" >
+                    <Button.Content>
+                        <Image Source="/chrome3.png" ToolTip="Open Init URL in default brwoser" />
+                    </Button.Content>
+                </Button>
+                <Grid Grid.Column="4" Grid.Row="2" VerticalAlignment="Stretch" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="65"/>
                         <ColumnDefinition Width="*"/>
@@ -211,7 +255,7 @@
                         <Button.Content>
                             <StackPanel Orientation="Horizontal" Margin="2,0,2,0" >
                                 <TextBlock VerticalAlignment="Center" Margin="2,0,4,0">Next...</TextBlock>
-                                <Image Source="/Load5.png" />
+                                <Image Source="/embedwebctrl4.png" />
                             </StackPanel>
                         </Button.Content>
                     </Button>

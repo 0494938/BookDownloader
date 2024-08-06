@@ -27,7 +27,7 @@ namespace WpfIEBookDownloader
         {
             this.Dispatcher.Invoke(() =>
             {
-                this.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                this.btnAutoDownload.GetBindingExpression(Button.IsEnabledProperty)?.UpdateTarget();
             });
         }
         public void UpdateAnalysisPageButton(BaseWndContextData? datacontext = null)

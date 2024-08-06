@@ -109,7 +109,19 @@ namespace WpfStreamDownloader
 
         public void LoadUiUrl(BaseWndContextData? datacontext, string strURL)
         {
-            throw new NotImplementedException();
+            if (datacontext != null)
+            {
+                webBrowser.Dispatcher.Invoke(() =>
+                {
+                    datacontext.PageLoaded = false;
+                    datacontext.NextLinkAnalysized = false;
+                    //btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
+                    btnNextPage.GetBindingExpression(Button.IsEnabledProperty)?.UpdateTarget();
+                    datacontext.PgmNaviUrl = strURL;
+                    //webBrowser.Navigate(strURL);
+                    webBrowser.CoreWebView2.Navigate(strURL);
+                });
+            }
         }
 
         public void UpdateNextPageButton(BaseWndContextData? datacontext = null)
@@ -237,17 +249,17 @@ namespace WpfStreamDownloader
         }
         public void UpdateInitPageButton(BaseWndContextData? datacontext = null)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void UpdateAutoDownloadPageButton(BaseWndContextData? datacontext = null)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void UpdateAnalysisPageButton(BaseWndContextData? datacontext = null)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void UpdateNovelName(string sNovelName, BaseWndContextData? datacontext = null)
@@ -329,17 +341,37 @@ namespace WpfStreamDownloader
 
         public void UpdateAggragatedContentsWithLimit(string strContents, BaseWndContextData? datacontext = null)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public bool isWebBrowserEmpty(BaseWndContextData? datacontext = null)
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool bLoadUnFinish = false;
+                //this.Dispatcher.Invoke(() => { bRet = webBrowser == null || webBrowser.Document == null; });
+                this.Dispatcher.Invoke(() => { bLoadUnFinish = webBrowser == null || webBrowser.CoreWebView2 == null || webBrowser.IsLoaded == false; });
+                return bLoadUnFinish;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public bool isWebPageLoadComplete(string strURL, BaseWndContextData? datacontext = null)
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool bLoadFinish = false;
+                //this.Dispatcher.Invoke(() => { bRet = webBrowser == null || webBrowser.Document == null; });
+                this.Dispatcher.Invoke(() => { bLoadFinish = webBrowser != null && webBrowser.CoreWebView2 != null || webBrowser.IsLoaded == true; });
+                return bLoadFinish;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public void NovelTypeChangeEvent(BaseWndContextData? datacontext, int nIndex)
@@ -377,12 +409,38 @@ namespace WpfStreamDownloader
 
         public string BatchDownloadNotified(BaseWndContextData? datacontext, DownloadStatus status, string sDownloadFileName)
         {
-            throw new NotImplementedException();
+            string strMsgAreaLog = "";
+            if (datacontext != null)
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    this.UpdateInitPageButton();
+                    this.UpdateAutoDownloadPageButton();
+
+                    UpdateStatusMsg(datacontext, "Flush Log to file: " + sDownloadFileName + ".log", -1);
+                    if (!string.IsNullOrEmpty(status?.NextUrl))
+                        txtInitURL.Text = status.NextUrl;
+
+                    strMsgAreaLog = txtLog.Text;
+                    MessageBox.Show(this, "Batch download finished...", "Web Novel Downloader", MessageBoxButton.OK);
+                });
+            }
+
+            return strMsgAreaLog;
         }
 
         public string GetNovelName(BaseWndContextData? datacontext = null)
         {
-            throw new NotImplementedException();
+            try
+            {
+                string sNovelName = "";
+                this.Dispatcher.Invoke(() => { sNovelName = txtBookName.Text.Trim(); });
+                return sNovelName;
+            }
+            catch (Exception)
+            {
+                return "DefaultNovel";
+            }
         }
 
         public bool DownloadFile(BaseWndContextData? datacontext, string sVedioUrl, bool bForceDownload = false)
@@ -432,9 +490,6 @@ namespace WpfStreamDownloader
                 wndMain.UpdateStatusMsg(datacontext, "Download Finished and save to " + strTsFileName + " in " + string.Format("{0:#.##}", span.TotalSeconds) + " seconds. ", (int)(100.0 * nFileIdx / lstVideoSpices.Count));
             }
 
-            // ffmpeg -i "concat:0001.ts|0002.ts|0003.ts|0004.ts|0005.ts" -bsf:a aac_adtstoasc -y full.mp4
-            //string sVideoName = "";
-            //this.Dispatcher.Invoke(() => { sVideoName = txtBookName.Text; });
             if (string.IsNullOrEmpty(sVideoName))
                 sVideoName = datacontext?.FileSavePath + "Video_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
             else
@@ -619,7 +674,6 @@ namespace WpfStreamDownloader
                     {
                         string sVideoName = "";
                         this.Dispatcher.Invoke(() => { sVideoName = datacontext.FileSavePath + txtBookName.Text; });
-                        //DateTime start = DateTime.Now;
 
                         UpdateStatusMsg(datacontext, "Begin download " + strDownloadUrl + " ... ", 0);
 
