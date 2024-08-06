@@ -354,13 +354,51 @@
                     </LinearGradientBrush>
                 </Grid.Background>
             </Grid>
-            <Grid Grid.Row="2" Grid.Column="2" >
+            <Grid Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="32"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <CheckBox Grid.Row="1" IsChecked="False" x:Name="chkShowHtml" HorizontalContentAlignment="Center" Content="Show Html" FontSize="14" FontWeight="Bold"/>
+                <Grid Grid.Row="0" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Grid.Column="0" x:Name="chkShowHtml" IsChecked="False" 
+                        HorizontalContentAlignment="Left"  
+                        VerticalAlignment="Center" VerticalContentAlignment="Center"
+                        Content="Show Html" 
+                        Margin="5,0,5,0"
+                        FontSize="14" FontWeight="Bold"/>
+                    <Separator Grid.Column="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                    <TextBlock Grid.Column="2" Margin="5,0,5,0" FontSize="14" FontWeight="Bold"> Download File Save Path</TextBlock>
+                    <TextBox Grid.Column="3" x:Name="txtSavePath" 
+                        Margin="5,0,2,0"
+                        FontSize="14" Text="U:\Movies\" 
+                        VerticalAlignment="Center" VerticalContentAlignment="Center" IsReadOnly="True"/>
+                    <Button Grid.Column="4" x:Name="btnSetting" Content="Setting" Margin="2,0,5,0" FontSize="14" Click="btnSetting_Click"/>
+
+                </Grid>
+                    <!--StackPanel HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Center">
+                </StackPanel-->
+                <TextBox
+                    Grid.Row="1"  
+                    x:Name="txtWebContents" 
+                    ToolTip="Page Html"
+                    BorderThickness="1" 
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Auto"
+                    FontSize="14" FontWeight="Normal" Text="Html">
+                    <TextBox.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">
+                            <GradientStop Color="LightGreen"/>
+                            <GradientStop Color="LightPink" Offset="0.7"/>
+                        </LinearGradientBrush>
+                    </TextBox.Background>
+                </TextBox>
                 <Grid.Background>
                     <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">
                         <GradientStop Color="LightGreen"/>
@@ -368,22 +406,6 @@
                     </LinearGradientBrush>
                 </Grid.Background>
             </Grid>
-
-            <TextBox
-                Grid.Row="2"  Grid.Column="3"
-                x:Name="txtWebContents" 
-                ToolTip="Page Html"
-                BorderThickness="1" 
-                VerticalScrollBarVisibility="Auto"
-                HorizontalScrollBarVisibility="Auto"
-                FontSize="14" FontWeight="Normal" Text="Html">
-                <TextBox.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">
-                        <GradientStop Color="LightGreen"/>
-                        <GradientStop Color="LightPink" Offset="0.7"/>
-                    </LinearGradientBrush>
-                </TextBox.Background>
-            </TextBox>
 
         </Grid>
         <Grid  Grid.Row="2" VerticalAlignment="Stretch" AutomationProperties.HelpText="" Background="LightGray" >

@@ -1,4 +1,5 @@
 ﻿using BaseBookDownloader;
+using Microsoft.Win32;
 using NAudio.Lame;
 using NAudio.Wave;
 using System.Diagnostics;
@@ -43,6 +44,15 @@ namespace WpfIEBookDownloader
         {
             Debug.WriteLine("OnMainWindowLoaded invoked...");
             //HideScriptErrors(webBrowser, true);
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if (datacontext != null)
+            {
+                RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\zdhe\\batchdownload\\1.0", false);
+                datacontext.FileTempPath = (registryKey.GetValue("FileTempPath") as string) ?? "";
+                datacontext.FileSavePath = (registryKey.GetValue("FileSavePath") as string) ?? "";
+                registryKey?.Close();
+            }
+            
             if (cmbInstalledVoice.Items.Count == 0)
             {
                 synthesizer = InitAndHookSpeech(synthesizer);

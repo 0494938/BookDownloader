@@ -1,12 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <LangVersion>10.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>AnyCPU;x64</Platforms>
+    <OutputType>Library</OutputType>
+    <ApplicationIcon>dolwnload.ico</ApplicationIcon>
+	<ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -18,9 +21,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="dolwnload6.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\BaseBookDownload\AnalysisHtmlBody.cs" Link="AnalysisHtmlBody.cs" />
     <Compile Include="..\BaseBookDownload\BaseBookDownloader.cs" Link="BaseBookDownloader.cs" />
     <Compile Include="..\BaseBookDownload\BaseDataContext.cs" Link="BaseDataContext.cs" />
+    <Compile Include="..\BaseBookDownload\BaseDataStatus.cs" Link="BaseDataStatus.cs" />
     <Compile Include="..\BaseBookDownload\BookDownloadUrlUtil.cs" Link="BookDownloadUrlUtil.cs" />
     <Compile Include="..\BaseBookDownload\Book_AnalysisBody.cs" Link="Book_AnalysisBody.cs" />
     <Compile Include="..\BaseBookDownload\Book_AnalysisBody17K.cs" Link="Book_AnalysisBody17K.cs" />
@@ -52,8 +60,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="dolwnload.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="dolwnload6.png" />
   </ItemGroup>
 
 </Project>

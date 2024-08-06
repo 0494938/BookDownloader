@@ -118,7 +118,7 @@ namespace BookDownloadFormApp
                 DownloadStatus.MaxPageToDownload = nMaxPage;
 
                 DownloadStatus.ContentsWriter = new StreamWriter(
-                    File.Open(AppDomain.CurrentDomain.BaseDirectory + "DumpNovel" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + ".txt",
+                    File.Open(datacontext.FileSavePath + "DumpNovel" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + ".txt",
                     FileMode.CreateNew,
                     FileAccess.ReadWrite,
                     FileShare.Read),

@@ -1,9 +1,6 @@
 ﻿using BaseBookDownloader;
-using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -149,6 +146,19 @@ namespace WpfIEBookDownloader
             if (e.Key == System.Windows.Input.Key.Enter)
             {
                 btnNextPage.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+            }
+        }
+
+        private void btnSetting_Click(object sender, RoutedEventArgs e)
+        {
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if (datacontext != null)
+            {
+                BaseBookDownload.WPF.WndSetting wndSetting = new BaseBookDownload.WPF.WndSetting(datacontext)
+                {
+                    Owner = this
+                };
+                wndSetting.ShowDialog();
             }
         }
     }

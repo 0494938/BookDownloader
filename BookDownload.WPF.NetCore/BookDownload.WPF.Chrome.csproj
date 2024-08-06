@@ -26,6 +26,7 @@
         -->
     <RollForward>Major</RollForward>
     <StartupObject>WpfBookDownloader.App</StartupObject>
+    <TargetFrameworks>net8.0-windows</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(PlatformTarget)' == 'x86'">

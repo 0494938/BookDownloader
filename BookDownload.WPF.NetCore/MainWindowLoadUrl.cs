@@ -59,7 +59,7 @@ namespace WpfBookDownloader
                 DownloadStatus.MaxPageToDownload = nMaxPage;
 
                 DownloadStatus.ContentsWriter = new StreamWriter(
-                    File.Open( AppDomain.CurrentDomain.BaseDirectory + (string.IsNullOrEmpty(txtOutputFileName.Text.Trim()) ? @"Content" : txtOutputFileName.Text.Trim()) + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + ".txt", 
+                    File.Open(datacontext.FileSavePath + (string.IsNullOrEmpty(txtOutputFileName.Text.Trim()) ? @"Content" : txtOutputFileName.Text.Trim()) + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + ".txt", 
                     FileMode.CreateNew, 
                     FileAccess.ReadWrite,
                     FileShare.Read),

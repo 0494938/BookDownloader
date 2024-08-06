@@ -75,7 +75,7 @@ namespace WpfStreamDownloader
                 string VedioUrl = webBrowser.Source.ToString().Trim();
                 YouTube youTube = YouTube.Default;
                 var video = youTube.GetVideo(VedioUrl);
-                string strFileName = AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar + video.FullName;
+                string strFileName = datacontext.FileSavePath + video.FullName;
 
                 new Thread(() => {
                     DateTime start = DateTime.Now;

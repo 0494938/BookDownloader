@@ -1,4 +1,5 @@
 ﻿using CefSharp;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -115,6 +116,15 @@ namespace WpfBookDownloader
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if (datacontext != null)
+            {
+                RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\zdhe\\batchdownload\\1.0", false);
+                datacontext.FileTempPath = (registryKey.GetValue("FileTempPath") as string) ?? "";
+                datacontext.FileSavePath = (registryKey.GetValue("FileSavePath") as string) ?? "";
+                registryKey?.Close();
+            }
+            
             if (cmbNovelType.SelectedIndex == -1) {
                 NovelTypeChangeEvent(App.Current.MainWindow.DataContext as WndContextData, 0);
             }

@@ -20,6 +20,16 @@ namespace BookDownloadFormApp
 
         private void WindowsForm_Load(object sender, EventArgs e)
         {
+            if (datacontext != null)
+            {
+                Microsoft.Win32.RegistryKey? registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\zdhe\\batchdownload\\1.0", false);
+                if (registryKey != null)
+                {
+                    datacontext.FileTempPath = (registryKey.GetValue("FileTempPath") as string) ?? "";
+                    datacontext.FileSavePath = (registryKey.GetValue("FileSavePath") as string) ?? "";
+                    registryKey.Close();
+                }
+            }
             //cmbNovelType.SelectedIndex = cmbNovelType.FindString("4 无线电子书");
             cmbNovelType.SelectedIndex = 16;
 

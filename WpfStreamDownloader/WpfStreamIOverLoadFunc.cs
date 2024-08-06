@@ -14,6 +14,7 @@ using VideoLibrary;
 namespace WpfStreamDownloader
 {
 #pragma warning disable SYSLIB0014 // 型またはメンバーが旧型式です
+#pragma warning disable CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
     public partial class WpfStreamMainWindow : Window, IBaseMainWindow
     {
         public void UpdateStatusMsg(BaseWndContextData? datacontext, string msg, int value)
@@ -424,7 +425,7 @@ namespace WpfStreamDownloader
                 DateTime start = DateTime.Now;
                 //UpdateStatusMsg(datacontext, "Download Start: " + sFileUrl.ToString() + " ...", 0);
                 nFileIdx++;
-                string strTsFileName = sLeadId + string.Format("{0:0000}", nFileIdx) + ".ts";
+                string strTsFileName = datacontext?.FileTempPath + sLeadId + string.Format("{0:0000}", nFileIdx) + ".ts";
                 byte[] fileContent = webClient.DownloadData(sFileUrl);
                 System.IO.File.WriteAllBytes(strTsFileName, fileContent);
                 TimeSpan span = DateTime.Now - start;
@@ -435,10 +436,10 @@ namespace WpfStreamDownloader
             //string sVideoName = "";
             //this.Dispatcher.Invoke(() => { sVideoName = txtBookName.Text; });
             if (string.IsNullOrEmpty(sVideoName))
-                sVideoName = "Video_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
+                sVideoName = datacontext?.FileSavePath + "Video_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
             else
             {
-                sVideoName = sVideoName.Replace(" - YouTube", "").Replace('\\', '￥').Replace('#', '＃')
+                sVideoName = datacontext?.FileSavePath + sVideoName.Replace(" - YouTube", "").Replace('\\', '￥').Replace('#', '＃')
                     .Replace('$', '＄').Replace('%', '％').Replace('!', '！').Replace('&', '＆').Replace('\'', '’').Replace('{', '｛')
                     .Replace('\"', '”').Replace('}', '｝').Replace(':', '：').Replace('\\', '￥').Replace('@', '＠').Replace('<', '＜').Replace('>', '＞').Replace('+', '＋')
                     .Replace('`', '‘').Replace('*', '＊').Replace('|', '｜').Replace('?', '？').Replace('=', '＝').Replace('/', '／');
@@ -451,7 +452,7 @@ namespace WpfStreamDownloader
             foreach (string sCmd in lstVideoSpices)
             {
                 nFileIdx++;
-                string strTsFileName = sLeadId + string.Format("{0:0000}", nFileIdx) + ".ts";
+                string strTsFileName = datacontext?.FileTempPath + sLeadId + string.Format("{0:0000}", nFileIdx) + ".ts";
                 if (string.IsNullOrEmpty(strCmd))
                 {
                     strCmd = "ffmpeg -i \"concat:" + strTsFileName;
@@ -495,7 +496,7 @@ namespace WpfStreamDownloader
             foreach (string sCmd in lstVideoSpices)
             {
                 nFileIdx++;
-                string strTsFileName = sLeadId + string.Format("{0:0000}", nFileIdx) + ".ts";
+                string strTsFileName = datacontext?.FileTempPath + sLeadId + string.Format("{0:0000}", nFileIdx) + ".ts";
                 File.Delete(strTsFileName);
             }
 
@@ -547,7 +548,12 @@ namespace WpfStreamDownloader
         //            out HWtype);
         //    }
         //}
-        
+
+        class DownloadTask {
+            public string strFileName="";
+            public DateTime start;
+            public int n = 0;
+        }
         public bool DownloadFile(BaseWndContextData? datacontext, System.Collections.Generic.Dictionary<string, string> dictUrls, bool bForceDownload = false)
         {
             bool bAutoDownload = false;
@@ -569,7 +575,7 @@ namespace WpfStreamDownloader
                 if (!string.IsNullOrEmpty(strDownloadUrl))
                 {
                     WebClient webClient = new WebClient();
-                    byte[] fileContent = null;
+                    byte[]? fileContent = null;
                     if (IsPornHubSite(strDownloadUrl))
                     {
                         string sVideoName = "";
@@ -612,20 +618,62 @@ namespace WpfStreamDownloader
                     else if (IsRedPornSite(strDownloadUrl))
                     {
                         string sVideoName = "";
-                        this.Dispatcher.Invoke(() => { sVideoName = txtBookName.Text; });
-                        DateTime start = DateTime.Now;
+                        this.Dispatcher.Invoke(() => { sVideoName = datacontext.FileSavePath + txtBookName.Text; });
+                        //DateTime start = DateTime.Now;
 
                         UpdateStatusMsg(datacontext, "Begin download " + strDownloadUrl + " ... ", 0);
 
-                        webClient.DownloadFile(strDownloadUrl, sVideoName + ".mp4");
-                        TimeSpan span = DateTime.Now - start;
-                        UpdateStatusMsg(datacontext, "Download Finished and save to " + sVideoName + ".mp4" + " in " + string.Format("{0:#.##}", span.TotalSeconds) + " seconds. ",100);
+                        DownloadTask taskPara = new DownloadTask() ;
+                        taskPara.start = DateTime.Now;
+                        taskPara.strFileName = sVideoName;
+                        //webClient.DownloadFile(strDownloadUrl, sVideoName + ".mp4");
+                        webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
+                        webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
+                        webClient.DownloadFileAsync(new Uri(strDownloadUrl), sVideoName + ".mp4", taskPara);
+
+                        //TimeSpan span = DateTime.Now - start;
+                        //UpdateStatusMsg(datacontext, "Download Finished and save to " + sVideoName + ".mp4" + " in " + string.Format("{0:#.##}", span.TotalSeconds) + " seconds. ",100);
                         //Task task = webClient.DownloadFileTaskAsync(strDownloadUrl, sVideoName + ".mp4");
                     }
 
                 }
             }
             return true;
+        }
+
+        private void WebClient_DownloadFileCompleted(object? sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            DownloadTask task = (DownloadTask)e.UserState;
+            Debug.Assert(task != null);
+            WndContextData? datacontext = null;
+            this.Dispatcher.Invoke(() => { datacontext = App.Current.MainWindow.DataContext as WndContextData; });
+            TimeSpan span = DateTime.Now - task.start;
+            //UpdateStatusMsg(datacontext, "WebClient_DownloadStringCompleted. Cancelled:" + e.Cancelled + ", Result" + e.Result, 100);
+            UpdateStatusMsg(datacontext, "Download Finished and save to " + task.strFileName + " in " + string.Format("{0:#.##}", span.TotalSeconds) + " seconds. Cancelled:" + e.Cancelled + ", Error:" + e.Error + ", Result:" + e.ToString(), 100);
+        }
+
+        private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            DownloadTask task = (DownloadTask)e.UserState;
+            Debug.Assert(task != null);
+            task.n++;
+            if (task.n % 59 == 0)
+            {
+                WndContextData? datacontext = null;
+                this.Dispatcher.Invoke(() => { datacontext = App.Current.MainWindow.DataContext as WndContextData; });
+                UpdateStatusMsg(datacontext, "Downloading " + task.strFileName+ "... " + (e.BytesReceived / 1024/1024) + " MB/" + (e.TotalBytesToReceive / 1024 / 1024) + " MB Received. ", e.ProgressPercentage);
+            }
+        }
+
+        private void WebClient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            DownloadTask task = (DownloadTask)e.UserState;
+            Debug.Assert(task != null);
+            WndContextData? datacontext = null;
+            this.Dispatcher.Invoke(() => { datacontext = App.Current.MainWindow.DataContext as WndContextData; });
+            TimeSpan span = DateTime.Now - task.start;
+            //UpdateStatusMsg(datacontext, "WebClient_DownloadStringCompleted. Cancelled:" + e.Cancelled + ", Result" + e.Result, 100);
+            UpdateStatusMsg(datacontext, "Download Finished and save to " + task.strFileName + " in " + string.Format("{0:#.##}", span.TotalSeconds) + " seconds. Cancelled:" + e.Cancelled + ", Result" + e.Result, 100);
         }
 
         bool DownloadTsFileAndMergeInAir(BaseWndContextData? datacontext, System.Collections.Generic.List<string> lstVideoSpices)
@@ -714,5 +762,6 @@ namespace WpfStreamDownloader
         }
 
     }
+#pragma warning restore CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
 #pragma warning restore SYSLIB0014 // 型またはメンバーが旧型式です
 }

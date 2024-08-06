@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.Win32;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +20,19 @@ namespace WpfStreamDownloader
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if(cmbNovelType.SelectedIndex <0)
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if (datacontext != null)
+            {
+                RegistryKey ?registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\zdhe\\batchdownload\\1.0", false);
+                if (registryKey != null)
+                {
+                    datacontext.FileTempPath = (registryKey.GetValue("FileTempPath") as string) ?? "";
+                    datacontext.FileSavePath = (registryKey.GetValue("FileSavePath") as string) ?? "";
+                    registryKey.Close();
+                }
+            }
+
+            if (cmbNovelType.SelectedIndex <0)
                 cmbNovelType.SelectedIndex = 17;
             NovelTypeChangeEvent(App.Current.MainWindow.DataContext as WndContextData, cmbNovelType.SelectedIndex);
             //BtnClickActions(txtInitURL.Text);

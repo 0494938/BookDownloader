@@ -35,7 +35,7 @@ namespace WpfStreamDownloader
             string strFileNameBase = "";
             this.Dispatcher.Invoke(() => {
                 datacontext = App.Current.MainWindow.DataContext as WndContextData;
-                strFileNameBase = AppDomain.CurrentDomain.BaseDirectory + "HtmlDownload_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
+                strFileNameBase = "HtmlDownload_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
             });
 
             Debug.Assert(datacontext != null);
@@ -45,7 +45,7 @@ namespace WpfStreamDownloader
             if (!string.IsNullOrEmpty(strHtml?.Trim()))
             {
                 StreamWriter html = new StreamWriter(
-                   File.Open(strFileNameBase + ".html",
+                   File.Open(datacontext.FileTempPath + strFileNameBase + ".html",
                    FileMode.Create,
                    FileAccess.ReadWrite,
                    FileShare.Read),
@@ -58,7 +58,7 @@ namespace WpfStreamDownloader
                 string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(strHtml, false, false, false);
 
                 StreamWriter htmlPretty = new StreamWriter(
-                    File.Open(strFileNameBase + "_pretty.html",
+                    File.Open(datacontext.FileTempPath + strFileNameBase + "_pretty.html",
                     FileMode.Create,
                     FileAccess.ReadWrite,
                     FileShare.Read),
@@ -89,7 +89,10 @@ namespace WpfStreamDownloader
         static bool IsPornHubSite(string strUrl)
         {
             //Match match = ex.Match(strUrl);
-            return Regex.IsMatch(strUrl, pornHubMatch);
+            bool bMatch= Regex.IsMatch(strUrl, pornHubMatch);
+            if(!bMatch)
+                bMatch = Regex.IsMatch(strUrl, "https://[a-zA-Z0-0\\-]+\\.phncdn\\.com/");
+            return bMatch;
         }
 
         static string redPornMatch = "https://([a-zA-Z0-9]+\\.)?redporn\\.porn/";

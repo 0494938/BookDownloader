@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
-
 namespace BaseBookDownloader
 {
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。

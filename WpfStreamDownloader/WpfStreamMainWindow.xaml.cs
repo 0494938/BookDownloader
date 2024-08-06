@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using BaseBookDownload.WPF;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls.Primitives;
@@ -43,6 +44,19 @@ namespace WpfStreamDownloader
             if (e.Key == System.Windows.Input.Key.Enter)
             {
                 btnNextPage.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+            }
+        }
+
+        private void btnSetting_Click(object sender, RoutedEventArgs e)
+        {
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if (datacontext != null)
+            {
+                WndSetting wndSetting = new WndSetting(datacontext)
+                {
+                    Owner = this
+                };
+                wndSetting.ShowDialog();
             }
         }
     }

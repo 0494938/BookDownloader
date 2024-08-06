@@ -77,6 +77,9 @@
     <Compile Include="..\BaseBookDownload\BaseDataContext.cs">
       <Link>BaseDataContext.cs</Link>
     </Compile>
+    <Compile Include="..\BaseBookDownload\BaseDataStatus.cs">
+      <Link>BaseDataStatus.cs</Link>
+    </Compile>
     <Compile Include="..\BaseBookDownload\BookDownloadUrlUtil.cs">
       <Link>BookDownloadUrlUtil.cs</Link>
     </Compile>
