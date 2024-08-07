@@ -40,10 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BaseBookDownload.WPF\BaseBookDownload.WPF.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Auto2.png" />
     <Resource Include="chrome3.png" />
     <Resource Include="dolwnload6.png" />

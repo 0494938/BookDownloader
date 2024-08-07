@@ -118,12 +118,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BaseBookDownload.Form\BaseBookDownload.Frm.csproj">
-      <Project>{5d92c6cf-ca00-4d3a-be4a-6866bc68a8ae}</Project>
-      <Name>BaseBookDownload.Frm</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="novel_3_TZV_icon.ico" />
   </ItemGroup>
   <ItemGroup>
