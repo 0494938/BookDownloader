@@ -2,31 +2,11 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows7.0</TargetFramework>
-    <LangVersion>10.0</LangVersion>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <UseWindowsForms>False</UseWindowsForms>
     <ApplicationIcon>Novel10.ico</ApplicationIcon>
-    <Platforms>AnyCPU;x64</Platforms>
-    <StartupObject></StartupObject>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <Optimize>False</Optimize>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Optimize>False</Optimize>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <Optimize>True</Optimize>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Optimize>True</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,21 +22,22 @@
 
 	<ItemGroup>
 		<Content Include="..\BookDownload.WPF.IEBrowserOCR\tessdata\**\*.*">
-			<Link>tessdata\%(RecursiveDir)%(FileName)%(Extension)</Link>
+			<Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
-    <COMReference Include="SHDocVw">
-      <VersionMinor>1</VersionMinor>
-      <VersionMajor>1</VersionMajor>
-      <Guid>eab22ac0-30c1-11cf-a7eb-0000c05bae0b</Guid>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>false</Isolated>
-      <EmbedInteropTypes>true</EmbedInteropTypes>
-    </COMReference>
+	  <None Remove="Auto2.png" />
+	  <None Remove="chrome3.png" />
+	  <None Remove="embedwebctrl4.png" />
+	  <None Remove="html7.png" />
+	  <None Remove="Novel9.ico" />
+	  <None Remove="refresh1.png" />
+	  <None Remove="url12.png" />
+	</ItemGroup>
+
+	<ItemGroup>
     <COMReference Include="MSHTML">
       <WrapperTool>tlbimp</WrapperTool>
       <VersionMinor>0</VersionMinor>
@@ -66,11 +47,28 @@
       <Isolated>false</Isolated>
       <EmbedInteropTypes>true</EmbedInteropTypes>
     </COMReference>
+    <COMReference Include="SpeechLib">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>4</VersionMinor>
+      <VersionMajor>5</VersionMajor>
+      <Guid>e6da930b-bba5-44df-ac6f-fe60c1eddec8</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="SHDocVw">
+      <VersionMinor>1</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>eab22ac0-30c1-11cf-a7eb-0000c05bae0b</Guid>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
 
-
   <ItemGroup>
-    <Resource Include="Novel10.ico" />
+    <Content Include="Novel10.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -80,58 +78,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
+    <ProjectReference Include="..\BaseBookDownload.WPF\BaseBookDownload.WPF.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Update="tessdata\chi_sim.traineddata">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="tessdata\chi_sim_vert.traineddata">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="tessdata\chi_tra.traineddata">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="tessdata\chi_tra_vert.traineddata">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="tessdata\eng.traineddata">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="tessdata\jpn.traineddata">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="tessdata\jpn_vert.traineddata">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="packages\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Auto3.png" />
-    <Resource Include="Auto3.webp" />
-    <Resource Include="Auto4.webp" />
-    <Resource Include="Auto5.png" />
-    <Resource Include="Auto7.png" />
-    <Resource Include="Auto8.jpg" />
-    <Resource Include="chrome1.jpg" />
-    <Resource Include="chrome4.png" />
-    <Resource Include="chromium-256.ico" />
+    <Resource Include="Auto2.png" />
+    <Resource Include="chrome3.png" />
+    <Resource Include="embedwebctrl4.png" />
+    <Resource Include="html7.png" />
     <Resource Include="Novel9.ico" />
-    <Resource Include="novel_3_TZV_icon.ico" />
-    <Resource Include="refresh4.jpg" />
+    <Resource Include="refresh1.png" />
+    <Resource Include="url12.png" />
   </ItemGroup>
 
 </Project>

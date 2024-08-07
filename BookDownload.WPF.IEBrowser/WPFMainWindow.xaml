@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfIEBookDownloader"
         xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        xmlns:local="clr-namespace:WpfIEBookDownloader"
         mc:Ignorable="d"
         Title="Book Downloader WPF Version(IE Core)" Height="1100" Width="1800" 
         WindowStartupLocation="CenterScreen" 
@@ -13,7 +13,7 @@
         Loaded="OnMainWindowLoaded"
         Activated="OnMainWindowActivated"
         Unloaded="OnMainWindowUnloaded"
-        Closing="OnMainWindowClosing" Icon="/Novel9.ico" 
+        Closing="OnMainWindowClosing" Icon="/Novel9.ico" Cursor="" 
         >
     <Window.DataContext>
         <local:WndContextData/>
@@ -102,7 +102,7 @@
                          Margin="5,1,1,1" PreviewKeyDown="txtInitURL_PreviewKeyDown" />
                 <Button Grid.Column="3" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Click="OnLoadInBrowser">
                     <Button.Content>
-                        <Image Source="/chrome3.png" ToolTip="Open Init URL in default brwoser" />
+                        <Image ToolTip="Open Init URL in default brwoser" Source="/chrome3.png" />
                     </Button.Content>
                 </Button>
                 <Grid Grid.Column="4" Grid.Row="0" VerticalAlignment="Center" >
@@ -200,19 +200,9 @@
                 <ColumnDefinition Width="2"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TabControl Grid.Column="0" Margin="-3,-1,0,-3" SelectedIndex="0">
-                <TabItem x:Name="tblItemBrowser" >
-                    <TabItem.Header>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock VerticalAlignment="Center">Browser</TextBlock>
-                            <Image  Height="28" Source="/embedwebctrl4.png"/>
-                        </StackPanel>
-                    </TabItem.Header>
-                    <Wpf:WebView2 
+            <Wpf:WebView2  Grid.Column="0" Margin="-3,-1,0,-3" 
                         x:Name="webBrowser" 
                         ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" />
-                </TabItem>
-            </TabControl>
             <GridSplitter 
                 Grid.Column="1" Width="2"
                 HorizontalAlignment="Stretch"
@@ -518,4 +508,5 @@
             <ProgressBar Height="18" Width="200" x:Name="txtProgress" Grid.Column="2" Value="{Binding Path=ProcessBarValue,Mode=OneWay}" Margin="2,0,5,0" Background="Blue" BorderBrush="LightBlue" />
         </Grid>
     </Grid>
+
 </Window>

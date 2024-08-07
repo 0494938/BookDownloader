@@ -1,4 +1,4 @@
-﻿using Application = System.Windows.Application;
+﻿using System.Windows;
 
 namespace WpfIEBookDownloader
 {

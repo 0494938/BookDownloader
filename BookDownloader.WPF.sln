@@ -6,12 +6,24 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseBookDownload.WPF", "BaseBookDownload.WPF\BaseBookDownload.WPF.csproj", "{8BB2C761-BC9F-489D-B51F-35854C27C1E4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfStreamDownloader", "WpfStreamDownloader\WpfStreamDownloader.csproj", "{AED9A67F-A05B-4F86-BE60-96B4D1787748}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8BB2C761-BC9F-489D-B51F-35854C27C1E4} = {8BB2C761-BC9F-489D-B51F-35854C27C1E4}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookDownload.WPF.Chrome", "BookDownload.WPF.Chrome\BookDownload.WPF.Chrome.csproj", "{5454E67E-DA1A-46A4-ADA2-AEF20F6C188E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8BB2C761-BC9F-489D-B51F-35854C27C1E4} = {8BB2C761-BC9F-489D-B51F-35854C27C1E4}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookDownload.WPF.WebView2OCR", "BookDownload.WPF.IEBrowserOCR\BookDownload.WPF.WebView2OCR.csproj", "{4E8E5371-2CB8-4138-ABF1-6663223FA6E2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8BB2C761-BC9F-489D-B51F-35854C27C1E4} = {8BB2C761-BC9F-489D-B51F-35854C27C1E4}
+	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookDownload.WPF.WebView2", "BookDownload.WPF.IEBrowser\BookDownload.WPF.WebView2.csproj", "{42C963FF-DBD0-4077-A539-7682F04A093A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookDownload.WPF.WebView2", "BookDownload.WPF.IEBrowser\BookDownload.WPF.WebView2.csproj", "{DBA89719-CE8D-4DB0-B16F-B6426DB54852}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8BB2C761-BC9F-489D-B51F-35854C27C1E4} = {8BB2C761-BC9F-489D-B51F-35854C27C1E4}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,18 +83,18 @@ Global
 		{4E8E5371-2CB8-4138-ABF1-6663223FA6E2}.Release|x64.Build.0 = Release|x64
 		{4E8E5371-2CB8-4138-ABF1-6663223FA6E2}.Release|x86.ActiveCfg = Release|Any CPU
 		{4E8E5371-2CB8-4138-ABF1-6663223FA6E2}.Release|x86.Build.0 = Release|Any CPU
-		{42C963FF-DBD0-4077-A539-7682F04A093A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{42C963FF-DBD0-4077-A539-7682F04A093A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{42C963FF-DBD0-4077-A539-7682F04A093A}.Debug|x64.ActiveCfg = Debug|x64
-		{42C963FF-DBD0-4077-A539-7682F04A093A}.Debug|x64.Build.0 = Debug|x64
-		{42C963FF-DBD0-4077-A539-7682F04A093A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{42C963FF-DBD0-4077-A539-7682F04A093A}.Debug|x86.Build.0 = Debug|Any CPU
-		{42C963FF-DBD0-4077-A539-7682F04A093A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{42C963FF-DBD0-4077-A539-7682F04A093A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{42C963FF-DBD0-4077-A539-7682F04A093A}.Release|x64.ActiveCfg = Release|x64
-		{42C963FF-DBD0-4077-A539-7682F04A093A}.Release|x64.Build.0 = Release|x64
-		{42C963FF-DBD0-4077-A539-7682F04A093A}.Release|x86.ActiveCfg = Release|Any CPU
-		{42C963FF-DBD0-4077-A539-7682F04A093A}.Release|x86.Build.0 = Release|Any CPU
+		{DBA89719-CE8D-4DB0-B16F-B6426DB54852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBA89719-CE8D-4DB0-B16F-B6426DB54852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBA89719-CE8D-4DB0-B16F-B6426DB54852}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DBA89719-CE8D-4DB0-B16F-B6426DB54852}.Debug|x64.Build.0 = Debug|Any CPU
+		{DBA89719-CE8D-4DB0-B16F-B6426DB54852}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DBA89719-CE8D-4DB0-B16F-B6426DB54852}.Debug|x86.Build.0 = Debug|Any CPU
+		{DBA89719-CE8D-4DB0-B16F-B6426DB54852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBA89719-CE8D-4DB0-B16F-B6426DB54852}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBA89719-CE8D-4DB0-B16F-B6426DB54852}.Release|x64.ActiveCfg = Release|Any CPU
+		{DBA89719-CE8D-4DB0-B16F-B6426DB54852}.Release|x64.Build.0 = Release|Any CPU
+		{DBA89719-CE8D-4DB0-B16F-B6426DB54852}.Release|x86.ActiveCfg = Release|Any CPU
+		{DBA89719-CE8D-4DB0-B16F-B6426DB54852}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -36,9 +36,9 @@ namespace WpfIEBookDownloader
         private void WebBrowser_NavigationCompleted(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
         {
             Debug.WriteLine("WebBrowser_NavigationCompleted invoked...");
-            MainFrameWebLoadCompleted(sender, (sender as Microsoft.Web.WebView2.Wpf.WebView2)?.Source?.ToString()??"");
+            MainFrameWebLoadCompleted(sender, (sender as Microsoft.Web.WebView2.Wpf.WebView2)?.Source?.ToString() ?? "");
         }
-        
+
         private void CoreWebView2_WebMessageReceived(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
         {
             //throw new NotImplementedException();
@@ -84,7 +84,7 @@ namespace WpfIEBookDownloader
 
         public static void StartUrlOnWebBrowser(string strUrl)
         {
-            if(!string.IsNullOrEmpty(strUrl.Trim()))
+            if (!string.IsNullOrEmpty(strUrl.Trim()))
                 //Process.Start("explorer", strUrl.Trim());  
                 Process.Start(new ProcessStartInfo { FileName = strUrl.Trim(), UseShellExecute = true });
         }
@@ -161,13 +161,13 @@ namespace WpfIEBookDownloader
                 wndSetting.ShowDialog();
             }
         }
-    }
 
-    [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    [Guid("6d5140c1-7436-11ce-8034-00aa006009fa")]
-    internal interface IServiceProvider
-    {
-        [return: MarshalAs(UnmanagedType.IUnknown)]
-        object QueryService(ref Guid guidService, ref Guid riid);
+        [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [Guid("6d5140c1-7436-11ce-8034-00aa006009fa")]
+        internal interface IServiceProvider
+        {
+            [return: MarshalAs(UnmanagedType.IUnknown)]
+            object QueryService(ref Guid guidService, ref Guid riid);
+        }
     }
 }
