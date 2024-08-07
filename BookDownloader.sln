@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseBookDownload.Frm", "Bas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseBookDownload.WPF", "BaseBookDownload.WPF\BaseBookDownload.WPF.csproj", "{8BB2C761-BC9F-489D-B51F-35854C27C1E4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfStreamDownloader", "WpfStreamDownloader\WpfStreamDownloader.csproj", "{AED9A67F-A05B-4F86-BE60-96B4D1787748}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStreamDownload.WPF", "WpfStreamDownloader\BookStreamDownload.WPF.csproj", "{AED9A67F-A05B-4F86-BE60-96B4D1787748}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookDownload.Form.WebView2", "BookDownload.Form.IEBrowser\BookDownload.Form.WebView2.csproj", "{95958DCB-325C-4C4C-A3F0-B5BFAF36C774}"
 EndProject

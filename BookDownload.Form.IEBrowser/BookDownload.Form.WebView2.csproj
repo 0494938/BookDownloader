@@ -155,6 +155,12 @@
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8.1\System.Windows.Forms.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaseBookDownload.Form\BaseBookDownload.Frm.csproj">
+      <Project>{5d92c6cf-ca00-4d3a-be4a-6866bc68a8ae}</Project>
+      <Name>BaseBookDownload.Frm</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

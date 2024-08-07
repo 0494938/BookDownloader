@@ -24,6 +24,7 @@
     <None Remove="pornhub5.png" />
     <None Remove="pornhub6.png" />
     <None Remove="refresh1.png" />
+    <None Remove="setting2.png" />
     <None Remove="url12.png" />
     <None Remove="url6.png" />
     <None Remove="youtube10.png" />
@@ -57,6 +58,7 @@
     <Resource Include="pornhub5.png" />
     <Resource Include="pornhub6.png" />
     <Resource Include="refresh1.png" />
+    <Resource Include="setting2.png" />
     <Resource Include="url12.png" />
     <Resource Include="url6.png" />
     <Resource Include="youtube10.png" />

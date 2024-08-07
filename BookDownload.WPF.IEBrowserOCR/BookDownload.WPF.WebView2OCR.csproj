@@ -47,6 +47,7 @@
   <ItemGroup>
     <None Remove="Auto3.webp" />
     <None Remove="Auto4.webp" />
+    <None Remove="setting2.png" />
   </ItemGroup>
 
 
@@ -152,6 +153,7 @@
     <Resource Include="Novel_2.png" />
     <Resource Include="ocr1.png" />
     <Resource Include="refresh1.png" />
+    <Resource Include="setting2.png" />
     <Resource Include="sync3.png" />
     <Resource Include="url12.png" />
     <Resource Include="url15.jpg" />

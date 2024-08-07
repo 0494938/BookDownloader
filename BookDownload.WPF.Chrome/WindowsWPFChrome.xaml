@@ -82,7 +82,7 @@
                     <Button Grid.Column="2" 
                             Margin="1,1,1,1" x:Name="btnInitURL" HorizontalAlignment="Stretch"
                             ToolTip="Load Initial URL in Embeded Browser Control" 
-                            Click="btnInitURL_Click" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}">
+                            Click="btnInitURL_Click" IsEnabled="{Binding Path=IsInitButtonEnabled,Mode=OneWay}">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal" Margin="2,0,2,0" HorizontalAlignment="Stretch">
                                 <TextBlock  VerticalAlignment="Center" Margin="2,0,4,0">Init...</TextBlock>

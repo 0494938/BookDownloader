@@ -53,7 +53,8 @@ namespace BaseBookDownloader
         public Dictionary<string, DownloadStatus> DictDownloadStatus { get; } = new Dictionary<string, DownloadStatus>();
         public Dictionary<string, string> DictHandledContentsForDupCheck { get; } = new Dictionary<string, string>();
         bool _backGroundNotRunning = true;
-        public bool BackGroundNotRunning { get { return _backGroundNotRunning && SelectedIdx <(int)BatchQueryNovelContents.YOUTUBE;  } set { _backGroundNotRunning = value; } } 
+        public bool BackGroundNotRunning { get { return _backGroundNotRunning && SelectedIdx <(int)BatchQueryNovelContents.YOUTUBE;  } set { _backGroundNotRunning = value; } }
+        public bool IsInitButtonEnabled { get { return _backGroundNotRunning; }  }
         bool _pageLoaded = false;
         public bool PageLoaded { get { return _pageLoaded && BackGroundNotRunning; } set { _pageLoaded = value; } }
         bool _contentsAnalysised = false;
