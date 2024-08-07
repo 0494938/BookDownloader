@@ -1,0 +1,552 @@
+﻿<Window x:Class="WpfIEBookDownloader.WPFMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfIEBookDownloader"
+        xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        mc:Ignorable="d"
+        Title="Book Downloader WPF Version(IE Core)" Height="1100" Width="1800" 
+        WindowStartupLocation="CenterScreen" 
+        WindowState="Maximized"
+        Icon="/Novel9.ico" 
+        Loaded="OnMainWindowLoaded"
+        Activated="OnMainWindowActivated"
+        Unloaded="OnMainWindowUnloaded"
+        Closing="OnMainWindowClosing" 
+        >
+    <Window.DataContext>
+        <local:WndContextData/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <GroupBox 
+            VerticalAlignment="Center" 
+            VerticalContentAlignment="Center"
+            Grid.Row="0" 
+            Grid.ColumnSpan="3">
+            <Grid 
+                Margin="0,6,0,0"
+                VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2"/>
+                    <ColumnDefinition Width="34"/>
+                    <ColumnDefinition Width="300"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="3"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid HorizontalAlignment="Stretch"
+                    Grid.Column="0" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2" />
+                        <ColumnDefinition Width="70" />
+                    </Grid.ColumnDefinitions>
+                    <ComboBox 
+                        x:Name="cmbNovelType" 
+                        Margin="0,1,1,1" 
+                        Grid.Column="0" 
+                        SelectedIndex="20" 
+                        SelectionChanged="OnBookTypeSelectChagned" 
+                        HorizontalAlignment="Stretch"
+                        VerticalContentAlignment="Center"
+                        FontSize="12" >
+                        <ComboBoxItem Content="0 爱看书吧 m.ikbook8.com"></ComboBoxItem>
+                        <ComboBoxItem Content="1 QQ电子书 book.qq.com"></ComboBoxItem>
+                        <ComboBoxItem Content="2 笔趣阁 m.xbiqugew.com"></ComboBoxItem>
+                        <ComboBoxItem Content="3 笔趣阁PC www.xbiqugew.com"></ComboBoxItem>
+                        <ComboBoxItem Content="4 无线电子书 www.wxdzs.net"></ComboBoxItem>
+                        <ComboBoxItem Content="5 苍穹小说 www.cqhhhs.com"></ComboBoxItem>
+                        <ComboBoxItem Content="6 金庸小说网 www.jinhuaja.com"></ComboBoxItem>
+                        <ComboBoxItem Content="7 书旗小说网 www.shuqi.com"></ComboBoxItem>
+                        <ComboBoxItem Content="8 番茄小说网 fanqienovel.com?enter_from=page"></ComboBoxItem>
+                        <ComboBoxItem Content="9 番茄小说网 fanqienovel.com?source=seo_fq_juhe"></ComboBoxItem>
+                        <ComboBoxItem Content="10 红袖添香 www.hongxiu.com"></ComboBoxItem>
+                        <ComboBoxItem Content="11 新小说吧 www.xxs8.com"></ComboBoxItem>
+                        <ComboBoxItem Content="12 言情小说吧 www.xs8.cn"></ComboBoxItem>
+                        <!--Separator/-->
+                        <ComboBoxItem Content="13 Bad 17小说网 www.17k.com"></ComboBoxItem>
+                        <ComboBoxItem Content="14 可乐小说网 www.keleshuba.net"></ComboBoxItem>
+                        <ComboBoxItem Content="15 天天小说 m.ttshu8.com"></ComboBoxItem>
+                        <ComboBoxItem Content="16 天天小说PC www.ttshu8.com"></ComboBoxItem>
+                        <ComboBoxItem Content="17 69电子书 69shuba.cx"></ComboBoxItem>
+                        <ComboBoxItem Content="18 UU小说 www.uuxs.com"></ComboBoxItem>
+                        <ComboBoxItem Content="19 UU小说网 www.uuxs8.cc"></ComboBoxItem>
+                        <ComboBoxItem Content="20 全本小说网 www.qbxsw.com"></ComboBoxItem>
+                    </ComboBox>
+                    <!--Button Grid.Column="1" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Content="Web Load" Click="OnLoadInBrowser"/-->
+                    <!--Button Grid.Column="2" Margin="1,1,1,1" x:Name="btnInitURL" Content="Load URL" Click="btnInitURL_Click" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" /-->
+                    <Button Grid.Column="2" 
+                            Margin="1,1,1,1" x:Name="btnInitURL" HorizontalAlignment="Stretch"
+                            ToolTip="Load Initial URL in Embeded Browser Control" 
+                            Click="btnInitURL_Click" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" Margin="2,0,2,0" HorizontalAlignment="Stretch">
+                                <TextBlock  VerticalAlignment="Center" Margin="2,0,4,0">Init...</TextBlock>
+                                <Image Height="30" Source="/embedwebctrl4.png" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </Grid>
+                <TextBox Grid.Column="1" 
+                         x:Name="txtInitURL" 
+                         Text="https://www.wxdzs.net/wxread/94612_43816524.html" 
+                         VerticalAlignment="Stretch" VerticalContentAlignment="Center" 
+                         Margin="5,1,1,1" PreviewKeyDown="txtInitURL_PreviewKeyDown" />
+                <Button Grid.Column="3" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Click="OnLoadInBrowser">
+                    <Button.Content>
+                        <Image Source="/chrome3.png" ToolTip="Open Init URL in default brwoser" />
+                    </Button.Content>
+                </Button>
+                <Grid Grid.Column="4" Grid.Row="0" VerticalAlignment="Center" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="65"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="File Name" VerticalAlignment="Center"  FontSize="12" Margin="1,1,1,1" />
+                    <TextBox Grid.Column="1" x:Name="txtOutputFileName" Text="Novel" Margin="1,1,1,1"  VerticalAlignment="Stretch" VerticalContentAlignment="Center"/>
+                    <!--Button Grid.Column="2" x:Name="btnAutoDownload" Content="Auto From" Click="btnAutoURL_Click"  Margin="1,1,1,1"  FontWeight="Bold" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" /-->
+                    <Button Grid.Column="2" x:Name="btnAutoDownload" ToolTip="Batch Download From Init Url With Analysis of Nexgt Link" Click="btnAutoURL_Click"  Margin="1,1,1,1"  FontWeight="Bold" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" >
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" Margin="2,0,2,0">
+                                <TextBlock Foreground="Red" VerticalAlignment="Center" Margin="2,0,4,0">Batch...</TextBlock>
+                                <Image Source="/Auto2.png" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <TextBox Grid.Column="3" x:Name="txtPages" Text="20" TextAlignment="Right" PreviewTextInput="PreviewPagesTextInput"  VerticalAlignment="Stretch" VerticalContentAlignment="Center" DataObject.Pasting="PagesPaste"   Margin="1,1,1,1" />
+                </Grid>
+
+                <Grid Grid.Column="0" Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="2" />
+                        <ColumnDefinition Width="70" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0"
+                        Orientation="Horizontal" HorizontalAlignment="Stretch">
+                        <Button x:Name="btnSyncFromBrowser" Click="OnSyncFromBrowser" ToolTip="Qujery URL/Source from Embeded Browser Control" Margin="0,1,1,1" >
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal" Margin="2,0,2,0" >
+                                    <!--TextBlock  VerticalAlignment="Center" Margin="2,0,4,0">Source...</TextBlock-->
+                                    <Image Source="/url12.png" />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <Button x:Name="btnAnalsys" Click="OnSyncFromBrowser" ToolTip="Query and Show Current WebControl Html Source" Margin="1,1,1,1" >
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal" Margin="2,0,2,0" >
+                                    <!--TextBlock  VerticalAlignment="Center" Margin="2,0,4,0">Source...</TextBlock-->
+                                    <Image Source="/html7.png" />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <!--Button x:Name="btnReloadWebPage" Click="OnBtnRefreshPage" Content="Refresh" Margin="1,1,1,1" /-->
+                        <Button x:Name="btnReloadWebPage" ToolTip="Refresh Web Page" Click="OnBtnRefreshPage" Margin="1,1,1,1">
+                            <Button.Content>
+                                <Image Source="/refresh1.png"/>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1"
+                            Text="Curr URL:" TextAlignment="Right" 
+                            FontSize="12" FontWeight="Bold" 
+                            
+                            VerticalAlignment="Center" HorizontalAlignment="Right"  
+                            Margin="1,1,1,1"/>
+                    <Button Grid.Column="3"
+                            Margin="1,1,1,1" HorizontalAlignment="Right"
+                            x:Name="btnCurURL" ToolTip="Load Current URL in Embeded Browser Control" 
+                            Click="btnCurrURL_Click" 
+                            IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" Margin="2,0,2,0" HorizontalAlignment="Stretch">
+                                <TextBlock  VerticalAlignment="Center" Margin="2,0,4,0">Curr...</TextBlock>
+                                <Image Height="30" Source="/embedwebctrl4.png" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </Grid>
+                <TextBox Grid.Column="1" Grid.Row="2" 
+                         x:Name="txtCurURL" 
+                         VerticalAlignment="Stretch" VerticalContentAlignment="Center" 
+                         Margin="5,1,1,1" PreviewKeyDown="txtCurURL_PreviewKeyDown" />
+                <!--Button Grid.Column="3" x:Name="btnAnalysisCurURL" Content="Analysis Current URL" Click="btnAnalysisCurURL_Click" IsEnabled="{Binding Path=PageLoaded,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center" FontWeight="Bold" /-->
+                <Button Grid.Column="3" Grid.Row="2" 
+                    x:Name="btnCurPageOnWeb" Click="btnLaunchCurUrlOnWeb_Click" VerticalAlignment="Center"  Margin="1,1,1,1" >
+                    <Button.Content>
+                        <Image Source="/chrome3.png" ToolTip="Open Init URL in default brwoser" />
+                    </Button.Content>
+                </Button>
+                <Grid Grid.Column="4" Grid.Row="2" VerticalAlignment="Stretch" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="65"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Margin="1,1,1,1" VerticalAlignment="Center" TextAlignment="Center">Book Name</TextBlock>
+                    <TextBox Grid.Column="1" x:Name="txtBookName" Text=" " Margin="1,1,1,1" VerticalAlignment="Stretch" VerticalContentAlignment="Center"/>
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+        <Grid Grid.Row="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TabControl Grid.Column="0" Margin="-3,-1,0,-3" SelectedIndex="0">
+                <TabItem x:Name="tblItemBrowser" >
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock VerticalAlignment="Center">Browser</TextBlock>
+                            <Image  Height="28" Source="/embedwebctrl4.png"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Wpf:WebView2 
+                        x:Name="webBrowser" 
+                        ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" />
+                </TabItem>
+                <TabItem x:Name="tblItemOcr">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock VerticalAlignment="Center">OCR</TextBlock>
+                            <Image Source="/ocr1.png" Height="28"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox x:Name="cmbOcrLanguage" SelectedIndex="0" Margin="0,0,3,0">
+                                <ComboBoxItem Content="Simplified Chinese"/>
+                                <ComboBoxItem Content="Traditional Chinese"/>
+                                <ComboBoxItem Content="Japanese"/>
+                                <ComboBoxItem Content="Japanese Vertial"/>
+                                <ComboBoxItem Content="English"/>
+                            </ComboBox>
+                            <Button x:Name="btnOCR" Click="ClickOCR" Visibility="Visible" Margin="2,0,3,0" Content="Begin OCR Scan"/>
+                        </StackPanel>
+                        <Image x:Name="imgOCR" Source="/gcMangager.png" AllowDrop="True" Stretch="UniformToFill" Drop="imgOCR_Drop" DragOver="imgOCR_DragOver"></Image>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+            <GridSplitter 
+                Grid.Column="1" Width="2"
+                HorizontalAlignment="Stretch"
+                ResizeBehavior="BasedOnAlignment"
+                ResizeDirection="Auto" Cursor="SizeWE">
+            </GridSplitter>
+
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="2"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="3"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="3"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="3"/>
+                    <RowDefinition Height="100"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0"
+                    Grid.Column="0" 
+                    Text="Next Page URL:"
+                    HorizontalAlignment="Center"
+                    TextWrapping="WrapWithOverflow"
+                    FontWeight="Bold" 
+                    FontSize="12" 
+                    VerticalAlignment="Center"/>
+                <Grid
+                Grid.Row="0"
+                Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox 
+                    x:Name="txtNextUrl" 
+                    BorderThickness="1"  
+                    VerticalAlignment="Stretch"
+                    VerticalContentAlignment="Center"
+                    FontSize="12" FontWeight="Thin" PreviewKeyDown="txtNextUrl_PreviewKeyDown">
+                    </TextBox>
+                    <!--Button x:Name="btnNextPage" Grid.Column="1" Content="Goto Next URL" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center" FontWeight="Bold"  Margin="1,1,1,1" /-->
+                    <Button x:Name="btnNextPage" Grid.Column="1" ToolTip="Load Next URL in Embeded Browser Control" Click="btnNextPage_Click" IsEnabled="{Binding Path=NextLinkAnalysized,Mode=TwoWay}" Grid.ColumnSpan="2"  VerticalAlignment="Center" Margin="1,1,1,1" >
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" Margin="2,0,2,0" >
+                                <TextBlock VerticalAlignment="Center" Margin="2,0,4,0">Next...</TextBlock>
+                                <Image Height="30" Source="/embedwebctrl4.png" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
+                </Grid>
+                <Line Grid.Row="1" Grid.ColumnSpan="2" Height="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" />
+                <Grid 
+                Grid.Row="2"
+                Grid.Column="0" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel 
+                    Grid.Row="0"
+                    Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" >
+                        <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center">
+                        <TextBlock 
+                        Text="Html:"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"
+                        FontSize="12" 
+                        x:Name="btnOutputTest"
+                        VerticalAlignment="Center"/>
+                        <CheckBox x:Name="chkboxPrettyHtml" Content="Pretty Html" IsChecked="True" Checked="OnCheckPrettyHtmlChanged" Unchecked="OnCheckPrettyHtmlChanged"/>
+                        <CheckBox x:Name="chkboxIgnoreHeader" Content="Ignore Head" IsChecked="True" Checked="OnCheckPrettyHtmlChanged" Unchecked="OnCheckPrettyHtmlChanged" Visibility="{Binding IsChecked, ElementName=chkboxPrettyHtml, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <CheckBox x:Name="chkboxIgnoreScript" Content="Ignore Script" IsChecked="True" Checked="OnCheckPrettyHtmlChanged" Unchecked="OnCheckPrettyHtmlChanged" Visibility="{Binding IsChecked, ElementName=chkboxPrettyHtml, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+                    <StackPanel 
+                    Grid.Row="2"
+                    Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}">
+                        <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center"/>
+                        <Button 
+                        Height="40" 
+                        Margin="0,0,3,0" >
+                            <Button.Content>
+                                <TextBlock Text="Test Encoding(output test.txt)" TextWrapping="WrapWithOverflow" FontWeight="Bold" TextAlignment="Center"/>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                <Grid 
+                    Grid.Row="4"
+                    Grid.Column="0" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="37*"/>
+                        <ColumnDefinition Width="13*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0"
+                    Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" Grid.ColumnSpan="2" Margin="0,0,0,40" Grid.RowSpan="2" >
+                        <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock Grid.Row="1"
+                        Text="Text Content(From Html):" 
+                        TextWrapping="WrapWithOverflow"
+                        HorizontalAlignment="Left"
+                        FontWeight="Bold" 
+                        FontSize="12" 
+                        VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="15,0,0,0"/>
+                    <StackPanel 
+                        Grid.Row="2"
+                        Grid.ColumnSpan="2">
+                        <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center" Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" />
+                        <ComboBox x:Name="cmbInstalledVoice" Margin="3,3,3,0"></ComboBox>
+                        <Button 
+                            Height="40" 
+                            Margin="3,3,3,0"
+                            x:Name="btnSpeech"
+                            Click="OnClickSpeechText">
+                            <Button.Content>
+                                <TextBlock Text="Speech Play" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"/>
+                            </Button.Content>
+                        </Button>
+                        <Button 
+                            Height="40" 
+                            Margin="3,3,3,0"
+                            x:Name="btnConvertToMp3"
+                            Click="OnConvertToMp3">
+                            <Button.Content>
+                                <TextBlock Text="Convert to Mp3" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"/>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="6"
+                    Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0"
+                Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" >
+                        <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock 
+                        Grid.Row="1"
+                        HorizontalAlignment="Center"
+                        Text="Merged Content:" 
+                        TextWrapping="WrapWithOverflow"
+                        FontWeight="Bold" 
+                        FontSize="12" 
+                        VerticalAlignment="Center"/>
+                    <StackPanel Grid.Row="2"
+                        Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" >
+                        <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+                <StackPanel Grid.Row="8" VerticalAlignment="Center"
+                    Grid.Column="0">
+                    <TextBlock 
+                        Text="Log:"
+                        HorizontalAlignment="Center"
+                        FontWeight="Bold" 
+                        FontSize="14" 
+                        VerticalAlignment="Center"/>
+                    <Button Grid.Column="4" x:Name="btnSetting" Content="Setting" Margin="2,0,5,10" FontSize="14" Click="btnSetting_Click"/>
+                </StackPanel>
+                <GridSplitter 
+                    Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="5"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    ShowsPreview="True" Cursor="SizeNS">
+                </GridSplitter>
+                <GridSplitter 
+                    Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Height="5"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    ShowsPreview="True"  Cursor="SizeNS">
+                </GridSplitter>
+                <GridSplitter 
+                    Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Height="5"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    ShowsPreview="True" Cursor="SizeNS">
+                </GridSplitter>
+                <TextBox
+                    Grid.Row="2" 
+                    Grid.Column="1"
+                    x:Name="txtWebContents" 
+                    BorderThickness="1" 
+                    AcceptsReturn="True"
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Auto"
+                    FontSize="12" FontWeight="Thin">
+                    <TextBox.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="CadetBlue"/>
+                            <GradientStop Color="LightBlue" Offset="0.7"/>
+                        </LinearGradientBrush>
+                    </TextBox.Background>
+                </TextBox>
+                <TextBox
+                    Grid.Row="4" 
+                    Grid.Column="1"
+                    x:Name="txtAnalysizedContents" 
+                    BorderThickness="1" 
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Disabled"
+                    AcceptsReturn="True"
+                    TextWrapping="WrapWithOverflow"
+                    FontSize="12" FontWeight="Thin">
+                    <TextBox.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" Opacity="0.5" StartPoint="0.5,0">
+                            <GradientStop Color="LightGreen"/>
+                            <GradientStop Color="LightPink" Offset="0.7"/>
+                        </LinearGradientBrush>
+                    </TextBox.Background>
+                </TextBox>
+                <TextBox
+                    Grid.Row="6" 
+                    Grid.Column="1"
+                    x:Name="txtAggregatedContents" 
+                    BorderThickness="1" 
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Auto"
+                    AcceptsReturn="True"
+                    FontSize="12" FontWeight="Thin">
+                    <TextBox.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="CadetBlue"/>
+                            <GradientStop Color="LightBlue" Offset="0.7"/>
+                        </LinearGradientBrush>
+                    </TextBox.Background>
+                </TextBox>
+                <Grid Grid.Row="8" 
+                  Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="66*"/>
+                        <ColumnDefinition Width="2"/>
+                        <ColumnDefinition Width="33*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                    Grid.Column="0"
+                    x:Name="txtLog" 
+                    Margin="0,2,1,2"
+                    BorderThickness="1" 
+                    FontSize="12" 
+                    FontWeight="Thin" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <!--Background="LightGray"-->
+                        <TextBox.Background>
+                            <LinearGradientBrush Opacity="0.5" EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="LightGray"/>
+                                <GradientStop Color="LightSlateGray" Offset="0.7"/>
+                            </LinearGradientBrush>
+                        </TextBox.Background>
+                    </TextBox>
+                    <GridSplitter 
+                        Grid.Column="1" Width="5"
+                        HorizontalAlignment="Stretch"
+                        ResizeBehavior="BasedOnAlignment"
+                        ResizeDirection="Auto" Cursor="SizeWE">
+                    </GridSplitter>
+                    <TextBox
+                        Grid.Column="2"
+                        x:Name="txtChapter" 
+                        Margin="0,2,1,2"
+                        BorderThickness="1" 
+                        FontSize="12" 
+                        FontWeight="Thin" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <!--Background="LightGray"-->
+                        <TextBox.Background>
+                            <LinearGradientBrush Opacity="0.5"  EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="LightGray"/>
+                                <GradientStop Color="LightSlateGray" Offset="0.7"/>
+                            </LinearGradientBrush>
+                        </TextBox.Background>
+                    </TextBox>
+                </Grid>
+
+            </Grid>
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="CadetBlue"/>
+                    <GradientStop Color="LightBlue" Offset="0.7"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+        </Grid>
+        <Grid  Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Stretch" AutomationProperties.HelpText="" Background="LightGray" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="202" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="txtStatus"  Grid.Column="0" FontSize="12" FontWeight="Thin" Text="{Binding Path=StartBarMsg,Mode=OneWay}" Margin="5,1,2,1" VerticalAlignment="Stretch" Height="23" />
+            <Separator Grid.Column="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+            <ProgressBar Height="18" Width="200" x:Name="txtProgress" Grid.Column="2" Value="{Binding Path=ProcessBarValue,Mode=OneWay}" Margin="2,0,5,0" Background="Blue" BorderBrush="LightBlue" />
+        </Grid>
+    </Grid>
+</Window>
