@@ -163,10 +163,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BaseBookDownload.WPF\BaseBookDownload.WPF.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Auto1.png" />
     <Resource Include="Auto2.png" />
     <Resource Include="Auto3.png" />
