@@ -411,3 +411,4 @@ bin_net6.0
 *.ts
 *.html
 *.txt
+/bin_webview2/BookStreamDownload.WPF.exe.WebView2/EBWebView
