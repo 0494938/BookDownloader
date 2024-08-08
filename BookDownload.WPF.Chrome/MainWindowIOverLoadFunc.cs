@@ -207,7 +207,7 @@ namespace WpfBookDownloader
             GetWebDocHtml(doc);
             int nMaxRetry = 5 * 20;
             int nRetry = 0;
-            while (nRetry  < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+            while (nRetry  < nMaxRetry && string.IsNullOrEmpty(doc.sHtml) && !datacontext.UnloadPgm)
             {
                 nRetry++;
                 Thread.Sleep(200);
@@ -275,6 +275,7 @@ namespace WpfBookDownloader
                 if (value >= 0)
                     txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
             });
+            DownloadStatus.WriteDbgLnLog(msg);
         }
 
         public void UpdateStatusProgress(BaseWndContextData datacontext, int value)

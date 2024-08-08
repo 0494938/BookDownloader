@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookDownload.WPF.WebView2OC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookDownload.WPF.WebView2", "BookDownload.WPF.IEBrowser\BookDownload.WPF.WebView2.csproj", "{42C963FF-DBD0-4077-A539-7682F04A093A}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "WpfBookStreamDownloader", "WpfSetup\WpfSetup.vdproj", "{AEBC379F-78D0-4391-A9B3-39068BA55CE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -124,6 +126,12 @@ Global
 		{42C963FF-DBD0-4077-A539-7682F04A093A}.Release|x64.Build.0 = Release|x64
 		{42C963FF-DBD0-4077-A539-7682F04A093A}.Release|x86.ActiveCfg = Release|Any CPU
 		{42C963FF-DBD0-4077-A539-7682F04A093A}.Release|x86.Build.0 = Release|Any CPU
+		{AEBC379F-78D0-4391-A9B3-39068BA55CE0}.Debug|Any CPU.ActiveCfg = Debug
+		{AEBC379F-78D0-4391-A9B3-39068BA55CE0}.Debug|x64.ActiveCfg = Debug
+		{AEBC379F-78D0-4391-A9B3-39068BA55CE0}.Debug|x86.ActiveCfg = Debug
+		{AEBC379F-78D0-4391-A9B3-39068BA55CE0}.Release|Any CPU.ActiveCfg = Release
+		{AEBC379F-78D0-4391-A9B3-39068BA55CE0}.Release|x64.ActiveCfg = Release
+		{AEBC379F-78D0-4391-A9B3-39068BA55CE0}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

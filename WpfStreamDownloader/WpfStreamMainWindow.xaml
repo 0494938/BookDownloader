@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Stream Downloader WPF Version(WebView2 based)" Height="1100" Width="1800" 
         WindowStartupLocation="CenterScreen" 
-        WindowState="Normal" Icon="/download12.jpg" Loaded="Window_Loaded" Unloaded="Window_Unloaded"
+        WindowState="Normal" Icon="/download12.jpg" Loaded="Window_Loaded" Unloaded="Window_Unloaded" Closed="Window_Closed" Closing="Window_Closing"
         >
     <Window.DataContext>
         <local:WndContextData/>
@@ -220,8 +220,11 @@
                 x:Name="webBrowser" 
                 ScrollViewer.HorizontalScrollBarVisibility="Auto" 
                 ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                ScrollViewer.CanContentScroll="True" 
-            />
+                ScrollViewer.CanContentScroll="True">
+                <Wpf:WebView2.CreationProperties>
+                    <Wpf:CoreWebView2CreationProperties UserDataFolder="{Binding Path=WebView2UserFolder,Mode=OneWay}"/>
+                </Wpf:WebView2.CreationProperties>
+            </Wpf:WebView2>
             <GridSplitter 
                 Grid.Row="1" Grid.Column="0" Height="3" Grid.ColumnSpan="5"
                 HorizontalAlignment="Stretch"

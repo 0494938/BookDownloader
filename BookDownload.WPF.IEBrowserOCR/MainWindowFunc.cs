@@ -1,4 +1,5 @@
 ﻿using BaseBookDownloader;
+using Microsoft.Web.WebView2.Core;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -6,6 +7,7 @@ using System.Windows.Controls;
 
 namespace WpfIEBookDownloader
 {
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
         public void UpdateNextPageButton(BaseWndContextData? datacontext = null) {
@@ -158,7 +160,7 @@ namespace WpfIEBookDownloader
             });
             int nMaxRetry = 5 * 20;
             int nRetry = 0;
-            while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+            while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml) && !datacontext.UnloadPgm)
             {
                 nRetry++;
                 Thread.Sleep(200);
@@ -180,7 +182,7 @@ namespace WpfIEBookDownloader
 
             Debug.Assert(datacontext != null);
 
-            string? strBody = GetWebDocHtmlSource(strUrl, bWaitOptoin);
+            string? strBody = GetWebDocHtmlSource(strUrl, bWaitOptoin, datacontext);
             if (!string.IsNullOrEmpty(strBody?.Trim()))
             {
                 string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(strBody, true, true);
@@ -233,23 +235,22 @@ namespace WpfIEBookDownloader
         public void UpdateStatusMsg(BaseWndContextData? datacontext, string msg, int value)
         {
             Debug.WriteLine(msg); if (datacontext != null)
+            datacontext.StartBarMsg = msg;
+            if (value >= 0)
+                datacontext.ProcessBarValue = value;
+            txtStatus.Dispatcher.Invoke(() =>
             {
-                datacontext.StartBarMsg = msg;
-                if (value >= 0)
-                    datacontext.ProcessBarValue = value;
-                txtStatus.Dispatcher.Invoke(() =>
+                txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
+                if (!string.IsNullOrEmpty(msg))
                 {
-                    txtStatus.GetBindingExpression(TextBlock.TextProperty).UpdateTarget();
-                    if (!string.IsNullOrEmpty(msg))
-                    {
-                        txtLog.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
-                        txtLog.CaretIndex = txtLog.Text.Length;
-                        txtLog.ScrollToEnd();
-                    }
-                    if (value >= 0)
-                        txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
-                });
-            }
+                    txtLog.AppendText(msg + ((value >= 0) ? ("(" + value + "%)") : "") + "\r\n");
+                    txtLog.CaretIndex = txtLog.Text.Length;
+                    txtLog.ScrollToEnd();
+                }
+                if (value >= 0)
+                    txtProgress.GetBindingExpression(ProgressBar.ValueProperty).UpdateTarget();
+            });
+            DownloadStatus.WriteDbgLnLog(msg);
         }
 
         public void Back(BaseWndContextData? datacontext) {
@@ -278,6 +279,9 @@ namespace WpfIEBookDownloader
 
         public void GetBrowserDocAndPutToCtrl()
         {
+            WndContextData? datacontext = null;
+            this.Dispatcher.Invoke(() => { datacontext = App.Current.MainWindow.DataContext as WndContextData; });
+ 
             _DocContents doc = new _DocContents();
             new Thread(() =>
             {
@@ -289,7 +293,7 @@ namespace WpfIEBookDownloader
                     {
                         bLoaded = webBrowser.IsLoaded;
                     });
-                    while (nRetry < nMaxRetry && bLoaded == false)
+                    while (nRetry < nMaxRetry && bLoaded == false && !datacontext.UnloadPgm)
                     {
                         nRetry++;
                         Thread.Sleep(100);
@@ -311,7 +315,7 @@ namespace WpfIEBookDownloader
                             });
                         });
 
-                        while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                        while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml) && !datacontext.UnloadPgm)
                         {
                             nRetry++;
                             Thread.Sleep(100);
@@ -335,6 +339,8 @@ namespace WpfIEBookDownloader
 
         public void GetBrowserDocAndPrettyToCtrl()
         {
+            WndContextData? datacontext = null;
+            this.Dispatcher.Invoke(() => { datacontext = App.Current.MainWindow.DataContext as WndContextData; });
             _DocContents doc = new _DocContents();
             new Thread(() =>
             {
@@ -346,7 +352,7 @@ namespace WpfIEBookDownloader
                     {
                         bLoaded = webBrowser.IsLoaded;
                     });
-                    while (nRetry < nMaxRetry && bLoaded == false)
+                    while (nRetry < nMaxRetry && bLoaded == false && !datacontext.UnloadPgm)
                     {
                         nRetry++;
                         Thread.Sleep(100);
@@ -369,7 +375,7 @@ namespace WpfIEBookDownloader
                         });
                         Thread.Sleep(100);
 
-                        while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                        while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml) && !datacontext.UnloadPgm)
                         {
                             nRetry++;
                             Thread.Sleep(100);
@@ -433,7 +439,9 @@ namespace WpfIEBookDownloader
             //webBrowser.BindingContextChanged += new EventHandler(Browser_BindingContextChanged);
             webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
 #else
-            await webBrowser.EnsureCoreWebView2Async(null);
+            var env = await CoreWebView2Environment.CreateAsync(null, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+            await webBrowser.EnsureCoreWebView2Async(env);
+
             webBrowser.NavigationCompleted += WebBrowser_NavigationCompleted;
             webBrowser.Loaded += WebBrowser_Loaded;
             webBrowser.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
@@ -453,4 +461,5 @@ namespace WpfIEBookDownloader
             throw new NotImplementedException();
         }
     }
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 }

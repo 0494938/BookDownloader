@@ -109,7 +109,7 @@ namespace BaseBookDownloader
                 Debug.WriteLine($"{strURL} : Download Finished, Begin Analysis ...");
                 if (!UnloadPgm)
                 {
-                    string? strBody = wndMain.GetWebDocHtmlSource(strURL);
+                    string? strBody = wndMain.GetWebDocHtmlSource(strURL, true, this);
                     wndMain.UpdateWebBodyOuterHtml(strBody);
                     if (!string.IsNullOrEmpty(strBody))
                     {

@@ -113,58 +113,6 @@ namespace WpfBookDownloader
             webBrowser.Unloaded += WebBrowser_Unloaded;
             webBrowser.TitleChanged += WebBrowser_TitleChanged;
         }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
-            if (datacontext != null)
-            {
-                RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\zdhe\\batchdownload\\1.0", false);
-                datacontext.FileTempPath = (registryKey.GetValue("FileTempPath") as string) ?? "";
-                datacontext.FileSavePath = (registryKey.GetValue("FileSavePath") as string) ?? "";
-                registryKey?.Close();
-            }
-            
-            if (cmbNovelType.SelectedIndex == -1) {
-                NovelTypeChangeEvent(App.Current.MainWindow.DataContext as WndContextData, 0);
-            }
-            else
-            {
-                NovelTypeChangeEvent(App.Current.MainWindow.DataContext as WndContextData, cmbNovelType.SelectedIndex);
-            }
-        }
-
-        private void Window_Unloaded(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("OnMainWindowUnloaded invoked...");
-            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
-            if (datacontext != null) { datacontext.UnloadPgm = true; }
-            webBrowser.Dispose();
-        }
-
-        private void txtInitURL_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            Debug.WriteLine("txtInitURL_PreviewKeyDown, SystemKey: " + e.SystemKey + ", Key:" + e.Key);
-            btnInitURL.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-        }
-
-        private void txtCurURL_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            Debug.WriteLine("txtCurURL_PreviewKeyDown, SystemKey: " + e.SystemKey + ", Key:" + e.Key);
-            if (e.Key == System.Windows.Input.Key.Enter)
-            {
-                btnCurURL.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-            }
-        }
-
-        private void txtNextUrl_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            Debug.WriteLine("txtNextUrl_PreviewKeyDown, SystemKey: " + e.SystemKey + ", Key:" + e.Key);
-            if (e.Key == System.Windows.Input.Key.Enter)
-            {
-                btnNextPage.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-            }
-        }
     }
 #pragma warning restore CS8604 // Null 参照引数の可能性があります。
 #pragma warning restore CA1416 // プラットフォームの互換性を検証

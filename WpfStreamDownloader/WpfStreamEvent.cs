@@ -25,9 +25,9 @@ namespace WpfStreamDownloader
                 RegistryKey ?registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\zdhe\\batchdownload\\1.0", false);
                 if (registryKey != null)
                 {
-                    datacontext.FileTempPath = (registryKey.GetValue("FileTempPath") as string) ?? "";
-                    datacontext.FileSavePath = (registryKey.GetValue("FileSavePath") as string) ?? "";
-                    registryKey.Close();
+                    datacontext.FileTempPath = (registryKey?.GetValue("FileTempPath") as string) ?? "";
+                    datacontext.FileSavePath = (registryKey?.GetValue("FileSavePath") as string) ?? "";
+                    registryKey?.Close();
                 }
             }
 

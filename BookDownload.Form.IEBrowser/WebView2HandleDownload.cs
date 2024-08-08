@@ -48,7 +48,7 @@ namespace BookDownloadFormApp
             });
             int nMaxRetry = 5 * 20;
             int nRetry = 0;
-            while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+            while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml) && !datacontext.UnloadPgm)
             {
                 nRetry++;
                 Thread.Sleep(200);

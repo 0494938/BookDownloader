@@ -20,7 +20,9 @@ namespace WpfBookDownloader
                 //By default CefSharp will use an in-memory cache, you need to specify a Cache Folder to persist data
                 IgnoreCertificateErrors = true,
                 //RootCachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache\\" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss")),
-                RootCachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ChromeCache." + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss")),
+                //RootCachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ChromeCache." + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss")),
+                RootCachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ChromeCache"),
+                BrowserSubprocessPath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName
                 //CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache")
             };
 

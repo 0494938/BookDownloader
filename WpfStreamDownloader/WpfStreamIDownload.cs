@@ -11,6 +11,8 @@ namespace WpfStreamDownloader
 {
 #pragma warning disable SYSLIB0014 // 型またはメンバーが旧型式です
 #pragma warning disable CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
+#pragma warning disable IDE0090 // 'new(...)' を使用する
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
     public class DownloadTask
     {
         public string FileName { get; set; } = "";
@@ -112,7 +114,7 @@ namespace WpfStreamDownloader
             int nFileIdx = 0;
             string sLeadId = string.Format("{0:#}", Thread.CurrentThread.ManagedThreadId) + "_";
             var items = lstTasks.Items;
-            
+
             DownloadTask task = new DownloadTask() { Uri = strOrgDownloadUrl, Progress = "0%", FileName= sVideoName, FullPathName = datacontext.FileSavePath + sVideoName + ".mp4", StartTime = DateTime.Now, };
             datacontext.TaskList.Add(task);
             this.Dispatcher.Invoke(() => { lstTasks.Items.Refresh(); });
@@ -315,4 +317,6 @@ namespace WpfStreamDownloader
     }
 #pragma warning restore CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
 #pragma warning restore SYSLIB0014 // 型またはメンバーが旧型式です
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning restore IDE0090 // 'new(...)' を使用する
 }

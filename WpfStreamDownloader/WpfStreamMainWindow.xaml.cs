@@ -59,5 +59,17 @@ namespace WpfStreamDownloader
                 wndSetting.ShowDialog();
             }
         }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Window_Closed invoked...");
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Debug.WriteLine("Window_Closing invoked...");
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            if (datacontext != null) { datacontext.UnloadPgm = true; }
+        }
     }
 }

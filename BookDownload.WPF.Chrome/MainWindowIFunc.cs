@@ -56,11 +56,13 @@ namespace WpfBookDownloader
         private void GetWebDocHtml(_DocContents doc)
         {
             bool isLoading = false;
+            WndContextData? datacontext = null;
             this.Dispatcher.Invoke(() => {
                 isLoading = webBrowser.IsLoading;
+                datacontext = App.Current.MainWindow.DataContext as WndContextData;
             });
             int nMaxRetry = 10 * 30, nRetry=0;
-            if (nRetry < nMaxRetry && ( webBrowser == null || isLoading == true))
+            if (nRetry < nMaxRetry && ( webBrowser == null || isLoading == true) && !datacontext.UnloadPgm)
             {
                 nRetry++;
                 Thread.Sleep(100);
@@ -86,6 +88,8 @@ namespace WpfBookDownloader
         public void GetBrowserDocAndPutToCtrl()
         {
             _DocContents doc = new _DocContents();
+            WndContextData? datacontext = null;
+            this.Dispatcher.Invoke(() => { datacontext = App.Current.MainWindow.DataContext as WndContextData; });
             new Thread(() =>
             {
                 try
@@ -96,7 +100,7 @@ namespace WpfBookDownloader
                     {
                         bLoaded = webBrowser.IsLoaded;
                     });
-                    while (nRetry < nMaxRetry && bLoaded == false)
+                    while (nRetry < nMaxRetry && bLoaded == false && !datacontext.UnloadPgm)
                     {
                         nRetry++;
                         Thread.Sleep(100);
@@ -118,7 +122,7 @@ namespace WpfBookDownloader
                             });
                         });
 
-                        while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                        while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml) && !datacontext.UnloadPgm)
                         {
                             nRetry++;
                             Thread.Sleep(100);
@@ -140,6 +144,8 @@ namespace WpfBookDownloader
         public void GetBrowserDocAndPrettyToCtrl()
         {
             _DocContents doc = new _DocContents();
+            WndContextData? datacontext = null;
+            this.Dispatcher.Invoke(() => { datacontext = App.Current.MainWindow.DataContext as WndContextData; });
             new Thread(() =>
             {
                 try
@@ -150,7 +156,7 @@ namespace WpfBookDownloader
                     {
                         bLoaded = webBrowser.IsLoaded;
                     });
-                    while (nRetry < nMaxRetry && bLoaded == false)
+                    while (nRetry < nMaxRetry && bLoaded == false && !datacontext.UnloadPgm)
                     {
                         nRetry++;
                         Thread.Sleep(100);
@@ -173,7 +179,7 @@ namespace WpfBookDownloader
                         });
                         Thread.Sleep(100);
 
-                        while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                        while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml) && !datacontext.UnloadPgm)
                         {
                             nRetry++;
                             Thread.Sleep(100);

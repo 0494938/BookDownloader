@@ -49,8 +49,8 @@ namespace WpfIEBookDownloader
             if (datacontext != null)
             {
                 RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\zdhe\\batchdownload\\1.0", false);
-                datacontext.FileTempPath = (registryKey.GetValue("FileTempPath") as string) ?? "";
-                datacontext.FileSavePath = (registryKey.GetValue("FileSavePath") as string) ?? "";
+                datacontext.FileTempPath = (registryKey?.GetValue("FileTempPath") as string) ?? "";
+                datacontext.FileSavePath = (registryKey?.GetValue("FileSavePath") as string) ?? "";
                 registryKey?.Close();
             }
             

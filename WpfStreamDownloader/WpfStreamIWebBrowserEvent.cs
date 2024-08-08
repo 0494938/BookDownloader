@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace WpfStreamDownloader
 {
-
+#pragma warning disable CS0162 // 到達できないコードが検出されました
     public partial class WpfStreamMainWindow : Window
     {
         private void WebBrowser_NavigationCompleted(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
@@ -37,7 +37,7 @@ namespace WpfStreamDownloader
             CoreWebView2? wv2 = sender as CoreWebView2;
             if (wv2 != null)
             {
-                if (!BaseWndContextData.NeedSkipHandleSourceChanged(wv2.Source.ToString()) && datacontext?.PgmNaviUrl != wv2.Source.ToString() && (datacontext?.BackGroundNotRunning==true || (datacontext.SelectedIdx >= (int)BatchQueryNovelContents.YOUTUBE)))
+                if (!BaseWndContextData.NeedSkipHandleSourceChanged(wv2.Source.ToString()) && datacontext?.PgmNaviUrl != wv2.Source.ToString() && (datacontext?.BackGroundNotRunning==true || (datacontext?.SelectedIdx >= (int)BatchQueryNovelContents.YOUTUBE)))
                 {
                     MainFrameWebLoadCompleted(sender, wv2.Source.ToString());
                 }
@@ -70,7 +70,7 @@ namespace WpfStreamDownloader
             try
             {
                 WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
-                if (e.Response != null && datacontext != null)
+                if (e.Response != null && datacontext != null && !datacontext.UnloadPgm)
                 {
                     if (false)
                     {
@@ -252,4 +252,5 @@ namespace WpfStreamDownloader
             //Debug.WriteLine("CoreWebView2_FrameNavigationStarting invoked... IsRedirected:" + e.IsRedirected + ", Uri:" + e.Uri.ToString());
         }
     }
+#pragma warning restore CS0162 // 到達できないコードが検出されました
 }

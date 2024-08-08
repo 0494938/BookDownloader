@@ -32,6 +32,7 @@ namespace BookDownloadFormApp
                     txtProgress.Value = value;
             });
             Debug.WriteLine(msg);
+            DownloadStatus.WriteDbgLnLog(msg);
         }
 
         public void UpdateStatusProgress(BaseWndContextData datacontext, int value)

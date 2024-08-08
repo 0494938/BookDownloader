@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Microsoft.Web.WebView2.Core;
+using System.Windows;
 
 namespace WpfStreamDownloader
 {
@@ -7,7 +8,8 @@ namespace WpfStreamDownloader
     {
         public async void InitBrowser()
         {
-            await webBrowser.EnsureCoreWebView2Async(null);
+            var env = await CoreWebView2Environment.CreateAsync(null, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+            await webBrowser.EnsureCoreWebView2Async(env);
 
             webBrowser.NavigationCompleted += WebBrowser_NavigationCompleted;
             webBrowser.Loaded += WebBrowser_Loaded;

@@ -41,7 +41,7 @@
             <Button Content="View source" Command="{Binding WebBrowser.ViewSourceCommand, ElementName=Browser}" Grid.Column="4" Width="75" />
         </Grid>
         <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="0,1">
-            <wpf:ChromiumWebBrowser x:Name="Browser"
+            <wpf:ChromiumWebBrowser x:Name="webBrowser"
                                     Address="https://www.google.com">
                 <behaviors:Interaction.Behaviors>
                     <behaviours:HoverLinkBehaviour x:Name="HoverLinkBehaviour"/>

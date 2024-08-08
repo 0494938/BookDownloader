@@ -43,7 +43,7 @@ namespace BookDownloadFormApp
             string ?strBody = null;
             GetWebDocHtml(doc);
             this.Invoke(() => { strBody = doc.sHtml; });
-            while (string.IsNullOrEmpty(doc.sHtml))
+            while (string.IsNullOrEmpty(doc.sHtml) && !this.datacontext.UnloadPgm)
             {
                 Thread.Sleep(200);
                 GetWebDocHtml(doc);

@@ -12,11 +12,14 @@ namespace WpfStreamDownloader
 {
 #pragma warning disable SYSLIB0014 // 型またはメンバーが旧型式です
 #pragma warning disable CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning disable CS0162 // 到達できないコードが検出されました
     public partial class WpfStreamMainWindow : Window, IBaseMainWindow
     {
         public void UpdateStatusMsg(BaseWndContextData? datacontext, string msg, int value)
         {
             Debug.WriteLine(msg);
+            DownloadStatus.WriteDbgLnLog(msg); 
             try
             {
                 if (datacontext != null)
@@ -151,7 +154,11 @@ namespace WpfStreamDownloader
         public void GetBrowserDocAndPrettyToCtrl(string ? strHtml=null, string ? strPrettyFileName=null)
         {
             bool bOutputHtml = false;
-            this.Dispatcher.Invoke(() => { return bOutputHtml = chkShowHtml.IsChecked ?? false; });
+            WndContextData? datacontext = null;
+            this.Dispatcher.Invoke(() => {
+                return bOutputHtml = chkShowHtml.IsChecked ?? false;
+                datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            });
             _DocContents doc = new _DocContents();
             if (bOutputHtml)
             {
@@ -175,7 +182,7 @@ namespace WpfStreamDownloader
                         {
                             bLoaded = webBrowser.IsLoaded;
                         });
-                        while (nRetry < nMaxRetry && bLoaded == false)
+                        while (nRetry < nMaxRetry && bLoaded == false && !datacontext.UnloadPgm)
                         {
                             nRetry++;
                             Thread.Sleep(100);
@@ -538,6 +545,8 @@ namespace WpfStreamDownloader
         }
 
     }
+#pragma warning restore CS0162 // 到達できないコードが検出されました
 #pragma warning restore CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning restore SYSLIB0014 // 型またはメンバーが旧型式です
 }

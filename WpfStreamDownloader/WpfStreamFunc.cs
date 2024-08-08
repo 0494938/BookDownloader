@@ -41,7 +41,7 @@ namespace WpfStreamDownloader
             Debug.Assert(datacontext != null);
             bool bOutputHtml = false;
             this.Dispatcher.Invoke(() => { return bOutputHtml = chkShowHtml.IsChecked ?? false; });
-            string? strHtml = GetWebDocHtmlSource(strUrl, bWaitOptoin);
+            string? strHtml = GetWebDocHtmlSource(strUrl, bWaitOptoin, datacontext);
             if (!string.IsNullOrEmpty(strHtml?.Trim()))
             {
                 ;
@@ -121,7 +121,7 @@ namespace WpfStreamDownloader
                 });
                 int nMaxRetry = 5 * 20;
                 int nRetry = 0;
-                while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml) && !datacontext.UnloadPgm)
                 {
                     nRetry++;
                     Thread.Sleep(200);
@@ -133,7 +133,7 @@ namespace WpfStreamDownloader
                 html = html.Remove(html.Length - 1, 1);
                 return html;
             }
-            catch (TaskCanceledException ex){ }
+            catch (TaskCanceledException ){ }
 
             return "";
 

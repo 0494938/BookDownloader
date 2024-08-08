@@ -1,5 +1,6 @@
 ﻿using BaseBookDownload.Frm;
 using BaseBookDownloader;
+using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
 using System;
 using System.Runtime.InteropServices;
@@ -26,8 +27,8 @@ namespace BookDownloadFormApp
                 Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\zdhe\\batchdownload\\1.0", false);
                 if (registryKey != null)
                 {
-                    datacontext.FileTempPath = (registryKey.GetValue("FileTempPath") as string) ?? "";
-                    datacontext.FileSavePath = (registryKey.GetValue("FileSavePath") as string) ?? "";
+                    datacontext.FileTempPath = (registryKey?.GetValue("FileTempPath") as string) ?? "";
+                    datacontext.FileSavePath = (registryKey?.GetValue("FileSavePath") as string) ?? "";
                     registryKey.Close();
                 }
             }
@@ -53,7 +54,10 @@ namespace BookDownloadFormApp
             //this.Controls.Add(browser);
             this.scBottom.Panel1.Controls.Add(webBrowser);
             webBrowser.Dock = DockStyle.Fill;
-            await webBrowser.EnsureCoreWebView2Async(null);
+            
+            var env = await CoreWebView2Environment.CreateAsync(null, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+            await webBrowser.EnsureCoreWebView2Async(env);
+            
             webBrowser.NavigationCompleted += WebBrowser_NavigationCompleted;
             webBrowser.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
             //webBrowser.Loaded +=  WebBrowser_Loaded;

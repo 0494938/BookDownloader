@@ -5,6 +5,7 @@ using CefSharp.BrowserSubprocess;
 using CefSharp.WinForms;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -31,8 +32,8 @@ namespace BookDownloadFormApp
                 Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\zdhe\\batchdownload\\1.0", false);
                 if (registryKey != null)
                 {
-                    datacontext.FileTempPath = (registryKey.GetValue("FileTempPath") as string) ?? "";
-                    datacontext.FileSavePath = (registryKey.GetValue("FileSavePath") as string) ?? "";
+                    datacontext.FileTempPath = (registryKey?.GetValue("FileTempPath") as string) ?? "";
+                    datacontext.FileSavePath = (registryKey?.GetValue("FileSavePath") as string) ?? "";
                     registryKey.Close();
                 }
             }
@@ -52,7 +53,17 @@ namespace BookDownloadFormApp
 
         public void InitBrowser()
         {
-            Cef.Initialize(new CefSettings());
+            //Cef.Initialize(new CefSettings());
+            Cef.Initialize(new CefSettings()
+            {
+                //By default CefSharp will use an in-memory cache, you need to specify a Cache Folder to persist data
+                IgnoreCertificateErrors = true,
+                //RootCachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache\\" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss")),
+                //RootCachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ChromeCache." + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss")),
+                RootCachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ChromeCache"),
+                BrowserSubprocessPath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName
+                //CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache")
+            });
             datacontext.PgmNaviUrl = txtInitURL.Text.Trim();
             webBrowser = new ChromiumWebBrowser(
                 //txtInitURL.Text.Trim()

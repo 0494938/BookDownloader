@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Text;
 
 namespace BaseBookDownloader
 {
@@ -37,7 +38,17 @@ namespace BaseBookDownloader
                 _output_writer = value;
             }
         }
+        private static StreamWriter? _log_writer = new StreamWriter(File.Open(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "Log" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + ".log",
+                    FileMode.CreateNew,
+                    FileAccess.ReadWrite,
+                    FileShare.Read),
+                    Encoding.UTF8);
+        public static void WriteDbgLnLog(string strLog)
+        {
+            _log_writer.WriteLine(strLog);
+        }
     }
+
     public partial class BaseWndContextData : INotifyPropertyChanged
     {
         #region Variable_and_Properties
@@ -67,6 +78,7 @@ namespace BaseBookDownloader
         public string? PgmNaviUrl { get; set; }
         public bool UnloadPgm { get; set; } = false;
         public int RefreshCount { get; set; } = 0;
+        public string WebView2UserFolder { get { return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData); } }
 
         public bool IsYouTube { get {
                 if (SelectedIdx == (int)BatchQueryNovelContents.YOUTUBE)

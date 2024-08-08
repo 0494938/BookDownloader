@@ -13,7 +13,7 @@
         Loaded="OnMainWindowLoaded"
         Activated="OnMainWindowActivated"
         Unloaded="OnMainWindowUnloaded"
-        Closing="OnMainWindowClosing" 
+        Closing="OnMainWindowClosing" Closed="Window_Closed" 
         >
     <Window.DataContext>
         <local:WndContextData/>
@@ -217,7 +217,11 @@
                     </TabItem.Header>
                     <Wpf:WebView2 
                         x:Name="webBrowser" 
-                        ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" />
+                        ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True">
+                        <Wpf:WebView2.CreationProperties>
+                            <Wpf:CoreWebView2CreationProperties UserDataFolder="{Binding Path=WebView2UserFolder,Mode=OneWay}"/>
+                        </Wpf:WebView2.CreationProperties>
+                    </Wpf:WebView2>
                 </TabItem>
                 <TabItem x:Name="tblItemOcr">
                     <TabItem.Header>
