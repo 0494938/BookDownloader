@@ -22,7 +22,7 @@ namespace WpfStreamDownloader
             string strFileNameBase = "";
             this.Dispatcher.Invoke(() => {
                 datacontext = App.Current.MainWindow.DataContext as WndContextData;
-                strFileNameBase = "HtmlDownload_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
+                strFileNameBase = "HtmlDownload_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + Thread.CurrentThread.ManagedThreadId;
             });
             StreamWriter? html = null;
             try {

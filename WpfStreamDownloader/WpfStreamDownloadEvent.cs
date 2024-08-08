@@ -114,21 +114,23 @@ namespace WpfStreamDownloader
 
                     new Thread(() => {
                         DateTime start = DateTime.Now;
-                        UpdateStatusMsg(datacontext, "Download Start: " + VedioUrl.ToString() + " ...", 0);
+                        try
+                        {
+                            UpdateStatusMsg(datacontext, "Download Start: " + VedioUrl.ToString() + " ...", 0);
 
-                        DownloadTask task = new DownloadTask() { Uri = VedioUrl, Progress = "0%", FullPathName = strFileName, FileName= sTitle, StartTime = DateTime.Now, };
-                        datacontext.TaskList.Add(task);
+                            DownloadTask task = new DownloadTask() { Uri = VedioUrl, Progress = "0%", FullPathName = strFileName, FileName = sTitle, StartTime = DateTime.Now, };
+                            datacontext.TaskList.Add(task);
 
-                        this.Dispatcher.Invoke(() => { lstTasks.Items.Refresh(); });
+                            this.Dispatcher.Invoke(() => { lstTasks.Items.Refresh(); });
 
-                        System.IO.File.WriteAllBytes(strFileName, video.GetBytes());
-                        //video.GetBytesAsync().
+                            System.IO.File.WriteAllBytes(strFileName, video.GetBytes());
 
-                        TimeSpan span = DateTime.Now - start;
-                        UpdateStatusMsg(datacontext, "Download Finished and save to " + strFileName + " in " + string.Format("{0:#.##}", span.TotalSeconds) + " seconds. ", 100);
-                        task.Progress = "100%";
-                        this.Dispatcher.Invoke(() => { lstTasks.Items.Refresh(); });
-                        //this.Dispatcher.Invoke(() => { lstTasks.ItemsSource = null; lstTasks.ItemsSource = datacontext.TaskList; });
+                            TimeSpan span = DateTime.Now - start;
+                            UpdateStatusMsg(datacontext, "Download Finished and save to " + strFileName + " in " + string.Format("{0:#.##}", span.TotalSeconds) + " seconds. ", 100);
+                            task.Progress = "100%";
+                            this.Dispatcher.Invoke(() => { lstTasks.Items.Refresh(); });
+                        }
+                        catch (TaskCanceledException) { }
                     }).Start();
                 }
                 catch (Exception ex) {
@@ -144,19 +146,25 @@ namespace WpfStreamDownloader
             {
                 new Thread(() => {
                     string strUrl="";
-                    this.Dispatcher.Invoke(() => { strUrl= webBrowser.Source.ToString(); });
-                    
-                    string? sHtml = GetWebDocHtmlSource(strUrl);
-                    if (!string.IsNullOrEmpty(sHtml) && IsPornHubSite(strUrl))
+                    try
                     {
-                        PornHubStreamPageContent analysizer = new PornHubStreamPageContent();
-                        analysizer.AnalysisHtmlStream(this, datacontext, strUrl, sHtml, false, null, 0, true);
-                    }else if (!string.IsNullOrEmpty(sHtml) && IsRedPornSite(strUrl))
-                    {
-                        RedPornStreamPageContent analysizer = new RedPornStreamPageContent();
-                        analysizer.AnalysisHtmlStream(this, datacontext, strUrl, sHtml, false, null, 0, true);
-                    }else
-                    UpdateStatusMsg(datacontext, "Download Failed as Html is empty...", 100);
+                        this.Dispatcher.Invoke(() => { strUrl = webBrowser.Source.ToString(); });
+
+                        string? sHtml = GetWebDocHtmlSource(strUrl);
+                        if (!string.IsNullOrEmpty(sHtml) && IsPornHubSite(strUrl))
+                        {
+                            PornHubStreamPageContent analysizer = new PornHubStreamPageContent();
+                            analysizer.AnalysisHtmlStream(this, datacontext, strUrl, sHtml, false, null, 0, true);
+                        }
+                        else if (!string.IsNullOrEmpty(sHtml) && IsRedPornSite(strUrl))
+                        {
+                            RedPornStreamPageContent analysizer = new RedPornStreamPageContent();
+                            analysizer.AnalysisHtmlStream(this, datacontext, strUrl, sHtml, false, null, 0, true);
+                        }
+                        else
+                            UpdateStatusMsg(datacontext, "Download Failed as Html is empty...", 100);
+                    }
+                    catch (TaskCanceledException) { }
                 }).Start();
                 
             }

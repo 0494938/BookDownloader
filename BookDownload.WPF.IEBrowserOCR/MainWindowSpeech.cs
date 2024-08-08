@@ -75,50 +75,6 @@ namespace WpfIEBookDownloader
 
         private void OnConvertToMp3(object sender, RoutedEventArgs e)
         {
-            //SpeechSynthesizer mp3Synthesizer = InitAndHookSpeech(null);
-            //LameMP3FileWriter mp3 = new LameMP3FileWriter("testoutput1.mp3", new WaveFormat(22050, 16, 1), LAMEPreset.VBR_90);
-            //WaveFileWriter wave = new WaveFileWriter(mp3, new WaveFormat(22050, 16, 1));
-            //mp3Synthesizer.SetOutputToWaveStream(wave);
-
-            //PromptBuilder builder = new PromptBuilder();
-            //if (cmbInstalledVoice.SelectedIndex == -1)
-            //    builder.StartVoice(new CultureInfo("zh-Hans"));
-            //else
-            //{
-            //    string strCul = cmbInstalledVoice.Text;
-            //    builder.StartVoice(new CultureInfo(strCul.Substring(0, strCul.IndexOf(" - "))));
-            //}
-
-            //string strText = txtAnalysizedContents.SelectedText.Trim(new char[] { ' ', '\t', '\n', '\r' });
-            //if (!string.IsNullOrEmpty(strText) && strText.Length > 4)
-            //{
-            //    nShift = txtAnalysizedContents.SelectionStart;
-            //}
-            //else
-            //{
-            //    nShift = 0; strText = "";
-            //}
-
-            //builder.AppendText(string.IsNullOrEmpty(strText) ? txtAnalysizedContents.Text : strText);
-            //builder.EndVoice();
-
-            //nShift4Errr = -1;
-            //new Thread(() =>
-            //{
-            //    try
-            //    {
-            //        mp3Synthesizer.Speak(builder);
-            //    }
-            //    catch (Exception)
-            //    {
-            //    }
-
-            //    mp3.Close();
-            //    nShift4Errr = -1;
-            //    bSpeaking = false;
-            //    threadSpeech = null;
-
-            //}).Start();
             OnConvertToMp3_MemoryStream(sender, e);
         }
 
@@ -172,7 +128,6 @@ namespace WpfIEBookDownloader
                 nShift4Errr = -1;
                 bSpeaking = false;
                 threadSpeech = null;
-
             }).Start();
         }
         

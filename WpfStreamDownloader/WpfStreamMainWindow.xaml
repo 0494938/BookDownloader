@@ -50,7 +50,7 @@
                         x:Name="cmbNovelType" 
                         Margin="0,1,1,1" 
                         Grid.Column="0" 
-                        SelectedIndex="21" 
+                        SelectedIndex="24" 
                         SelectionChanged="OnBookTypeSelectChagned" 
                         HorizontalAlignment="Stretch"
                         VerticalContentAlignment="Center"
@@ -79,8 +79,9 @@
                         <ComboBoxItem Content="20 全本小说网 www.qbxsw.com"></ComboBoxItem>
                         <ComboBoxItem Content="21 YouTube"></ComboBoxItem>
                         <ComboBoxItem Content="22 PornHub"></ComboBoxItem>
-                        <ComboBoxItem Content="23 redporn.porn"></ComboBoxItem>
-                    </ComboBox>
+                        <ComboBoxItem Content="23 Redporn.porn"></ComboBoxItem>
+						<!--ComboBoxItem Content="24 x.com"></ComboBoxItem-->
+					</ComboBox>
                     <!--Button Grid.Column="1" Margin="1,1,1,1" x:Name="btnLoadInBrowser" Content="Web Load" Click="OnLoadInBrowser"/-->
                     <!--Button Grid.Column="2" Margin="1,1,1,1" x:Name="btnInitURL" Content="Load URL" Click="btnInitURL_Click" IsEnabled="{Binding Path=BackGroundNotRunning,Mode=TwoWay}" /-->
                     <Button Grid.Column="2" 

@@ -1,4 +1,4 @@
-BookDownload.*
+*.WebView2
 WpfStreamDownloader.*
 *.log
 *.txt

@@ -157,60 +157,63 @@ namespace WpfStreamDownloader
             {
                 new Thread(() =>
                 {
-                    if (string.IsNullOrEmpty(strHtml))
+                    try
                     {
-                        string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(doc.sHtml, false, false, false);
-                        this.Dispatcher.Invoke(() =>
+                        if (string.IsNullOrEmpty(strHtml))
                         {
-                            txtWebContents.Text = strPrettyHtml;
-                        });
-                        return;
-                    }
-
-                    int nMaxRetry = 10 * 60, nRetry = 0;
-                    bool bLoaded = false;
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        bLoaded = webBrowser.IsLoaded;
-                    });
-                    while (nRetry < nMaxRetry && bLoaded == false)
-                    {
-                        nRetry++;
-                        Thread.Sleep(100);
-                        this.Dispatcher.Invoke(() =>
-                        {
-                            bLoaded = webBrowser.IsLoaded;
-                        });
-                    }
-                    if (bLoaded)
-                    {
-                        this.Dispatcher.Invoke(() =>
-                        {
-                            webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
-                            {
-                                doc.sHtml = taskHtml.Result;
-                            });
-
-                        });
-                        Thread.Sleep(100);
-
-                        while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
-                        {
-                            nRetry++;
-                            Thread.Sleep(100);
-                        }
-                        if (!string.IsNullOrEmpty(doc.sHtml))
-                        {
-                            bool bIgnoreScript = false;
-                            bool bIgnoreHead = false;
-                            string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(doc.sHtml, bIgnoreScript, bIgnoreHead);
+                            string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(doc.sHtml, false, false, false);
                             this.Dispatcher.Invoke(() =>
                             {
                                 txtWebContents.Text = strPrettyHtml;
                             });
+                            return;
                         }
 
+                        int nMaxRetry = 10 * 60, nRetry = 0;
+                        bool bLoaded = false;
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            bLoaded = webBrowser.IsLoaded;
+                        });
+                        while (nRetry < nMaxRetry && bLoaded == false)
+                        {
+                            nRetry++;
+                            Thread.Sleep(100);
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                bLoaded = webBrowser.IsLoaded;
+                            });
+                        }
+                        if (bLoaded)
+                        {
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
+                                {
+                                    doc.sHtml = taskHtml.Result;
+                                });
+
+                            });
+                            Thread.Sleep(100);
+
+                            while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                            {
+                                nRetry++;
+                                Thread.Sleep(100);
+                            }
+                            if (!string.IsNullOrEmpty(doc.sHtml))
+                            {
+                                bool bIgnoreScript = false;
+                                bool bIgnoreHead = false;
+                                string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(doc.sHtml, bIgnoreScript, bIgnoreHead);
+                                this.Dispatcher.Invoke(() =>
+                                {
+                                    txtWebContents.Text = strPrettyHtml;
+                                });
+                            }
+                        }
                     }
+                    catch (TaskCanceledException) { }
                 }).Start();
             }
         }

@@ -68,7 +68,6 @@ namespace BaseBookDownloader
         public bool UnloadPgm { get; set; } = false;
         public int RefreshCount { get; set; } = 0;
 
-        //bool _bYouHub = false;
         public bool IsYouTube { get {
                 if (SelectedIdx == (int)BatchQueryNovelContents.YOUTUBE)
                     return true;
@@ -76,10 +75,19 @@ namespace BaseBookDownloader
                     return false;
             } }
 
-        //bool _bPornHub = false;
         public bool IsPornTube { get
             {
                 if (SelectedIdx == (int)BatchQueryNovelContents.PORNHUB || SelectedIdx == (int)BatchQueryNovelContents.REDPORN)
+                    return true;
+                else
+                    return false;
+            }
+        }
+        public bool IsTwitter
+        {
+            get
+            {
+                if (SelectedIdx == (int)BatchQueryNovelContents.TWITTER)
                     return true;
                 else
                     return false;
@@ -130,6 +138,7 @@ namespace BaseBookDownloader
             new _SITE_Behavior_() { idx =BatchQueryNovelContents.YOUTUBE,leadUrl="https://www.youtube.com/", dftUrl = "https://www.youtube.com/watch?v=0pPPXeXKdfg",bSkipHandleSourceChangedEvent=false},
             new _SITE_Behavior_() { idx =BatchQueryNovelContents.PORNHUB,leadUrl="https://jp.pornhub.com/", dftUrl = "https://jp.pornhub.com/view_video.php?viewkey=6617c17b03771",bSkipHandleSourceChangedEvent=false,},
             new _SITE_Behavior_() { idx =BatchQueryNovelContents.REDPORN,leadUrl="https://redporn.porn/", dftUrl = "https://redporn.porn/15960451?title=bellesa-films-riley-reyes-romantic-missionary-sex-porn",bSkipHandleSourceChangedEvent=false},
+            new _SITE_Behavior_() { idx =BatchQueryNovelContents.TWITTER,leadUrl="https://x.com/", dftUrl = "https://x.com/PunchingCat/status/1821025825640345720",bSkipHandleSourceChangedEvent=false},
         };
         public static string GetDefaultUrlByIdx(int nIdx)
         {
@@ -137,78 +146,10 @@ namespace BaseBookDownloader
                 return Site_Behavior_Defs[nIdx].dftUrl;
             }
             return "";
-            /*
-            switch (nIdx)
-            {
-                case (int)BatchQueryNovelContents.IKBOOK8:
-                    return "https://m.ikbook8.com/book/i116399132/18897986.html";
-                case (int)BatchQueryNovelContents.QQBOOK:
-                    return "https://book.qq.com/book-read/47135031/1";
-                case (int)BatchQueryNovelContents.BIQUGE:
-                    return "https://m.xbiqugew.com/book/50761/32248795.html";
-                case (int)BatchQueryNovelContents.BIQUGE_PC:
-                    return "https://www.xbiqugew.com/book/18927/12811470.html";
-                case (int)BatchQueryNovelContents.WXDZH:
-                    return "https://www.wxdzs.net/wxread/94612_43816524.html";
-                case (int)BatchQueryNovelContents.CANGQIONG:
-                    return "http://www.cqhhhs.com/book/85756/28421368.html";
-                case (int)BatchQueryNovelContents.JINYONG:
-                    return "http://www.jinhuaja.com/b/184315/976061.html";
-                case (int)BatchQueryNovelContents.SHUQI:
-                    return "https://www.shuqi.com/reader?bid=8991909&cid=2589796";
-                case (int)BatchQueryNovelContents.FANQIE:
-                    return "https://fanqienovel.com/reader/7100359997917397512?enter_from=page";
-                case (int)BatchQueryNovelContents.FANQIE2:
-                    return "https://fanqienovel.com/reader/7268154919981580800?source=seo_fq_juhe";
-                case (int)BatchQueryNovelContents.HXTX:
-                    return "https://www.hongxiu.com/chapter/7200532503839703/19328808342308247";
-                case (int)BatchQueryNovelContents.XXSB:
-                    return "https://book.xxs8.com/677942/94808.html";
-                case (int)BatchQueryNovelContents.YQXSB:
-                    return "https://www.xs8.cn/chapter/3738025904323901/10686192507259378";
-                case (int)BatchQueryNovelContents._17K:
-                    return "https://www.17k.com/chapter/3589602/48625472.html";
-                case (int)BatchQueryNovelContents.COLA:
-                    return "https://www.keleshuba.net/book/302396/173366895.html";
-                case (int)BatchQueryNovelContents.TIANTIAN:
-                    return "https://m.ttshu8.com/book/33693/124470410.html";
-                case (int)BatchQueryNovelContents.TIANTIAN_PC:
-                    return "https://www.ttshu8.com/book/33693/124470410.html";
-                case (int)BatchQueryNovelContents.NOVEL69:
-                    return "https://69shuba.cx/txt/38164/26461664";
-                case (int)BatchQueryNovelContents.UUNOVEL_COM:
-                    return "https://www.uuxs.com/chapter/72206/46164826.html";
-                case (int)BatchQueryNovelContents.UUNOVEL_CC:
-                    return "http://www.uuxs8.cc/r46844/29229950.html";
-                case (int)BatchQueryNovelContents.FINISHEDNOVEL:
-                    return "https://www.qbxsw.com/du_134667/49689977.html";
-
-                case (int)BatchQueryNovelContents.YOUTUBE:
-                    return "https://www.youtube.com/watch?v=0pPPXeXKdfg";
-                case (int)BatchQueryNovelContents.PORNHUB:
-                    return "https://jp.pornhub.com/view_video.php?viewkey=6617c17b03771";
-                case (int)BatchQueryNovelContents.REDPORN:
-                    return "https://redporn.porn/15960451?title=bellesa-films-riley-reyes-romantic-missionary-sex-porn";
-                //case (int)BatchQueryNovelContents.TOBEDONE:
-                //    break;
-                default:
-                    Debug.Assert(false);
-                    return "";
-                }
-                */
         }
 
         public static bool NeedSkipHandleSourceChanged(string strUrl)
         {
-            /*
-            if(strUrl.StartsWith("https://m.ikbook8.com/"))
-                return true;
-            if (strUrl.StartsWith("https://book.qq.com/"))
-                return true;
-            if (strUrl.StartsWith("https://www.wxdzs.net"))
-                return true;
-            */
-
             foreach (_SITE_Behavior_ sitedef in Site_Behavior_Defs)
             {
                 if (strUrl.StartsWith(sitedef.leadUrl))
@@ -332,6 +273,8 @@ namespace BaseBookDownloader
         PORNHUB = YOUTUBE + 1,
         [EnumCode("RedPorn")]
         REDPORN = PORNHUB + 1,
+        [EnumCode("Twitter")]
+        TWITTER = REDPORN + 1,
         //TOBEDONE = 13,
     }
 

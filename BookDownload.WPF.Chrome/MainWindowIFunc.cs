@@ -3,6 +3,7 @@ using CefSharp;
 using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -87,46 +88,52 @@ namespace WpfBookDownloader
             _DocContents doc = new _DocContents();
             new Thread(() =>
             {
-                int nMaxRetry = 10 * 60, nRetry = 0;
-                bool bLoaded = false;
-                this.Dispatcher.Invoke(() =>
+                try
                 {
-                    bLoaded = webBrowser.IsLoaded;
-                });
-                while (nRetry < nMaxRetry && bLoaded == false) 
-                {
-                    nRetry++;
-                    Thread.Sleep(100);
+                    int nMaxRetry = 10 * 60, nRetry = 0;
+                    bool bLoaded = false;
                     this.Dispatcher.Invoke(() =>
                     {
                         bLoaded = webBrowser.IsLoaded;
                     });
-                }
-                if (bLoaded) {
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
-                        {
-                            this.Dispatcher.Invoke(() =>
-                            {
-                                doc.sHtml = taskHtml.Result;
-                            });
-                        });
-                    });
-
-                    while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                    while (nRetry < nMaxRetry && bLoaded == false)
                     {
                         nRetry++;
                         Thread.Sleep(100);
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            bLoaded = webBrowser.IsLoaded;
+                        });
                     }
-                    if (!string.IsNullOrEmpty(doc.sHtml))
+                    if (bLoaded)
                     {
                         this.Dispatcher.Invoke(() =>
                         {
-                            txtWebContents.Text = doc.sHtml?.Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n");
+                            webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
+                            {
+                                this.Dispatcher.Invoke(() =>
+                                {
+                                    doc.sHtml = taskHtml.Result;
+                                });
+                            });
                         });
+
+                        while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                        {
+                            nRetry++;
+                            Thread.Sleep(100);
+                        }
+                        if (!string.IsNullOrEmpty(doc.sHtml))
+                        {
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                txtWebContents.Text = doc.sHtml?.Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n");
+                            });
+                        }
                     }
                 }
+                catch (TaskCanceledException) { }
+
             }).Start();
         }
 
@@ -135,58 +142,63 @@ namespace WpfBookDownloader
             _DocContents doc = new _DocContents();
             new Thread(() =>
             {
-                int nMaxRetry = 10 * 60, nRetry = 0;
-                bool bLoaded = false;
-                this.Dispatcher.Invoke(() =>
+                try
                 {
-                    bLoaded = webBrowser.IsLoaded;
-                });
-                while (nRetry < nMaxRetry && bLoaded == false) 
-                {
-                    nRetry++;
-                    Thread.Sleep(100);
+                    int nMaxRetry = 10 * 60, nRetry = 0;
+                    bool bLoaded = false;
                     this.Dispatcher.Invoke(() =>
                     {
                         bLoaded = webBrowser.IsLoaded;
                     });
-                }
-                if (bLoaded) {
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
-                        {
-                            this.Dispatcher.Invoke(() =>
-                            {
-                                doc.sHtml = taskHtml.Result;
-                            });
-                        });
-                    });
-                    Thread.Sleep(100);
-
-                    while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                    while (nRetry < nMaxRetry && bLoaded == false)
                     {
                         nRetry++;
                         Thread.Sleep(100);
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            bLoaded = webBrowser.IsLoaded;
+                        });
                     }
-                    if (!string.IsNullOrEmpty(doc.sHtml))
+                    if (bLoaded)
                     {
-                        bool bIgnoreScript = false;
-                        bool bIgnoreHead = false;
                         this.Dispatcher.Invoke(() =>
                         {
-                            bIgnoreScript = chkboxIgnoreScript.IsChecked ?? false;
-                            bIgnoreHead = chkboxIgnoreHeader.IsChecked ?? false;
+                            webBrowser.GetSourceAsync().ContinueWith(taskHtml =>
+                            {
+                                this.Dispatcher.Invoke(() =>
+                                {
+                                    doc.sHtml = taskHtml.Result;
+                                });
+                            });
                         });
+                        Thread.Sleep(100);
 
-                        string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(doc.sHtml, bIgnoreScript, bIgnoreHead);
-
-                        this.Dispatcher.Invoke(() =>
+                        while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
                         {
-                            txtWebContents.Text = strPrettyHtml;
-                        });
+                            nRetry++;
+                            Thread.Sleep(100);
+                        }
+                        if (!string.IsNullOrEmpty(doc.sHtml))
+                        {
+                            bool bIgnoreScript = false;
+                            bool bIgnoreHead = false;
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                bIgnoreScript = chkboxIgnoreScript.IsChecked ?? false;
+                                bIgnoreHead = chkboxIgnoreHeader.IsChecked ?? false;
+                            });
+
+                            string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(doc.sHtml, bIgnoreScript, bIgnoreHead);
+
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                txtWebContents.Text = strPrettyHtml;
+                            });
+                        }
+
                     }
-
                 }
+                catch (TaskCanceledException) { }
             }).Start();
         }
     }

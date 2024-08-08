@@ -42,7 +42,6 @@ namespace WpfBookDownloader
                     {
                         UpdateStatusMsg(datacontext, "Finished Page download : " + e.Url.ToString() + " ...", 50);
                         new Thread(() => datacontext.WaitAndLaunchAnalsys(this, e.Url.ToString(), false, null)).Start();
-                        //AnalysisURL(e.Url.ToString());
 
                     }
                 }

@@ -42,7 +42,6 @@ namespace BookDownloadFormApp
                 try
                 {
                     datacontext.PageLoaded = true;
-                    //btnAnalysisCurURL.GetBindingExpression(Button.IsEnabledProperty).UpdateTarget();
                     this.UpdateAnalysisPageButton();
                     if (datacontext.RefreshCount > 0 )
                     {
@@ -58,8 +57,6 @@ namespace BookDownloadFormApp
                     else
                     {
                         UpdateStatusMsg(datacontext, "Finished Page download : " + e.Url.ToString() + " ...", 50);
-                        //Thread thread = new Thread(() => datacontext.WaitAndLaunchAnalsysi(this, e.Url.ToString(), false, null));
-                        //thread.Start();
                         new Thread(() => datacontext.WaitAndLaunchAnalsys(this, e.Url.ToString(), false, null)).Start();
 
                     }

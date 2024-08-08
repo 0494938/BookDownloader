@@ -283,49 +283,53 @@ namespace WpfIEBookDownloader
             {
                 int nMaxRetry = 10 * 60, nRetry = 0;
                 bool bLoaded = false;
-                this.Dispatcher.Invoke(() =>
+                try
                 {
-                    bLoaded = webBrowser.IsLoaded;
-                });
-                while (nRetry < nMaxRetry && bLoaded == false)
-                {
-                    nRetry++;
-                    Thread.Sleep(100);
                     this.Dispatcher.Invoke(() =>
                     {
                         bLoaded = webBrowser.IsLoaded;
                     });
-                }
-                if (bLoaded)
-                {
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
-                        {
-                            this.Dispatcher.Invoke(() =>
-                            {
-                                doc.sHtml = taskHtml.Result;
-                            });
-                        });
-                    });
-
-                    while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                    while (nRetry < nMaxRetry && bLoaded == false)
                     {
                         nRetry++;
                         Thread.Sleep(100);
-                    }
-                    if (!string.IsNullOrEmpty(doc.sHtml))
-                    {
-                        doc.sHtml = Regex.Unescape(doc.sHtml);
-                        doc.sHtml = doc.sHtml.Remove(0, 1);
-                        doc.sHtml = doc.sHtml.Remove(doc.sHtml.Length - 1, 1);
-
                         this.Dispatcher.Invoke(() =>
                         {
-                            txtWebContents.Text = doc.sHtml?.Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n");
+                            bLoaded = webBrowser.IsLoaded;
                         });
                     }
+                    if (bLoaded)
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
+                            {
+                                this.Dispatcher.Invoke(() =>
+                                {
+                                    doc.sHtml = taskHtml.Result;
+                                });
+                            });
+                        });
+
+                        while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                        {
+                            nRetry++;
+                            Thread.Sleep(100);
+                        }
+                        if (!string.IsNullOrEmpty(doc.sHtml))
+                        {
+                            doc.sHtml = Regex.Unescape(doc.sHtml);
+                            doc.sHtml = doc.sHtml.Remove(0, 1);
+                            doc.sHtml = doc.sHtml.Remove(doc.sHtml.Length - 1, 1);
+
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                txtWebContents.Text = doc.sHtml?.Replace("\r\n\r\n\r\n", "\r\n")?.Replace("\r\n\r\n", "\r\n");
+                            });
+                        }
+                    }
                 }
+                catch (TaskCanceledException) { }
             }).Start();
         }
 
@@ -336,66 +340,71 @@ namespace WpfIEBookDownloader
             {
                 int nMaxRetry = 10 * 60, nRetry = 0;
                 bool bLoaded = false;
-                this.Dispatcher.Invoke(() =>
+                try
                 {
-                    bLoaded = webBrowser.IsLoaded;
-                });
-                while (nRetry < nMaxRetry && bLoaded == false)
-                {
-                    nRetry++;
-                    Thread.Sleep(100);
                     this.Dispatcher.Invoke(() =>
                     {
                         bLoaded = webBrowser.IsLoaded;
                     });
-                }
-                if (bLoaded)
-                {
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
-                        {
-                            this.Dispatcher.Invoke(() =>
-                            {
-                                doc.sHtml = taskHtml.Result;
-                            });
-                        });
-                    });
-                    Thread.Sleep(100);
-
-                    while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
+                    while (nRetry < nMaxRetry && bLoaded == false)
                     {
                         nRetry++;
                         Thread.Sleep(100);
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            bLoaded = webBrowser.IsLoaded;
+                        });
                     }
-                    if (!string.IsNullOrEmpty(doc.sHtml))
+                    if (bLoaded)
                     {
-                        bool bIgnoreScript = false;
-                        bool bIgnoreHead = false;
                         this.Dispatcher.Invoke(() =>
                         {
-                            bIgnoreScript = chkboxIgnoreScript.IsChecked ?? false;
-                            bIgnoreHead = chkboxIgnoreHeader.IsChecked ?? false;
+                            webBrowser.ExecuteScriptAsync("document.documentElement.outerHTML;").ContinueWith(taskHtml =>
+                            {
+                                this.Dispatcher.Invoke(() =>
+                                {
+                                    doc.sHtml = taskHtml.Result;
+                                });
+                            });
                         });
-                        doc.sHtml = Regex.Unescape(doc.sHtml);
-                        doc.sHtml = doc.sHtml.Remove(0, 1);
-                        doc.sHtml = doc.sHtml.Remove(doc.sHtml.Length - 1, 1);
+                        Thread.Sleep(100);
 
-                        string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(doc.sHtml, bIgnoreScript, bIgnoreHead);
-
-                        this.Dispatcher.Invoke(() =>
+                        while (nRetry < nMaxRetry && string.IsNullOrEmpty(doc.sHtml))
                         {
-                            txtWebContents.Text = strPrettyHtml;
-                        });
+                            nRetry++;
+                            Thread.Sleep(100);
+                        }
+                        if (!string.IsNullOrEmpty(doc.sHtml))
+                        {
+                            bool bIgnoreScript = false;
+                            bool bIgnoreHead = false;
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                bIgnoreScript = chkboxIgnoreScript.IsChecked ?? false;
+                                bIgnoreHead = chkboxIgnoreHeader.IsChecked ?? false;
+                            });
+                            doc.sHtml = Regex.Unescape(doc.sHtml);
+                            doc.sHtml = doc.sHtml.Remove(0, 1);
+                            doc.sHtml = doc.sHtml.Remove(doc.sHtml.Length - 1, 1);
+                            string strPrettyHtml = PrettyPrintUtil.PrettyPrintHtml(doc.sHtml, bIgnoreScript, bIgnoreHead);
+
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                txtWebContents.Text = strPrettyHtml;
+                            });
+                        }
                     }
-
                 }
+                catch (TaskCanceledException) { }
+
             }).Start();
         }
 
         public async void InitBrowser()
         {
 
+
+#if false
             //webBrowser.LoadingStateChanged += Browser_LoadingStateChanged;
             //webBrowser.FrameLoadStart += (sender, args) =>
             //{
@@ -422,8 +431,6 @@ namespace WpfIEBookDownloader
             //webBrowser.ControlAdded += new ControlEventHandler(Browser_ControlAdded);
             //webBrowser.ControlRemoved += new ControlEventHandler(Browser_ControlRemoved);
             //webBrowser.BindingContextChanged += new EventHandler(Browser_BindingContextChanged);
-
-#if false
             webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
 #else
             await webBrowser.EnsureCoreWebView2Async(null);
