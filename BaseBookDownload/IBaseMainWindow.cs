@@ -25,6 +25,7 @@
         public void UpdateNextUrl(string url, BaseWndContextData? datacontext = null);
         public void UpdateCurUrl(string url, BaseWndContextData? datacontext = null);
         public void UpdateNovelName(string sNovelName, BaseWndContextData? datacontext = null);
+        public void UpdateChapterName(string sChapterName, BaseWndContextData? datacontext = null);
 
         public void UpdateWebBodyOuterHtml(string? strBody, BaseWndContextData? datacontext = null);
         public void UpdateAnalysizedContents(string strContents, BaseWndContextData? datacontext = null);

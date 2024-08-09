@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BaseBookDownload.WPF"
         mc:Ignorable="d"
-        Title="Save Folder Setting" Height="200" Width="400" 
+        Title="Save Folder Setting" Height="150" Width="400" 
         ResizeMode="NoResize"  
         WindowStartupLocation="CenterOwner" 
         Loaded="Window_Loaded"
@@ -33,8 +33,29 @@
         <TextBlock Grid.Row="3" Text="Temporary File Path" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <TextBox Grid.Row="1" x:Name="txtSavePath" Grid.Column="2" Text="File Save Path" FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Center" IsReadOnly="True"/>
         <TextBox Grid.Row="3" x:Name="txtTempPath" Grid.Column="2" Text="Temporary File Path" FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Center" IsReadOnly="True"/>
-        <Button Grid.Row="1" Grid.Column="4" Content="Browser..." FontWeight="Bold" x:Name="btnSavePathSetting" Click="btnSavePathSetting_Click"/>
-        <Button Grid.Row="3" Grid.Column="4" Content="Browser..." FontWeight="Bold" x:Name="btnTempPathSetting" Click="btnTempPathSetting_Click"/>
-        <Button Grid.Row="6" Grid.Column="4" Content="Close" FontWeight="Bold" x:Name="btnOK" Click="btnOK_click" IsDefault="True"/>
+        <Button Grid.Row="1" Grid.Column="4" FontWeight="Bold" x:Name="btnSavePathSetting" Click="btnSavePathSetting_Click">
+            <Button.Content>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="  ...  " TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible" VerticalAlignment="Center"/>
+                    <Image Height="22" Source="/BaseBookDownload.WPF;component/folder1.png" />
+                </StackPanel>
+            </Button.Content>
+        </Button>
+        <Button Grid.Row="3" Grid.Column="4" FontWeight="Bold" x:Name="btnTempPathSetting" Click="btnTempPathSetting_Click">
+            <Button.Content>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="  ...  " TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible" VerticalAlignment="Center"/>
+                    <Image Height="22" Source="/BaseBookDownload.WPF;component/folder1.png" />
+                </StackPanel>
+            </Button.Content>
+        </Button>
+        <Button Grid.Row="6" Grid.Column="4" FontWeight="Bold" x:Name="btnOK" Click="btnOK_click" IsDefault="True">
+            <Button.Content>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text=" Close " TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"  VerticalAlignment="Center"/>
+                    <Image Height="22" Source="/BaseBookDownload.WPF;component/close3.png" />
+                </StackPanel>
+            </Button.Content>
+        </Button>
     </Grid>
 </Window>

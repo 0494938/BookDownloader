@@ -58,14 +58,6 @@ namespace WpfIEBookDownloader
             datacontext.UnloadPgm = true;
         }
 
-        private void OnMainWindowUnloaded(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("OnMainWindowUnloaded invoked...");
-            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
-            datacontext.UnloadPgm = true;
-            webBrowser.Dispose();
-        }
-
         private void MainFrameWebLoaded(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("MainFrameWebLoaded invoked...");

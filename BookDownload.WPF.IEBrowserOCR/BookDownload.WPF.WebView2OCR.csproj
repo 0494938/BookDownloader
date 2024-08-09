@@ -47,6 +47,10 @@
   <ItemGroup>
     <None Remove="Auto3.webp" />
     <None Remove="Auto4.webp" />
+    <None Remove="convert_mp3_10.png" />
+    <None Remove="convert_mp3_13.jpg" />
+    <None Remove="convert_mp3_6.png" />
+    <None Remove="convert_mp3_9.jpg" />
     <None Remove="setting2.png" />
   </ItemGroup>
 
@@ -138,6 +142,10 @@
     <Resource Include="Auto3.webp" />
     <Resource Include="Auto4.webp" />
     <Resource Include="chrome3.png" />
+    <Resource Include="convert_mp3_10.png" />
+    <Resource Include="convert_mp3_13.jpg" />
+    <Resource Include="convert_mp3_6.png" />
+    <Resource Include="convert_mp3_9.jpg" />
     <Resource Include="embedwebctrl4.png" />
     <Resource Include="gcMangager.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

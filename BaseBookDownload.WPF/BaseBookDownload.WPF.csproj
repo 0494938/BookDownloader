@@ -21,7 +21,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="close3.png" />
     <None Remove="dolwnload6.png" />
+    <None Remove="folder1.png" />
+    <None Remove="folder2.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,11 +68,16 @@
 
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
+    <PackageReference Include="NAudio.Lame" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Speech" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="close3.png" />
     <Resource Include="dolwnload6.png" />
+    <Resource Include="folder1.png" />
+    <Resource Include="folder2.jpg" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,9 @@
-﻿using System.Linq;
+﻿using NAudio.Lame;
+using NAudio.Wave;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Speech.Synthesis;
 using System.Text;
 
 namespace BaseBookDownloader
@@ -402,5 +407,56 @@ namespace BaseBookDownloader
             return sb.ToString();
         }
 #pragma warning restore CS8632 // '#nullable' 注釈コンテキスト内のコードでのみ、Null 許容参照型の注釈を使用する必要があります。
+    }
+
+    public partial class Util
+    {
+        public static void ConvertTextToMp3(IBaseMainWindow wndMain, BaseWndContextData datacontext, string strMp3FileName, string strText, string strCulture, string? strOutputPath=null)
+        {
+            if (string.IsNullOrEmpty(strText.Trim()))
+            {
+                //MessageBox.Show("Select Text is Emtpy or less than 4 bytes", "Error", MessageBoxButton.OK);
+                return;
+            }
+
+            SpeechSynthesizer mp3Synthesizer = new SpeechSynthesizer();
+            mp3Synthesizer.Volume = 100;
+            mp3Synthesizer.Rate = 0;
+            MemoryStream ms = new MemoryStream();
+            mp3Synthesizer.SetOutputToWaveStream(ms);
+
+            PromptBuilder builder = new PromptBuilder();
+
+            builder.StartVoice(new CultureInfo(strCulture));
+            builder.AppendText(strText);
+            builder.EndVoice();
+
+            //new System.Threading.Thread(() =>
+            //{
+            try
+            {
+                mp3Synthesizer.Speak(builder);
+            }
+            catch (System.Exception)
+            {
+            }
+            ms.Seek(0, SeekOrigin.Begin);
+            strMp3FileName = strMp3FileName.Replace('\\', '￥').Replace('#', '＃')
+                .Replace('$', '＄').Replace('%', '％').Replace('!', '！').Replace('&', '＆').Replace('\'', '’').Replace('{', '｛')
+                .Replace('\"', '”').Replace('}', '｝').Replace(':', '：').Replace('\\', '￥').Replace('@', '＠').Replace('<', '＜').Replace('>', '＞').Replace('+', '＋')
+                .Replace('`', '‘').Replace('*', '＊').Replace('|', '｜').Replace('?', '？').Replace('=', '＝').Replace('/', '／');
+            if (!strMp3FileName.EndsWith(".mp3", System.StringComparison.CurrentCultureIgnoreCase))
+                strMp3FileName += ".mp3";
+            strMp3FileName = (string.IsNullOrEmpty(strOutputPath)?datacontext.FileSavePath:strOutputPath) + strMp3FileName;
+            wndMain.UpdateStatusMsg(datacontext, "Begin convert text to " + strMp3FileName, 0);
+            using (var rdr = new WaveFileReader(ms))
+            using (var wtr = new LameMP3FileWriter(strMp3FileName, rdr.WaveFormat, LAMEPreset.VBR_90))
+            {
+                rdr.CopyTo(wtr);
+            }
+
+            wndMain.UpdateStatusMsg(datacontext, "Finished convertioln text to " + strMp3FileName, 100);
+            //}).Start();
+        }
     }
 }

@@ -100,6 +100,13 @@ namespace BookDownloadFormApp
             //});
         }
 
+        public void UpdateChapterName(string sChapterName, BaseWndContextData? datacontext = null)
+        {
+            //this.Invoke(() => {
+            //    this.txtChapterName.Text = sChapterName;
+            //});
+        }
+
         public void UpdateAnalysizedContents(string strContents, BaseWndContextData? datacontext = null)
         {
             this.Invoke(() => {

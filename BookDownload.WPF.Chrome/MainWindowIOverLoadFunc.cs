@@ -134,6 +134,14 @@ namespace WpfBookDownloader
             });
         }
 
+        public void UpdateChapterName(string sChapterName, BaseWndContextData? datacontext = null)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                this.txtChapterName.Text = sChapterName;
+            });
+        }
+
         public void UpdateAggragatedContents(string strContents, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() =>

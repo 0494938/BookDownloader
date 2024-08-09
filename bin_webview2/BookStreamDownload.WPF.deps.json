@@ -66,6 +66,25 @@
           "System.Runtime": "4.3.0"
         }
       },
+      "NAudio.Core/2.1.0": {
+        "runtime": {
+          "lib/netstandard2.0/NAudio.Core.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
+          }
+        }
+      },
+      "NAudio.Lame/2.1.0": {
+        "dependencies": {
+          "NAudio.Core": "2.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/NAudio.Lame.dll": {
+            "assemblyVersion": "2.0.1.0",
+            "fileVersion": "2.0.1.0"
+          }
+        }
+      },
       "NETStandard.Library/1.6.1": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
@@ -649,6 +668,22 @@
           "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0"
         }
       },
+      "System.Speech/8.0.0": {
+        "runtime": {
+          "lib/net8.0/System.Speech.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net8.0/System.Speech.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          }
+        }
+      },
       "System.Text.Encoding/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
@@ -746,7 +781,9 @@
       "BaseBookDownload.WPF/1.0.0": {
         "dependencies": {
           "HtmlAgilityPack": "1.11.61",
-          "Newtonsoft.Json": "13.0.3"
+          "NAudio.Lame": "2.1.0",
+          "Newtonsoft.Json": "13.0.3",
+          "System.Speech": "8.0.0"
         },
         "runtime": {
           "BaseBookDownload.WPF.dll": {}
@@ -794,6 +831,20 @@
       "sha512": "sha512-9ZQKCWxH7Ijp9BfahvL2Zyf1cJIk8XYLF6Yjzr2yi0b2cOut/HQ31qf1ThHAgCc3WiZMdnWcfJCgN82/0UunxA==",
       "path": "microsoft.win32.primitives/4.3.0",
       "hashPath": "microsoft.win32.primitives.4.3.0.nupkg.sha512"
+    },
+    "NAudio.Core/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0iowfmolibU4KxjaC/s7lox/BeDg76UVvXtCuCzRiNpylVndqsxXxp+bVWFrpv0KzQDIKLxZrnDmYENlAI0u9g==",
+      "path": "naudio.core/2.1.0",
+      "hashPath": "naudio.core.2.1.0.nupkg.sha512"
+    },
+    "NAudio.Lame/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Y+FtVgvjT+bNpBFqDiAKcFGelix1UavpX66vLymzWalXOGvY+MsoLNKL6aNGA0INjvBxeI3qd1LlD+bg7Nv2Ww==",
+      "path": "naudio.lame/2.1.0",
+      "hashPath": "naudio.lame.2.1.0.nupkg.sha512"
     },
     "NETStandard.Library/1.6.1": {
       "type": "package",
@@ -1228,6 +1279,13 @@
       "sha512": "sha512-t2Tmu6Y2NtJ2um0RtcuhP7ZdNNxXEgUm2JeoA/0NvlMjAhKCnM1NX07TDl3244mVp3QU6LPEhT3HTtH1uF7IYw==",
       "path": "system.security.cryptography.x509certificates/4.3.0",
       "hashPath": "system.security.cryptography.x509certificates.4.3.0.nupkg.sha512"
+    },
+    "System.Speech/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CNuiA6vb95Oe5PRjClZEBiaju31vwB8OIeCgeSBXyZL6+MS4RVVB2X/C11z0xCkooHE3Vy91nM2z76emIzR+sg==",
+      "path": "system.speech/8.0.0",
+      "hashPath": "system.speech.8.0.0.nupkg.sha512"
     },
     "System.Text.Encoding/4.3.0": {
       "type": "package",

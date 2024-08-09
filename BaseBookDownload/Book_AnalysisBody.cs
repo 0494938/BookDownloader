@@ -45,6 +45,8 @@ namespace BaseBookDownloader
             wndMain.UpdateNextUrl(strNextLink);
             wndMain.UpdateCurUrl("");
             wndMain.UpdateNovelName(strBookName);
+            wndMain.UpdateChapterName(strChapter);
+            
             wndMain.UpdateChapterMsg(datacontext, strChapter, -1);
             if (bSilenceMode)
             {

@@ -11,6 +11,8 @@ using System.Windows;
 namespace WpfIEBookDownloader
 {
 #pragma warning disable CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
+#pragma warning disable CS8604 // Null 参照引数の可能性があります。
     public partial class WPFMainWindow : Window, IBaseMainWindow
     {
 
@@ -64,8 +66,15 @@ namespace WpfIEBookDownloader
                     Console.WriteLine(GetVoiceInfoDesc(installed_voices[i].VoiceInfo));
                     cmbInstalledVoice.Items.Add(GetVoiceInfoDesc(installed_voices[i].VoiceInfo));
                 }
-                
             }
+        }
+
+        private void OnMainWindowUnloaded(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("OnMainWindowUnloaded invoked...");
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            datacontext.UnloadPgm = true;
+            webBrowser.Dispose();
         }
 
         static string GetVoiceInfoDesc(VoiceInfo vi)
@@ -75,62 +84,24 @@ namespace WpfIEBookDownloader
 
         private void OnConvertToMp3(object sender, RoutedEventArgs e)
         {
-            OnConvertToMp3_MemoryStream(sender, e);
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            ConvertTextToMp3(datacontext, (string.IsNullOrEmpty(txtBookName.Text.Trim()) ? "Novel" : txtBookName.Text.Trim()) + 
+                "_" + (string.IsNullOrEmpty(txtBookName.Text.Trim()) ? "Chapter" : txtBookName.Text.Trim()));
         }
 
-        private void OnConvertToMp3_MemoryStream(object sender, RoutedEventArgs e)
+        private void ConvertTextToMp3(WndContextData datacontext, string strMp3FileName)
         {
-            SpeechSynthesizer mp3Synthesizer = new SpeechSynthesizer();
-            mp3Synthesizer.Volume = 100;
-            mp3Synthesizer.Rate = 0;
-            MemoryStream ms = new MemoryStream();
-            mp3Synthesizer.SetOutputToWaveStream(ms);
-
-            PromptBuilder builder = new PromptBuilder();
-            if (cmbInstalledVoice.SelectedIndex == -1)
-                builder.StartVoice(new CultureInfo("zh-Hans"));
-            else
-            {
-                string strCul = cmbInstalledVoice.Text;
-                builder.StartVoice(new CultureInfo(strCul.Substring(0, strCul.IndexOf(" - "))));
-            }
-
             string strText = txtAnalysizedContents.SelectedText.Trim(new char[] { ' ', '\t', '\n', '\r' });
-            if (!string.IsNullOrEmpty(strText) && strText.Length > 4)
-            {
-                nShift = txtAnalysizedContents.SelectionStart;
-            }
-            else
-            {
-                nShift = 0; strText = "";
-            }
+            if (string.IsNullOrEmpty(strText.Trim()) || strText.Trim().Length <= 4)
+                return;
 
-            builder.AppendText(string.IsNullOrEmpty(strText) ? txtAnalysizedContents.Text : strText);
-            builder.EndVoice();
+            string strVoice = cmbInstalledVoice.SelectedIndex == -1 ? "zh-Hans" : cmbInstalledVoice.Text.Substring(0, cmbInstalledVoice.Text.IndexOf(" - "));
 
-            nShift4Errr = -1;
-            new Thread(() =>
-            {
-                try
-                {
-                    mp3Synthesizer.Speak(builder);
-                }
-                catch (Exception)
-                {
-                }
-                ms.Seek(0, SeekOrigin.Begin);
-                using (var rdr = new WaveFileReader(ms))
-                using (var wtr = new LameMP3FileWriter("testoutput.mp3", rdr.WaveFormat, LAMEPreset.VBR_90))
-                {
-                    rdr.CopyTo(wtr);
-                }
-
-                nShift4Errr = -1;
-                bSpeaking = false;
-                threadSpeech = null;
+            new Thread(() => {
+                BaseBookDownloader.Util.ConvertTextToMp3(this, datacontext, strMp3FileName, strText, strVoice);
             }).Start();
         }
-        
+
         private void OnClickSpeechText(object sender, RoutedEventArgs e)
         {
             if (threadSpeech != null && (threadSpeech.ThreadState == System.Threading.ThreadState.Running || threadSpeech.ThreadState == System.Threading.ThreadState.WaitSleepJoin)) { 
@@ -142,10 +113,9 @@ namespace WpfIEBookDownloader
                     synthesizer.SpeakAsyncCancel(curPromptBuilder);
 
                     bSpeaking = false;
-                    btnSpeech.Content = "Speech Play";
+                    btnSpeechText.Text = "Speech Play";
                     nShift4Errr = -1;
                 }
-                    
             }
             else{
                 if (!string.IsNullOrEmpty(txtAnalysizedContents.Text.Trim()))
@@ -179,8 +149,8 @@ namespace WpfIEBookDownloader
 
                     builder.AppendText(string.IsNullOrEmpty(strText)? txtAnalysizedContents.Text: strText);
                     builder.EndVoice();
-                    
-                    btnSpeech.Content = "Speech Stop";
+
+                    btnSpeechText.Text = "Speech Stop";
                     bSpeaking = true;
                     nShift4Errr = -1;
                     threadSpeech = new Thread(() =>
@@ -194,7 +164,7 @@ namespace WpfIEBookDownloader
                         nShift4Errr = -1;
                         bSpeaking = false;
                         threadSpeech = null; 
-                        this.Dispatcher.Invoke(() => { btnSpeech.Content = "Speech Play"; });
+                        this.Dispatcher.Invoke(() => { btnSpeechText.Text = "Speech Play"; });
                         
                     });
                     threadSpeech.Start();
@@ -207,11 +177,7 @@ namespace WpfIEBookDownloader
             if (nShift4Errr == -1 && e.CharacterPosition >=0) {
                 nShift4Errr = e.CharacterPosition;
             }
-            //Debug.WriteLine("Synthesizer_SpeakProgress(bSpeaking:" + bSpeaking + ", Text:" + e.Text +
-            //    ", CharacterPosition:" + (nShift4Errr == -1 ? e.CharacterPosition + nShift : e.CharacterPosition - nShift4Errr + nShift) +
-            //    ", CharacterCount:" + e.CharacterCount +
-            //    ", Cancelled:" + e.Cancelled +
-            //    ")");
+
             this.Dispatcher.Invoke(() => {
                 //txtAnalysizedContents.Select(e.CharacterPosition, e.CharacterCount);
                 txtAnalysizedContents.Focus();
@@ -255,5 +221,7 @@ namespace WpfIEBookDownloader
             Debug.WriteLine("Synthesizer_VoiceChange.  Prompt:" + e.Prompt + ", UserState:" + e.UserState + ", Prompt:" + e.Prompt + ", Voice:" + e.Voice);
         }
     }
+#pragma warning restore CS8604 // Null 参照引数の可能性があります。
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 #pragma warning restore CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
 }

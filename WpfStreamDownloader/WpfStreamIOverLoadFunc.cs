@@ -285,7 +285,15 @@ namespace WpfStreamDownloader
             this.Dispatcher.Invoke(() => { txtBookName.Text = sNovelName; });
             
         }
-       
+
+        public void UpdateChapterName(string sChapterName, BaseWndContextData? datacontext = null)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                this.txtChapterName.Text = sChapterName;
+            });
+        }
+        
         public void UpdateAnalysizedContents(string strContents, BaseWndContextData? datacontext = null)
         {
             try

@@ -1,4 +1,5 @@
 ﻿using BaseBookDownload.WPF;
+using BookStreamDownload.WPF;
 using System.Diagnostics;
 using System.Text;
 using System.Windows;
@@ -6,7 +7,8 @@ using System.Windows.Controls.Primitives;
 
 namespace WpfStreamDownloader
 {
-
+#pragma warning disable IDE0059 // 値の不必要な代入
+#pragma warning disable CS8604 // Null 参照引数の可能性があります。
     public partial class WpfStreamMainWindow : Window
     {
         public WpfStreamMainWindow()
@@ -71,5 +73,14 @@ namespace WpfStreamDownloader
             WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
             if (datacontext != null) { datacontext.UnloadPgm = true; }
         }
+
+        private void OnConvertTextToMp3(object sender, RoutedEventArgs e)
+        {
+            WndContextData? datacontext = App.Current.MainWindow.DataContext as WndContextData;
+            ConvertNovelTextToMp3 wndMp3Convert = new ConvertNovelTextToMp3(datacontext) { Owner = this };
+            bool? res = wndMp3Convert.ShowDialog();
+        }
     }
+#pragma warning restore CS8604 // Null 参照引数の可能性があります。
+#pragma warning restore IDE0059 // 値の不必要な代入
 }

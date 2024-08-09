@@ -55,7 +55,6 @@ namespace WpfIEBookDownloader
             }
         }
 
-        
         public void UpdateNovelName(string sNovelName, BaseWndContextData? datacontext = null)
         {
             this.Dispatcher.Invoke(() => {
@@ -63,6 +62,13 @@ namespace WpfIEBookDownloader
             });
         }
 
+        public void UpdateChapterName(string sChapterName, BaseWndContextData? datacontext = null)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                this.txtChapterName.Text = sChapterName;
+            });
+        }
     }
 #pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
 }

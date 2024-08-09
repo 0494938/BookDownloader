@@ -9,10 +9,9 @@
         Title="Book Downloader WPF Version(IE Core)" Height="1100" Width="1800" 
         WindowStartupLocation="CenterScreen" 
         WindowState="Maximized"
-        
         Loaded="OnMainWindowLoaded"
-        Activated="OnMainWindowActivated"
         Unloaded="OnMainWindowUnloaded"
+        Activated="OnMainWindowActivated"
         Closing="OnMainWindowClosing" Icon="/Novel9.ico" Cursor="" Closed="Window_Closed" 
         >
     <Window.DataContext>
@@ -37,7 +36,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2"/>
                     <ColumnDefinition Width="34"/>
-                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="400"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -187,9 +186,13 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="65"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Margin="1,1,1,1" VerticalAlignment="Center" TextAlignment="Center">Book Name</TextBlock>
-                    <TextBox Grid.Column="1" x:Name="txtBookName" Text=" " Margin="1,1,1,1" VerticalAlignment="Stretch" VerticalContentAlignment="Center"/>
+                    <TextBlock Grid.Column="0" Margin="1,0,1,0" VerticalAlignment="Center" TextAlignment="Center">Book Name</TextBlock>
+                    <TextBox Grid.Column="1" x:Name="txtBookName" Text=" " Margin="1,1,1,1" VerticalContentAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Margin="1,0,1,0" VerticalAlignment="Center" TextAlignment="Left">Chapter</TextBlock>
+                    <TextBox Grid.Column="3" x:Name="txtChapterName" Text=" " Margin="1,1,1,1" VerticalContentAlignment="Center"/>
                 </Grid>
             </Grid>
         </GroupBox>
@@ -330,21 +333,25 @@
                         <TextBlock Text="Dbg Area" Foreground="Gray" TextAlignment="Center" Visibility="{Binding Path=EnabledDbgButtons,Mode=TwoWay}" />
                         <ComboBox x:Name="cmbInstalledVoice" Margin="3,3,3,0"></ComboBox>
                         <Button 
-                            Height="40" 
                             Margin="3,3,3,0"
                             x:Name="btnSpeech"
                             Click="OnClickSpeechText">
                             <Button.Content>
-                                <TextBlock Text="Speech Play" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"/>
+                                <StackPanel>
+                                    <Image Height="30" Source="/convert_mp3_10.png" />
+                                    <TextBlock x:Name="btnSpeechText" Text="Speech Play" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"/>
+                                </StackPanel>
                             </Button.Content>
                         </Button>
                         <Button 
-                            Height="40" 
                             Margin="3,3,3,0"
                             x:Name="btnConvertToMp3"
                             Click="OnConvertToMp3">
                             <Button.Content>
-                                <TextBlock Text="Convert to Mp3" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"/>
+                                <StackPanel>
+                                    <Image Width="60"  Source="/convert_mp3_9.jpg"  />
+                                    <TextBlock Text="Convert to Mp3" TextWrapping="WrapWithOverflow" FontWeight="Bold" Visibility="Visible"/>
+                                </StackPanel>
                             </Button.Content>
                         </Button>
                     </StackPanel>

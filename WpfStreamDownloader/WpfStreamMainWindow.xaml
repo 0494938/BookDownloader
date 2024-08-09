@@ -196,9 +196,13 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="65"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Margin="1,1,1,1" VerticalAlignment="Center" TextAlignment="Center">Book Name</TextBlock>
-                    <TextBox Grid.Column="1" x:Name="txtBookName" Text=" " Margin="1,1,1,1" VerticalAlignment="Stretch" VerticalContentAlignment="Center"/>
+                    <TextBlock Grid.Column="0" Margin="1,0,1,0" VerticalAlignment="Center" TextAlignment="Center">Book Name</TextBlock>
+                    <TextBox Grid.Column="1" x:Name="txtBookName" Text=" " Margin="1,1,1,1" VerticalContentAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Margin="1,0,1,0" VerticalAlignment="Center" TextAlignment="Left">Chapter</TextBlock>
+                    <TextBox Grid.Column="3" x:Name="txtChapterName" Text=" " Margin="1,1,1,1" VerticalContentAlignment="Center"/>
                 </Grid>
             </Grid>
         </GroupBox>
@@ -314,6 +318,8 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="2"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="2"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <CheckBox Grid.Row="0" 
                         IsChecked="True" x:Name="chkMuteWeb" 
@@ -345,8 +351,8 @@
                         ToolTip="Download YourTube Video" Margin="1,3,1,5">
                         <Button.Content>
                             <StackPanel Orientation="Vertical" Margin="2,2,2,2" >
-                                <TextBlock  VerticalAlignment="Center" Margin="2,2,2,2" FontSize="14" FontWeight="Bold">Download</TextBlock>
                                 <Image Width="40" Source="/youtube9.png" />
+                                <TextBlock  VerticalAlignment="Center" Margin="2,2,2,2" FontSize="14" FontWeight="Bold">Download</TextBlock>
                             </StackPanel>
                         </Button.Content>
                     </Button>
@@ -356,8 +362,18 @@
                         x:Name="btnDownloadPornHub" Click="OnPornHubDownload" ToolTip="Download PornHub Video" Margin="1,1,1,1" >
                         <Button.Content>
                             <StackPanel Orientation="Vertical" Margin="1,3,1,5" >
-                                <TextBlock  VerticalAlignment="Center" Margin="2,2,2,2" FontSize="14" FontWeight="Bold">Download</TextBlock>
                                 <Image Width="40" Source="/pornhub4.png"  />
+                                <TextBlock  VerticalAlignment="Center" Margin="2,2,2,2" FontSize="14" FontWeight="Bold">Download</TextBlock>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Button 
+                        Grid.Row="6"
+                        x:Name="btnConvertNovelToMp3" Click="OnConvertTextToMp3" ToolTip="Convert Text to Mp3" Margin="1,5,1,5" >
+                        <Button.Content>
+                            <StackPanel Margin="1,3,1,5" Orientation="Vertical">
+                                <Image Width="60" Source="/convert_mp3_9.jpg" />
+                                <TextBlock  VerticalAlignment="Center" Margin="2,2,2,2" FontSize="14" FontWeight="Bold">Convert Mp3</TextBlock>
                             </StackPanel>
                         </Button.Content>
                     </Button>

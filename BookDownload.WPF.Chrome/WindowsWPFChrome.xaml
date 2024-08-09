@@ -31,7 +31,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2"/>
                     <ColumnDefinition Width="34"/>
-                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="400"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -188,9 +188,13 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="65"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Margin="1,1,1,1" VerticalAlignment="Center" TextAlignment="Center">Book Name</TextBlock>
-                    <TextBox Grid.Column="1" x:Name="txtBookName" Text=" " Margin="1,1,1,1" VerticalAlignment="Stretch" VerticalContentAlignment="Center"/>
+                    <TextBlock Grid.Column="0" Margin="1,0,1,0" VerticalAlignment="Center" TextAlignment="Center">Book Name</TextBlock>
+                    <TextBox Grid.Column="1" x:Name="txtBookName" Text=" " Margin="1,1,1,1" VerticalContentAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Margin="1,0,1,0" VerticalAlignment="Center" TextAlignment="Left">Chapter</TextBlock>
+                    <TextBox Grid.Column="3" x:Name="txtChapterName" Text=" " Margin="1,1,1,1" VerticalContentAlignment="Center"/>
                 </Grid>
             </Grid>
         </GroupBox>

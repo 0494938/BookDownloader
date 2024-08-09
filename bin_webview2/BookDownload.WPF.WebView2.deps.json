@@ -104,7 +104,9 @@
       "BaseBookDownload.WPF/1.0.0": {
         "dependencies": {
           "HtmlAgilityPack": "1.11.61",
-          "Newtonsoft.Json": "13.0.3"
+          "NAudio.Lame": "2.1.0",
+          "Newtonsoft.Json": "13.0.3",
+          "System.Speech": "8.0.0"
         },
         "runtime": {
           "BaseBookDownload.WPF.dll": {}
